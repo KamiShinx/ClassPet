@@ -173,9 +173,10 @@ var busy = false;
 
 (function init() {
   var session = getSession();
-  if (session && session.student_id) {
+  if (session && session.student_id && session.password) {
     loadStudentState(session.student_id, session.password);
   } else {
+    clearSession();
     loadRoster();
   }
 })();

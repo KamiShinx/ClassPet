@@ -1,0 +1,621 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>טמגוצ'י - דירוג פעילויות</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&family=Secular+One&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --egg: #ff4785;
+            --egg-light: #ff7aa5;
+            --egg-dark: #d62861;
+            --egg-shadow: #b3194a;
+            --lcd: #e0f2f1; 
+            --lcd-dark: #2f3640;
+            --lcd-mid: #718093;
+            --candy-pink: #ff70a6;
+            --candy-yellow: #ffd166;
+            --candy-blue: #70d6ff;
+            --sel-bg: #e1b12c; 
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; }
+        html, body { height: 100%; height: 100dvh; overflow: hidden; }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: #ffeaa7;
+            display: flex; align-items: center; justify-content: center;
+            padding: 2vh 10px; 
+            position: relative;
+        }
+
+        body::before {
+            content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+            background-image: radial-gradient(rgba(0,0,0,0.08) 2px, transparent 2px); background-size: 20px 20px;
+        }
+
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+        @keyframes bounceFlower { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-6px)} }
+        @keyframes wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-6deg)} 75%{transform:rotate(6deg)} }
+        @keyframes popIn { 0%{opacity:0;transform:scale(0.95)} 100%{opacity:1;transform:scale(1)} }
+        @keyframes heartPop { 0%{opacity:1;transform:translateY(0) scale(1)} 100%{opacity:0;transform:translateY(-30px) scale(1.5)} }
+        @keyframes eggJump { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-4px)} }
+        @keyframes floatDevice { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        @keyframes scanlineCRT { 0% { top: -10%; } 100% { top: 110%; } }
+        
+        /* אנימציות הבועה החדשות! כניסה ויציאה מהאמצע */
+        @keyframes bubblePop { 
+            0% { opacity: 0; transform: translateX(-50%) scale(0.6); } 
+            100% { opacity: 1; transform: translateX(-50%) scale(1); } 
+        }
+        @keyframes bubbleFadeOut {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            100% { opacity: 0; transform: translateX(-50%) scale(0.8); }
+        }
+
+        .egg-wrapper {
+            position: relative; z-index: 10;
+            width: 100%; 
+            max-width: 400px; 
+            height: 100%; 
+            max-height: 800px; 
+            display: flex; flex-direction: column; align-items: center;
+            animation: floatDevice 4.5s ease-in-out infinite;
+        }
+
+        .ring { 
+            width: 35px; height: 18px; border: 5px solid #ccc; border-bottom: none; 
+            border-radius: 12px 12px 0 0; margin-bottom: -3px; z-index: 11; background: #e6e6e6; flex-shrink: 0; 
+        }
+
+        .shell {
+            width: 100%; flex: 1 1 0; min-height: 0; 
+            background: linear-gradient(150deg, var(--egg-light) 0%, var(--egg) 40%, var(--egg-dark) 100%);
+            border-radius: 48% 48% 44% 44% / 32% 32% 28% 28%; 
+            padding: 14% 10% 5%; 
+            box-shadow: 0 10px 0 var(--egg-shadow), 0 15px 30px rgba(0,0,0,0.3), inset -5px -10px 20px rgba(0,0,0,0.1), inset 5px 10px 20px rgba(255,255,255,0.4);
+            border: 2px solid rgba(0,0,0,0.1); 
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .brand {
+            font-family: 'Press Start 2P', monospace; font-size: 0.5rem; 
+            color: rgba(255,255,255,0.9); text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+            margin-bottom: 12px; flex-shrink: 0; white-space: nowrap; text-align: center; width: 100%;
+        }
+
+        .bezel {
+            width: 100%; 
+            flex-grow: 1; 
+            background: #1a1a2e;
+            border-radius: 12px 12px 20px 20px; 
+            padding: 15px; 
+            box-shadow: inset 0 6px 15px rgba(0,0,0,0.9), 0 2px 1px rgba(255,255,255,0.2);
+            display: flex; flex-direction: column; position: relative; overflow: hidden;
+            margin-bottom: 15px; 
+        }
+
+        .bezel::before {
+            content: ''; position: absolute; top: -20%; left: -20%; width: 150%; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.05) 0%, transparent 100%);
+            transform: rotate(-15deg); pointer-events: none; z-index: 100;
+        }
+
+        .lcd {
+            width: 100%; flex: 1 1 0; background: var(--lcd);
+            border-radius: 4px; position: relative; display: flex; flex-direction: column;
+            box-shadow: inset 3px 3px 10px rgba(0,0,0,0.2); overflow: hidden;
+        }
+
+        .lcd::after {
+            content:''; position:absolute; inset:0; pointer-events:none; z-index:40;
+            background-image: linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+            background-size: 3px 3px;
+        }
+        
+        .lcd-vignette { position: absolute; inset: 0; pointer-events: none; z-index: 45; box-shadow: inset 0 0 20px rgba(0,0,0,0.3); }
+        .lcd-scanline { position: absolute; width: 100%; height: 8px; background: rgba(0,0,0,0.05); z-index: 42; pointer-events: none; animation: scanlineCRT 4s linear infinite; }
+
+        .lcd-status {
+            flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+            padding: 6px 10px; border-bottom: 2px solid var(--lcd-dark);
+            color: var(--lcd-dark); background: rgba(0,0,0,0.03); text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
+        }
+        .status-name, .status-mood { font-family: 'Secular One', sans-serif; font-size: 0.85rem; }
+        .hearts-row { display: flex; gap: 2px; align-items: center; }
+        .ht { width: 14px; height: 14px; transition: all 0.3s; object-fit: contain; }
+        .ht.on { filter: none; transform: scale(1); } 
+        .ht.off { filter: grayscale(100%) opacity(0.2); transform: scale(0.8); }
+
+        .lcd-body { flex: 1 1 0; position: relative; z-index: 5; overflow: hidden; display: flex; flex-direction: column; }
+        
+        .panel { 
+            display: none; height: 100%; width: 100%; 
+            padding: 8px 10px; 
+            flex-direction: column; align-items: center; 
+            justify-content: space-evenly; 
+        }
+        .panel.active { display: flex; animation: popIn 0.2s ease-out; }
+
+        /* ===== תיבת הקווסט (המשימה) הקבועה ===== */
+        .quest-box {
+            font-family: 'Secular One', sans-serif;
+            font-size: clamp(0.85rem, 2.2vh, 1.1rem);
+            color: var(--lcd-dark);
+            background: rgba(0,0,0,0.05);
+            border: 2px dashed var(--lcd-mid);
+            padding: 4px 8px;
+            border-radius: 6px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 5px;
+            flex-shrink: 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .quest-icon {
+            color: var(--sel-bg); text-shadow: 1px 1px 0 var(--lcd-dark);
+            display: inline-block; animation: bounce 1.5s infinite;
+        }
+
+        /* ===== החדר של הצמח ===== */
+        .plant-zone { 
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-end; 
+            width: 100%; max-width: 210px; 
+            height: clamp(110px, 22vh, 150px); 
+            background: #dff0f7;
+            border: 3px solid var(--lcd-dark); border-radius: 6px;
+            position: relative; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+            flex-shrink: 0; overflow: hidden; transition: background 0.5s;
+        }
+        .plant-zone.wilting { background: #b0bec5; }
+        .plant-zone::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 18px;
+            background: rgba(0,0,0,0.1); border-top: 2px dashed var(--lcd-dark); z-index: 1;
+        }
+
+        /* ===== בועת הדיבור (עכשיו עם Fade-out) ===== */
+        .speech-bubble {
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border: 3px solid var(--lcd-dark);
+            border-radius: 8px;
+            padding: 4px 6px;
+            font-family: 'Heebo', sans-serif;
+            font-size: clamp(0.7rem, 1.8vh, 0.9rem);
+            color: var(--lcd-dark);
+            text-align: center;
+            width: 92%;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+            z-index: 10;
+            display: none; 
+            line-height: 1.15;
+            /* האנימציה נקבעת ב-JS */
+        }
+        .speech-bubble::after {
+            content: ''; position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%);
+            border-width: 7px 7px 0; border-style: solid; border-color: var(--lcd-dark) transparent transparent transparent;
+        }
+        .speech-bubble::before {
+            content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%);
+            border-width: 5px 5px 0; border-style: solid; border-color: #fff transparent transparent transparent; z-index: 1;
+        }
+
+        .plant-vp { position: relative; width: 90px; height: 100px; transform-origin: bottom center; transform: scale(0.75); z-index: 3; margin-bottom: 2px; }
+
+        .phase-label {
+            position: absolute; bottom: 22px; right: 5px; font-family: 'Secular One', sans-serif; font-size: 0.65rem;
+            color: var(--lcd-dark); background: rgba(255,255,255,0.9);
+            padding: 2px 5px; border: 2px solid var(--lcd-dark); z-index: 5; box-shadow: 2px 2px 0 var(--lcd-dark);
+        }
+
+        .pot { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 46px; height: 24px; background: var(--lcd-dark); border-radius: 2px 2px 6px 6px; z-index: 3; }
+        .pot::before { content: ''; position: absolute; top: -3px; left: -3px; right: -3px; height: 6px; background: var(--lcd-dark); border-radius: 2px; }
+        .pot-soil { position: absolute; top: 2px; left: 3px; right: 3px; height: 5px; background: #634832; border-radius: 2px 2px 0 0; }
+        .pot-face { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; z-index: 4; font-family: monospace; color: var(--lcd); }
+
+        .p-stage { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275); z-index: 2; }
+        .p-stage.off { opacity: 0; transform: translateX(-50%) scale(0); pointer-events: none; }
+        .p-stage.on  { opacity: 1; transform: translateX(-50%) scale(1); }
+
+        .tamagotchi-egg { width: 22px; height: 28px; background: #fff; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; border: 2px solid var(--lcd-dark); position: relative; animation: eggJump 2s ease-in-out infinite; box-shadow: inset -2px -2px 4px rgba(0,0,0,0.1); }
+        .tamagotchi-egg::before { content: ''; position: absolute; top: 5px; left: 3px; width: 5px; height: 5px; background: var(--egg); border-radius: 50%; opacity: 0.8; }
+        .tamagotchi-egg::after { content: ''; position: absolute; bottom: 6px; right: 4px; width: 3px; height: 3px; background: var(--candy-blue); border-radius: 50%; opacity: 0.8; }
+
+        .sprout-s { width: 4px; height: 22px; background: #2ecc71; margin: 0 auto; position: relative; border: 1px solid var(--lcd-dark); }
+        .sprout-lf { position: absolute; width: 12px; height: 8px; background: #2ecc71; border: 1px solid var(--lcd-dark); animation: wiggle 3s ease-in-out infinite; }
+        .sprout-lf.a { top: 0; right: 2px; border-radius: 50% 50% 50% 0; transform-origin: bottom right; }
+        .sprout-lf.b { top: 8px; left: 2px; border-radius: 50% 50% 0 50%; transform-origin: bottom left; animation-delay: .4s; }
+
+        .grow-s { width: 5px; height: 42px; background: #27ae60; margin: 0 auto; position: relative; border: 1px solid var(--lcd-dark); }
+        .grow-lf { position: absolute; width: 16px; height: 10px; background: #2ecc71; border: 1px solid var(--lcd-dark); animation: wiggle 2.5s ease-in-out infinite; }
+        .grow-lf.a { top: 8px; right: 3px; border-radius: 50% 50% 50% 0; }
+        .grow-lf.b { top: 18px; left: 3px; border-radius: 50% 50% 0 50%; animation-delay: .6s; }
+        .grow-lf.c { top: 4px; left: 3px; border-radius: 50% 50% 0 50%; animation-delay: 1s; }
+
+        .bloom-s { width: 5px; height: 50px; background: #27ae60; margin: 0 auto; position: relative; border: 1px solid var(--lcd-dark); }
+        .bloom-lf { position: absolute; width: 16px; height: 10px; background: #2ecc71; border: 1px solid var(--lcd-dark); animation: wiggle 2.5s ease-in-out infinite; }
+        .bloom-lf.a { top: 16px; right: 3px; border-radius: 50% 50% 50% 0; }
+        .bloom-lf.b { top: 28px; left: 3px; border-radius: 50% 50% 0 50%; animation-delay: .4s; }
+        .bloom-flower { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 34px; height: 34px; animation: bounceFlower 2.5s ease-in-out infinite; }
+        .bl-petal { position: absolute; width: 12px; height: 12px; background: #f1c40f; border-radius: 50%; border: 1px solid var(--lcd-dark); }
+        .bl-petal:nth-child(1){top:0;left:50%;transform:translateX(-50%)}
+        .bl-petal:nth-child(2){bottom:0;left:50%;transform:translateX(-50%)}
+        .bl-petal:nth-child(3){top:50%;left:0;transform:translateY(-50%)}
+        .bl-petal:nth-child(4){top:50%;right:0;transform:translateY(-50%)}
+        .bl-petal:nth-child(5){top:3px;left:3px}
+        .bl-petal:nth-child(6){top:3px;right:3px}
+        .bl-center { position: absolute; top: 50%;left: 50%; transform: translate(-50%,-50%); width: 14px;height: 14px; background: #e67e22; border-radius: 50%; border: 2px solid var(--lcd-dark); z-index: 2; display: flex; align-items: center; justify-content: center; }
+        .bl-face { font-size: 5px; color: #fff; font-weight: bold; font-family: monospace; letter-spacing: -1px; }
+
+        .plant-zone.wilting .sprout-s, .plant-zone.wilting .grow-s, .plant-zone.wilting .bloom-s { transform: rotate(18deg); transform-origin: bottom center; filter: grayscale(50%); }
+
+        .wel-title { font-family: 'Secular One', sans-serif; font-size: clamp(1.3rem, 4vh, 1.6rem); color: var(--lcd-dark); text-align: center; text-shadow: 1px 1px 0 rgba(255,255,255,0.5); }
+        .wel-sub { font-size: clamp(0.8rem, 2vh, 1rem); color: var(--lcd-dark); font-weight: 700; text-align: center; background: rgba(0,0,0,0.05); padding: 5px 8px; border: 2px dashed var(--lcd-mid); margin-bottom: 10px; }
+        
+        .wel-input {
+            font-family: 'Heebo', sans-serif; font-size: clamp(1.1rem, 3vh, 1.3rem); font-weight: 900;
+            padding: 10px; border: 3px solid var(--lcd-dark); border-radius: 0; 
+            background: #fff; text-align: center; width: 85%; margin: 0 auto; display: block;
+            color: var(--lcd-dark); transition: all 0.2s; box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+        }
+        .wel-input:focus { outline: none; border-color: var(--sel-bg); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 rgba(0,0,0,0.1); }
+        .wel-input::placeholder { color: var(--lcd-mid); opacity: 0.6; }
+
+        /* מרווח עליון מוגדר בין העציץ לאימוג'ים */
+        .emo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; margin-top: 15px; margin-bottom: 2px; }
+        .emo {
+            background: #fff; border: 2px solid var(--lcd-dark); border-radius: 6px; padding: 6px 2px; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 4px; user-select: none;
+            box-shadow: 2px 2px 0 var(--lcd-mid); 
+        }
+        .emo:active { transform: translate(2px, 2px); box-shadow: 0 0 0; }
+        .emo .e-icon { width: clamp(35px, 6vh, 45px); height: clamp(35px, 6vh, 45px); display: flex; align-items: center; justify-content: center; }
+        .anim-emo { width: 100%; height: 100%; object-fit: contain; }
+        .emo .e-txt { font-family: 'Heebo', sans-serif; font-weight: 900; font-size: clamp(0.6rem, 1.5vh, 0.75rem); color: var(--lcd-dark); text-align: center; line-height: 1; }
+        .native-emoji { font-size: 1.6rem; }
+        
+        .emo.sel { background: var(--sel-bg); box-shadow: 2px 2px 0 var(--lcd-dark); transform: translate(-1px, -1px); }
+        .emo.sel .e-txt { color: var(--lcd-dark); }
+
+        .spark { position: absolute; pointer-events: none; z-index: 20; animation: heartPop 1s ease-out forwards; width: 25px; height: 25px; }
+
+        .hw-container { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; margin-top: auto; }
+        .hw-btns { display: flex; justify-content: center; gap: 25px; }
+        .hw {
+            width: 45px; height: 45px;
+            border-radius: 50%; border: 3px solid var(--lcd-dark); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: bold; color: white;
+            box-shadow: 0 4px 0 var(--lcd-dark), inset 0 2px 4px rgba(255,255,255,0.4);
+            transition: all 0.1s; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .hw:active { box-shadow: 0 1px 0 var(--lcd-dark); transform: translateY(3px); }
+        .hw-a { background: var(--candy-blue); }
+        .hw-b { background: var(--candy-yellow); color: #554400; text-shadow: none; margin-top: 6px; }
+        .hw-c { background: var(--candy-pink); }
+
+        .hw-labels { display: flex; justify-content: center; gap: 25px; margin-top: 4px; }
+        .hw-lbl { width: 45px; text-align: center; font-family: 'Secular One', sans-serif; font-size: 0.65rem; color: rgba(255,255,255,0.8); letter-spacing: 1px; text-shadow: 0 1px 1px rgba(0,0,0,0.4); }
+
+        .fin { text-align: center; }
+        .fin-icon { height: 60px; width: auto; margin: 15px auto; animation: bounceFlower 2s ease-in-out infinite; filter: drop-shadow(0 0 4px rgba(249,191,59,0.6)); }
+        .fin-title { font-family: 'Secular One', sans-serif; font-size: 1.8rem; color: var(--lcd-dark); margin: 0; }
+        .fin-sub { font-weight: 900; font-size: 0.9rem; color: var(--lcd-mid); margin: 5px 0 0 0; }
+    </style>
+</head>
+<body>
+
+<div class="egg-wrapper">
+    <div class="ring"></div>
+    <div class="shell">
+        <div class="brand">MAALE ADUMIM-GOTCHI</div>
+
+        <div class="bezel">
+            <div class="lcd">
+                <div class="lcd-vignette"></div>
+                <div class="lcd-scanline"></div>
+
+                <div class="lcd-status">
+                    <span class="status-name" id="sName">אורח/ת</span>
+                    <span class="status-mood" id="sMood">מחכה...</span>
+                    <span class="hearts-row" id="sHearts"></span>
+                </div>
+
+                <div class="lcd-body" id="lcdBody">
+                    <div class="panel active" id="p-welcome">
+                        <div class="plant-zone" id="plantZone">
+                            <div class="speech-bubble" id="plantSpeech"></div>
+                            <div class="phase-label" id="phaseLabel"></div>
+                            <div class="plant-vp">
+                                <div class="pot"><div class="pot-soil"></div><div class="pot-face" id="potFace">♡</div></div>
+                                <div class="p-stage on" id="ps-seed"><div class="tamagotchi-egg"></div></div>
+                                <div class="p-stage off" id="ps-sprout"><div class="sprout-s"><div class="sprout-lf a"></div><div class="sprout-lf b"></div></div></div>
+                                <div class="p-stage off" id="ps-grow"><div class="grow-s"><div class="grow-lf a"></div><div class="grow-lf b"></div><div class="grow-lf c"></div></div></div>
+                                <div class="p-stage off" id="ps-bloom">
+                                    <div class="bloom-s"><div class="bloom-lf a"></div><div class="bloom-lf b"></div>
+                                        <div class="bloom-flower">
+                                            <div class="bl-petal"></div><div class="bl-petal"></div><div class="bl-petal"></div>
+                                            <div class="bl-petal"></div><div class="bl-petal"></div><div class="bl-petal"></div>
+                                            <div class="bl-center"><span class="bl-face" id="bloomFace">◕‿◕</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="wel-title">מוכן לשחק?</div>
+                        <div class="wel-sub">דרג/י את הפעילויות<br>כדי להאכיל את חיית המחמד שלך</div>
+                        <input type="text" id="nameIn" class="wel-input" placeholder="מה השם שלך?">
+                    </div>
+
+                    <div id="actContainer"></div>
+
+                    <div class="panel fin" id="p-finish">
+                        <div id="plantZoneFin"></div>
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.webp" class="fin-icon" alt="🎉" onerror="this.outerHTML='<div class=\\'fin-icon native-emoji\\'>🎉</div>'">
+                        <div class="fin-title" id="finTitle">כל הכבוד!</div>
+                        <div class="fin-sub">הדירוג שלך נשלח בהצלחה.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hw-container">
+            <div class="hw-btns">
+                <div class="hw hw-c" onclick="hwNext()">▶</div>
+                <div class="hw hw-b" onclick="hwMiddle()">OK</div>
+                <div class="hw hw-a" onclick="hwPrev()">◀</div>
+            </div>
+            <div class="hw-labels">
+                <div class="hw-lbl">הבא</div>
+                <div class="hw-lbl">אישור</div>
+                <div class="hw-lbl">חזור</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+
+function initAudio() {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playTone(freq, type, duration, vol = 0.05) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + duration);
+}
+
+function vibe(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
+function sfxClick() { initAudio(); playTone(600, 'square', 0.1); vibe(15); }
+function sfxSelect() { initAudio(); playTone(900, 'square', 0.15); vibe([20, 30, 20]); }
+function sfxSuccess() {
+    initAudio(); playTone(400, 'square', 0.1);
+    setTimeout(() => playTone(600, 'square', 0.1), 100);
+    setTimeout(() => playTone(800, 'square', 0.3), 200);
+    vibe([30, 50, 30, 50, 100]);
+}
+
+const activities = [
+    "גני חלל - טלסקופ שמש", "גני סייבר - טליבוט",
+    "טלסקופ קטן להרכבה", "פעילות רגשית - משחק"
+];
+
+const emotions = [
+    { text:"הפתיע אותי", emoji:"🤯", hex:"1f92f", score:2 },
+    { text:"גיליתי מלא", emoji:"💡", hex:"1f4a1", score:1 },
+    { text:"רוצה עוד",   emoji:"✨", hex:"2728", score:2 },
+    { text:"נהנתי בטירוף", emoji:"🤩", hex:"1f929", score:2 },
+    { text:"הלכתי לאיבוד", emoji:"😵", hex:"1f635", score:-1 }, 
+    { text:"היה רגיל",    emoji:"😐", hex:"1f610", score:0 },  
+    { text:"היה קשה",     emoji:"🥵", hex:"1f975", score:-1 },
+    { text:"שעמם אותי",   emoji:"🥱", hex:"1f971", score:-2 }
+];
+
+const plantReactions = {
+    "הפתיע אותי": "וואו! איזה כיף לגלות דברים חדשים! 🤯",
+    "גיליתי מלא": "ידע זה כוח! איזה יופי! 💡",
+    "רוצה עוד": "הסקרנות שלך פשוט מדהימה! ✨",
+    "נהנתי בטירוף": "יששש! איזו אנרגיה מטורפת! 🤩",
+    "הלכתי לאיבוד": "הכל טוב! מותר ורצוי להיעזר בנו 😵",
+    "היה רגיל": "סבבה לגמרי, ממשיכים הלאה! 😐",
+    "היה קשה": "אלופים לא מוותרים כשקשה! 🥵",
+    "שעמם אותי": "לא נורא, בטוח שהתחנה הבאה תהיה אש! 🥱"
+};
+
+let cur = 0; const total = activities.length; let uName = '';
+const plantZone = document.getElementById('plantZone');
+
+function build() {
+    const c = document.getElementById('actContainer');
+    activities.forEach((act, i) => {
+        const n = i + 1;
+        const emos = emotions.map(e =>
+            `<div class="emo" data-text="${e.text}" data-score="${e.score}" onclick="togEmo(this)">
+                <div class="e-icon">
+                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/${e.hex}/512.webp" alt="${e.emoji}" class="anim-emo" onerror="this.outerHTML='<span class=\\'native-emoji\\'>${e.emoji}</span>'">
+                </div>
+                <span class="e-txt">${e.text}</span>
+            </div>`).join('');
+            
+        c.innerHTML += `
+            <div class="panel" id="p-act-${n}">
+                <div class="quest-box"><span class="quest-icon">❕</span> משימה: ${act}</div>
+                <div id="plant-slot-${n}"></div>
+                <div class="emo-grid">${emos}</div>
+            </div>`;
+    });
+}
+
+function movePlantTo(panelId) {
+    const target = document.getElementById(panelId);
+    if (target) { target.insertBefore(plantZone, target.children[1]); }
+}
+
+let bubbleTimer;
+function updateSpeechBubble(text, stayVisible = false) {
+    const speech = document.getElementById('plantSpeech');
+    speech.innerHTML = text;
+    speech.style.display = 'block';
+    
+    // איפוס והפעלה של אנימציית הכניסה
+    speech.style.animation = 'none';
+    speech.offsetHeight; 
+    speech.style.animation = 'bubblePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+
+    clearTimeout(bubbleTimer);
+    
+    // אם לא ביקשנו שהיא תישאר לתמיד, נפעיל טיימר של Fade-out
+    if (!stayVisible) {
+        bubbleTimer = setTimeout(() => {
+            speech.style.animation = 'bubbleFadeOut 0.4s forwards';
+        }, 2500); // מתפוגג אחרי שתיים וחצי שניות
+    }
+}
+
+function togEmo(el) {
+    sfxSelect(); 
+    el.classList.toggle('sel');
+    
+    if (el.classList.contains('sel')) {
+        spark(el);
+        const emoText = el.dataset.text;
+        if (plantReactions[emoText]) {
+            // הבועה קופצת עם הפידבק ואז מתפוגגת
+            updateSpeechBubble(`<b>${plantReactions[emoText]}</b>`, false);
+        }
+    }
+    
+    refresh();
+}
+
+function spark(el) {
+    const s = document.createElement('div');
+    s.className = 'spark';
+    s.innerHTML = '<img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2728/512.webp" style="width:100%;height:100%;" onerror="this.outerHTML=\'✨\'">';
+    s.style.left = (Math.random()*60+20)+'%'; s.style.top = '-10%';
+    el.appendChild(s); setTimeout(() => s.remove(), 1000);
+}
+
+function getScore() { let s = 0; document.querySelectorAll('.emo.sel').forEach(e => s += +e.dataset.score); return s; }
+
+function refresh() {
+    const sc = getScore();
+    const stages = ['ps-seed','ps-sprout','ps-grow','ps-bloom'];
+
+    stages.forEach(id => { document.getElementById(id).classList.add('off'); document.getElementById(id).classList.remove('on'); });
+    let si = 0;
+    if (cur >= 4) si = 3; else if (cur >= 3) si = 2; else if (cur >= 2) si = 1;
+    document.getElementById(stages[si]).classList.remove('off'); document.getElementById(stages[si]).classList.add('on');
+
+    const phases = ['🥚 ביצה','🌱 נבט','🌿 צומח','🌻 פריחה'];
+    document.getElementById('phaseLabel').textContent = phases[si];
+
+    plantZone.classList.toggle('wilting', sc < 0);
+    document.getElementById('bloomFace').textContent = sc < 0 ? '◕︵◕' : '◕‿◕';
+
+    const moods = [
+        {min:-Infinity,max:-3,t:'צמא קצת 🥀',p:'😢'}, {min:-3,max:0,t:'צמא קצת 💧',p:'😟'},
+        {min:0,max:3,t:'גדל יפה 🌱',p:'😊'}, {min:3,max:6,t:'צומח מעולה 🌿',p:'😄'},
+        {min:6,max:Infinity,t:'מושלם! 🌻',p:'🥰'}
+    ];
+    const m = moods.find(x => sc >= x.min && sc < x.max) || moods[2];
+    document.getElementById('sMood').textContent = m.t; document.getElementById('potFace').textContent = m.p;
+
+    const hc = Math.max(0, Math.min(5, Math.floor((sc+2)/2)));
+    document.getElementById('sHearts').innerHTML = Array.from({length:5},(_,i) => 
+        `<img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764/512.webp" class="ht ${i<hc?'on':'off'}" alt="♥" onerror="this.outerHTML='<span class=\\'ht ${i<hc?'on':'off'}\\'>❤️</span>'">`
+    ).join('');
+}
+
+function showPanel(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const el = document.getElementById(id); if (el) el.classList.add('active');
+}
+
+function goTo(n) {
+    cur = n;
+    if (n === 0) { showPanel('p-welcome'); movePlantTo('p-welcome'); } 
+    else if (n <= total) { showPanel('p-act-'+n); movePlantTo('p-act-'+n); } 
+    else { showPanel('p-finish'); movePlantTo('p-finish'); }
+    
+    const speech = document.getElementById('plantSpeech');
+    
+    if (n > 0 && n <= total) {
+        // במסך פעילות: קופץ, שואל, ומתפוגג
+        updateSpeechBubble(`איך היה פה? 🤔`, false);
+    } else if (n > total) {
+        // במסך הסיום: אומר תודה ונשאר קבוע
+        updateSpeechBubble(`תודה <b>${uName}</b>!<br>איזה כיף ששיחקנו!`, true);
+    } else {
+        speech.style.display = 'none';
+        clearTimeout(bubbleTimer);
+    }
+    
+    refresh();
+}
+
+function startSurvey() {
+    uName = document.getElementById('nameIn').value.trim();
+    if (!uName) {
+        document.getElementById('nameIn').style.borderColor = 'var(--egg)';
+        document.getElementById('nameIn').placeholder = 'הכנס שם!';
+        sfxClick(); return;
+    }
+    document.getElementById('sName').textContent = uName;
+    sfxSuccess(); goTo(1);
+}
+
+function hwPrev() { sfxClick(); if (cur > 1 && cur <= total) goTo(cur - 1); }
+function hwNext() { sfxClick(); if (cur >= 1 && cur < total) goTo(cur + 1); }
+function hwMiddle() {
+    if (cur === 0) startSurvey();
+    else if (cur === total) { sfxClick(); submitForm(); }
+    else if (cur > 0 && cur < total) { sfxClick(); goTo(cur + 1); }
+}
+
+function submitForm() {
+    if (cur < total) return;
+    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSflJGNpw2XY2OO6-1c_jqqlJg8hydGJtoGQXZNDSKiongSbNQ/formResponse";
+    const nameEntry = "entry.183675469";
+    const actEntries = ["entry.202624636","entry.707423137","entry.646807539","entry.1449702924"];
+
+    const fd = new URLSearchParams();
+    fd.append(nameEntry, uName);
+    activities.forEach((_,i) => {
+        document.querySelectorAll(`#p-act-${i+1} .emo.sel`).forEach(btn => { fd.append(actEntries[i], btn.dataset.text); });
+    });
+
+    document.getElementById(`p-act-${total}`).innerHTML = '<div style="margin:auto; text-align:center;"><h2>שולח...</h2></div>';
+
+    fetch(formUrl, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:fd.toString()})
+    .then(() => {
+        sfxSuccess();
+        document.getElementById('finTitle').textContent = `כל הכבוד!`;
+        document.getElementById('sMood').textContent = 'נשלח 🎉';
+        goTo(total + 1);
+    })
+    .catch(() => alert("אופס, משהו השתבש בחיבור. נסה שוב!"));
+}
+
+document.getElementById('nameIn').addEventListener('keydown', e => { if(e.key==='Enter') startSurvey(); });
+build();
+</script>
+</body>
+</html>

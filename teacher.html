@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ClassPet - &#x05DE;&#x05D5;&#x05E8;&#x05D4;</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&family=Secular+One&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="egg-wrapper">
+  <div class="ring"></div>
+  <div class="shell">
+    <div class="brand">CLASS-PET &#x05DE;&#x05D5;&#x05E8;&#x05D4;</div>
+
+    <div class="bezel">
+      <div class="lcd">
+        <div class="lcd-vignette"></div>
+        <div class="lcd-scanline"></div>
+
+        <div class="lcd-status" id="statusBar">
+          <span class="status-name">&#x1F4CB; &#x05DC;&#x05D5;&#x05D7; &#x05DE;&#x05D5;&#x05E8;&#x05D4;</span>
+        </div>
+
+        <div class="lcd-body" id="lcdBody">
+
+          <!-- PIN LOGIN -->
+          <div class="panel active" id="p-pin">
+            <div style="text-align:center;padding:15px 10px;">
+              <div style="font-size:2.5rem;margin-bottom:6px;">&#x1F512;</div>
+              <div style="font-family:'Secular One',sans-serif;font-size:1.1rem;color:var(--lcd-dark);margin-bottom:4px;">&#x05D4;&#x05DB;&#x05E0;&#x05E1; &#x05E7;&#x05D5;&#x05D3; PIN</div>
+            </div>
+            <div class="pin-display" id="pinDisplay">____</div>
+            <div class="pin-pad">
+              <div class="pin-key" onclick="pinKey('1')">1</div>
+              <div class="pin-key" onclick="pinKey('2')">2</div>
+              <div class="pin-key" onclick="pinKey('3')">3</div>
+              <div class="pin-key" onclick="pinKey('4')">4</div>
+              <div class="pin-key" onclick="pinKey('5')">5</div>
+              <div class="pin-key" onclick="pinKey('6')">6</div>
+              <div class="pin-key" onclick="pinKey('7')">7</div>
+              <div class="pin-key" onclick="pinKey('8')">8</div>
+              <div class="pin-key" onclick="pinKey('9')">9</div>
+              <div class="pin-key" onclick="pinClear()" style="font-size:0.8rem;">&#x2190;</div>
+              <div class="pin-key" onclick="pinKey('0')">0</div>
+              <div class="pin-key" onclick="pinSubmit()" style="background:var(--candy-yellow);font-size:0.8rem;">OK</div>
+            </div>
+          </div>
+
+          <!-- DASHBOARD -->
+          <div class="panel" id="p-dashboard">
+            <div style="padding:6px 8px;width:100%;border-bottom:1px solid var(--lcd-mid);">
+              <select class="dropdown" id="activeLessonSelect" onchange="selectActiveLesson()">
+                <option value="">-- &#x05D1;&#x05D7;&#x05E8; &#x05E9;&#x05D9;&#x05E2;&#x05D5;&#x05E8; --</option>
+              </select>
+            </div>
+            <div class="teacher-roster" id="rosterGrid">
+              <div class="loading">&#x05D8;&#x05D5;&#x05E2;&#x05DF;</div>
+            </div>
+            <div class="fab" onclick="showNewLesson()">+</div>
+
+            <!-- Student detail drawer -->
+            <div class="drawer" id="studentDrawer">
+              <div class="drawer-close" onclick="closeDrawer()">&#x25C0; &#x05D7;&#x05D6;&#x05D5;&#x05E8;</div>
+              <div id="drawerContent"></div>
+            </div>
+
+            <!-- New lesson modal -->
+            <div class="drawer" id="lessonModal">
+              <div class="drawer-close" onclick="closeLessonModal()">&#x25C0; &#x05D7;&#x05D6;&#x05D5;&#x05E8;</div>
+              <div style="text-align:center;font-family:'Secular One',sans-serif;font-size:1.1rem;color:var(--lcd-dark);margin-bottom:12px;">&#x1F4DA; &#x05E9;&#x05D9;&#x05E2;&#x05D5;&#x05E8; &#x05D7;&#x05D3;&#x05E9;</div>
+              <div class="form-group">
+                <div class="form-label">&#x05E0;&#x05D5;&#x05E9;&#x05D0;</div>
+                <input type="text" class="form-input" id="lessonTopic" placeholder="&#x05DE;&#x05D4; &#x05DC;&#x05DE;&#x05D3;&#x05D5; &#x05D4;&#x05D9;&#x05D5;&#x05DD;?">
+              </div>
+              <div class="form-group">
+                <div class="form-label">&#x05EA;&#x05D9;&#x05D0;&#x05D5;&#x05E8; (&#x05D0;&#x05D5;&#x05E4;&#x05E6;&#x05D9;&#x05D5;&#x05E0;&#x05DC;&#x05D9;)</div>
+                <input type="text" class="form-input" id="lessonDesc" placeholder="&#x05E4;&#x05E8;&#x05D8;&#x05D9;&#x05DD; &#x05E0;&#x05D5;&#x05E1;&#x05E4;&#x05D9;&#x05DD;">
+              </div>
+              <div class="form-group">
+                <div class="form-label">&#x05EA;&#x05D0;&#x05E8;&#x05D9;&#x05DA;</div>
+                <input type="date" class="form-input" id="lessonDate">
+              </div>
+              <div style="text-align:center;padding:10px;">
+                <div class="big-btn yellow" onclick="createLesson()">&#x05E6;&#x05D5;&#x05E8; &#x05E9;&#x05D9;&#x05E2;&#x05D5;&#x05E8; &#x2795;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hw-container">
+      <div class="hw-btns">
+        <div class="hw hw-c" onclick="sfxClick()">&#x25B6;</div>
+        <div class="hw hw-b" onclick="sfxClick()">OK</div>
+        <div class="hw hw-a" onclick="goBack()">&#x25C0;</div>
+      </div>
+      <div class="hw-labels">
+        <div class="hw-lbl">&#x05D4;&#x05D1;&#x05D0;</div>
+        <div class="hw-lbl">&#x05D0;&#x05D9;&#x05E9;&#x05D5;&#x05E8;</div>
+        <div class="hw-lbl">&#x05D7;&#x05D6;&#x05D5;&#x05E8;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+/* ============================================================
+   Teacher Panel Logic
+   ============================================================ */
+
+var token = null;
+var dashboard = null;
+var activeLesson = null;
+var pinCode = '';
+
+(function init() {
+  var saved = getTeacherToken();
+  if (saved) { token = saved; loadDashboard(); }
+  var dateInput = document.getElementById('lessonDate');
+  if (dateInput) dateInput.value = new Date().toISOString().substring(0, 10);
+})();
+
+// ---- PIN ----
+var pinLoading = false;
+function pinKey(d) {
+  if (pinLoading) return;
+  sfxClick();
+  if (pinCode.length >= 4) return;
+  pinCode += d; updatePinDisplay();
+  if (pinCode.length === 4) setTimeout(pinSubmit, 200);
+}
+function pinClear() { if (pinLoading) return; sfxClick(); pinCode = pinCode.slice(0, -1); updatePinDisplay(); }
+function pinSubmit() {
+  if (!pinCode || pinLoading) return;
+  pinLoading = true;
+  document.getElementById('pinDisplay').textContent = '\u05D8\u05D5\u05E2\u05DF...';
+  document.querySelectorAll('.pin-key').forEach(function(k) { k.style.opacity = '0.5'; });
+  api('loginTeacher', { pin: pinCode }).then(function(res) {
+    token = res.token; setTeacherToken(token); sfxSuccess(); pinLoading = false;
+    document.querySelectorAll('.pin-key').forEach(function(k) { k.style.opacity = '1'; });
+    loadDashboard();
+  }).catch(function() {
+    sfxError(); showToast('\u05E7\u05D5\u05D3 \u05E9\u05D2\u05D5\u05D9!', true);
+    pinCode = ''; pinLoading = false;
+    document.querySelectorAll('.pin-key').forEach(function(k) { k.style.opacity = '1'; });
+    updatePinDisplay();
+  });
+}
+function updatePinDisplay() {
+  var display = '';
+  for (var i = 0; i < 4; i++) display += i < pinCode.length ? '\u25CF' : '_';
+  document.getElementById('pinDisplay').textContent = display;
+}
+
+// ---- Dashboard ----
+function loadDashboard() {
+  showPanel('p-pin', false); showPanel('p-dashboard', true);
+  api('getClassDashboard', { token: token }).then(function(data) {
+    dashboard = data;
+    renderLessonDropdown(data.allLessons);
+    renderRoster(data.roster);
+  }).catch(function(err) {
+    if (err.message.indexOf('expired') !== -1 || err.message.indexOf('Invalid') !== -1) {
+      clearTeacherToken(); token = null;
+      showPanel('p-dashboard', false); showPanel('p-pin', true);
+      showToast('\u05D4\u05E1\u05E9\u05DF \u05E4\u05D2, \u05D4\u05EA\u05D7\u05D1\u05E8 \u05DE\u05D7\u05D3\u05E9', true);
+    } else {
+      document.getElementById('rosterGrid').innerHTML = '<div class="empty-state">\u05E9\u05D2\u05D9\u05D0\u05D4: ' + escHtml(err.message) + '</div>';
+    }
+  });
+}
+
+function renderLessonDropdown(lessons) {
+  var sel = document.getElementById('activeLessonSelect');
+  sel.innerHTML = '<option value="">-- \u05D1\u05D7\u05E8 \u05E9\u05D9\u05E2\u05D5\u05E8 --</option>';
+  lessons.forEach(function(l) {
+    var opt = document.createElement('option');
+    opt.value = l.id; opt.textContent = l.date + ' - ' + l.topic;
+    sel.appendChild(opt);
+  });
+  if (dashboard.todayLessons.length > 0) {
+    sel.value = dashboard.todayLessons[0].id;
+    activeLesson = dashboard.todayLessons[0].id;
+  }
+}
+
+function selectActiveLesson() { activeLesson = document.getElementById('activeLessonSelect').value || null; sfxClick(); }
+
+function renderRoster(roster) {
+  var grid = document.getElementById('rosterGrid');
+  if (!roster || roster.length === 0) { grid.innerHTML = '<div class="empty-state">\u05D0\u05D9\u05DF \u05EA\u05DC\u05DE\u05D9\u05D3\u05D9\u05DD</div>'; return; }
+  grid.innerHTML = roster.map(function(s) {
+    var badge = '';
+    if (s.attendance === 'present') badge = '<span class="attendance-badge present">\u2705</span>';
+    else if (s.attendance === 'late') badge = '<span class="attendance-badge late">\u23F0</span>';
+    else if (s.attendance === 'absent') badge = '<span class="attendance-badge absent">\u274C</span>';
+    return '<div class="student-card" id="card-' + s.id + '">' +
+      '<div class="student-card-header" onclick="openStudentDetail(\'' + s.id + '\')">' +
+        '<span class="student-card-name">' + escHtml(s.name) + ' ' + badge + '</span>' +
+        '<span class="student-card-stats">' +
+          '<span>\uD83C\uDF96\uFE0F' + s.level + '</span>' +
+          '<span>\uD83E\uDE99' + s.coins + '</span>' +
+          '<span>\u2B50' + s.stars + '</span></span></div>' +
+      '<div class="student-card-actions">' +
+        '<div class="action-btn attend" onclick="logBehavior(\'' + s.id + '\',\'attendance\',event)">\u2705 \u05E0\u05D5\u05DB\u05D7;</div>' +
+        '<div class="action-btn late" onclick="logBehavior(\'' + s.id + '\',\'late\',event)">\u23F0 \u05D0\u05D9\u05D7\u05D5\u05E8;</div>' +
+        '<div class="action-btn absent" onclick="logBehavior(\'' + s.id + '\',\'absent\',event)">\u274C \u05D7\u05D9\u05E1\u05D5\u05E8;</div>' +
+        '<div class="action-btn good" onclick="logBehavior(\'' + s.id + '\',\'good_behavior\',event)">\u2B50 \u05D8\u05D5\u05D1;</div>' +
+        '<div class="action-btn disrupt" onclick="logBehavior(\'' + s.id + '\',\'disruption\',event)">\uD83D\uDEAB \u05D4\u05E4\u05E8\u05E2\u05D4;</div></div></div>';
+  }).join('');
+}
+
+var busy = false;
+function logBehavior(studentId, type, event) {
+  if (event) event.stopPropagation();
+  if (busy) return;
+  busy = true;
+  sfxClick();
+  var card = document.getElementById('card-' + studentId);
+  if (card) card.style.opacity = '0.6';
+  api('addBehavior', { token: token, student_id: studentId, lesson_id: activeLesson, type: type }).then(function(result) {
+    busy = false; sfxSuccess(); showToast(getBehaviorLabel(type) + ' - ' + escHtml(result.name)); loadDashboard();
+  }).catch(function(err) {
+    busy = false;
+    if (card) card.style.opacity = '1';
+    showToast('\u05E9\u05D2\u05D9\u05D0\u05D4: ' + err.message, true); sfxError();
+  });
+}
+
+function getBehaviorLabel(type) {
+  return { attendance:'\u2705 \u05E0\u05D5\u05DB\u05D7\u05D5\u05EA', late:'\u23F0 \u05D0\u05D9\u05D7\u05D5\u05E8', absent:'\u274C \u05D7\u05D9\u05E1\u05D5\u05E8',
+    good_behavior:'\u2B50 \u05D4\u05EA\u05E0\u05D4\u05D2\u05D5\u05EA \u05D8\u05D5\u05D1\u05D4', disruption:'\uD83D\uDEAB \u05D4\u05E4\u05E8\u05E2\u05D4' }[type] || type;
+}
+
+// ---- Student Detail ----
+function openStudentDetail(studentId) {
+  sfxClick();
+  var drawer = document.getElementById('studentDrawer');
+  var content = document.getElementById('drawerContent');
+  content.innerHTML = '<div class="loading">\u05D8\u05D5\u05E2\u05DF</div>';
+  drawer.classList.add('active');
+  api('getStudentDetail', { token: token, student_id: studentId }).then(function(data) {
+    var s = data.student;
+    var html = '<div style="text-align:center;margin-bottom:12px;">' +
+      '<div style="font-family:\'Secular One\',sans-serif;font-size:1.2rem;color:var(--lcd-dark);">' + escHtml(s.name) + '</div>' +
+      '<div style="font-size:0.8rem;color:var(--lcd-mid);">\uD83C\uDF96\uFE0F \u05E8\u05DE\u05D4 ' + s.level + ' | \uD83E\uDE99 ' + s.coins + ' | \u2B50 ' + s.stars + '</div></div>';
+    html += '<div style="font-family:\'Secular One\',sans-serif;font-size:0.9rem;color:var(--lcd-dark);margin-bottom:6px;">\u05D4\u05EA\u05E0\u05D4\u05D2\u05D5\u05EA \u05D0\u05D7\u05E8\u05D5\u05E0\u05D5\u05EA</div>';
+    if (data.behaviors.length === 0) { html += '<div class="history-item">\u05D0\u05D9\u05DF \u05E2\u05D3\u05D9\u05D9\u05DF</div>'; }
+    else { data.behaviors.slice(-10).reverse().forEach(function(b) {
+      var ts = b.timestamp ? b.timestamp.substring(0, 10) : '';
+      html += '<div class="history-item"><b>' + getBehaviorLabel(b.type) + '</b>' +
+        (b.lesson_topic ? ' (' + escHtml(b.lesson_topic) + ')' : '') +
+        ' <span style="color:var(--lcd-mid);">' + (b.coins_delta >= 0 ? '+' : '') + b.coins_delta + '\uD83E\uDE99</span>' +
+        (b.note ? '<br><em>' + escHtml(b.note) + '</em>' : '') +
+        '<div style="font-size:0.6rem;color:var(--lcd-mid);">' + ts + '</div></div>';
+    }); }
+    html += '<div style="font-family:\'Secular One\',sans-serif;font-size:0.9rem;color:var(--lcd-dark);margin:12px 0 6px;">\u05D3\u05D9\u05E8\u05D5\u05D2\u05D9\u05DD \u05D0\u05D7\u05E8\u05D5\u05E0\u05D9\u05DD</div>';
+    if (data.ratings.length === 0) { html += '<div class="history-item">\u05D0\u05D9\u05DF \u05E2\u05D3\u05D9\u05D9\u05DF</div>'; }
+    else { data.ratings.slice(-10).reverse().forEach(function(r) {
+      html += '<div class="history-item">' + escHtml(r.emotion_text) + ' (' + escHtml(r.lesson_topic) + ')' +
+        ' <span style="color:' + (r.emotion_score > 0 ? '#2ecc71' : r.emotion_score < 0 ? '#e74c3c' : 'var(--lcd-mid)') + ';">' +
+        (r.emotion_score >= 0 ? '+' : '') + r.emotion_score + '</span></div>';
+    }); }
+    content.innerHTML = html;
+  }).catch(function(err) { content.innerHTML = '<div class="empty-state">\u05E9\u05D2\u05D9\u05D0\u05D4: ' + escHtml(err.message) + '</div>'; });
+}
+
+function closeDrawer() { sfxClick(); document.getElementById('studentDrawer').classList.remove('active'); }
+
+// ---- New Lesson ----
+function showNewLesson() {
+  sfxClick();
+  document.getElementById('lessonModal').classList.add('active');
+  document.getElementById('lessonDate').value = new Date().toISOString().substring(0, 10);
+}
+function closeLessonModal() { sfxClick(); document.getElementById('lessonModal').classList.remove('active'); }
+
+function createLesson() {
+  if (busy) return;
+  var topic = document.getElementById('lessonTopic').value.trim();
+  var desc = document.getElementById('lessonDesc').value.trim();
+  var date = document.getElementById('lessonDate').value;
+  if (!topic) { showToast('\u05D4\u05DB\u05E0\u05E1 \u05E0\u05D5\u05E9\u05D0!', true); sfxError(); return; }
+  busy = true;
+  sfxClick(); showToast('\u05D9\u05D5\u05E6\u05E8...');
+  api('createLesson', { token: token, topic: topic, description: desc, date: date }).then(function() {
+    busy = false; sfxSuccess(); showToast('\u05E9\u05D9\u05E2\u05D5\u05E8 \u05E0\u05D5\u05E6\u05E8! \uD83D\uDCDA');
+    document.getElementById('lessonTopic').value = '';
+    document.getElementById('lessonDesc').value = '';
+    closeLessonModal(); loadDashboard();
+  }).catch(function(err) { busy = false; showToast('\u05E9\u05D2\u05D9\u05D0\u05D4: ' + err.message, true); sfxError(); });
+}
+
+function goBack() {
+  sfxClick();
+  if (document.getElementById('studentDrawer').classList.contains('active')) { closeDrawer(); return; }
+  if (document.getElementById('lessonModal').classList.contains('active')) { closeLessonModal(); return; }
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

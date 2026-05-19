@@ -278,6 +278,16 @@ body::before {
 .big-btn.blue { background:var(--candy-blue); color:var(--lcd-dark); }
 .big-btn.yellow { background:var(--candy-yellow); color:var(--lcd-dark); }
 
+/* TTS toggle */
+.tts-btn {
+  position:absolute; top:4px; left:4px; z-index:50;
+  width:28px; height:28px; border-radius:50%; border:2px solid var(--lcd-dark);
+  background:#fff; font-size:0.9rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:1px 1px 0 var(--lcd-mid); user-select:none;
+}
+.tts-btn:active { transform:translate(1px,1px); box-shadow:0 0 0; }
+
 /* FAB */
 .fab {
   position:absolute; bottom:10px; left:10px; width:44px; height:44px;

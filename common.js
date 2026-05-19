@@ -81,6 +81,7 @@ function showToast(msg, isError) {
   t.className = 'toast' + (isError ? ' error' : '');
   t.textContent = msg;
   document.body.appendChild(t);
+  speak(msg);
   setTimeout(function() { t.remove(); }, 2500);
 }
 
@@ -103,6 +104,45 @@ var encouragements = [
 function randomEncouragement() {
   return encouragements[Math.floor(Math.random() * encouragements.length)];
 }
+
+// ---- Text-to-Speech ----
+var ttsEnabled = localStorage.getItem('classpet_tts') === 'true';
+
+function speak(text) {
+  if (!ttsEnabled || !text) return;
+  window.speechSynthesis.cancel();
+  var utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'he-IL';
+  utter.rate = 0.9;
+  utter.pitch = 1.1;
+  // Try to find a Hebrew voice
+  var voices = window.speechSynthesis.getVoices();
+  var heVoice = voices.find(function(v) { return v.lang.indexOf('he') === 0; });
+  if (heVoice) utter.voice = heVoice;
+  window.speechSynthesis.speak(utter);
+}
+
+function toggleTTS() {
+  ttsEnabled = !ttsEnabled;
+  localStorage.setItem('classpet_tts', ttsEnabled);
+  var btn = document.getElementById('ttsToggle');
+  if (btn) {
+    btn.textContent = ttsEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+    btn.title = ttsEnabled ? '\u05DB\u05D1\u05D4 \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05E7\u05D5\u05DC' : '\u05D4\u05E4\u05E2\u05DC \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05E7\u05D5\u05DC';
+  }
+  if (ttsEnabled) speak('\u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05E7\u05D5\u05DC \u05D4\u05D5\u05E4\u05E2\u05DC\u05D4');
+  sfxClick();
+}
+
+// Preload voices + init button
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('ttsToggle');
+  if (btn) btn.textContent = ttsEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+});
 
 // ---- HTML escape ----
 function escHtml(str) {

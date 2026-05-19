@@ -18,6 +18,7 @@
       <div class="lcd">
         <div class="lcd-vignette"></div>
         <div class="lcd-scanline"></div>
+        <div class="tts-btn" id="ttsToggle" onclick="toggleTTS()" title="&#x05D4;&#x05E4;&#x05E2;&#x05DC; &#x05E7;&#x05E8;&#x05D9;&#x05D0;&#x05D4; &#x05D1;&#x05E7;&#x05D5;&#x05DC;">&#x1F507;</div>
 
         <!-- Status bar -->
         <div class="lcd-status" id="statusBar" style="display:none;">
@@ -182,6 +183,7 @@ var busy = false;
 })();
 
 function loadRoster() {
+  speak('\u05D1\u05D7\u05E8 \u05D0\u05EA \u05D4\u05E9\u05DD \u05E9\u05DC\u05DA');
   api('getRoster').then(function(roster) {
     var list = document.getElementById('nameList');
     if (!roster || roster.length === 0) {
@@ -203,6 +205,7 @@ function pickStudent(id, name) {
   pendingStudentName = name;
   studentPin = '';
   document.getElementById('pinWelcome').textContent = '\u05E9\u05DC\u05D5\u05DD ' + name + '!';
+  speak('\u05E9\u05DC\u05D5\u05DD ' + name + '! \u05D4\u05DB\u05E0\u05E1 \u05E1\u05D9\u05E1\u05DE\u05D4');
   updateStudentPinDisplay();
   showPanel('p-login', false);
   showPanel('p-student-pin', true);
@@ -284,6 +287,7 @@ function enterApp() {
   currentTab = 'p-pet';
   renderPet();
   sfxSuccess();
+  speak('\u05E9\u05DC\u05D5\u05DD ' + state.name + '! \u05D6\u05D5 \u05D7\u05D9\u05EA \u05D4\u05DE\u05D7\u05DE\u05D3 \u05E9\u05DC\u05DA. \u05D9\u05E9 \u05DC\u05DA ' + state.coins + ' \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA \u05D5\u05E8\u05DE\u05D4 ' + state.level);
 }
 
 function updateStatusBar() {
@@ -318,10 +322,10 @@ function switchTab(el) {
   el.classList.add('active');
   document.querySelectorAll('#lcdBody > .panel').forEach(function(p) { p.classList.remove('active'); });
   document.getElementById(tab).classList.add('active');
-  if (tab === 'p-rate') loadOpenLessons();
-  if (tab === 'p-shop') loadShop();
-  if (tab === 'p-stats') loadStats();
-  if (tab === 'p-pet') renderPet();
+  if (tab === 'p-rate') { loadOpenLessons(); speak('\u05D3\u05E8\u05D2 \u05E9\u05D9\u05E2\u05D5\u05E8'); }
+  if (tab === 'p-shop') { loadShop(); speak('\u05D7\u05E0\u05D5\u05EA'); }
+  if (tab === 'p-stats') { loadStats(); speak('\u05E1\u05D8\u05D8\u05D9\u05E1\u05D8\u05D9\u05E7\u05D4'); }
+  if (tab === 'p-pet') { renderPet(); speak('\u05D4\u05E4\u05D8 \u05E9\u05DC\u05D9'); }
 }
 
 // ---- Rating flow ----
@@ -364,7 +368,10 @@ function openRating(lessonId, topic) {
 function togEmo(el) {
   sfxSelect();
   el.classList.toggle('sel');
-  if (el.classList.contains('sel')) spark(el);
+  if (el.classList.contains('sel')) {
+    spark(el);
+    speak(el.dataset.text);
+  }
 }
 
 function spark(el) {

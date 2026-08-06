@@ -1160,6 +1160,190 @@
   });
 
   /* ============================================================
+     סצנה — רקטה מול טיל מונחה: פוגעים במטרה?
+     ============================================================ */
+  Stage.register('guided', (S) => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(46, 1.6, .1, 600);
+    camera.position.set(0, 6, 27);
+    lightRig(scene);
+    scene.add(starField(400, 160));
+
+    // קרקע
+    const ground = new THREE.Mesh(new THREE.CircleGeometry(120, 56), new THREE.MeshStandardMaterial({ color: 0x14264a, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2; scene.add(ground);
+    const grid = new THREE.GridHelper(120, 30, C.blue, 0x1d2c50);
+    grid.material.transparent = true; grid.material.opacity = .28; grid.position.y = .02; scene.add(grid);
+
+    const START = new THREE.Vector3(-11, 1.6, 0);
+    const TARGET = new THREE.Vector3(11, 8.0, 0);
+
+    // משגר
+    const pad = new THREE.Group(); scene.add(pad);
+    pad.position.copy(START); pad.position.y = 0;
+    const padBase = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.8, .4, 26), M.paint(0x24345a, .8));
+    padBase.position.y = .2; pad.add(padBase);
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(.16, 3.4, .16), M.metal(0x8fa0bb, .4));
+    rail.position.y = 1.9; rail.rotation.z = -.42; pad.add(rail);
+
+    // מטרה — טבעת זוהרת
+    const targetG = new THREE.Group(); scene.add(targetG);
+    targetG.position.copy(TARGET);
+    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.5, .14, 12, 44), M.glow(C.yellow, 1.2));
+    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(.85, .1, 12, 36), M.glow(0xff5c6e, 1.2));
+    targetG.add(ring1, ring2);
+    const bull = new THREE.Mesh(new THREE.SphereGeometry(.32, 20, 14), M.glow(0xffffff, 1.6));
+    targetG.add(bull);
+
+    // הרקטה
+    const rocket = new THREE.Group(); scene.add(rocket);
+    const R = .34;
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(R, R, 2.4, 26), M.paint(C.white, .34));
+    rocket.add(body);
+    const payload = new THREE.Mesh(new THREE.CylinderGeometry(R * 1.02, R * 1.02, .7, 26), M.paint(C.blue, .3));
+    payload.position.y = .55; rocket.add(payload);
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(R, 1.1, 26), M.paint(C.yellow, .3));
+    nose.position.y = 1.75; rocket.add(nose);
+    addFins(rocket, 4, finGeo(.85, .6, .05), M.paint(C.amber, .32), R * .9, -1.2);
+
+    // חלקים שקיימים רק בטיל מונחה: חיישן בראש + כנפוני היגוי
+    const brain = new THREE.Mesh(new THREE.SphereGeometry(.17, 18, 12), M.glow(0x6fe0ff, 2));
+    brain.position.y = 2.15; rocket.add(brain);
+    const canards = new THREE.Group(); rocket.add(canards);
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2;
+      const cv = new THREE.Mesh(new THREE.BoxGeometry(.06, .3, .42), M.paint(0xdfe8f7, .4));
+      cv.position.set(Math.cos(a) * R, 1.05, Math.sin(a) * R);
+      cv.rotation.y = -a;
+      canards.add(cv);
+    }
+
+    const jet = new Jet({ count: 220, size: .3, speed: 12, spread: .2, life: .38, color: 0xffd9a0 });
+    const trail = new Jet({ count: 160, tex: TEX_SMOKE, size: .7, speed: 2.2, spread: .3, life: 1.6, color: 0xa8bcd8, blending: THREE.NormalBlending });
+    scene.add(jet.points, trail.points);
+
+    // פיצוץ הפגיעה
+    const boom = new Jet({ count: 260, size: .55, speed: 12, spread: 1.0, life: .7, color: 0xffd08a, dir: new THREE.Vector3(0, .2, 0), gravity: -4 });
+    scene.add(boom.points);
+    const shock = new THREE.Mesh(new THREE.TorusGeometry(1, .1, 10, 40),
+      new THREE.MeshBasicMaterial({ color: 0xfff0c0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
+    scene.add(shock);
+
+    const labels = Labeller();
+    const L = {
+      brain: labels.add('<b>ראש הנחיה</b><small>חיישן + מחשב קטן — ה״מוח״</small>', new THREE.Vector3(0, 0, 0), 'blue'),
+      pay: labels.add('<b>מטען מועיל</b><small>מה שהרקטה נושאת</small>', new THREE.Vector3(0, 0, 0), 'yellow'),
+      eng: labels.add('<b>מקטע ההנעה</b><small>המנוע והדלק</small>', new THREE.Vector3(0, 0, 0), 'red'),
+    };
+
+    let guided = false, st = 'idle', t = 0, orbit = null;
+    const pos = new THREE.Vector3(), vel = new THREE.Vector3();
+    const WIND = new THREE.Vector3(0, 0, 3.6);
+    let boomT = 0;
+
+    function rest() {
+      rocket.position.copy(START);
+      rocket.rotation.set(0, 0, -.42);
+    }
+    rest();
+
+    function aim(dir) {
+      // מיישרים את ציר ה-Y של הרקטה לכיוון התנועה
+      const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+      rocket.quaternion.slerp(q, .35);
+    }
+
+    return {
+      scene, camera, labels,
+      attachOrbitTo(dom) {
+        if (orbit) orbit.dispose();
+        orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 5, 0), { minR: 16, maxR: 60, autoRot: .05, maxPol: Math.PI / 2 - .05 });
+        this.orbit = orbit;
+      },
+      onEnter() { labels.mountTo(Stage.host); },
+      setGuided(v) {
+        guided = v;
+        brain.visible = v; canards.visible = v;
+        L.brain.shown = v && st === 'idle';
+      },
+      launch() {
+        if (st === 'fly') return;
+        st = 'fly'; boomT = 0;
+        pos.copy(START);
+        // מכוונים ישר אל המטרה — בלי לקחת בחשבון כבידה ורוח
+        vel.copy(TARGET).sub(START).normalize().multiplyScalar(17);
+        jet.setOn(true); trail.setOn(true);
+        Object.values(L).forEach(l => l.shown = false);
+        shock.material.opacity = 0; shock.scale.setScalar(1);
+      },
+      reset() {
+        st = 'idle'; rest();
+        jet.setOn(false); trail.setOn(false); boom.setOn(false);
+        shock.material.opacity = 0;
+        L.pay.shown = L.eng.shown = true;
+        L.brain.shown = guided;
+      },
+      get state() { return st; },
+      update(dt) {
+        t += dt;
+        ring1.rotation.z += dt * .5; ring2.rotation.z -= dt * .8;
+        targetG.rotation.y = Math.sin(t * .3) * .25;
+        bull.material.emissiveIntensity = 1.2 + Math.sin(t * 4) * .5;
+        if (guided) brain.material.emissiveIntensity = st === 'fly' ? (1 + Math.sin(t * 22) * 1.4) : 1.6;
+
+        if (st === 'fly') {
+          if (guided) {
+            // ה״מוח״ מתקן את הכיוון כל הזמן לעבר המטרה
+            const want = TARGET.clone().sub(pos).normalize().multiplyScalar(vel.length());
+            vel.lerp(want, Math.min(1, dt * 4.2));
+            canards.rotation.y = Math.sin(t * 18) * .18;
+          }
+          vel.y -= 9.81 * dt;
+          vel.addScaledVector(WIND, dt);
+          pos.addScaledVector(vel, dt);
+          rocket.position.copy(pos);
+          aim(vel);
+
+          const d = pos.distanceTo(TARGET);
+          if (d < 1.5) {
+            st = 'hit';
+            jet.setOn(false); trail.setOn(false);
+            boom.points.position.copy(TARGET); boom.setOn(true); boomT = 0;
+            shock.position.copy(TARGET); shock.material.opacity = .95; shock.scale.setScalar(1);
+            rocket.visible = false;
+            if (this.onResult) this.onResult(true);
+          } else if (pos.y < .3 || pos.x > 26 || Math.abs(pos.z) > 22) {
+            st = 'miss';
+            jet.setOn(false);
+            if (this.onResult) this.onResult(false);
+          }
+        } else if (st === 'hit') {
+          boomT += dt;
+          shock.scale.setScalar(1 + boomT * 12);
+          shock.material.opacity = Math.max(0, .95 - boomT * 1.4);
+          shock.lookAt(camera.position);
+          if (boomT > 1.4) { boom.setOn(false); rocket.visible = true; }
+        } else if (st === 'idle') {
+          rocket.visible = true;
+          rocket.position.lerp(START, Math.min(1, dt * 4));
+        }
+
+        const back = new THREE.Vector3(0, -1.4, 0).applyQuaternion(rocket.quaternion).add(rocket.position);
+        jet.points.position.copy(back);
+        trail.points.position.copy(back);
+        jet.update(dt); trail.update(dt); boom.update(dt);
+
+        if (st === 'idle') {
+          L.brain.pos.copy(rocket.position).add(new THREE.Vector3(.9, 2.4, 0));
+          L.pay.pos.copy(rocket.position).add(new THREE.Vector3(1.1, .6, 0));
+          L.eng.pos.copy(rocket.position).add(new THREE.Vector3(-1.1, -1.0, 0));
+        }
+        labels.project(camera, Stage.host);
+      },
+    };
+  });
+
+  /* ============================================================
      סצנה 6 — רקטת הבקבוק: דיאגרמה מפורקת
      ============================================================ */
   Stage.register('bottle', (S) => {

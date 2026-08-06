@@ -106,6 +106,43 @@
   })();
 
   /* ============================================================
+     ספירה לאחור 3·2·1 — הרגע שבו כל הכיתה סופרת בקול
+     ============================================================ */
+  const Countdown = (function () {
+    const box = $('#countdown'), num = box.querySelector('b');
+    let busy = false;
+    return {
+      get busy() { return busy; },
+      run(done) {
+        if (busy) return;
+        busy = true;
+        const seq = ['3', '2', '1', 'שיגור!'];
+        let k = 0;
+        box.classList.add('on');
+        (function step() {
+          if (k >= seq.length) {
+            box.classList.remove('on');
+            busy = false;
+            done && done();
+            return;
+          }
+          num.textContent = seq[k];
+          num.classList.toggle('go', k === seq.length - 1);
+          // Web Animations — מובטח שמתחיל מחדש בכל ספרה, בלי טריקים של reflow
+          num.animate(
+            [{ transform: 'scale(2.05)', opacity: 0 },
+             { transform: 'scale(1)', opacity: 1, offset: .30 },
+             { transform: 'scale(1)', opacity: 1 }],
+            { duration: 600, easing: 'cubic-bezier(.15,1.5,.4,1)' }
+          );
+          k++;
+          setTimeout(step, 620);
+        })();
+      },
+    };
+  })();
+
+  /* ============================================================
      ניקוד + טיימר
      ============================================================ */
   let score = 0;
@@ -174,7 +211,8 @@
     } else if (window.Stage3D) {
       Stage3D.unmount();
     }
-    if (Ctl[idx] && Ctl[idx].enter) Ctl[idx].enter();
+    const c = Ctl[s.dataset.id];
+    if (c && c.enter) c.enter();
     if (!Timer.running && idx > 0) Timer.start();
   }
 
@@ -255,12 +293,13 @@
   $$('.quiz').forEach(q => initQuiz(q));
 
   /* ============================================================
-     בקרים לכל שקף
+     בקרים לכל שקף — ממופתחים לפי data-id ולא לפי מיקום,
+     כדי שאפשר יהיה להוסיף/להסיר שקפים בלי לשבור כלום
      ============================================================ */
   const Ctl = {};
 
-  /* ---------- שקף 1 · ניוטון ---------- */
-  Ctl[1] = (function () {
+  /* ---------- ניוטון ---------- */
+  Ctl.newton = (function () {
     const sl = $('#nw-slider'), out = $('#nw-inf');
     const go = $('#nw-go'), rst = $('#nw-reset');
     let launched = 0;
@@ -275,6 +314,7 @@
       if (!s) return;
       s.release();
       launched++;
+      FX.burst(undefined, innerHeight * .5, 30);
       if (launched === 1) addScore(5);
       go.disabled = true;
       s.onLand = () => { go.disabled = false; };
@@ -284,8 +324,8 @@
     return { enter: sync };
   })();
 
-  /* ---------- שקף 3 · מנוע ---------- */
-  Ctl[3] = (function () {
+  /* ---------- מנוע רקטי ---------- */
+  Ctl.engine = (function () {
     const sl = $('#en-slider'), out = $('#en-ex');
     const fire = $('#en-fire'), cut = $('#en-cut'), lab = $('#en-lab');
     const bLiq = $('#en-liquid'), bSol = $('#en-solid');
@@ -335,13 +375,13 @@
     };
   })();
 
-  /* ---------- שקף 4 · משחק ההרכבה ---------- */
-  Ctl[4] = (function () {
+  /* ---------- משחק ההרכבה ---------- */
+  Ctl.build = (function () {
     // המונחים תואמים למינוח שבתוכנית הלימודים: מקטע הנעה / ניהוג וייצוב / מטען מועיל
     const PARTS = [
-      { i: 0, em: '🔥', name: 'מקטע ההנעה', sub: 'מנוע + סנפירי ייצוב — תמיד בתחתית' },
-      { i: 1, em: '🛢️', name: 'מיכלי הדלק', sub: 'הדלק והמחמצן שנשרפים' },
-      { i: 2, em: '📦', name: 'המטען המועיל', sub: 'לוויין, ציוד או אנשים — בשביל זה טסים' },
+      { i: 0, em: '🔥', name: 'מקטע ההנעה', sub: 'המנוע והסנפירים — תמיד למטה' },
+      { i: 1, em: '🛢️', name: 'מיכלי הדלק', sub: 'מה שנשרף' },
+      { i: 2, em: '📦', name: 'המטען המועיל', sub: 'מה שהרקטה נושאת — בשביל זה טסים' },
       { i: 3, em: '🔺', name: 'החרטום', sub: 'חותך את האוויר בראש' },
     ];
     const wrap = $('#bd-parts'), track = $('#bd-track');
@@ -389,17 +429,21 @@
         setTimeout(() => btn.classList.remove('bad'), 420);
         verdict.className = 'verdict bad';
         verdict.textContent = next === 0
-          ? 'לא מזה מתחילים — מה תמיד נמצא בתחתית של רקטה?'
-          : 'לא בדיוק. חשבו: מה בא ישר מעל ' + PARTS[next - 1].name + '?';
+          ? 'לא מזה מתחילים. מה תמיד נמצא בתחתית של רקטה?'
+          : 'עוד לא. תחשבו: מה בא ישר מעל ' + PARTS[next - 1].name + '?';
       }
     }
 
     launch.addEventListener('click', () => {
-      const s = Stage3D.inst('build'); if (s) s.launch();
-      FX.rain(140);
-      verdict.className = 'verdict good';
-      verdict.textContent = '🚀 שיגור מוצלח!';
       launch.disabled = true;
+      verdict.className = 'verdict';
+      verdict.textContent = '📣 כל הכיתה סופרת: 3 · 2 · 1…';
+      Countdown.run(() => {
+        const s = Stage3D.inst('build'); if (s) s.launch();
+        FX.rain(140);
+        verdict.className = 'verdict good';
+        verdict.textContent = '🚀 שיגור מוצלח!';
+      });
     });
     reset.addEventListener('click', () => { next = 0; launch.disabled = true; build(); const s = Stage3D.inst('build'); if (s) s.reset(); verdict.className = 'verdict'; verdict.textContent = 'מחכה לחלק הראשון…'; });
 
@@ -407,32 +451,32 @@
     return { enter() { } };
   })();
 
-  /* ---------- שקף 5 · היסטוריה ---------- */
-  Ctl[5] = (function () {
+  /* ---------- ציר הזמן ---------- */
+  Ctl.history = (function () {
     const ERAS = [
       {
-        y: '1232', n: 'חץ האש הסיני', s: 'סין · שושלת סונג',
-        t: 'בקרב על העיר קאי־פנג ירו הסינים על המונגולים "חצי אש": קנה במבוק ממולא באבק שריפה, קשור לחץ עץ. האבק בער, הגזים יצאו מהקצה — והחץ טס לבדו. זו הרקטה הראשונה בהיסטוריה, ו־800 שנה אחר כך היא עדיין עובדת בדיוק לפי אותו עיקרון.',
+        y: '1232', n: 'חץ האש הסיני', s: 'סין · הרקטה הראשונה',
+        t: 'לוחמים סינים לקחו קנה במבוק, מילאו אותו באבק שריפה וקשרו אותו לחץ. האבק בער, הגזים יצאו מהקצה — והחץ טס לבד. זו הרקטה הראשונה בעולם. 800 שנה עברו מאז, והעיקרון לא השתנה בכלל.',
       },
       {
-        y: '1926', n: 'הרקטה של גודארד', s: 'ארה"ב · דלק נוזלי ראשון',
-        t: 'רוברט גודארד שיגר משדה של דודתו בבוסטון את הרקטה הראשונה בעולם עם דלק נוזלי (בנזין + חמצן נוזלי). היא עפה 12.5 מטר במשך 2.5 שניות ונחתה בשדה כרוב. עיתונים לעגו לו וכתבו שהוא "לא מבין פיזיקה" — היום כל רקטה מודרנית בעולם בנויה לפי העיקרון שלו.',
+        y: '1926', n: 'הרקטה של גודארד', s: 'ארה"ב · הראשונה עם דלק נוזלי',
+        t: 'רוברט גודארד שיגר בשדה של הדודה שלו את הרקטה הראשונה בעולם שרצה על דלק נוזלי. היא עלתה 12 מטר, עפה שתי שניות וחצי, ונפלה בשדה כרוב. בעיתונים צחקו עליו — והיום כל רקטה בעולם בנויה לפי הרעיון שלו.',
       },
       {
         y: '1942', n: 'V-2', s: 'גרמניה · הראשונה שהגיעה לחלל',
-        t: 'הרקטה הראשונה שחצתה את גבול החלל — 188 ק"מ גובה. היא פותחה בגרמניה הנאצית ככלי נשק, ובבנייתה הועסקו בכפייה אלפי אסירים שרבים מהם מתו. אחרי המלחמה המהנדסים והתוכניות התחלקו בין ארה"ב לברית המועצות — וכך התחיל מרוץ החלל.',
+        t: 'הרקטה הראשונה שהצליחה להגיע עד לחלל — 188 ק"מ למעלה. בנו אותה בגרמניה הנאצית ככלי נשק, ואת העבודה הקשה עשו אסירים שהוכרחו לזה. אחרי המלחמה המדענים והתוכניות הגיעו לאמריקה ולרוסיה — ומשם התחיל המרוץ לחלל.',
       },
       {
-        y: '1957', n: 'ספוטניק 1', s: 'ברה"מ · הלוויין הראשון',
-        t: 'כדור אלומיניום בגודל כדורסל, 83 ק"ג, עם ארבע אנטנות — והחפץ הראשון מעשה ידי אדם שהקיף את כדור הארץ. כל 96 דקות הוא השלים הקפה, ושידר "ביפ… ביפ…" שכל חובב רדיו בעולם יכול היה לקלוט. העולם הבין באותו רגע שעידן החלל התחיל.',
+        y: '1957', n: 'ספוטניק 1', s: 'רוסיה · הלוויין הראשון',
+        t: 'כדור מתכת בגודל של כדורסל עם ארבע אנטנות. זה החפץ הראשון שבני אדם שלחו להקיף את כדור הארץ. כל שעה וחצי הוא השלים סיבוב, ושידר "ביפ… ביפ…" שכל אחד בעולם יכול היה לשמוע ברדיו.',
       },
       {
         y: '1969', n: 'סטרן 5 · אפולו 11', s: 'ארה"ב · לירח וחזרה',
-        t: '111 מטר גובה — בניין של 36 קומות. 2,900 טון במשקל, מתוכם 2,700 טון דלק שנשרפים ב־12 דקות. חמשת המנועים בשלב הראשון פיתחו 35 מיליון ניוטון דחף. זו הרקטה החזקה ביותר שהטיסה בני אדם, והיא לקחה שלושה אסטרונאוטים 384,000 ק"מ אל הירח.',
+        t: 'הרקטה הכי גדולה שהטיסה בני אדם: גובה של בניין בן 36 קומות. כמעט כל המשקל שלה היה דלק — והוא נשרף כולו תוך 12 דקות. היא לקחה שלושה אנשים עד הירח והחזירה אותם הביתה.',
       },
       {
         y: '2015', n: 'פאלקון 9', s: 'ספייס-אקס · הרקטה שחוזרת',
-        t: 'בפעם הראשונה בהיסטוריה, שלב ראשון של רקטה סובב את עצמו באוויר, הצית מנועים לבלימה, ונחת בעמידה על ארבע רגליים. עד אז כל רקטה הייתה חד־פעמית. מאותו רגע אפשר לתדלק ולשגר שוב — ומחיר הטיסה לחלל צנח פי כמה.',
+        t: 'בפעם הראשונה אי פעם, רקטה סובבה את עצמה באוויר, הדליקה מנועים כדי לבלום, ונחתה בעמידה על ארבע רגליים. עד אז כל רקטה הייתה לשימוש אחד בלבד. מאותו יום אפשר לתדלק ולשגר שוב — וטיסה לחלל נעשתה הרבה יותר זולה.',
       },
     ];
     const list = $('#hi-list'), title = $('#hi-title'), text = $('#hi-text');
@@ -463,8 +507,68 @@
     return { enter() { show(cur < 0 ? 0 : cur); } };
   })();
 
-  /* ---------- שקף 7 · רקטת הבקבוק ---------- */
-  Ctl[7] = (function () {
+  /* ---------- רקטה מול טיל מונחה ---------- */
+  Ctl.guided = (function () {
+    const bPlain = $('#gd-plain'), bGuided = $('#gd-guided');
+    const go = $('#gd-go'), rst = $('#gd-reset'), verdict = $('#gd-verdict');
+    let guided = false, triedPlain = false, triedGuided = false;
+
+    function setMode(v) {
+      guided = v;
+      bPlain.classList.toggle('on', !v);
+      bGuided.classList.toggle('on', v);
+      go.textContent = v ? '🎯 שגרו את הטיל המונחה!' : '🚀 שגרו את הרקטה!';
+      const s = Stage3D.inst('guided');
+      if (s) { s.reset(); s.setGuided(v); }
+      verdict.className = 'verdict';
+      verdict.textContent = v
+        ? 'לטיל הזה יש מוח בראש. נראה אם זה עוזר…'
+        : 'לרקטה הזאת אין הגה. מכוונים — ומקווים.';
+    }
+    bPlain.addEventListener('click', () => setMode(false));
+    bGuided.addEventListener('click', () => setMode(true));
+
+    go.addEventListener('click', () => {
+      const s = Stage3D.inst('guided'); if (!s) return;
+      if (s.state !== 'idle') s.reset();
+      s.setGuided(guided);
+      go.disabled = true;
+      verdict.className = 'verdict';
+      verdict.textContent = '📣 כולם סופרים בקול!';
+      Countdown.run(() => fire(s));
+    });
+
+    function fire(s) {
+      s.launch();
+      verdict.className = 'verdict';
+      verdict.textContent = '🚀 בדרך למטרה…';
+      s.onResult = (hit) => {
+        go.disabled = false;
+        if (hit) {
+          verdict.className = 'verdict good';
+          verdict.textContent = '🎯 פגיעה! המוח בראש תיקן את הכיוון תוך כדי טיסה.';
+          FX.burst(undefined, innerHeight * .45, 90);
+          if (!triedGuided) { triedGuided = true; addScore(10); }
+        } else {
+          verdict.className = 'verdict bad';
+          verdict.textContent = 'החטאנו. כוח המשיכה והרוח הסיטו אותה — ואין לה איך לתקן. נסו את הטיל המונחה!';
+          if (!triedPlain) { triedPlain = true; addScore(5); }
+        }
+      };
+      setTimeout(() => { go.disabled = false; }, 8000);
+    }
+
+    rst.addEventListener('click', () => {
+      const s = Stage3D.inst('guided'); if (s) { s.reset(); s.setGuided(guided); }
+      go.disabled = false;
+    });
+
+    setMode(false);
+    return { enter() { const s = Stage3D.inst('guided'); if (s) { s.reset(); s.setGuided(guided); } } };
+  })();
+
+  /* ---------- רקטת הבקבוק ---------- */
+  Ctl.bottle = (function () {
     const ex = $('#bo-slider'), exOut = $('#bo-ex');
     const wa = $('#bo-water'), waOut = $('#bo-w');
     function sync() {
@@ -480,8 +584,8 @@
     return { enter: sync };
   })();
 
-  /* ---------- שקף 8 · סימולטור ---------- */
-  Ctl[8] = (function () {
+  /* ---------- סימולטור השיגור ---------- */
+  Ctl.sim = (function () {
     const wa = $('#sm-water'), waOut = $('#sm-w');
     const ba = $('#sm-bar'), baOut = $('#sm-p');
     const hOut = $('#sm-h'), vOut = $('#sm-v'), bOut = $('#sm-best');
@@ -500,20 +604,26 @@
     ba.addEventListener('input', sync);
 
     function advise(w, h) {
-      if (w > 0.62) return ['bad', '💧 יותר מדי מים — אין מספיק אוויר שידחוף אותם החוצה. הרקטה כבדה והדחיפה קצרה.'];
-      if (w < 0.18) return ['bad', '💨 כמעט רק אוויר — אין מספיק מסה לזרוק אחורה, אז אין ממה להידחף.'];
-      if (w >= 0.28 && w <= 0.45) return ['good', '🎯 בול בנקודה המתוקה! בערך שליש מים — בדיוק מה שנעשה בחוץ.'];
-      return ['', '🙂 לא רע. נסו להתקרב לשליש מים (33%) — שם נמצא השיא.'];
+      if (w > 0.62) return ['bad', '💧 יותר מדי מים! לא נשאר מספיק אוויר שידחוף אותם החוצה.'];
+      if (w < 0.18) return ['bad', '💨 כמעט רק אוויר. אין מספיק מים לזרוק אחורה — אז אין ממה להידחף.'];
+      if (w >= 0.28 && w <= 0.45) return ['good', '🎯 בול! בערך שליש מים — בדיוק מה שנעשה בחוץ.'];
+      return ['', '🙂 לא רע! נסו להתקרב לשליש מים (33%) — שם מגיעים הכי גבוה.'];
     }
 
     go.addEventListener('click', () => {
       const s = Stage3D.inst('sim'); if (!s) return;
       if (s.state !== 'idle') { s.reset(); }
       const c = cfg();
-      const r = s.launch();
-      if (!r) return;
-      shots++;
       go.disabled = true;
+      verdict.className = 'verdict';
+      verdict.textContent = '📣 כולם סופרים בקול!';
+      Countdown.run(() => fire(s, c));
+    });
+
+    function fire(s, c) {
+      const r = s.launch();
+      if (!r) { go.disabled = false; return; }
+      shots++;
       hOut.textContent = '…'; vOut.textContent = Math.round(r.dv);
       verdict.className = 'verdict';
       verdict.textContent = '🚀 בדרך למעלה…';
@@ -532,15 +642,15 @@
         go.disabled = false;
       };
       setTimeout(() => { go.disabled = false; }, 12000);
-    });
+    }
 
-    rst.addEventListener('click', () => { const s = Stage3D.inst('sim'); if (s) s.reset(); go.disabled = false; verdict.className = 'verdict'; verdict.textContent = 'בחרו כמות מים ולחץ — ותשגרו.'; hOut.textContent = '—'; });
+    rst.addEventListener('click', () => { const s = Stage3D.inst('sim'); if (s) s.reset(); go.disabled = false; verdict.className = 'verdict'; verdict.textContent = 'בחרו כמה מים וכמה אוויר — ושגרו.'; hOut.textContent = '—'; });
 
     return { enter() { const s = Stage3D.inst('sim'); if (s) s.reset(); sync(); } };
   })();
 
-  /* ---------- שקף 10 · סיום ---------- */
-  Ctl[10] = { enter() { setTimeout(() => FX.rain(160), 350); } };
+  /* ---------- סיום ---------- */
+  Ctl.finale = { enter() { setTimeout(() => FX.rain(160), 350); } };
 
   /* ============================================================
      הפעלה

@@ -645,14 +645,23 @@ input[type=range]::-moz-range-thumb {
   animation: signBob 4.5s ease-in-out infinite;
 }
 @keyframes signBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-.sign-inner { position: relative; height: 100%; max-height: 100%; max-width: 100%; aspect-ratio: 793 / 689; margin: auto; }
+.sign-inner {
+  position: relative;
+  width: 100%; height: auto; max-height: 100%;
+  aspect-ratio: 793 / 689;
+  margin: auto;
+}
+.sign-miki { object-fit: fill; }
 .sign-board {
   position: absolute;
   left: 1.01%; top: 1.16%; width: 97.86%; height: 45.57%;
   display: flex; flex-direction: column; justify-content: center;
-  padding: 3% 5%;
-  background: linear-gradient(160deg, #ffffff, #eaf3fd);
-  border-radius: 6px;
+  padding: 4% 5.5%;
+  background: linear-gradient(165deg, #ffffff 0%, #eef5fd 100%);
+  border: 3px solid #cfe0f2;
+  border-bottom-width: 5px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(20, 50, 90, .16), inset 0 2px 0 rgba(255,255,255,.9);
   overflow: hidden;
 }
 .sign-board h4 {
@@ -721,3 +730,12 @@ input[type=range]::-moz-range-thumb {
 .slide[data-id="build"] .part { min-height: 52px; padding: 9px 16px; }
 .slide[data-id="build"] .slot { min-height: 32px; }
 .slide[data-id="build"] .verdict { min-height: 52px; padding: 10px 16px; }
+
+/* ===== מייקי עומד בפינת הבמה כמו מנחה ===== */
+.miki.stage-corner {
+  position: absolute; bottom: 0; inset-inline-start: 10px;
+  z-index: 5; pointer-events: none;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.45));
+}
+.miki.stage-corner.end { inset-inline-start: auto; inset-inline-end: 10px; }
+@media (max-width: 1080px), (max-height: 640px) { .miki.stage-corner { display: none; } }

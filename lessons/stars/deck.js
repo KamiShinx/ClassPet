@@ -324,26 +324,6 @@
      ============================================================ */
   const Ctl = {};
 
-  /* ---------- השמש ---------- */
-  Ctl.star = (function () {
-    const bE = $('#sn-earth'), bC = $('#sn-cut');
-    bE.addEventListener('click', () => {
-      const s = Stage3D.inst('sun'); if (!s) return;
-      const v = !s.earthOn; s.setEarth(v); bE.classList.toggle('on', v);
-    });
-    bC.addEventListener('click', () => {
-      const s = Stage3D.inst('sun'); if (!s) return;
-      const v = !s.cutOn; s.setCut(v); bC.classList.toggle('on', v);
-    });
-    return {
-      enter() {
-        const s = Stage3D.inst('sun'); if (!s) return;
-        bE.classList.toggle('on', s.earthOn);
-        bC.classList.toggle('on', s.cutOn);
-      },
-    };
-  })();
-
   /* ---------- לידת כוכב ---------- */
   Ctl.birth = (function () {
     const sl = $('#bi-slider'), out = $('#bi-out'), verdict = $('#bi-verdict');

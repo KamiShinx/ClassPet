@@ -917,77 +917,119 @@
     ring.rotation.x = Math.PI / 2; ring.position.y = -4.08; scene.add(ring);
     const sh = shadowDisc(3.6); sh.position.y = -4.09; scene.add(sh);
 
-    const holder = new THREE.Group(); holder.position.y = -4.0; scene.add(holder);
+    // מישור y=0 של ה-holder הוא בדיוק פני הדיסקית, כדי שדגם שנוחת ייגע בה ולא ירחף
+    const holder = new THREE.Group(); holder.position.y = -4.1; scene.add(holder);
 
     const models = [];
     function push(g, anim) { g.visible = false; g.userData.anim = anim; holder.add(g); models.push(g); return g; }
 
-    /* 1232 — חץ אש: טס בקשת ומתחיל מחדש */
+    /* 1232 — חץ אש: טס בקשת רכה מקצה לקצה, הלהבה נגררת מאחור */
     (function () {
       const g = new THREE.Group();
       const arrow = new THREE.Group(); g.add(arrow);
+      // גיאומטריה ממורכזת סביב אמצע החץ, כך שהסיבוב הוא סביב מרכז הכובד
+      const Y0 = -3.4;
       const shaft = new THREE.Mesh(new THREE.CylinderGeometry(.07, .09, 6, 14), M.paint(0x9b7444, .8));
-      shaft.position.y = 3; arrow.add(shaft);
+      shaft.position.y = 3 + Y0; arrow.add(shaft);
       const tube = new THREE.Mesh(new THREE.CylinderGeometry(.3, .34, 1.5, 20), M.paint(0x7a5228, .85));
-      tube.position.y = 2.1; arrow.add(tube);
+      tube.position.y = 2.1 + Y0; arrow.add(tube);
       for (let i = 0; i < 3; i++) {
         const b = new THREE.Mesh(new THREE.TorusGeometry(.33, .04, 8, 22), M.paint(0x4a3418, .9));
-        b.rotation.x = Math.PI / 2; b.position.y = 1.6 + i * .5; arrow.add(b);
+        b.rotation.x = Math.PI / 2; b.position.y = 1.6 + i * .5 + Y0; arrow.add(b);
       }
       const tip = new THREE.Mesh(new THREE.ConeGeometry(.16, .7, 14), M.metal(0xa8b6c9, .35));
-      tip.position.y = 6.3; arrow.add(tip);
+      tip.position.y = 6.3 + Y0; arrow.add(tip);
       for (let i = 0; i < 3; i++) {
         const f = new THREE.Mesh(new THREE.BoxGeometry(.02, .55, .38), M.paint(0xe0d7c4, .8));
         const a = i / 3 * Math.PI * 2;
-        f.position.set(Math.cos(a) * .13, 5.35, Math.sin(a) * .13); f.rotation.y = -a;
+        f.position.set(Math.cos(a) * .13, 5.35 + Y0, Math.sin(a) * .13); f.rotation.y = -a;
         arrow.add(f);
       }
+      // רשימת חומרים לדהייה — נאספת פעם אחת ולא בכל פריים
+      const fadeMats = [];
+      arrow.traverse(o => { if (o.isMesh && o.material) { o.material.transparent = true; fadeMats.push(o.material); } });
       const fire = new Jet({ count: 150, size: .35, speed: 7, spread: .22, life: .35, color: 0xffb060 });
-      fire.points.position.y = 1.2; arrow.add(fire.points); fire.setOn(true);
+      fire.points.position.y = 1.2 + Y0; arrow.add(fire.points); fire.setOn(true);
+
+      // מסלול: קשת רכה משמאל לימין. הסיבוב מחושב מווקטור המהירות עצמו,
+      // כך שהחץ תמיד מצביע בדיוק לכיוון התנועה ואין קפיצות.
+      const W = 4.6, H = 1.5, Y_MID = 3.5;
       push(g, (dt, t) => {
         fire.update(dt);
-        const p = (t * .32) % 1;
-        arrow.position.set(-1.8 + p * 3.6, Math.sin(p * Math.PI) * 1.4, 0);
-        arrow.rotation.z = -Math.atan2(1, Math.cos(p * Math.PI) * 1.1) + Math.PI / 2;
+        const p = (t * .26) % 1;
+        const ang = p * Math.PI;
+        arrow.position.set((p - .5) * W, Y_MID + Math.sin(ang) * H, 0);
+        // נגזרות המסלול לפי p → וקטור המהירות
+        const vx = W, vy = H * Math.PI * Math.cos(ang);
+        // ציר ה-Y המקומי של החץ מיושר לווקטור המהירות
+        arrow.rotation.z = Math.atan2(-vx, vy);
         // דהייה בקצוות — כך החץ הבא "טס" ולא מקפץ אחורה
-        const fade = Math.min(1, p / .12) * Math.min(1, (1 - p) / .14);
-        arrow.traverse(o => {
-          if (o.material && o.material.transparent !== undefined && o.type === 'Mesh') {
-            o.material.transparent = true; o.material.opacity = fade;
-          }
-        });
+        const fade = Math.min(1, p / .14) * Math.min(1, (1 - p) / .16);
+        for (let i = 0; i < fadeMats.length; i++) fadeMats[i].opacity = fade;
         fire.mat.opacity = Math.min(fire.mat.opacity, fade);
       });
     })();
 
-    /* 1926 — גודארד: מתרומם קצת, רוטט, נופל, ומתחיל שוב */
+    /* 1926 — גודארד: שלד דק משנות ה-20, חרטום למעלה ומנוע ולהבה למטה */
     (function () {
       const g = new THREE.Group();
       const rig = new THREE.Group(); g.add(rig);
-      const frame = M.metal(0x8fa3bc, .4);
-      const eng = new THREE.Mesh(lathe([[.16, .8], [.16, .2], [.42, -.35]], 24), M.metal(0xc6cfdd, .3));
-      eng.material.side = THREE.DoubleSide; eng.position.y = 5.6; rig.add(eng);
+      const frameMat = M.metal(0x8fa3bc, .4);
+      const tankMat = M.metal(0xafbccd, .35);
+
+      // מנוע קטן בתחתית — הפעמון פונה כלפי מטה
+      const eng = new THREE.Mesh(lathe([[.10, .95], [.13, .55], [.20, .18], [.34, -.05]], 24), M.metal(0xc6cfdd, .3));
+      eng.material.side = THREE.DoubleSide; eng.position.y = 0; rig.add(eng);
+      // צוואר בין המנוע למכלים
+      const neck = new THREE.Mesh(new THREE.CylinderGeometry(.09, .09, .55, 12), frameMat);
+      neck.position.y = 1.2; rig.add(neck);
+
+      // שלד רזה: ארבעה מוטות דקים שנושאים את המכלים
       for (let i = 0; i < 4; i++) {
         const a = i / 4 * Math.PI * 2;
-        const rod = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, 4.6, 8), frame);
-        rod.position.set(Math.cos(a) * .42, 3.2, Math.sin(a) * .42); rig.add(rod);
+        const rod = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, 4.4, 8), frameMat);
+        rod.position.set(Math.cos(a) * .38, 3.5, Math.sin(a) * .38); rig.add(rod);
       }
-      const t1 = new THREE.Mesh(new THREE.CylinderGeometry(.34, .34, 1.5, 22), M.metal(0xafbccd, .35));
-      t1.position.y = 1.6; rig.add(t1);
-      const t2 = new THREE.Mesh(new THREE.CylinderGeometry(.28, .28, 1.1, 22), M.paint(0x54688a, .5));
-      t2.position.y = 3.1; rig.add(t2);
-      const cone = new THREE.Mesh(new THREE.ConeGeometry(.4, .7, 22), M.metal(0xc6cfdd, .3));
-      cone.position.y = .5; cone.rotation.x = Math.PI; rig.add(cone);
-      const fire = new Jet({ count: 130, size: .32, speed: 7, spread: .22, life: .34, color: 0xffcf90 });
-      fire.points.position.y = 5.05; rig.add(fire.points); fire.setOn(true);
-      // המנוע של גודארד ישב בראש והלהבה ירדה החוצה כלפי מטה סביב המבנה
+      // חישוקי חיזוק
+      [1.5, 3.5, 5.4].forEach(y => {
+        const h = new THREE.Mesh(new THREE.TorusGeometry(.38, .028, 8, 24), frameMat);
+        h.rotation.x = Math.PI / 2; h.position.y = y; rig.add(h);
+      });
+      // שני מכלים קטנים בתוך השלד
+      const t1 = new THREE.Mesh(new THREE.CylinderGeometry(.28, .28, 1.3, 22), tankMat);
+      t1.position.y = 2.5; rig.add(t1);
+      const t2 = new THREE.Mesh(new THREE.CylinderGeometry(.26, .26, 1.15, 22), M.paint(0x54688a, .5));
+      t2.position.y = 4.4; rig.add(t2);
+      // צינורות דלק דקים לאורך השלד
+      for (let i = 0; i < 2; i++) {
+        const a = i * Math.PI + .78;
+        const pipe = new THREE.Mesh(new THREE.CylinderGeometry(.022, .022, 4.2, 6), M.metal(0xd6dfea, .3));
+        pipe.position.set(Math.cos(a) * .3, 3.1, Math.sin(a) * .3); rig.add(pipe);
+      }
+      // חרטום — כלפי מעלה
+      const nose = new THREE.Mesh(new THREE.ConeGeometry(.34, .95, 22), M.metal(0xc6cfdd, .3));
+      nose.position.y = 6.15; rig.add(nose);
+      const collar = new THREE.Mesh(new THREE.CylinderGeometry(.34, .34, .5, 22), tankMat);
+      collar.position.y = 5.62; rig.add(collar);
+      // מייצבים קטנים בתחתית השלד
+      for (let i = 0; i < 3; i++) {
+        const a = i / 3 * Math.PI * 2;
+        const v = new THREE.Mesh(new THREE.BoxGeometry(.02, .5, .34), M.paint(0xdfe6f0, .5));
+        v.position.set(Math.cos(a) * .42, 1.45, Math.sin(a) * .42); v.rotation.y = -a + Math.PI / 2;
+        rig.add(v);
+      }
+
+      // הלהבה יוצאת מהפעמון בתחתית ויורדת כלפי מטה
+      const fire = new Jet({ count: 130, size: .3, speed: 6.5, spread: .2, life: .32, color: 0xffcf90 });
+      fire.points.position.y = -.1; rig.add(fire.points); fire.setOn(true);
       fire.o.dir.set(0, -1, 0);
+
+      // ריחוף רך ורציף — בלי תפר לולאה
       push(g, (dt, t) => {
         fire.update(dt);
-        const p = (t * .35) % 1;
-        rig.position.y = Math.sin(p * Math.PI) * 1.3;
-        rig.rotation.z = Math.sin(t * 7) * .07 * Math.sin(p * Math.PI);
-        rig.rotation.x = Math.cos(t * 6.2) * .05 * Math.sin(p * Math.PI);
+        rig.position.y = .18 + (1 - Math.cos(t * .9)) * .85;
+        rig.rotation.z = Math.sin(t * 2.4) * .05 + Math.sin(t * 6.7) * .015;
+        rig.rotation.x = Math.cos(t * 2.1) * .04 + Math.cos(t * 7.3) * .012;
       });
     })();
 
@@ -1086,51 +1128,88 @@
       });
     })();
 
-    /* 2015 — פאלקון 9: נוחתת, רגליים נפרשות */
+    /* 2015 — פאלקון 9: יורדת בבלימת מנוע, פורשת רגליים ונוחתת על הדיסקית */
     (function () {
       const g = new THREE.Group();
       const rig = new THREE.Group(); g.add(rig);
-      const body = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, 7.4, 40), M.paint(0xf2f6fb, .4));
-      body.position.y = 4.1; rig.add(body);
-      const inter = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, .7, 40), M.paint(0x232c3a, .55)); inter.position.y = 7.9; rig.add(inter);
+
+      // גובה הציר של הרגל נגזר מהזווית הפרושה, כך שכף הרגל נוגעת בדיוק ב-y=0
+      const LEG_L = 2.05;                 // אורך הרגל
+      const LEG_OPEN = -.72;              // זווית פרושה
+      const LEG_SHUT = -2.85;             // זווית מקופלת (צמודה לגוף, כלפי מעלה)
+      const PIVOT_Y = LEG_L * Math.cos(LEG_OPEN);   // ≈1.54 — הגובה שמניח את הרגל על הרצפה
+      const BODY_BOT = PIVOT_Y + .28;     // תחתית הגוף מעל מקטע המנועים
+      const BODY_H = 7.0;
+
+      const white = M.paint(0xf2f6fb, .4);
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, BODY_H, 40), white);
+      body.position.y = BODY_BOT + BODY_H / 2; rig.add(body);
+      const TOP = BODY_BOT + BODY_H;
+      const inter = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, .7, 40), M.paint(0x232c3a, .55));
+      inter.position.y = TOP + .35; rig.add(inter);
       rig.add(new THREE.Mesh(lathe(Array.from({ length: 14 }, (_, i) => {
-        const t = i / 13; return [.5 * Math.cos(t * Math.PI / 2 * .98), 8.3 + 1.9 * t];
-      }), 40), M.paint(0xf2f6fb, .4)));
+        const t = i / 13; return [.5 * Math.cos(t * Math.PI / 2 * .98), TOP + .7 + 1.8 * t];
+      }), 40), white));
+
       const legs = [];
       for (let i = 0; i < 4; i++) {
         const a = i / 4 * Math.PI * 2 + .78;
         const pivot = new THREE.Group();
-        pivot.position.set(Math.cos(a) * .5, .55, Math.sin(a) * .5);
-        pivot.rotation.y = -a;
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(.075, .1, 2.5, 10), M.paint(0x232c3a, .5));
-        leg.position.set(0, -1.1, .35); leg.rotation.x = .3;
-        pivot.add(leg);
-        const foot = new THREE.Mesh(new THREE.CylinderGeometry(.26, .26, .1, 14), M.metal(0x8090a5));
-        foot.position.set(0, -2.2, .95); pivot.add(foot);
+        pivot.position.set(Math.cos(a) * .5, PIVOT_Y, Math.sin(a) * .5);
+        // סיבוב סביב Y כך שציר ה-Z המקומי מצביע החוצה מהגוף — אחרת הרגליים
+        // נפרשות הצידה במקום כלפי חוץ ונראות כמו רגלי עכביש
+        pivot.rotation.y = Math.PI / 2 - a;
+        // הרגל יורדת ישר מטה בזווית 0, ולכן הסיבוב סביב X פורש אותה החוצה
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(.07, .105, LEG_L, 10), M.paint(0x232c3a, .5));
+        leg.position.y = -LEG_L / 2; pivot.add(leg);
+        const foot = new THREE.Mesh(new THREE.CylinderGeometry(.27, .27, .1, 16), M.metal(0x8090a5));
+        foot.position.y = -LEG_L + .05; pivot.add(foot);
+        // בוכנה דקה שמחברת את הרגל לגוף — נותנת תחושה של מנגנון
+        const strut = new THREE.Mesh(new THREE.CylinderGeometry(.035, .035, LEG_L * .62, 8), M.metal(0x9aa7ba, .35));
+        strut.position.set(0, -LEG_L * .31, .06); pivot.add(strut);
+        pivot.rotation.x = LEG_SHUT;
         rig.add(pivot); legs.push(pivot);
         const gf = new THREE.Mesh(new THREE.BoxGeometry(.06, .55, .42), M.metal(0x8e9bb0, .5));
-        gf.position.set(Math.cos(a) * .56, 7.2, Math.sin(a) * .56); gf.rotation.y = -a; rig.add(gf);
+        gf.position.set(Math.cos(a) * .56, TOP - .55, Math.sin(a) * .56);
+        gf.rotation.y = Math.PI / 2 - a; rig.add(gf);
       }
       for (let i = 0; i < 9; i++) {
         const a = i === 8 ? 0 : (i / 8) * Math.PI * 2, rr = i === 8 ? 0 : .3;
         const b = new THREE.Mesh(lathe([[.07, .05], [.1, -.1], [.16, -.32]], 16), M.metal(0x5d6a7d, .4));
         b.material.side = THREE.DoubleSide;
-        b.position.set(Math.cos(a) * rr, .3, Math.sin(a) * rr); rig.add(b);
+        b.position.set(Math.cos(a) * rr, BODY_BOT - .02, Math.sin(a) * rr); rig.add(b);
       }
-      const retro = new Jet({ count: 220, size: .38, speed: 9, spread: .26, life: .35, color: 0xffc98a });
-      retro.points.position.y = -.2; rig.add(retro.points);
-      // נחיתה מתנגנת פעם אחת מרגע הבחירה ואז נשארת על הכן.
+      // פתח הפליטה נמצא מעל פני הדיסקית, כך שהלהבה לא בוקעת מתחתיה
+      const retro = new Jet({ count: 220, size: .36, speed: 9, spread: .26, life: .32, color: 0xffc98a });
+      retro.points.position.y = BODY_BOT - .38; rig.add(retro.points);
+
+      // נחיתה חד-פעמית מרגע הבחירה, ואז הרקטה נשארת עומדת על הכן.
       // לולאה כאן תמיד נראית שבורה, כי הרקטה "מקפצת" חזרה לשמיים.
-      push(g, (dt, t, since) => {
+      const H0 = 6.2, DUR = 5.5;
+      const anim = (dt, t, since) => {
         retro.update(dt);
-        const DUR = 5.5;
         const k = THREE.MathUtils.clamp(since / DUR, 0, 1);
-        const ease = 1 - Math.pow(1 - k, 2.4);
-        rig.position.y = 7.5 * (1 - ease) + .15;
-        retro.setOn(k > .2 && k < .99);
-        retro.power = .5 + k * .9;
-        legs.forEach(l => l.rotation.x = -THREE.MathUtils.clamp((k - .35) / .35, 0, 1) * .95);
-      });
+        // ירידה בבלימה קבועה: מהירות מגיעה בדיוק ל-0 ברגע הנגיעה
+        rig.position.y = H0 * (1 - k) * (1 - k);
+        // הרגליים נפרשות באמצע הירידה — סיבוב גדול וברור
+        const d = THREE.MathUtils.clamp((k - .3) / .32, 0, 1);
+        const ds = d * d * (3 - 2 * d);
+        const ang = LEG_SHUT + (LEG_OPEN - LEG_SHUT) * ds;
+        for (let i = 0; i < legs.length; i++) legs[i].rotation.x = ang;
+        // המנוע דועך ככל שמתקרבים לקרקע ונכבה רגע לפני הנגיעה
+        retro.power = .35 + (1 - k) * 1.0;
+        retro.setOn(k > .04 && k < .96);
+        // ריכוך אחרון: נדנוד קטן ברגע הנחיתה שנרגע מהר
+        const jolt = Math.max(0, since - DUR);
+        rig.rotation.z = jolt > 0 ? Math.sin(jolt * 16) * .02 * Math.exp(-jolt * 3) : 0;
+      };
+      const f9 = push(g, anim);
+      f9.userData.reset = () => {
+        rig.position.y = H0; rig.rotation.z = 0;
+        for (let i = 0; i < legs.length; i++) legs[i].rotation.x = LEG_SHUT;
+        retro.setOn(false); retro.mat.opacity = 0;
+      };
+      f9.userData.reset();
     })();
 
     /* העתיד — סטארשיפ: הרקטה הגדולה ביותר שנבנתה אי פעם */
@@ -1160,11 +1239,11 @@
       }
       const fire = new Jet({ count: 460, size: .7, speed: 17, spread: .6, life: .6, color: 0x9fd0ff });
       const smk = new Jet({ count: 240, tex: TEX_SMOKE, size: 2.2, speed: 6, spread: 1.7, life: 2.0, color: 0x9fb4d0, blending: THREE.NormalBlending });
-      fire.points.position.y = -.6; smk.points.position.y = -1.1;
+      fire.points.position.y = -.3; smk.points.position.y = -.42;
       rig.add(fire.points, smk.points); fire.setOn(true); smk.setOn(true);
       push(g, (dt, tt) => {
         fire.update(dt); smk.update(dt);
-        rig.position.y = .8 + (1 - Math.cos(tt * .7)) * 1.3;
+        rig.position.y = .95 + (1 - Math.cos(tt * .7)) * 1.3;
         rig.position.x = (Math.random() - .5) * .05;
       });
     })();

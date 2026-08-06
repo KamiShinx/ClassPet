@@ -261,7 +261,7 @@
   Stage.register('sun', () => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(42, 1.6, .1, 900);
-    camera.position.set(0, 2, 20);
+    camera.position.set(0, 2, 27);
     lightRig(scene);
 
     const root = new THREE.Group(); scene.add(root);
@@ -293,8 +293,8 @@
         pts.push(new THREE.Vector3(Math.cos(ang) * rr, Math.sin(t * Math.PI) * 1.6 + tilt * 2, Math.sin(ang) * rr));
       }
       const tube = new THREE.Mesh(
-        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 26, .26, 8, false),
-        new THREE.MeshBasicMaterial({ color: 0xff7a10, transparent: true, opacity: .9, depthWrite: false })
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 26, .17, 8, false),
+        new THREE.MeshBasicMaterial({ color: 0xff8a20, transparent: true, opacity: .7, depthWrite: false })
       );
       root.add(tube); flares.push({ m: tube, ph: Math.random() * 6 });
     }
@@ -332,7 +332,7 @@
       scene, camera, labels,
       attachOrbitTo(dom) {
         if (orbit) orbit.dispose();
-        orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 0, 0), { minR: 9, maxR: 60, autoRot: .1 });
+        orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 0, 0), { minR: 12, maxR: 60, autoRot: .1 });
         this.orbit = orbit;
       },
       onEnter() { labels.mountTo(Stage.host); },

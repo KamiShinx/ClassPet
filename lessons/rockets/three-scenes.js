@@ -954,9 +954,13 @@
       // מסלול: קשת רכה משמאל לימין. הסיבוב מחושב מווקטור המהירות עצמו,
       // כך שהחץ תמיד מצביע בדיוק לכיוון התנועה ואין קפיצות.
       const W = 4.6, H = 1.5, Y_MID = 3.5;
+      let prevP = 0;
       push(g, (dt, t) => {
         fire.update(dt);
         const p = (t * .26) % 1;
+        // בתפר הלולאה מאתחלים את החלקיקים, אחרת שובל ישן "נגרר" למקום החדש
+        if (p < prevP) for (let i = 0; i < fire.o.count; i++) fire.reset(i);
+        prevP = p;
         const ang = p * Math.PI;
         arrow.position.set((p - .5) * W, Y_MID + Math.sin(ang) * H, 0);
         // נגזרות המסלול לפי p → וקטור המהירות
@@ -1137,7 +1141,8 @@
       const LEG_L = 2.05;                 // אורך הרגל
       const LEG_OPEN = -.72;              // זווית פרושה
       const LEG_SHUT = -2.85;             // זווית מקופלת (צמודה לגוף, כלפי מעלה)
-      const PIVOT_Y = LEG_L * Math.cos(LEG_OPEN);   // ≈1.54 — הגובה שמניח את הרגל על הרצפה
+      const FOOT_Y = -(LEG_L - .06);      // מרכז כף הרגל בציר הרגל
+      const PIVOT_Y = (LEG_L - .06) * Math.cos(LEG_OPEN) + .05; // מניח את כף הרגל בדיוק על y=0
       const BODY_BOT = PIVOT_Y + .28;     // תחתית הגוף מעל מקטע המנועים
       const BODY_H = 7.0;
 
@@ -1160,10 +1165,11 @@
         // נפרשות הצידה במקום כלפי חוץ ונראות כמו רגלי עכביש
         pivot.rotation.y = Math.PI / 2 - a;
         // הרגל יורדת ישר מטה בזווית 0, ולכן הסיבוב סביב X פורש אותה החוצה
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(.07, .105, LEG_L, 10), M.paint(0x232c3a, .5));
-        leg.position.y = -LEG_L / 2; pivot.add(leg);
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(.07, .105, LEG_L - .12, 10), M.paint(0x232c3a, .5));
+        leg.position.y = -(LEG_L - .12) / 2; pivot.add(leg);
+        // כף הרגל מוטה נגד הרגל כך שהיא שוכבת שטוח על הדיסקית ולא ננעצת בה
         const foot = new THREE.Mesh(new THREE.CylinderGeometry(.27, .27, .1, 16), M.metal(0x8090a5));
-        foot.position.y = -LEG_L + .05; pivot.add(foot);
+        foot.position.y = FOOT_Y; foot.rotation.x = -LEG_OPEN; pivot.add(foot);
         // בוכנה דקה שמחברת את הרגל לגוף — נותנת תחושה של מנגנון
         const strut = new THREE.Mesh(new THREE.CylinderGeometry(.035, .035, LEG_L * .62, 8), M.metal(0x9aa7ba, .35));
         strut.position.set(0, -LEG_L * .31, .06); pivot.add(strut);
@@ -1185,7 +1191,7 @@
 
       // נחיתה חד-פעמית מרגע הבחירה, ואז הרקטה נשארת עומדת על הכן.
       // לולאה כאן תמיד נראית שבורה, כי הרקטה "מקפצת" חזרה לשמיים.
-      const H0 = 6.2, DUR = 5.5;
+      const H0 = 5.4, DUR = 5.5;
       const anim = (dt, t, since) => {
         retro.update(dt);
         const k = THREE.MathUtils.clamp(since / DUR, 0, 1);
@@ -1251,8 +1257,8 @@
     let cur = -1, t = 0, orbit = null, since = 0;
     // קנה מידה + מרחק מצלמה לכל דגם, כדי שכל אחד ימלא את הבמה כמו שצריך
     const fits  = [1.15, 1.25, 1.15, 1.15, .85,  .80, .72];
-    const dist  = [16,   17,   19,   16,   19,  22,   23 ];
-    const camY  = [-.2,  .8,   1.8,  -.6,  1.6, 1.7,  1.8];
+    const dist  = [16,   18,   22,   16,   19,  23,   23 ];
+    const camY  = [-.2,  1.0,  2.3,  -.6,  1.6, 1.6,  1.8];
 
     return {
       scene, camera,

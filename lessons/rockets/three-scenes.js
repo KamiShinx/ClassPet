@@ -1027,7 +1027,7 @@
       // ריחוף רך ורציף — בלי תפר לולאה
       push(g, (dt, t) => {
         fire.update(dt);
-        rig.position.y = .18 + (1 - Math.cos(t * .9)) * .85;
+        rig.position.y = .34 + (1 - Math.cos(t * .9)) * .85;
         rig.rotation.z = Math.sin(t * 2.4) * .05 + Math.sin(t * 6.7) * .015;
         rig.rotation.x = Math.cos(t * 2.1) * .04 + Math.cos(t * 7.3) * .012;
       });
@@ -1248,11 +1248,11 @@
       });
     })();
 
-    let cur = -1, t = 0, orbit = null, anim = 0;
+    let cur = -1, t = 0, orbit = null, since = 0;
     // קנה מידה + מרחק מצלמה לכל דגם, כדי שכל אחד ימלא את הבמה כמו שצריך
-    const fits  = [1.25, 1.30, 1.15, 1.30, .85, 1.00, .82];
-    const dist  = [15,   16,   19,   14,   19,  21,   21 ];
-    const camY  = [.2,   1.2,  1.8,  1.2,  1.6, 1.5,  1.6];
+    const fits  = [1.15, 1.25, 1.15, 1.15, .85,  .80, .72];
+    const dist  = [16,   17,   19,   16,   19,  22,   23 ];
+    const camY  = [-.2,  .8,   1.8,  -.6,  1.6, 1.7,  1.8];
 
     return {
       scene, camera,
@@ -1262,23 +1262,25 @@
         this.orbit = orbit;
         if (cur >= 0) orbit.focus(new THREE.Vector3(0, camY[cur], 0), dist[cur]);
       },
+      // בחירה של דגם — גם אותו דגם שוב — תמיד מתחילה את האנימציה שלו מהתחלה,
+      // אחרת נחיתת פאלקון 9 מנוגנת פעם אחת בלבד ואף פעם לא נראית שוב.
       show(i) {
-        if (i === cur) return;
+        if (i == null || i < 0 || i >= models.length) return;
         models.forEach((m, k) => m.visible = k === i);
-        cur = i; anim = 0;
+        cur = i; since = 0;
         holder.scale.setScalar(fits[i]);
         if (orbit) orbit.focus(new THREE.Vector3(0, camY[i], 0), dist[i]);
+        const m = models[i];
+        if (m.userData.reset) m.userData.reset();
+        if (m.userData.anim) m.userData.anim(0, t, 0);
       },
+      restart() { if (cur >= 0) this.show(cur); },
       update(dt) {
-        t += dt; anim += dt;
+        t += dt; since += dt;
         ring.material.emissiveIntensity = .35 + Math.sin(t * 2.4) * .18;
         disc.rotation.y += dt * .15;
         const m = models[cur];
-        if (m) {
-          const k = Math.min(1, anim * 2.4), ease = 1 - Math.pow(1 - k, 3);
-          m.scale.setScalar(.4 + ease * .6);
-          if (m.userData.anim) m.userData.anim(dt, t, anim);
-        }
+        if (m && m.userData.anim) m.userData.anim(dt, t, since);
       },
     };
   });

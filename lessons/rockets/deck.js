@@ -73,11 +73,15 @@
      הנתונים מוטמעים ולא נטענים ב-fetch, כדי שיעבוד גם מ-file://
      ============================================================ */
   const MIKI = {
-    hay:  { frames: 18, w: 262, h: 300, fps: 14 },
-    like: { frames: 16, w: 262, h: 300, fps: 14 },
-    jump: { frames: 16, w: 186, h: 300, fps: 16 },
-    show: { frames: 18, w: 404, h: 300, fps: 14 },
-    walk: { frames: 16, w: 205, h: 300, fps: 16 },
+    hay:      { frames: 18, w: 262, h: 300, fps: 14 },
+    like:     { frames: 16, w: 262, h: 300, fps: 14 },
+    jump:     { frames: 16, w: 186, h: 300, fps: 16 },
+    show:     { frames: 18, w: 404, h: 300, fps: 14 },
+    walk:     { frames: 16, w: 205, h: 300, fps: 16 },
+    walkside: { frames: 16, w: 167, h: 300, fps: 16 },
+    jumpside: { frames: 17, w: 150, h: 300, fps: 16 },
+    point:    { frames: 16, w: 338, h: 300, fps: 14 },
+    sign:     { frames: 16, w: 529, h: 460, fps: 12 },
   };
   const mikis = [];
   function initMiki(el) {
@@ -85,9 +89,12 @@
     if (!d) return;
     el.style.backgroundImage = `url(img/miki/${el.dataset.clip}.png)`;
     el.style.backgroundSize = (d.frames * 100) + '% 100%';
-    el.style.height = (el.dataset.h || 26) + 'vh';
-    el.style.aspectRatio = d.w + ' / ' + d.h;
-    el.style.width = 'auto';
+    // data-fill = האלמנט כבר ממוקם ע"י ההורה (השלט), אין לגעת במידות
+    if (!el.hasAttribute('data-fill')) {
+      el.style.height = (el.dataset.h || 26) + 'vh';
+      el.style.aspectRatio = d.w + ' / ' + d.h;
+      el.style.width = 'auto';
+    }
     mikis.push({ el, d, i: 0, acc: 0 });
   }
   $$('.miki').forEach(initMiki);
@@ -554,6 +561,8 @@
         if (++visited === ERAS.length) { addScore(10); FX.burst(undefined, innerHeight * .5, 80); }
       }
     }
+    // כניסה לשקופית מנגנת מחדש את האנימציה של הדגם הנבחר (חשוב לנחיתת פאלקון 9,
+    // שאחרת נשארת קפואה על הכן מהפעם הקודמת)
     return { enter() { show(cur < 0 ? 0 : cur); } };
   })();
 

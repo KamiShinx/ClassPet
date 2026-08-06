@@ -648,13 +648,12 @@ input[type=range]::-moz-range-thumb {
 .sign-inner {
   position: relative;
   width: 100%; height: auto; max-height: 100%;
-  aspect-ratio: 793 / 689;
+  aspect-ratio: 529 / 460;
   margin: auto;
 }
-.sign-miki { object-fit: fill; }
 .sign-board {
   position: absolute;
-  left: 1.01%; top: 1.16%; width: 97.86%; height: 45.57%;
+  left: 0.72%; top: 0.83%; width: 98.46%; height: 44.68%;
   display: flex; flex-direction: column; justify-content: center;
   padding: 4% 5.5%;
   background: linear-gradient(165deg, #ffffff 0%, #eef5fd 100%);
@@ -672,9 +671,11 @@ input[type=range]::-moz-range-thumb {
   margin: 0; font-size: clamp(13px, 1.25vw, 22px); line-height: 1.35; color: var(--ink-2);
 }
 .sign-board b { color: var(--blue-dark); }
+/* מייקי בשלט מונפש: הלוח ננעל במקום, רק הוא זז מתחתיו */
 .sign-miki {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: contain; pointer-events: none;
+  background-repeat: no-repeat; background-position: 0% 0;
+  pointer-events: none;
 }
 
 /* ===== שורת צ'יפים אופקית + כרטיס פירוט בגובה קבוע ===== */

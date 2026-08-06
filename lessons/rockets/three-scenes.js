@@ -946,9 +946,17 @@
       fire.points.position.y = 1.2; arrow.add(fire.points); fire.setOn(true);
       push(g, (dt, t) => {
         fire.update(dt);
-        const p = (t * .38) % 1;
+        const p = (t * .32) % 1;
         arrow.position.set(-1.8 + p * 3.6, Math.sin(p * Math.PI) * 1.4, 0);
         arrow.rotation.z = -Math.atan2(1, Math.cos(p * Math.PI) * 1.1) + Math.PI / 2;
+        // דהייה בקצוות — כך החץ הבא "טס" ולא מקפץ אחורה
+        const fade = Math.min(1, p / .12) * Math.min(1, (1 - p) / .14);
+        arrow.traverse(o => {
+          if (o.material && o.material.transparent !== undefined && o.type === 'Mesh') {
+            o.material.transparent = true; o.material.opacity = fade;
+          }
+        });
+        fire.mat.opacity = Math.min(fire.mat.opacity, fade);
       });
     })();
 
@@ -1007,8 +1015,7 @@
       fire.points.position.y = -1.3; rig.add(fire.points); fire.setOn(true);
       push(g, (dt, t) => {
         fire.update(dt);
-        const p = (t * .3) % 1;
-        rig.position.y = 1.5 + p * 1.8;
+        rig.position.y = 1.9 + (1 - Math.cos(t * 1.1)) * .9;
         rig.rotation.y += dt * 1.6;
         rig.rotation.z = Math.sin(t * 1.4) * .05;
       });
@@ -1073,8 +1080,7 @@
       rig.add(fire.points, smk.points); fire.setOn(true); smk.setOn(true);
       push(g, (dt, t) => {
         fire.update(dt); smk.update(dt);
-        const p = (t * .18) % 1;
-        rig.position.y = .4 + Math.pow(p, 2.2) * 2.6;
+        rig.position.y = .9 + (1 - Math.cos(t * .75)) * 1.2;
         rig.position.x = (Math.random() - .5) * .05;
         rig.rotation.y += dt * .1;
       });
@@ -1113,23 +1119,17 @@
       }
       const retro = new Jet({ count: 220, size: .38, speed: 9, spread: .26, life: .35, color: 0xffc98a });
       retro.points.position.y = -.2; rig.add(retro.points);
-      push(g, (dt, t) => {
+      // נחיתה מתנגנת פעם אחת מרגע הבחירה ואז נשארת על הכן.
+      // לולאה כאן תמיד נראית שבורה, כי הרקטה "מקפצת" חזרה לשמיים.
+      push(g, (dt, t, since) => {
         retro.update(dt);
-        const p = (t * .16) % 1;
-        if (p < .70) {
-          // ירידה מבוקרת: מאט ככל שמתקרב, רגליים נפרשות בדרך
-          const k = p / .70;
-          const ease = 1 - Math.pow(1 - k, 2.2);
-          rig.position.y = 7.5 * (1 - ease) + .15;
-          retro.setOn(k > .25);
-          retro.power = .5 + k * .9;
-          legs.forEach(l => l.rotation.x = -THREE.MathUtils.clamp((k - .45) / .35, 0, 1) * .95);
-        } else {
-          // נחתה — עומדת בשקט לרגע לפני שמתחילה שוב
-          rig.position.y = .15;
-          retro.setOn(false);
-          legs.forEach(l => l.rotation.x = -.95);
-        }
+        const DUR = 5.5;
+        const k = THREE.MathUtils.clamp(since / DUR, 0, 1);
+        const ease = 1 - Math.pow(1 - k, 2.4);
+        rig.position.y = 7.5 * (1 - ease) + .15;
+        retro.setOn(k > .2 && k < .99);
+        retro.power = .5 + k * .9;
+        legs.forEach(l => l.rotation.x = -THREE.MathUtils.clamp((k - .35) / .35, 0, 1) * .95);
       });
     })();
 
@@ -1164,8 +1164,7 @@
       rig.add(fire.points, smk.points); fire.setOn(true); smk.setOn(true);
       push(g, (dt, tt) => {
         fire.update(dt); smk.update(dt);
-        const p = (tt * .16) % 1;
-        rig.position.y = .3 + Math.pow(p, 2.2) * 3.0;
+        rig.position.y = .8 + (1 - Math.cos(tt * .7)) * 1.3;
         rig.position.x = (Math.random() - .5) * .05;
       });
     })();
@@ -1199,7 +1198,7 @@
         if (m) {
           const k = Math.min(1, anim * 2.4), ease = 1 - Math.pow(1 - k, 3);
           m.scale.setScalar(.4 + ease * .6);
-          if (m.userData.anim) m.userData.anim(dt, t);
+          if (m.userData.anim) m.userData.anim(dt, t, anim);
         }
       },
     };

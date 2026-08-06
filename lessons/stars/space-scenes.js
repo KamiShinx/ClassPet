@@ -559,8 +559,9 @@
       }));
       debris.frustumCulled = false;
       g.add(debris);
-      reg('supernova', g, (dt, t) => {
-        const c = (t * .22) % 1;
+      // מתנגן מרגע הבחירה, כדי שתמיד רואים את ההתפוצצות מההתחלה
+      reg('supernova', g, (dt, t, since) => {
+        const c = ((since || 0) * .25) % 1;
         const r = c * 13;
         shell.scale.setScalar(Math.max(.01, r));
         shell.material.opacity = Math.max(0, .55 * (1 - c));
@@ -610,23 +611,29 @@
       reg('blackhole', g, (dt) => { disk.rotation.z += dt * .55; });
     })();
 
-    /* עיגול ייחוס בגודל השמש */
-    const ref = new THREE.Mesh(new THREE.RingGeometry(2.55, 2.62, 72),
-      new THREE.MeshBasicMaterial({ color: 0x4ab4ff, transparent: true, opacity: .75, side: THREE.DoubleSide }));
-    ref.rotation.x = -Math.PI / 2.6;
-    ref.visible = false;
-    scene.add(ref);
+    /* שמש בקנה מידה אמיתי לצד הגוף — הדרך היחידה שהגודל באמת מורגש */
+    const refSun = glowBall(2.6, 0xffd04a, 0xffb030, 1.1);
+    refSun.visible = false;
+    scene.add(refSun);
 
     const labels = Labeller();
-    const lRef = labels.add('גודל השמש<small>להשוואה</small>', new THREE.Vector3(0, -3.4, 0), 'blue');
-    lRef.shown = false;
+    const lRef = labels.add('השמש שלנו<small>באותו קנה מידה</small>', new THREE.Vector3(0, 0, 0), 'yellow');
+    const lObj = labels.add('', new THREE.Vector3(0, 0, 0), 'blue');
+    lRef.shown = false; lObj.shown = false;
 
-    const DIST = {
-      nebula: 30, main: 15, giant: 34, dwarf: 7,
-      supergiant: 46, supernova: 42, neutron: 22, blackhole: 26,
+    // לכל שלב: רדיוס, מרחק מצלמה בלי השוואה, ומרחק כשמציגים גם את השמש
+    const CONF = {
+      nebula:     { r: 8,    dist: 30, cmp: 30, name: '' },
+      main:       { r: 2.6,  dist: 15, cmp: 15, name: 'כוכב כמו השמש' },
+      giant:      { r: 7.6,  dist: 34, cmp: 44, name: 'ענק אדום' },
+      dwarf:      { r: .55,  dist: 7,  cmp: 20, name: 'ננס לבן' },
+      supergiant: { r: 10.5, dist: 46, cmp: 58, name: 'על-ענק אדום' },
+      supernova:  { r: 13,   dist: 34, cmp: 34, name: '' },
+      neutron:    { r: .4,   dist: 22, cmp: 20, name: 'כוכב נויטרונים' },
+      blackhole:  { r: 1.9,  dist: 26, cmp: 24, name: 'חור שחור' },
     };
 
-    let cur = null, t = 0, orbit = null;
+    let cur = null, t = 0, orbit = null, anim = 0;
 
     return {
       scene, camera, labels,
@@ -634,21 +641,38 @@
         if (orbit) orbit.dispose();
         orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 0, 0), { minR: 5, maxR: 90, autoRot: .1 });
         this.orbit = orbit;
-        if (cur) orbit.focus(new THREE.Vector3(0, 0, 0), DIST[cur] || 24);
+        if (cur) { const c = CONF[cur]; orbit.focus(new THREE.Vector3(0, 0, 0), c ? c.dist : 24); }
       },
       onEnter() { labels.mountTo(Stage.host); },
       show(key, showRef) {
         Object.entries(stages).forEach(([k, g]) => g.visible = (k === key));
-        cur = key;
-        ref.visible = !!showRef;
+        cur = key; anim = 0;
+        const c = CONF[key] || { r: 3, dist: 24, cmp: 24, name: '' };
+        refSun.visible = !!showRef;
         lRef.shown = !!showRef;
-        if (orbit) orbit.focus(new THREE.Vector3(0, 0, 0), DIST[key] || 24);
+        lObj.shown = !!showRef && !!c.name;
+        lObj.el.innerHTML = c.name;
+        if (showRef) {
+          // מרווח בין השניים לפי הגודל של הגוף המוצג
+          const gap = Math.max(2.4, c.r * .35);
+          const x = -(c.r + 2.6 + gap);
+          refSun.position.set(x, 0, 0);
+          lRef.pos.set(x, -2.6 - 1.4, 0);
+          lObj.pos.set(0, c.r + 1.2, 0);
+          if (orbit) orbit.focus(new THREE.Vector3(x / 2, 0, 0), c.cmp);
+        } else {
+          refSun.position.set(0, 0, 0);
+          if (orbit) orbit.focus(new THREE.Vector3(0, 0, 0), c.dist);
+        }
       },
       update(dt) {
-        t += dt;
+        t += dt; anim += dt;
         const g = stages[cur];
-        if (g && g.userData.anim) g.userData.anim(dt, t);
-        lRef.pos.set(2.6, -1.4, 0);
+        if (g && g.userData.anim) g.userData.anim(dt, t, anim);
+        if (refSun.visible) {
+          refSun.rotation.y += dt * .2;
+          refSun.userData.core.material.emissiveIntensity = 1.05 + Math.sin(t * 2) * .07;
+        }
         labels.project(camera, Stage.host);
       },
     };

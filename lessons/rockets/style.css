@@ -695,3 +695,29 @@ input[type=range]::-moz-range-thumb {
   display: flex; flex-direction: column; justify-content: center;
 }
 .card.detail p { font-size: clamp(14px, 1.28vw, 23px); line-height: 1.45; }
+
+/* ===== שקף הווידאו: הדבקת קישור יוטיוב ===== */
+.vid-empty {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  text-align: center; padding: 6%; color: #cfe0f5;
+}
+.vid-empty p { margin: 0 0 14px; font-size: var(--t-body); line-height: 1.4; }
+.vid-empty b { color: #fff; }
+.vid-empty input {
+  font-family: inherit; font-size: clamp(14px, 1.1vw, 19px);
+  width: min(440px, 80vw); padding: 12px 16px; border-radius: 12px;
+  border: 2px solid rgba(255,255,255,.28); background: rgba(255,255,255,.1);
+  color: #fff; direction: ltr; text-align: left; outline: none;
+}
+.vid-empty input::placeholder { color: #7f9ec0; }
+.vid-empty input:focus { border-color: var(--blue); }
+.vid-empty .ve-row { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+.vid-empty .ve-row .btn { min-height: 48px; padding: 10px 20px; }
+.vid-empty .ve-row .btn.ghost { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.3); }
+.vid-empty small { display: block; margin-top: 14px; font-size: 13px; color: #8fa9c8; }
+
+/* ===== שקף ההרכבה: נכנס בדיוק, בלי גלילה ===== */
+.slide[data-id="build"] .panel { overflow: hidden; gap: 10px; }
+.slide[data-id="build"] .part { min-height: 52px; padding: 9px 16px; }
+.slide[data-id="build"] .slot { min-height: 32px; }
+.slide[data-id="build"] .verdict { min-height: 52px; padding: 10px 16px; }

@@ -413,8 +413,8 @@
       list.innerHTML = '';
       data.forEach((e, i) => {
         const b = document.createElement('button');
-        b.className = 'tl-item' + (i === cur ? ' on' : '');
-        b.innerHTML = '<span class="yr">' + (i + 1) + '</span><span class="nm">' + e.n + '</span>';
+        b.className = (i === cur ? 'on' : '');
+        b.innerHTML = '<span class="yr">' + (i + 1) + '</span><span>' + e.n + '</span>';
         b.addEventListener('click', () => pick(i));
         list.appendChild(b);
       });
@@ -480,12 +480,11 @@
     let cur = 1;
     STEPS.forEach((e, i) => {
       const b = document.createElement('button');
-      b.className = 'tl-item';
-      b.innerHTML = '<span class="nm">' + e.n + '</span>';
+      b.innerHTML = '<span>' + e.n + '</span>';
       b.addEventListener('click', () => pick(i));
       list.appendChild(b);
     });
-    const items = $$('.tl-item', list);
+    const items = $$('button', list);
     function pick(i) {
       cur = i;
       items.forEach((b, k) => b.classList.toggle('on', k === i));

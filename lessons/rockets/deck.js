@@ -630,69 +630,95 @@
 
   /* ---------- שיגורים אמיתיים ---------- */
   Ctl.videos = (function () {
-    // ← כאן מדביקים מזהי יוטיוב. המזהה הוא מה שמופיע אחרי v= בכתובת.
-    //   דוגמה: https://www.youtube.com/watch?v=ABCdefGH123  ->  yt: 'ABCdefGH123'
-    //   אם משאירים ריק, השקף ינסה לנגן את הקובץ המקומי מהתיקייה video/.
     const CLIPS = [
-      { yt: '', f: 'video/artemis.mp4', n: 'ארטמיס 1',
-        t: 'נובמבר 2022. רקטת SLS — הרקטה החזקה ביותר שנאס״א שיגרה אי פעם — יוצאת לדרך אל הירח. שני מנועי העזר מייצרים כל אחד כוח של יותר מכל מנועי סטרן 5 יחד.' },
-      { yt: '', f: 'video/saturn5.mp4', n: 'אפולו 11',
-        t: 'יולי 1969. סטרן 5 מתרוממת עם שלושה אנשים בדרך לירח. שימו לב כמה זמן לוקח לה בכלל להתחיל לזוז — היא שוקלת כמעט 3,000 טון.' },
-      { yt: '', f: 'video/falcon9.mp4', n: 'נחיתת פאלקון 9',
-        t: 'רקטה חוזרת מהחלל, מסובבת את עצמה, מדליקה מנועים כדי לבלום ונוחתת בעמידה. בדיוק מה שראינו בציר הזמן — הפעם באמת.' },
+      { n: 'ארטמיס 1', q: 'Artemis I launch NASA',
+        t: 'נובמבר 2022. רקטת SLS — החזקה ביותר שנאס״א שיגרה אי פעם — יוצאת לדרך אל הירח.' },
+      { n: 'אפולו 11', q: 'Apollo 11 Saturn V launch',
+        t: 'יולי 1969. סטרן 5 מתרוממת עם שלושה אנשים בדרך לירח. שימו לב כמה זמן לוקח לה בכלל להתחיל לזוז.' },
+      { n: 'נחיתת פאלקון 9', q: 'Falcon 9 first stage landing',
+        t: 'רקטה חוזרת מהחלל, מסתובבת, מדליקה מנועים כדי לבלום ונוחתת בעמידה.' },
+      { n: 'סטארשיפ', q: 'Starship launch SpaceX',
+        t: 'הרקטה הגדולה ביותר שנבנתה אי פעם. הפרק שעדיין נכתב.' },
     ];
-    const vid = $('#vid'), listEl = $('#vid-list'), missing = $('#vid-missing'), pathEl = $('#vid-path');
+    const KEY = 'make-rocket-videos';
+    const saved = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } })();
+
+    const wrap = $('.videowrap'), listEl = $('#vid-list');
     const title = $('#vid-title'), text = $('#vid-text');
-    let cur = -1;
+    const oldVid = $('#vid'); if (oldVid) oldVid.remove();
+    const oldMissing = $('#vid-missing'); if (oldMissing) oldMissing.remove();
+
+    const frame = document.createElement('iframe');
+    frame.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture';
+    frame.allowFullscreen = true;
+    frame.style.cssText = 'width:100%;height:100%;border:0;display:none';
+    wrap.appendChild(frame);
+
+    const empty = document.createElement('div');
+    empty.className = 'vid-empty';
+    wrap.appendChild(empty);
+
+    let cur = 0;
+
+    // מקבל כתובת יוטיוב בכל צורה ומחזיר את המזהה
+    function idFrom(url) {
+      if (!url) return '';
+      const m = String(url).match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
+      if (m) return m[1];
+      const bare = String(url).trim();
+      return /^[A-Za-z0-9_-]{11}$/.test(bare) ? bare : '';
+    }
+
+    function render() {
+      const c = CLIPS[cur];
+      title.textContent = c.n;
+      text.textContent = c.t;
+      const id = saved[c.n];
+      if (id) {
+        frame.style.display = 'block';
+        frame.src = 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&modestbranding=1&playsinline=1';
+        empty.innerHTML = '';
+        empty.style.display = 'none';
+      } else {
+        frame.style.display = 'none';
+        frame.removeAttribute('src');
+        empty.style.display = 'grid';
+        empty.innerHTML =
+          '<div><p>הדביקו כאן קישור יוטיוב ל<b>' + c.n + '</b></p>' +
+          '<input type="text" placeholder="https://www.youtube.com/watch?v=…" spellcheck="false">' +
+          '<div class="ve-row">' +
+          '<button class="btn" data-act="save">שמרו</button>' +
+          '<button class="btn ghost" data-act="find">חפשו ביוטיוב</button>' +
+          '</div>' +
+          '<small>נשמר במחשב הזה, אז צריך לעשות את זה פעם אחת בלבד</small></div>';
+        const inp = empty.querySelector('input');
+        empty.querySelector('[data-act="save"]').addEventListener('click', () => {
+          const id2 = idFrom(inp.value);
+          if (!id2) { inp.style.borderColor = '#e0364c'; inp.value = ''; inp.placeholder = 'הקישור לא זוהה — נסו שוב'; return; }
+          saved[c.n] = id2;
+          try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+          render();
+        });
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') empty.querySelector('[data-act="save"]').click(); });
+        empty.querySelector('[data-act="find"]').addEventListener('click', () => {
+          window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(c.q), '_blank');
+        });
+      }
+      btns.forEach((b, k) => b.classList.toggle('on', k === cur));
+    }
 
     CLIPS.forEach((c, i) => {
       const b = document.createElement('button');
       b.className = 'tg';
       b.textContent = c.n;
-      b.addEventListener('click', () => play(i));
+      b.addEventListener('click', () => { cur = i; render(); });
       listEl.appendChild(b);
     });
     const btns = $$('.tg', listEl);
 
-    vid.addEventListener('error', () => { missing.classList.add('show'); });
-    vid.addEventListener('loadeddata', () => { missing.classList.remove('show'); });
-
-    const frame = document.createElement('iframe');
-    frame.id = 'vid-frame';
-    frame.allow = 'autoplay; encrypted-media; picture-in-picture';
-    frame.allowFullscreen = true;
-    frame.style.cssText = 'width:100%;height:100%;border:0;display:none';
-    vid.parentNode.insertBefore(frame, vid);
-
-    function play(i) {
-      cur = i;
-      btns.forEach((b, k) => b.classList.toggle('on', k === i));
-      const c = CLIPS[i];
-      title.textContent = c.n;
-      text.textContent = c.t;
-      missing.classList.remove('show');
-      if (c.yt) {
-        // הטמעה מיוטיוב — דורש אינטרנט בכיתה
-        vid.style.display = 'none';
-        vid.removeAttribute('src');
-        frame.style.display = 'block';
-        frame.src = 'https://www.youtube-nocookie.com/embed/' + c.yt +
-                    '?rel=0&modestbranding=1&playsinline=1';
-      } else {
-        frame.style.display = 'none';
-        frame.removeAttribute('src');
-        vid.style.display = 'block';
-        pathEl.textContent = c.f;
-        vid.src = c.f;
-        vid.loop = true;
-        vid.muted = true;
-        vid.play().catch(() => {});
-      }
-    }
-
     return {
-      enter() { if (cur < 0) play(0); else if (!CLIPS[cur].yt) vid.play().catch(() => {}); },
-      leave() { vid.pause(); frame.removeAttribute('src'); },
+      enter() { render(); },
+      leave() { frame.removeAttribute('src'); },
     };
   })();
 

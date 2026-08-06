@@ -3,26 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MAKE · איך רקטה עפה? — שיעור אינטראקטיבי</title>
+<title>MAKE · איך רקטה עפה?</title>
 <link rel="icon" href="img/miki-mark.png">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="labels.css">
 </head>
 <body>
 
-<!-- רקע חלל -->
-<div id="space-bg"></div>
-<canvas id="stars"></canvas>
+<div id="page-bg"></div>
 
-<!-- מסך טעינה -->
 <div id="loader"><div class="lw">
-  <img src="img/miki-mark.png" alt="מייקי">
-  <p>מכינים את מנועי התלת־ממד…</p>
+  <div class="miki" data-clip="like" data-h="20"></div>
+  <p>רגע…</p>
 </div></div>
 
 <div id="deck">
 
-  <!-- ================= סרגל עליון ================= -->
   <header id="topbar">
     <div id="brand">
       <img src="img/miki-logo-blue.png" alt="MAKE">
@@ -33,409 +29,306 @@
     </div>
     <div id="progress-wrap"><div id="dots"></div></div>
     <div id="score">⭐ <span id="score-n">0</span></div>
-    <div id="timer" title="לחצו כדי להפעיל / לעצור">⏱ <b id="timer-t">15:00</b></div>
+    <div id="timer">⏱ <b id="timer-t">15:00</b></div>
   </header>
 
-  <!-- ================= שקפים ================= -->
   <main id="slides">
 
-    <!-- ---------- פתיחה ---------- -->
+    <!-- ---------- 1 · פתיחה ---------- -->
     <section class="slide" data-id="hero" data-scene="hero" data-kind="fun">
       <div class="hero">
         <div class="hero-copy">
           <div class="eyebrow">MISSION · 15 דקות</div>
-          <h1 class="big">איך רקטה<br>עפה?</h1>
-          <p class="sub">אין לה גלגלים. אין לה כנפיים. אין לה על מה להישען.<br>
-          אז איך היא מטפסת עד לחלל — ואיך אנחנו נשגר אחת בעצמנו עוד מעט?</p>
+          <h1 class="big">איך רקטה<br><em>עפה?</em></h1>
+          <p class="sub">אין לה גלגלים, אין לה כנפיים, ואין לה על מה להישען.
+          ובכל זאת היא מטפסת עד לחלל.</p>
           <div class="mission-list">
             <div><span class="n">1</span><span>הסוד שמפעיל <b>כל</b> רקטה בעולם</span></div>
-            <div><span class="n">2</span><span>מה מסתתר בתוך <b>מנוע של רקטה</b></span></div>
+            <div><span class="n">2</span><span>מה מסתתר בתוך <b>מנוע רקטי</b></span></div>
             <div><span class="n">3</span><span>מהחץ הסיני ועד <b>הירח</b></span></div>
-            <div><span class="n">4</span><span>ואז — בונים <b>רקטת מים</b> 🚀💦</span></div>
+            <div><span class="n">4</span><span>ואז בונים <b>רקטת מים</b> 🚀</span></div>
           </div>
           <button class="btn" data-go="next">יוצאים לדרך ←</button>
         </div>
-        <div class="stage">
-          <div class="badge3d">3D · אינטראקטיבי</div>
-          <div class="hint">גררו כדי לסובב · גלגלת = זום</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
       </div>
     </section>
 
-    <!-- ---------- הקנייה 1 · חוק ניוטון השלישי ---------- -->
+    <!-- ---------- 2 · חוק ניוטון השלישי ---------- -->
     <section class="slide" data-id="newton" data-scene="newton" data-kind="learn">
-      <span class="tag learn">🧠 הקנייה · 1</span>
-      <h2 class="title">כשאתם דוחפים משהו — <i>הוא דוחף אתכם בחזרה</i></h2>
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">כשדוחפים משהו — <i>הוא דוחף בחזרה</i></h2>
       <div class="split wide-3d">
-        <div class="stage">
-          <div class="badge3d">3D · אינטראקטיבי</div>
-          <div class="hint">נפחו את הבלון ושחררו · גררו כדי לסובב</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
         <div class="panel">
-          <div class="card accent-b">
-            <h4><span class="ic">🎈</span> נסו את זה בראש</h4>
-            <p>הבלון זורק אוויר <b>למטה</b>. האוויר דוחף את הבלון <b>למעלה</b>.<br>
-            זה קורה תמיד, בכל מקום: דוחפים לכיוון אחד — נדחפים לכיוון ההפוך.</p>
-            <p>לזה קוראים <b>החוק השלישי של ניוטון</b>, וזה הסוד של כל רקטה ביקום.</p>
+          <div class="card accent-b big">
+            <h4><span class="ic">🎈</span> הבלון יורה אוויר למטה</h4>
+            <p>והאוויר דוחף אותו למעלה. תמיד, בכל מקום: כוח לכיוון אחד
+            יוצר כוח שווה לכיוון ההפוך. זה <b>החוק השלישי של ניוטון</b>.</p>
           </div>
-          <div class="group-tip"><span class="who">🙋 מתנדב/ת ללוח</span>
-            <span class="txt">בוחר/ת כמה לנפח, וכל הכיתה מנחשת בהצבעת ידיים: <b>גבוה או נמוך?</b></span></div>
           <div class="ctrl">
-            <label>כמה לנפח את הבלון? <output id="nw-inf">55%</output></label>
+            <label>ניפוח <output id="nw-inf">55%</output></label>
             <input type="range" id="nw-slider" min="10" max="100" value="55">
           </div>
           <div class="btn-row">
-            <button class="btn" id="nw-go">💨 שחררו את הבלון!</button>
-            <button class="btn ghost" id="nw-reset">↺ שוב</button>
+            <button class="btn" id="nw-go">שחררו את הבלון</button>
+            <button class="btn ghost" id="nw-reset">↺</button>
           </div>
-          <div class="card accent-y">
-            <h4><span class="ic">🎳</span> ומה גורם לדחיפה חזקה?</h4>
-            <p>דמיינו שאתם עומדים על קרח חלק. תזרקו כדור טניס — תזוזו טיפה.
-            תזרקו <b>כדור באולינג</b> — תעופו אחורה!</p>
-            <p>וגם: ככל שתזרקו <b>יותר חזק</b>, כך תזוזו יותר. רקטה עושה את זה
-            אלפי פעמים בשנייה.</p>
+          <div class="card accent-y big">
+            <h4><span class="ic">🎳</span> על קרח חלק</h4>
+            <p>זרקו כדור טניס — תזוזו קצת. זרקו כדור באולינג — תעופו אחורה.
+            <b>מה שזורקים כבד ומהיר יותר, הדחיפה חזקה יותר.</b></p>
           </div>
-          <div class="fact"><span class="ic">🌌</span><div>רקטה עושה בדיוק את זה, רק עם <b>גזים לוהטים</b> — ולכן היא עובדת <b>גם בחלל</b>: היא נדחפת על מה שהיא עצמה זורקת.</div></div>
+          <div class="miki" data-clip="hay" data-h="30"></div>
+          <div class="card big">
+            <h4><span class="ic">🌌</span> ולכן זה עובד בחלל</h4>
+            <p>רקטה יורה גזים לוהטים במקום אוויר, ולא נשענת על שום דבר מבחוץ.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- כיף · שאלה 1 ---------- -->
+    <!-- ---------- 3 · שאלה 1 ---------- -->
     <section class="slide" data-id="q1" data-scene="" data-kind="fun">
-      <span class="tag fun">🎮 כיף · שאלה 1</span>
+      <span class="tag fun">שאלה</span>
       <div class="quiz" data-quiz="q1" data-answer="1">
-        <div class="q-text">רקטה נמצאת בחלל, רחוק מהכול. על <em>מה</em> היא נדחפת קדימה?</div>
-        <div class="group-tip class-wide"><span class="who">📣 כל הכיתה</span>
-          <span class="txt">אף אחד לא קורא בקול! סופרים לשלוש — וכולם מרימים אצבעות: <b>1=א · 2=ב · 3=ג · 4=ד</b></span></div>
+        <div class="q-text">רקטה בחלל, רחוק מהכול. על <em>מה</em> היא נדחפת קדימה?</div>
         <div class="q-opts cols-2">
           <button class="opt"><span class="k">א</span><span>על האוויר שמסביבה</span></button>
-          <button class="opt"><span class="k">ב</span><span>על הגזים שהיא עצמה זורקת</span></button>
+          <button class="opt"><span class="k">ב</span><span>על הגזים שהיא יורה</span></button>
           <button class="opt"><span class="k">ג</span><span>על כוח המשיכה של השמש</span></button>
           <button class="opt"><span class="k">ד</span><span>על קרני השמש</span></button>
         </div>
         <div class="explain">
-          <img src="img/miki-mark.png" alt="מייקי">
-          <div><b>בול!</b> בחלל אין אוויר בכלל — ורקטות עפות שם מצוין.
-          הרקטה זורקת גז אחורה, והגז דוחף אותה קדימה. <b>היא לא צריכה שום דבר מבחוץ.</b></div>
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>בחלל אין אוויר בכלל, ורקטות עפות שם מצוין.
+          הרקטה יורה גז אחורה, והגז דוחף אותה קדימה — <b>בלי שום דבר מבחוץ</b>.</div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- הקנייה 2 · מנוע רקטי ---------- -->
+    <!-- ---------- 4 · מנוע רקטי ---------- -->
     <section class="slide" data-id="engine" data-scene="engine" data-kind="learn">
-      <span class="tag learn">🧠 הקנייה · 2</span>
-      <h2 class="title">מה יש בפנים? <em>מנוע של רקטה</em>, חתוך לשניים</h2>
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">בתוך <em>מנוע רקטי</em></h2>
       <div class="split wide-3d">
-        <div class="stage">
-          <div class="badge3d">3D · חתך אמיתי</div>
-          <div class="hint">גררו לסיבוב · פרקו עם המחוון</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
         <div class="panel">
-          <div class="group-tip"><span class="who">🙋 שני מתנדבים</span>
-            <span class="txt">אחד/ת מפרק/ת את המנוע לאט־לאט, והשני/ה לוחץ/ת <b>הצתה</b>. שאלו לפני: מה יקרה אם נרצה לכבות רקטה באמצע?</span></div>
-          <div class="ctrl">
-            <label>פרקו את המנוע <output id="en-ex">0%</output></label>
-            <input type="range" id="en-slider" min="0" max="100" value="0">
+          <div class="btn-row">
+            <button class="btn" id="en-explode">פרקו את המנוע</button>
+            <button class="btn blue" id="en-fire">הצתה</button>
           </div>
           <div class="toggle-row">
-            <button class="tg on" id="en-liquid">💧 דלק נוזלי</button>
-            <button class="tg" id="en-solid">🧱 דלק מוצק</button>
+            <button class="tg on" id="en-liquid">דלק נוזלי</button>
+            <button class="tg" id="en-solid">דלק מוצק</button>
           </div>
-          <div class="btn-row">
-            <button class="btn" id="en-fire">🔥 הצתה!</button>
-            <button class="tg on" id="en-cut">חתך פתוח</button>
-            <button class="tg on" id="en-lab">תוויות</button>
+          <div class="partlist" id="en-parts"></div>
+          <div class="card accent-b big" id="en-detail">
+            <h4><span class="ic">👆</span> <span id="en-title">בחרו חלק</span></h4>
+            <p id="en-text">כל חלק במנוע עושה עבודה אחרת. לחצו על אחד מהם.</p>
           </div>
-          <div class="card" id="en-card-liquid">
-            <h4><span class="ic">🧪</span> למה יש שני מיכלים?</h4>
-            <p>כדי שמשהו יישרף צריך שני דברים: <b>דלק</b> ו<b>אוויר</b>.
-            בחלל אין אוויר — אז הרקטה לוקחת איתה מיכל של אוויר משלה!
-            למיכל הזה קוראים <b>מחמצן</b>.</p>
-            <p>מנוע כזה אפשר <b>לחזק, להחליש ואפילו לכבות</b> באמצע הטיסה.</p>
-          </div>
-          <div class="card" id="en-card-solid" hidden>
-            <h4><span class="ic">🧱</span> מנוע של דלק מוצק</h4>
-            <p>כאן אין מיכלים בכלל. הדלק והמחמצן <b>מעורבבים מראש</b> לגוש קשה אחד,
-            עם חור בצורת כוכב באמצע. האש מתחילה בחור ומתפשטת החוצה — כמו נר ענק.</p>
-            <p>הוא זול ופשוט, ואפשר להשאיר אותו מוכן שנים. אבל
-            <b>ברגע שהדליקו — אי אפשר לכבות</b>. הוא יבער עד שייגמר.</p>
-          </div>
-          <div class="card accent-y">
-            <h4><span class="ic">💦</span> הטריק של האצבע על הצינור</h4>
-            <p>הגז הלוהט נדחק דרך צוואר צר, ואז מתפרץ החוצה דרך הפעמון הגדול.
-            זה בדיוק כמו לשים <b>אצבע על צינור מים</b> — פתאום הסילון יוצא הרבה יותר חזק.</p>
-          </div>
-          <div class="fact"><span class="ic">🌡️</span><div>בפנים חם <b>3,300 מעלות</b> — יותר ממה שהמתכת יכולה לסבול! אז דלק קר זורם בתוך הקירות ומקרר אותם, כמו מזגן.</div></div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- כיף · הרכיבו רקטה ---------- -->
+    <!-- ---------- 5 · הרכיבו רקטה ---------- -->
     <section class="slide" data-id="build" data-scene="build" data-kind="fun">
-      <span class="tag fun">🎮 כיף · אתגר בנייה</span>
+      <span class="tag fun">אתגר</span>
       <h2 class="title">הרכיבו רקטה — <em>מלמטה למעלה</em></h2>
       <div class="split">
-        <div class="stage">
-          <div class="badge3d">3D · אינטראקטיבי</div>
-          <div class="hint">כל חלק נכון נוחת במקומו</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
         <div class="panel">
-          <p class="sub" style="margin:0;font-size:15px">לחצו על החלקים <b>בסדר הנכון</b>, מהתחתית ועד לראש.<br>
-          לכל רקטה בעולם — מרקטת מים ועד סטרן 5 — יש בדיוק את ארבעת החלקים האלה.</p>
-          <div class="group-tip"><span class="who">🙋 4 מתנדבים</span>
-            <span class="txt">כל אחד/ת בא/ה ללוח ומרכיב/ה חלק אחד. הכיתה מצביעה על החלק הבא <b>לפני</b> שלוחצים.</span></div>
           <div class="parts" id="bd-parts"></div>
           <div class="build-track" id="bd-track"></div>
           <div class="btn-row">
-            <button class="btn" id="bd-launch" disabled>🚀 שגרו!</button>
-            <button class="btn ghost" id="bd-reset">↺ מחדש</button>
+            <button class="btn" id="bd-launch" disabled>שגרו</button>
+            <button class="btn ghost" id="bd-reset">↺</button>
           </div>
-          <div class="verdict" id="bd-verdict">מחכה לחלק הראשון…</div>
+          <div class="verdict" id="bd-verdict">מה נמצא בתחתית של כל רקטה?</div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- הקנייה 3 · היסטוריה ---------- -->
+    <!-- ---------- 6 · היסטוריה ---------- -->
     <section class="slide" data-id="history" data-scene="history" data-kind="learn">
-      <span class="tag learn">🧠 הקנייה · 3</span>
-      <h2 class="title">800 שנה של רקטות — <i>בבחירה שלכם</i></h2>
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">800 שנה של <em>רקטות</em></h2>
       <div class="split wide-3d">
-        <div class="stage">
-          <div class="badge3d">3D · 6 דגמים</div>
-          <div class="hint">גררו כדי לסובב את הדגם</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
         <div class="panel">
-          <div class="group-tip class-wide"><span class="who">📣 כל הכיתה</span>
-            <span class="txt">בוחרים ביחד 3 תחנות בהצבעה. אחרי כל דגם: <b>מה הכי הפתיע אתכם?</b></span></div>
           <div class="tl" id="hi-list"></div>
-          <div class="card accent-b" id="hi-card">
-            <h4><span class="ic">📜</span> <span id="hi-title">בחרו תחנה בציר הזמן</span></h4>
-            <p id="hi-text">כל דגם מוצג בתלת־ממד — אפשר לסובב אותו.</p>
+          <div class="card accent-b big" id="hi-card">
+            <h4><span class="ic">📜</span> <span id="hi-title">בחרו תחנה</span></h4>
+            <p id="hi-text">כל דגם זז — אפשר לסובב אותו.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- כיף · שאלה 2 ---------- -->
+    <!-- ---------- 7 · שאלה 2 ---------- -->
     <section class="slide" data-id="q2" data-scene="" data-kind="fun">
-      <span class="tag fun">🎮 כיף · שאלה 2</span>
+      <span class="tag fun">שאלה</span>
       <div class="quiz" data-quiz="q2" data-answer="2">
-        <div class="q-text">ב־<b>1926</b> עפה הרקטה הראשונה בעולם עם דלק נוזלי. היא עלתה <b>12 מטר</b>.<br>
-        כמה שנים עברו מאז ועד שאדם הלך על <em>הירח</em>?</div>
-        <div class="group-tip class-wide"><span class="who">📣 כל הכיתה</span>
-          <span class="txt">מצביעים באצבעות: <b>1=א · 2=ב · 3=ג · 4=ד</b>. סופרים כמה בכל אפשרות — ואז בודקים.</span></div>
+        <div class="q-text">הרקטה הראשונה עם דלק נוזלי עלתה <b>12 מטר</b> בשנת <b>1926</b>.<br>
+        כמה שנים אחר כך הלך אדם על <em>הירח</em>?</div>
         <div class="q-opts cols-2">
-          <button class="opt"><span class="k">א</span><span>בערך 120 שנה</span></button>
-          <button class="opt"><span class="k">ב</span><span>בערך 80 שנה</span></button>
-          <button class="opt"><span class="k">ג</span><span>רק 43 שנה</span></button>
-          <button class="opt"><span class="k">ד</span><span>בערך 15 שנה</span></button>
+          <button class="opt"><span class="k">א</span><span>120 שנה</span></button>
+          <button class="opt"><span class="k">ב</span><span>80 שנה</span></button>
+          <button class="opt"><span class="k">ג</span><span>43 שנה</span></button>
+          <button class="opt"><span class="k">ד</span><span>15 שנה</span></button>
         </div>
         <div class="explain">
-          <img src="img/miki-mark.png" alt="מייקי">
-          <div><b>רק 43 שנה!</b> הרקטה של 1926 עפה 12 מטר ונפלה בשדה כרוב.
-          43 שנה אחר כך רקטה לקחה שלושה אנשים עד <b>הירח</b>. זה כמו לעבור
-          מאופניים לחללית — בתוך חיים של אדם אחד.</div>
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>אותה רקטה מ־1926 נפלה בשדה כרוב אחרי שתי שניות.
+          <b>43 שנה</b> לאחר מכן נחתו שלושה אנשים על הירח — הכול בתוך חיים של אדם אחד.</div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- הקנייה 4 · רקטה או טיל (אפשר לדלג) ---------- -->
+    <!-- ---------- 8 · רקטה או טיל ---------- -->
     <section class="slide" data-id="guided" data-scene="guided" data-kind="learn">
-      <span class="tag learn">🧠 הקנייה · 4 <span class="opt-tag">אפשר לדלג</span></span>
-      <h2 class="title">רקטה או <em>טיל</em>? ההבדל הוא רק <i>מה יש בראש</i></h2>
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">רקטה או <em>טיל</em>?</h2>
       <div class="split wide-3d">
-        <div class="stage">
-          <div class="badge3d">3D · נסו לפגוע</div>
-          <div class="hint">בחרו סוג, ואז שגרו לעבר הטבעת</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
         <div class="panel">
-          <div class="group-tip"><span class="who">🙋 שני מתנדבים</span>
-            <span class="txt">הראשון/ה משגר/ת <b>רקטה רגילה</b>, השני/ה <b>טיל מונחה</b>. הכיתה מנחשת מראש מי יפגע.</span></div>
+          <div class="vs">
+            <div class="vs-card a">
+              <span class="ico">🚀</span>
+              <h5>רקטה</h5>
+              <p>מכוונים, משגרים — וזהו. ממשיכה לבד.</p>
+            </div>
+            <div class="vs-card b">
+              <span class="ico">🎯</span>
+              <h5>טיל מונחה</h5>
+              <p>אותה רקטה, עם מוח בראש שמתקן את הכיוון תוך כדי טיסה.</p>
+            </div>
+          </div>
           <div class="toggle-row">
-            <button class="tg on" id="gd-plain">🚀 רקטה רגילה</button>
-            <button class="tg" id="gd-guided">🎯 טיל מונחה</button>
+            <button class="tg on" id="gd-plain">רקטה</button>
+            <button class="tg" id="gd-guided">טיל מונחה</button>
+            <button class="btn" id="gd-go">שגרו</button>
           </div>
-          <div class="btn-row">
-            <button class="btn" id="gd-go">שגרו לעבר המטרה!</button>
-            <button class="btn ghost" id="gd-reset">↺ שוב</button>
+          <div class="verdict" id="gd-verdict">האם תפגע בטבעת?</div>
+          <div class="card big">
+            <h4><span class="ic">📦</span> מה שמים בראש?</h4>
+            <div class="heads">
+              <div class="head-tile"><span class="ico">🛰️</span><span>לוויין</span></div>
+              <div class="head-tile"><span class="ico">👨‍🚀</span><span>אנשים</span></div>
+              <div class="head-tile"><span class="ico">💥</span><span>ראש קרב</span></div>
+            </div>
+            <p style="margin-top:12px">אותו מנוע, אותו גוף, אותו חוק פיזיקה.
+            ההבדל היחיד הוא <b>מה מחליטים לשים למעלה</b>.</p>
           </div>
-          <div class="verdict" id="gd-verdict">בחרו סוג ושגרו. מי יפגע בטבעת?</div>
-          <div class="card accent-b">
-            <h4><span class="ic">🚀</span> רקטה</h4>
-            <p>מכוונים אותה לכיוון מסוים ומשגרים — ומשם היא ממשיכה <b>לבד</b>.
-            אין לה הגה ואין לה עיניים. רוח קלה או כוח המשיכה כבר מזיזים אותה מהמסלול.</p>
-          </div>
-          <div class="card accent-y">
-            <h4><span class="ic">🎯</span> טיל מונחה</h4>
-            <p>זו בדיוק אותה רקטה — רק שהוסיפו לה <b>מוח קטן בראש</b>: חיישן שרואה
-            לאן היא הולכת, ומחשב זעיר שמזיז כנפונים קטנים ומתקן את הכיוון תוך כדי טיסה.</p>
-          </div>
-          <div class="card">
-            <h4><span class="ic">📦</span> ומה שמים בראש?</h4>
-            <p>החלק שהרקטה נושאת נקרא <b>מטען מועיל</b> — זה מה שבשבילו כל הטיסה.</p>
-            <p>אצל נאס"א זה <b>לוויין</b>, טלסקופ, או אסטרונאוטים. בטיל צבאי זה
-            <b>ראש קרב</b> — חומר נפץ. אותו מנוע בדיוק, אותו גוף, אותו חוק פיזיקה —
-            <b>ההבדל הוא רק מה שמים בראש</b>, ולמה בחרו להשתמש בזה.</p>
-          </div>
-          <div class="fact"><span class="ic">🛡️</span><div>יש גם טילים שכל תפקידם <b>להגן</b>: כיפת ברזל וחץ רודפים אחרי רקטה שנורתה לעבר אנשים ופוגעים בה עוד באוויר. בשביל לתפוס משהו שעף — <b>חייבים מוח</b>.</div></div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- הקנייה 5 · רקטת המים ---------- -->
+    <!-- ---------- 9 · רקטת המים ---------- -->
     <section class="slide" data-id="bottle" data-scene="bottle" data-kind="learn">
-      <span class="tag learn">🧠 הקנייה · 5</span>
-      <h2 class="title">הרקטה <em>שלכם</em> — בקבוק, מים ואוויר</h2>
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">הרקטה <em>שלכם</em></h2>
       <div class="split wide-3d">
-        <div class="stage">
-          <div class="badge3d">3D · דיאגרמה מפורקת</div>
-          <div class="hint">גררו לסיבוב · פרקו כדי לראות בפנים</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
         <div class="panel">
-          <div class="group-tip"><span class="who">🙋 מתנדב/ת ללוח</span>
-            <span class="txt">מפרק/ת את הרקטה חלק־חלק, והכיתה מנסה לזהות: <b>מה התפקיד של כל חלק?</b></span></div>
-          <div class="ctrl">
-            <label>פרקו את הרקטה <output id="bo-ex">0%</output></label>
-            <input type="range" id="bo-slider" min="0" max="100" value="0">
+          <div class="btn-row">
+            <button class="btn" id="bo-explode">פרקו את הרקטה</button>
           </div>
           <div class="ctrl">
-            <label>כמה מים בבקבוק? <output id="bo-w">33%</output></label>
+            <label>מים בבקבוק <output id="bo-w">33%</output></label>
             <input type="range" id="bo-water" min="5" max="85" value="33">
           </div>
-          <div class="card accent-b">
-            <h4><span class="ic">💨</span> האוויר הוא הקפיץ. המים הם הדלק.</h4>
-            <p>המשאבה דוחסת אוויר לתוך הבקבוק. אוויר דחוס הוא בדיוק כמו
-            <b>קפיץ מכווץ</b> — הוא רוצה להתפוצץ החוצה.</p>
-            <p>ברגע שהפקק עף, האוויר מתפשט ו<b>יורה את המים החוצה</b> בעוצמה —
-            והרקטה עפה לכיוון ההפוך.</p>
+          <div class="card accent-b big">
+            <h4><span class="ic">💨</span> האוויר הוא הקפיץ</h4>
+            <p>המשאבה דוחסת אוויר לתוך הבקבוק, בדיוק כמו לכווץ קפיץ.
+            כשהפקק עף, האוויר מתפשט ו<b>יורה את המים החוצה</b>.</p>
           </div>
-          <div class="fact"><span class="ic">🎳</span><div>זוכרים את כדור הבאולינג? אוויר הוא קל מאוד. <b>מים כבדים הרבה יותר</b> — ולזרוק משהו כבד אחורה דוחף אותנו הרבה יותר חזק.</div></div>
+          <div class="card accent-y big">
+            <h4><span class="ic">💧</span> המים הם הדלק</h4>
+            <p>אוויר לבדו קל מדי. מים כבדים פי 800 — וזוכרים את כדור הבאולינג?
+            <b>ככל שמה שיורים כבד יותר, הדחיפה חזקה יותר.</b></p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- כיף · סימולטור ---------- -->
-    <section class="slide" data-id="sim" data-scene="sim" data-kind="fun">
-      <span class="tag fun">🎮 כיף · סימולטור שיגור</span>
-      <h2 class="title">מצאו את המתכון <em>המנצח</em> — לפני שיוצאים החוצה</h2>
-      <div class="split wide-3d">
-        <div class="stage">
-          <div class="badge3d">3D · סימולציה אמיתית</div>
-          <div class="hint">המצלמה עוקבת אחרי הרקטה</div>
-          <div class="labels"></div>
+    <!-- ---------- 10 · שיגורים אמיתיים ---------- -->
+    <section class="slide" data-id="videos" data-scene="" data-kind="fun">
+      <span class="tag fun">שיגורים אמיתיים</span>
+      <h2 class="title">איך זה נראה <em>במציאות</em></h2>
+      <div class="split even">
+        <div class="videowrap">
+          <video id="vid" playsinline preload="metadata"></video>
+          <div class="missing" id="vid-missing"><div>
+            <div>הסרטון לא נמצא</div>
+            <code id="vid-path"></code>
+          </div></div>
         </div>
-        <div class="panel">
-          <div class="group-tip"><span class="who">🙋 3 מתנדבים · תחרות</span>
-            <span class="txt">כל אחד/ת בוחר/ת מתכון משלו ומשגר/ת. מי הגיע הכי גבוה? השיא נשמר למעלה.</span></div>
-          <div class="ctrl">
-            <label>מים בבקבוק <output id="sm-w">33%</output></label>
-            <input type="range" id="sm-water" min="5" max="85" value="33">
+        <div class="panel center">
+          <div class="toggle-row" id="vid-list"></div>
+          <div class="card accent-b big" id="vid-card">
+            <h4><span class="ic">🎬</span> <span id="vid-title">בחרו שיגור</span></h4>
+            <p id="vid-text"></p>
           </div>
-          <div class="ctrl">
-            <label>כמה מנפחים <output id="sm-p">6.0 בר</output></label>
-            <input type="range" id="sm-bar" min="20" max="90" value="60">
-          </div>
-          <div class="readout">
-            <div class="ro"><b id="sm-h">—</b><span>לאיזה גובה הגיעה (מ׳)</span></div>
-            <div class="ro"><b id="sm-v">—</b><span>מהירות בשיגור (מ/ש)</span></div>
-            <div class="ro"><b id="sm-best">0</b><span>השיא שלכם (מ׳)</span></div>
-          </div>
-          <div class="btn-row">
-            <button class="btn" id="sm-go">🚀 שגרו!</button>
-            <button class="btn ghost" id="sm-reset">↺ מלאו מחדש</button>
-          </div>
-          <div class="verdict" id="sm-verdict">בחרו כמה מים וכמה אוויר — ושגרו.</div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- כיף · שאלה 3 + בטיחות ---------- -->
+    <!-- ---------- 11 · שאלה 3 ---------- -->
     <section class="slide" data-id="q3" data-scene="" data-kind="fun">
-      <span class="tag fun">🎮 כיף · שאלה 3</span>
-      <div class="split">
-        <div class="quiz" data-quiz="q3" data-answer="1" style="align-self:start">
-          <div class="q-text">מה יקרה אם נמלא את הבקבוק <em>עד למעלה</em> במים?</div>
-          <div class="group-tip class-wide" style="margin-bottom:12px"><span class="who">📣 כל הכיתה</span>
-            <span class="txt">מצביעים ביד: <b>1=א · 2=ב · 3=ג</b></span></div>
-          <div class="q-opts">
-            <button class="opt"><span class="k">א</span><span>היא תעוף הכי גבוה — יותר דלק!</span></button>
-            <button class="opt"><span class="k">ב</span><span>היא בקושי תזוז — אין מקום לאוויר</span></button>
-            <button class="opt"><span class="k">ג</span><span>אין הבדל בכלל</span></button>
-          </div>
-          <div class="explain">
-            <img src="img/miki-mark.png" alt="מייקי">
-            <div><b>נכון!</b> בלי אוויר אין <b>קפיץ</b> — ואין מי שידחוף את המים החוצה.
-            בלי מים אין <b>מה לזרוק</b>. צריך את שניהם: בערך <b>שליש מים</b>.</div>
-          </div>
+      <span class="tag fun">שאלה אחרונה</span>
+      <div class="quiz" data-quiz="q3" data-answer="1">
+        <div class="q-text">מה יקרה אם נמלא את הבקבוק <em>עד למעלה</em> במים?</div>
+        <div class="q-opts cols-2">
+          <button class="opt"><span class="k">א</span><span>תעוף הכי גבוה — יותר דלק</span></button>
+          <button class="opt"><span class="k">ב</span><span>בקושי תזוז — אין מקום לאוויר</span></button>
+          <button class="opt"><span class="k">ג</span><span>אין הבדל</span></button>
         </div>
-        <div class="panel">
-          <div class="card safety">
-            <h4><span class="ic">🦺</span> חוקי בטיחות — לפני שיוצאים</h4>
-            <ul>
-              <li>משקפי מגן על כולם. תמיד.</li>
-              <li>עומדים <b>מאחורי הקו</b> — לפחות 5 מטר מהמשגר.</li>
-              <li>לא מתכופפים מעל הרקטה כשהיא מנופחת.</li>
-              <li>סופרים בקול: <b>3 · 2 · 1 · שיגור!</b></li>
-              <li>לא מתקרבים עד שהרקטה נחתה ונרגעה.</li>
-              <li>רק בקבוקי שתייה שלמים — בלי סדקים ושריטות.</li>
-            </ul>
-          </div>
-          <div class="fact"><span class="ic">💦</span><div>תתרטבו. זה חלק מהכיף.</div></div>
+        <div class="explain">
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>בלי אוויר אין קפיץ, ואין מי שידחוף את המים החוצה.
+          בלי מים אין מה לירות. הסוד הוא האיזון — <b>בערך שליש מים</b>.</div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- סיום ---------- -->
+    <!-- ---------- 12 · סיום ---------- -->
     <section class="slide" data-id="finale" data-scene="hero" data-kind="fun">
-      <span class="tag fun">🚀 יוצאים לשטח</span>
+      <span class="tag fun">לשטח</span>
       <div class="finale">
         <div>
-          <h1 class="big" style="font-size:clamp(34px,5vw,68px)">לתחנות!</h1>
-          <p class="sub">עכשיו אתם יודעים בדיוק למה זה עובד. בואו נבנה.</p>
+          <h1 class="big">בונים <em>ומשגרים</em></h1>
           <div class="steps">
-            <div class="step"><span class="n">1</span><span>גוזרים סנפירים ומדביקים <b>3 סביב הבקבוק</b>, קרוב לפתח</span></div>
-            <div class="step"><span class="n">2</span><span>חרטום מקרטון, ובפנים קצת פלסטלינה — <b>שיהיה כבד בראש</b></span></div>
-            <div class="step"><span class="n">3</span><span>ממלאים <b>שליש מים</b> ומחברים למשגר</span></div>
-            <div class="step"><span class="n">4</span><span>מנפחים · כולם מאחורי הקו · <b>משקפי מגן</b></span></div>
-            <div class="step"><span class="n">5</span><span><b>3 · 2 · 1 — שיגור!</b> ורואים מי הגיע הכי גבוה</span></div>
+            <div class="step"><span class="n">1</span><span>שלושה סנפירים סביב הבקבוק, קרוב לפתח</span></div>
+            <div class="step"><span class="n">2</span><span>חרטום מקרטון עם פלסטלינה בפנים — <b>כובד בראש מייצב</b></span></div>
+            <div class="step"><span class="n">3</span><span><b>שליש מים</b>, ומחברים למשגר</span></div>
+            <div class="step"><span class="n">4</span><span>מנפחים · משקפי מגן · כולם מאחורי הקו</span></div>
+            <div class="step"><span class="n">5</span><span><b>3 · 2 · 1 — שיגור!</b></span></div>
           </div>
-          <div class="kv" style="margin-top:14px">
-            <span class="chip">🎈 דוחפים ⟷ <b>נדחפים</b></span>
-            <span class="chip">💨 אוויר = <b>קפיץ</b></span>
-            <span class="chip">💧 מים = <b>דלק</b></span>
-            <span class="chip">📐 <b>שליש</b> מים</span>
+          <div style="display:flex;align-items:flex-end;gap:18px;margin-top:14px">
+            <div class="miki" data-clip="jump" data-h="26"></div>
+            <div class="kv" style="flex:1">
+            <span class="chip">דוחפים ⟷ <b>נדחפים</b></span>
+            <span class="chip">אוויר = <b>קפיץ</b></span>
+            <span class="chip">מים = <b>דלק</b></span>
+            <span class="chip"><b>שליש</b> מים</span>
+            </div>
           </div>
         </div>
-        <div class="stage">
-          <div class="badge3d">3D</div>
-          <div class="labels"></div>
-        </div>
+        <div class="stage"><div class="labels"></div></div>
       </div>
     </section>
 
   </main>
 
-  <!-- ================= ניווט ================= -->
   <nav id="nav">
     <button class="navbtn" id="prev">→ הקודם</button>
-    <div class="mid">
-      <kbd>←</kbd> <kbd>→</kbd> מעבר בין שקפים · <kbd>רווח</kbd> הבא · <kbd>F</kbd> מסך מלא
-    </div>
     <button class="navbtn primary" id="next">הבא ←</button>
   </nav>
 
 </div>
 
-<!-- ספירה לאחור לכל הכיתה -->
 <div id="countdown"><b></b></div>
-
 <canvas id="fx"></canvas>
 
 <script src="vendor/three.min.js"></script>

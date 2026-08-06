@@ -1,93 +1,62 @@
 /* ============================================================
-   תוויות HTML המוקרנות מנקודות בתלת-ממד
+   תוויות המוקרנות מנקודות בתלת-ממד — גרסה בהירה
    ============================================================ */
 .labels {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 4;
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden; z-index: 4;
 }
 
 .l3d {
   position: absolute;
-  /* חייב להיות left פיזי — ההקרנה מהתלת-ממד מחזירה פיקסלים משמאל */
+  /* left פיזי — ההקרנה מהתלת-ממד מחזירה פיקסלים משמאל */
   top: 0; left: 0; right: auto;
   white-space: nowrap;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: #eaf2ff;
-  background: rgba(8, 13, 28, 0.74);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(140, 178, 235, 0.3);
-  border-radius: 11px;
-  padding: 6px 11px;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+  font-size: clamp(14px, 1.15vw, 21px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #101f33;
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 2px solid #d5e3f2;
+  border-radius: 12px;
+  padding: 7px 14px;
+  box-shadow: 0 6px 20px rgba(20, 50, 90, .16);
   transition: opacity .3s;
   will-change: transform;
 }
-.l3d b { color: #fff; font-weight: 800; }
 .l3d small {
   display: block;
   font-weight: 400;
-  font-size: 11px;
-  color: #93a7c8;
-  margin-top: 1px;
+  font-size: .78em;
+  color: #56718f;
+  margin-top: 2px;
   white-space: normal;
-  max-width: 190px;
+  max-width: 15em;
 }
 
-/* נקודת עיגון קטנה */
+/* נקודת עיגון */
 .l3d::after {
   content: '';
   position: absolute;
-  right: -5px; top: 50%;
-  width: 8px; height: 8px; margin-top: -4px;
+  right: -6px; top: 50%;
+  width: 10px; height: 10px; margin-top: -5px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 12px currentColor;
-  opacity: .85;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.9);
 }
 
-.l3d.blue   { border-color: rgba(0,148,255,.6);  color: #7ec6ff; }
-.l3d.blue b, .l3d.blue { }
-.l3d.yellow { border-color: rgba(255,198,30,.6); color: #ffd24d; }
-.l3d.green  { border-color: rgba(47,208,122,.6); color: #6ce7a8; }
-.l3d.red    { border-color: rgba(255,92,110,.6); color: #ff93a0; }
+.l3d.blue   { border-color: #0094ff; color: #0069c4; }
+.l3d.yellow { border-color: #f5a421; color: #c97a00; }
+.l3d.green  { border-color: #1a9e5c; color: #127845; }
+.l3d.red    { border-color: #e0364c; color: #b31d31; }
 
-.l3d.blue b, .l3d.yellow b, .l3d.green b, .l3d.red b { color: #fff; }
-.l3d.blue small, .l3d.yellow small, .l3d.green small, .l3d.red small { color: #93a7c8; }
+.l3d.blue small, .l3d.yellow small, .l3d.green small, .l3d.red small { color: #56718f; }
 
-/* תווית קטנה למשחק ההרכבה */
-.l3d.sm {
-  font-size: 12px;
-  padding: 4px 9px;
-  background: rgba(8, 13, 28, 0.62);
-  color: #ffd24d;
-  border-color: rgba(255,198,30,.45);
-}
-
-/* מד גובה בסימולטור */
-.l3d.alt {
-  font-family: 'SecularOne', monospace;
-  font-size: 15px;
-  color: #ffd24d;
-  border-color: rgba(255,198,30,.65);
-  background: rgba(8, 13, 28, 0.8);
-  direction: ltr;
-}
-.l3d.alt b { font-size: 24px; color: #ffd24d; letter-spacing: .5px; }
-.l3d.apex {
-  font-size: 14px;
-  color: #6ce7a8;
-  border-color: rgba(47,208,122,.7);
-  background: rgba(8, 20, 16, 0.82);
-}
-.l3d.apex b { color: #6ce7a8; font-size: 19px; }
+/* תווית קומפקטית */
+.l3d.sm { font-size: clamp(13px, 1vw, 18px); padding: 5px 11px; }
 
 @media (max-width: 900px) {
-  .l3d { font-size: 11.5px; padding: 4px 8px; }
-  .l3d small { font-size: 10px; max-width: 140px; }
+  .l3d { font-size: 13px; padding: 5px 10px; }
+  .l3d small { font-size: 11px; max-width: 12em; }
 }

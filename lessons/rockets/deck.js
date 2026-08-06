@@ -1,6 +1,5 @@
 /* ============================================================
    MAKE · שיעור רקטות — לוגיקת המצגת
-   ניווט, חידונים, משחקים, אפקטים
    ============================================================ */
 (function () {
   'use strict';
@@ -10,43 +9,7 @@
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
   /* ============================================================
-     רקע כוכבים (2D)
-     ============================================================ */
-  (function stars() {
-    const c = $('#stars'), g = c.getContext('2d');
-    let W, H, pts = [];
-    function build() {
-      W = c.width = innerWidth * devicePixelRatio;
-      H = c.height = innerHeight * devicePixelRatio;
-      c.style.width = innerWidth + 'px';
-      c.style.height = innerHeight + 'px';
-      const n = Math.round((innerWidth * innerHeight) / 5200);
-      pts = Array.from({ length: n }, () => ({
-        x: Math.random() * W, y: Math.random() * H,
-        r: (Math.random() * 1.25 + .25) * devicePixelRatio,
-        a: Math.random(), s: .25 + Math.random() * .9,
-        h: Math.random() < .12,
-      }));
-    }
-    build();
-    addEventListener('resize', build);
-    let t = 0;
-    (function loop() {
-      requestAnimationFrame(loop);
-      t += .016;
-      g.clearRect(0, 0, W, H);
-      for (const p of pts) {
-        const a = .18 + .62 * Math.abs(Math.sin(t * p.s + p.a * 9));
-        g.globalAlpha = a;
-        g.fillStyle = p.h ? '#8fc9ff' : '#ffffff';
-        g.beginPath(); g.arc(p.x, p.y, p.r, 0, 6.283); g.fill();
-      }
-      g.globalAlpha = 1;
-    })();
-  })();
-
-  /* ============================================================
-     אפקטים: קונפטי + הבזק
+     קונפטי
      ============================================================ */
   const FX = (function () {
     const c = $('#fx'), g = c.getContext('2d');
@@ -57,13 +20,13 @@
       c.style.width = innerWidth + 'px'; c.style.height = innerHeight + 'px';
     }
     size(); addEventListener('resize', size);
-    const COLORS = ['#ffc61e', '#f5a421', '#0094ff', '#4db4ff', '#ffffff', '#2fd07a'];
+    const COLORS = ['#ffc61e', '#f5a421', '#0094ff', '#4db4ff', '#1a9e5c', '#e0364c'];
     (function loop() {
       requestAnimationFrame(loop);
       g.clearRect(0, 0, W, H);
       for (let i = parts.length - 1; i >= 0; i--) {
         const p = parts[i];
-        p.vy += 0.34 * devicePixelRatio;
+        p.vy += .34 * devicePixelRatio;
         p.vx *= .995;
         p.x += p.vx; p.y += p.vy; p.rot += p.vr;
         p.life -= 1;
@@ -85,7 +48,7 @@
           const a = Math.random() * Math.PI * 2, sp = (4 + Math.random() * 13) * devicePixelRatio;
           parts.push({
             x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 6 * devicePixelRatio,
-            w: (5 + Math.random() * 7) * devicePixelRatio, h: (8 + Math.random() * 10) * devicePixelRatio,
+            w: (6 + Math.random() * 8) * devicePixelRatio, h: (9 + Math.random() * 11) * devicePixelRatio,
             rot: Math.random() * 6, vr: (Math.random() - .5) * .35,
             c: COLORS[(Math.random() * COLORS.length) | 0], life: 90 + Math.random() * 60,
           });
@@ -96,7 +59,7 @@
           parts.push({
             x: Math.random() * W, y: -40 * devicePixelRatio - Math.random() * H * .5,
             vx: (Math.random() - .5) * 3 * devicePixelRatio, vy: (2 + Math.random() * 5) * devicePixelRatio,
-            w: (5 + Math.random() * 7) * devicePixelRatio, h: (9 + Math.random() * 11) * devicePixelRatio,
+            w: (6 + Math.random() * 8) * devicePixelRatio, h: (10 + Math.random() * 12) * devicePixelRatio,
             rot: Math.random() * 6, vr: (Math.random() - .5) * .3,
             c: COLORS[(Math.random() * COLORS.length) | 0], life: 240,
           });
@@ -106,15 +69,54 @@
   })();
 
   /* ============================================================
-     ספירה לאחור 3·2·1 — הרגע שבו כל הכיתה סופרת בקול
+     מייקי — ספרייטים מהרנדרים המקוריים.
+     הנתונים מוטמעים ולא נטענים ב-fetch, כדי שיעבוד גם מ-file://
+     ============================================================ */
+  const MIKI = {
+    hay:  { frames: 18, w: 262, h: 300, fps: 14 },
+    like: { frames: 16, w: 262, h: 300, fps: 14 },
+    jump: { frames: 16, w: 186, h: 300, fps: 16 },
+    show: { frames: 18, w: 404, h: 300, fps: 14 },
+    walk: { frames: 16, w: 205, h: 300, fps: 16 },
+  };
+  const mikis = [];
+  function initMiki(el) {
+    const d = MIKI[el.dataset.clip];
+    if (!d) return;
+    el.style.backgroundImage = `url(img/miki/${el.dataset.clip}.png)`;
+    el.style.backgroundSize = (d.frames * 100) + '% 100%';
+    el.style.height = (el.dataset.h || 26) + 'vh';
+    el.style.aspectRatio = d.w + ' / ' + d.h;
+    el.style.width = 'auto';
+    mikis.push({ el, d, i: 0, acc: 0 });
+  }
+  $$('.miki').forEach(initMiki);
+  (function tick() {
+    requestAnimationFrame(tick);
+    const now = performance.now();
+    mikis.forEach(m => {
+      if (!m.el.isConnected || !m.el.offsetParent) return;
+      if (!m.last) m.last = now;
+      const dt = Math.min(now - m.last, 200); m.last = now;
+      m.acc += dt;
+      const step = 1000 / m.d.fps;
+      while (m.acc >= step) {
+        m.acc -= step;
+        m.i = (m.i + 1) % m.d.frames;
+        m.el.style.backgroundPositionX = (m.i / (m.d.frames - 1) * 100) + '%';
+      }
+    });
+  })();
+
+  /* ============================================================
+     ספירה לאחור
      ============================================================ */
   const Countdown = (function () {
     const box = $('#countdown'), num = box.querySelector('b');
     let busy = false;
     return {
-      get busy() { return busy; },
       run(done) {
-        if (busy) return;
+        if (busy) { done && done(); return; }
         busy = true;
         const seq = ['3', '2', '1', 'שיגור!'];
         let k = 0;
@@ -128,10 +130,9 @@
           }
           num.textContent = seq[k];
           num.classList.toggle('go', k === seq.length - 1);
-          // Web Animations — מובטח שמתחיל מחדש בכל ספרה, בלי טריקים של reflow
           num.animate(
             [{ transform: 'scale(2.05)', opacity: 0 },
-             { transform: 'scale(1)', opacity: 1, offset: .30 },
+             { transform: 'scale(1)', opacity: 1, offset: .3 },
              { transform: 'scale(1)', opacity: 1 }],
             { duration: 600, easing: 'cubic-bezier(.15,1.5,.4,1)' }
           );
@@ -151,7 +152,7 @@
     const el = $('#score-n');
     el.textContent = score;
     el.parentElement.animate(
-      [{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }],
+      [{ transform: 'scale(1)' }, { transform: 'scale(1.22)' }, { transform: 'scale(1)' }],
       { duration: 420, easing: 'cubic-bezier(.2,1.4,.4,1)' }
     );
   }
@@ -162,18 +163,17 @@
     function paint() {
       const m = Math.floor(Math.max(0, left) / 60), s = Math.max(0, left) % 60;
       el.textContent = m + ':' + String(s).padStart(2, '0');
-      el.style.color = left <= 60 ? '#ff5c6e' : (left <= 180 ? '#ffc61e' : '');
+      el.style.color = left <= 60 ? '#e0364c' : (left <= 180 ? '#c97a00' : '');
     }
     paint();
-    function tick() { if (left > 0) { left--; paint(); } }
     $('#timer').addEventListener('click', () => (running ? stop() : start()));
-    function start() { if (running) return; running = true; id = setInterval(tick, 1000); $('#timer').style.borderColor = 'rgba(255,198,30,.5)'; }
-    function stop() { running = false; clearInterval(id); $('#timer').style.borderColor = ''; }
-    return { start, stop, get running() { return running; } };
+    function start() { if (running) return; running = true; id = setInterval(() => { if (left > 0) { left--; paint(); } }, 1000); }
+    function stop() { running = false; clearInterval(id); }
+    return { start, get running() { return running; } };
   })();
 
   /* ============================================================
-     ניווט בין שקפים
+     ניווט
      ============================================================ */
   const slides = $$('.slide');
   const dotsWrap = $('#dots');
@@ -182,7 +182,6 @@
   slides.forEach((s, i) => {
     const d = document.createElement('button');
     d.className = 'dot kind-' + (s.dataset.kind || 'learn');
-    d.title = 'שקף ' + (i + 1);
     d.addEventListener('click', () => go(i));
     dotsWrap.appendChild(d);
   });
@@ -191,7 +190,12 @@
   function go(i) {
     i = clamp(i, 0, slides.length - 1);
     if (i === idx) return;
-    if (idx >= 0) slides[idx].classList.remove('active');
+    if (idx >= 0) {
+      const prev = slides[idx];
+      prev.classList.remove('active');
+      const pc = Ctl[prev.dataset.id];
+      if (pc && pc.leave) pc.leave();
+    }
     idx = i;
     const s = slides[idx];
     s.classList.add('active');
@@ -203,14 +207,11 @@
     $('#prev').disabled = idx === 0;
     $('#next').disabled = idx === slides.length - 1;
 
-    // חיבור סצנת התלת-ממד
     const sceneName = s.dataset.scene;
     const host = s.querySelector('.stage');
-    if (sceneName && host && window.Stage3D) {
-      Stage3D.mount(sceneName, host);
-    } else if (window.Stage3D) {
-      Stage3D.unmount();
-    }
+    if (sceneName && host && window.Stage3D) Stage3D.mount(sceneName, host);
+    else if (window.Stage3D) Stage3D.unmount();
+
     const c = Ctl[s.dataset.id];
     if (c && c.enter) c.enter();
     if (!Timer.running && idx > 0) Timer.start();
@@ -222,7 +223,6 @@
 
   addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT') return;
-    // RTL: חץ שמאל = קדימה
     if (e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(idx + 1); }
     else if (e.key === 'ArrowRight' || e.key === 'PageUp') { e.preventDefault(); go(idx - 1); }
     else if (e.key === 'Home') go(0);
@@ -233,7 +233,6 @@
     }
   });
 
-  // החלקה במגע
   (function swipe() {
     let x0 = null, y0 = null;
     $('#slides').addEventListener('touchstart', e => {
@@ -242,29 +241,22 @@
     }, { passive: true });
     $('#slides').addEventListener('touchend', e => {
       if (x0 === null) return;
-      const dx = e.changedTouches[0].clientX - x0;
-      const dy = e.changedTouches[0].clientY - y0;
+      const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
       if (Math.abs(dx) > 90 && Math.abs(dx) > Math.abs(dy) * 1.6) go(idx + (dx > 0 ? -1 : 1));
       x0 = null;
     }, { passive: true });
   })();
 
-  /* ============================================================
-     מחוונים — צביעת המסלול
-     ============================================================ */
+  /* מחוונים */
   function paintRange(r) {
-    const pct = ((r.value - r.min) / (r.max - r.min)) * 100;
-    r.style.setProperty('--pct', pct + '%');
+    r.style.setProperty('--pct', ((r.value - r.min) / (r.max - r.min)) * 100 + '%');
   }
-  $$('input[type=range]').forEach(r => {
-    paintRange(r);
-    r.addEventListener('input', () => paintRange(r));
-  });
+  $$('input[type=range]').forEach(r => { paintRange(r); r.addEventListener('input', () => paintRange(r)); });
 
   /* ============================================================
      חידונים
      ============================================================ */
-  function initQuiz(box, onDone) {
+  $$('.quiz').forEach(box => {
     const answer = parseInt(box.dataset.answer, 10);
     const opts = $$('.opt', box);
     const explain = $('.explain', box);
@@ -281,7 +273,6 @@
           const r = o.getBoundingClientRect();
           FX.burst(r.left + r.width / 2, r.top + r.height / 2, 110);
           addScore(tries === 1 ? 10 : 5);
-          if (onDone) onDone();
         } else {
           o.classList.add('wrong');
           setTimeout(() => o.classList.remove('wrong'), 500);
@@ -289,16 +280,14 @@
         }
       });
     });
-  }
-  $$('.quiz').forEach(q => initQuiz(q));
+  });
 
   /* ============================================================
-     בקרים לכל שקף — ממופתחים לפי data-id ולא לפי מיקום,
-     כדי שאפשר יהיה להוסיף/להסיר שקפים בלי לשבור כלום
+     בקרים
      ============================================================ */
   const Ctl = {};
 
-  /* ---------- ניוטון ---------- */
+  /* ---------- הבלון ---------- */
   Ctl.newton = (function () {
     const sl = $('#nw-slider'), out = $('#nw-inf');
     const go = $('#nw-go'), rst = $('#nw-reset');
@@ -310,12 +299,9 @@
     }
     sl.addEventListener('input', sync);
     go.addEventListener('click', () => {
-      const s = Stage3D.inst('newton');
-      if (!s) return;
+      const s = Stage3D.inst('newton'); if (!s) return;
       s.release();
-      launched++;
-      FX.burst(undefined, innerHeight * .5, 30);
-      if (launched === 1) addScore(5);
+      if (++launched === 1) addScore(5);
       go.disabled = true;
       s.onLand = () => { go.disabled = false; };
       setTimeout(() => { go.disabled = false; }, 5000);
@@ -326,82 +312,120 @@
 
   /* ---------- מנוע רקטי ---------- */
   Ctl.engine = (function () {
-    const sl = $('#en-slider'), out = $('#en-ex');
-    const fire = $('#en-fire'), cut = $('#en-cut'), lab = $('#en-lab');
-    const bLiq = $('#en-liquid'), bSol = $('#en-solid');
-    const cLiq = $('#en-card-liquid'), cSol = $('#en-card-solid');
-    let on = false, cutOn = true, labOn = true, solid = false;
+    const LIQUID = [
+      { k: 'shell', c: '#c3cede', n: 'מעטפת חיצונית',
+        t: 'הגוף שעוטף את הכול. הוא צריך להיות חזק מספיק כדי לא להתקמט מהאוויר שנלחץ עליו במהירות של אלפי קמ״ש, וקל מספיק כדי שיהיה כדאי להרים אותו. עשוי מסגסוגות אלומיניום דקות מפחית שתייה — אבל מחוזקות מבפנים בטבעות.' },
+      { k: 'ox', c: '#5ec0ff', n: 'מיכל מחמצן',
+        t: 'כדי שמשהו יישרף צריך חמצן. במכונית הוא נשאב מהאוויר, אבל בחלל אין אוויר — אז הרקטה נושאת חמצן משלה, נוזלי וקפוא במינוס 183 מעלות. זה בדיוק מה שהופך מנוע רקטי לשונה מכל מנוע אחר בעולם.' },
+      { k: 'fuel', c: '#ffc61e', n: 'מיכל דלק',
+        t: 'מה שנשרף בפועל: נפט מזוקק, מימן נוזלי או מתאן. המיכל תופס את רוב האורך של הרקטה, ורוב המשקל בשיגור הוא פשוט דלק — בסטרן 5, מתוך 2,900 טון, כ־2,700 טון היו דלק ומחמצן.' },
+      { k: 'pump', c: '#c9803a', n: 'משאבות טורבו',
+        t: 'הלב של המנוע. הן שואבות דלק ומחמצן ודוחפות אותם פנימה בלחץ עצום — כמות מספיקה למלא בריכה ביתית בכמה שניות. הן מסתובבות כל כך מהר שהן מייצרות בעצמן כוח של מאות מכוניות.' },
+      { k: 'chamber', c: '#b4c2d6', n: 'תא הבעירה',
+        t: 'כאן הדלק והמחמצן נפגשים דרך מאות חורים זעירים, מתערבבים ונשרפים. הטמפרטורה מגיעה ל־3,300 מעלות — חם יותר ממה שהמתכת עצמה יכולה לסבול. הפתרון: הדלק הקר זורם בצינורות בתוך הקירות ומקרר אותם מבפנים לפני שהוא נשרף.' },
+      { k: 'throat', c: '#8fa3bc', n: 'הגרון',
+        t: 'הנקודה הצרה ביותר במנוע, וגם החשובה ביותר. הגז הלוהט נדחס לעבור דרך פתח קטן, ובדיוק כמו לשים אצבע על צינור מים — הוא יוצא הרבה יותר מהר. כאן הגז שובר את מהירות הקול.' },
+      { k: 'nozzle', c: '#93a4bd', n: 'פעמון הסילון',
+        t: 'החרוט הגדול בתחתית אינו קישוט. הגז שיצא מהגרון ממשיך להתפשט לאורכו וממשיך להאיץ, עד פי חמישה ממהירות הקול. ככל שהרקטה גבוהה יותר והאוויר דליל יותר, כך הפעמון צריך להיות רחב יותר — ולכן למנועי חלל יש פעמונים ענקיים.' },
+    ];
+    const SOLID = [
+      { k: 'shell', c: '#c3cede', n: 'מעטפת חיצונית',
+        t: 'אותה מעטפת בדיוק. מבחוץ אי אפשר לדעת אם המנוע נוזלי או מוצק.' },
+      { k: 'solid', c: '#6b5a4a', n: 'גוש הדלק המוצק',
+        t: 'כאן אין מיכלים, אין משאבות ואין צנרת. הדלק והמחמצן מעורבבים מראש לגוש קשה אחד, כמו גומי, עם חור בצורת כוכב לכל אורכו. האש מתחילה בחור ומתקדמת החוצה — וצורת הכוכב היא שקובעת כמה חזק המנוע ידחוף בכל רגע.' },
+      { k: 'nozzle', c: '#93a4bd', n: 'פעמון הסילון',
+        t: 'אותו תפקיד בדיוק: מכוון את הגז ומאיץ אותו החוצה.' },
+    ];
 
+    const list = $('#en-parts'), title = $('#en-title'), text = $('#en-text');
+    const bExp = $('#en-explode'), bFire = $('#en-fire');
+    const bLiq = $('#en-liquid'), bSol = $('#en-solid');
+    let solid = false, fired = false, cur = null;
+
+    function render() {
+      const data = solid ? SOLID : LIQUID;
+      list.innerHTML = '';
+      data.forEach(p => {
+        const b = document.createElement('button');
+        b.className = 'pl' + (p.k === cur ? ' on' : '');
+        b.innerHTML = `<span class="sw" style="background:${p.c}"></span><span>${p.n}</span>`;
+        b.addEventListener('click', () => pick(p));
+        list.appendChild(b);
+      });
+    }
+    function pick(p) {
+      cur = p.k;
+      title.textContent = p.n;
+      text.textContent = p.t;
+      const s = Stage3D.inst('engine');
+      if (s) s.select(p.k);
+      render();
+    }
     function setFuel(v) {
-      solid = v;
+      solid = v; cur = null;
       bLiq.classList.toggle('on', !v);
       bSol.classList.toggle('on', v);
-      cLiq.hidden = v; cSol.hidden = !v;
+      title.textContent = 'בחרו חלק';
+      text.textContent = v
+        ? 'מנוע דלק מוצק בנוי מפחות חלקים — וזה בדיוק היתרון שלו.'
+        : 'כל חלק במנוע עושה עבודה אחרת. לחצו על אחד מהם.';
       const s = Stage3D.inst('engine');
-      if (s) s.setSolid(v);
+      if (s) { s.setSolid(v); s.clearSelection(); }
+      render();
     }
     bLiq.addEventListener('click', () => setFuel(false));
     bSol.addEventListener('click', () => setFuel(true));
-    function sync() {
-      out.textContent = sl.value + '%';
-      const s = Stage3D.inst('engine');
-      if (s) s.setExplode(sl.value / 100);
-    }
-    sl.addEventListener('input', sync);
-    fire.addEventListener('click', () => {
+
+    bExp.addEventListener('click', () => {
       const s = Stage3D.inst('engine'); if (!s) return;
-      on = !on; s.setIgnition(on);
-      fire.textContent = on ? '⏹ כיבוי מנוע' : '🔥 הצתה!';
-      fire.classList.toggle('blue', on);
-      if (on) FX.burst(innerWidth * 0.32, innerHeight * 0.75, 45);
+      const now = !s.exploded;
+      s.setExploded(now);
+      bExp.textContent = now ? 'הרכיבו בחזרה' : 'פרקו את המנוע';
     });
-    cut.addEventListener('click', () => {
+    bFire.addEventListener('click', () => {
       const s = Stage3D.inst('engine'); if (!s) return;
-      cutOn = !cutOn; s.setCut(cutOn);
-      cut.classList.toggle('on', cutOn);
-      cut.textContent = cutOn ? 'חתך פתוח' : 'חתך סגור';
+      const now = !s.ignition;
+      s.setIgnition(now);
+      bFire.textContent = now ? 'כיבוי' : 'הצתה';
+      if (now && !fired) { fired = true; addScore(5); }
     });
-    lab.addEventListener('click', () => {
-      const s = Stage3D.inst('engine'); if (!s) return;
-      labOn = !labOn; s.setLabels(labOn);
-      lab.classList.toggle('on', labOn);
-    });
+
+    render();
     return {
       enter() {
         const s = Stage3D.inst('engine'); if (!s) return;
-        s.setSolid(solid); s.setExplode(sl.value / 100);
-        s.setCut(cutOn); s.setLabels(labOn); s.setIgnition(on);
+        s.setSolid(solid);
+        if (cur) s.select(cur); else s.clearSelection();
+        bExp.textContent = s.exploded ? 'הרכיבו בחזרה' : 'פרקו את המנוע';
+        bFire.textContent = s.ignition ? 'כיבוי' : 'הצתה';
       },
     };
   })();
 
   /* ---------- משחק ההרכבה ---------- */
   Ctl.build = (function () {
-    // המונחים תואמים למינוח שבתוכנית הלימודים: מקטע הנעה / ניהוג וייצוב / מטען מועיל
     const PARTS = [
-      { i: 0, em: '🔥', name: 'מקטע ההנעה', sub: 'המנוע והסנפירים — תמיד למטה' },
-      { i: 1, em: '🛢️', name: 'מיכלי הדלק', sub: 'מה שנשרף' },
-      { i: 2, em: '📦', name: 'המטען המועיל', sub: 'מה שהרקטה נושאת — בשביל זה טסים' },
-      { i: 3, em: '🔺', name: 'החרטום', sub: 'חותך את האוויר בראש' },
+      { i: 0, em: '🔥', name: 'מקטע ההנעה' },
+      { i: 1, em: '🛢️', name: 'מיכלי הדלק' },
+      { i: 2, em: '📦', name: 'המטען המועיל' },
+      { i: 3, em: '🔺', name: 'החרטום' },
     ];
     const wrap = $('#bd-parts'), track = $('#bd-track');
     const launch = $('#bd-launch'), reset = $('#bd-reset'), verdict = $('#bd-verdict');
     let next = 0, scored = false;
 
     function build() {
-      wrap.innerHTML = '';
-      track.innerHTML = '';
+      wrap.innerHTML = ''; track.innerHTML = '';
       PARTS.forEach((_, k) => {
         const s = document.createElement('div');
         s.className = 'slot';
-        s.textContent = ['תחתית ↓', 'שלב 2', 'שלב 3', 'ראש ↑'][k];
+        s.textContent = ['תחתית', '2', '3', 'ראש'][k];
         track.appendChild(s);
       });
-      const order = PARTS.slice().sort(() => Math.random() - .5);
-      order.forEach(p => {
+      PARTS.slice().sort(() => Math.random() - .5).forEach(p => {
         const b = document.createElement('button');
         b.className = 'part';
-        b.innerHTML = `<span class="em">${p.em}</span><span>${p.name}<small>${p.sub}</small></span>`;
+        b.innerHTML = `<span class="em">${p.em}</span><span>${p.name}</span>`;
         b.addEventListener('click', () => pick(p, b));
         wrap.appendChild(b);
       });
@@ -418,7 +442,7 @@
         if (s) s.place(p.i);
         next++;
         verdict.className = 'verdict good';
-        verdict.textContent = next < 4 ? `יופי! ${next} מתוך 4 — מה בא אחריו?` : '🎉 הרקטה מוכנה. לחצו "שגרו"!';
+        verdict.textContent = next < 4 ? `${next} מתוך 4` : 'הרקטה מוכנה לשיגור';
         if (next === 4) {
           launch.disabled = false;
           FX.burst(undefined, innerHeight * .5, 90);
@@ -428,56 +452,45 @@
         btn.classList.add('bad');
         setTimeout(() => btn.classList.remove('bad'), 420);
         verdict.className = 'verdict bad';
-        verdict.textContent = next === 0
-          ? 'לא מזה מתחילים. מה תמיד נמצא בתחתית של רקטה?'
-          : 'עוד לא. תחשבו: מה בא ישר מעל ' + PARTS[next - 1].name + '?';
+        verdict.textContent = next === 0 ? 'לא מזה מתחילים' : 'מה בא ישר מעל ' + PARTS[next - 1].name + '?';
       }
     }
 
     launch.addEventListener('click', () => {
       launch.disabled = true;
-      verdict.className = 'verdict';
-      verdict.textContent = '📣 כל הכיתה סופרת: 3 · 2 · 1…';
       Countdown.run(() => {
         const s = Stage3D.inst('build'); if (s) s.launch();
         FX.rain(140);
         verdict.className = 'verdict good';
-        verdict.textContent = '🚀 שיגור מוצלח!';
+        verdict.textContent = 'שיגור מוצלח';
       });
     });
-    reset.addEventListener('click', () => { next = 0; launch.disabled = true; build(); const s = Stage3D.inst('build'); if (s) s.reset(); verdict.className = 'verdict'; verdict.textContent = 'מחכה לחלק הראשון…'; });
+    reset.addEventListener('click', () => {
+      next = 0; launch.disabled = true; build();
+      const s = Stage3D.inst('build'); if (s) s.reset();
+      verdict.className = 'verdict';
+      verdict.textContent = 'מה נמצא בתחתית של כל רקטה?';
+    });
 
     build();
-    return { enter() { } };
+    return {};
   })();
 
   /* ---------- ציר הזמן ---------- */
   Ctl.history = (function () {
     const ERAS = [
-      {
-        y: '1232', n: 'חץ האש הסיני', s: 'סין · הרקטה הראשונה',
-        t: 'לוחמים סינים לקחו קנה במבוק, מילאו אותו באבק שריפה וקשרו אותו לחץ. האבק בער, הגזים יצאו מהקצה — והחץ טס לבד. זו הרקטה הראשונה בעולם. 800 שנה עברו מאז, והעיקרון לא השתנה בכלל.',
-      },
-      {
-        y: '1926', n: 'הרקטה של גודארד', s: 'ארה"ב · הראשונה עם דלק נוזלי',
-        t: 'רוברט גודארד שיגר בשדה של הדודה שלו את הרקטה הראשונה בעולם שרצה על דלק נוזלי. היא עלתה 12 מטר, עפה שתי שניות וחצי, ונפלה בשדה כרוב. בעיתונים צחקו עליו — והיום כל רקטה בעולם בנויה לפי הרעיון שלו.',
-      },
-      {
-        y: '1942', n: 'V-2', s: 'גרמניה · הראשונה שהגיעה לחלל',
-        t: 'הרקטה הראשונה שהצליחה להגיע עד לחלל — 188 ק"מ למעלה. בנו אותה בגרמניה הנאצית ככלי נשק, ואת העבודה הקשה עשו אסירים שהוכרחו לזה. אחרי המלחמה המדענים והתוכניות הגיעו לאמריקה ולרוסיה — ומשם התחיל המרוץ לחלל.',
-      },
-      {
-        y: '1957', n: 'ספוטניק 1', s: 'רוסיה · הלוויין הראשון',
-        t: 'כדור מתכת בגודל של כדורסל עם ארבע אנטנות. זה החפץ הראשון שבני אדם שלחו להקיף את כדור הארץ. כל שעה וחצי הוא השלים סיבוב, ושידר "ביפ… ביפ…" שכל אחד בעולם יכול היה לשמוע ברדיו.',
-      },
-      {
-        y: '1969', n: 'סטרן 5 · אפולו 11', s: 'ארה"ב · לירח וחזרה',
-        t: 'הרקטה הכי גדולה שהטיסה בני אדם: גובה של בניין בן 36 קומות. כמעט כל המשקל שלה היה דלק — והוא נשרף כולו תוך 12 דקות. היא לקחה שלושה אנשים עד הירח והחזירה אותם הביתה.',
-      },
-      {
-        y: '2015', n: 'פאלקון 9', s: 'ספייס-אקס · הרקטה שחוזרת',
-        t: 'בפעם הראשונה אי פעם, רקטה סובבה את עצמה באוויר, הדליקה מנועים כדי לבלום, ונחתה בעמידה על ארבע רגליים. עד אז כל רקטה הייתה לשימוש אחד בלבד. מאותו יום אפשר לתדלק ולשגר שוב — וטיסה לחלל נעשתה הרבה יותר זולה.',
-      },
+      { y: '1232', n: 'חץ האש הסיני',
+        t: 'לוחמים סינים מילאו קנה במבוק באבק שריפה וקשרו אותו לחץ. האבק בער, הגזים יצאו מהקצה, והחץ טס בכוחות עצמו. זו הרקטה הראשונה בעולם — והעיקרון שלה לא השתנה מאז.' },
+      { y: '1926', n: 'הרקטה של גודארד',
+        t: 'רוברט גודארד שיגר בשדה של דודתו את הרקטה הראשונה בעולם שרצה על דלק נוזלי. היא עלתה 12 מטר, עפה שתי שניות וחצי ונפלה בשדה כרוב. בעיתונים צחקו עליו. היום כל רקטה בעולם בנויה לפי הרעיון שלו.' },
+      { y: '1942', n: 'V-2',
+        t: 'הרקטה הראשונה שהגיעה עד לחלל — 188 קילומטר. היא נבנתה בגרמניה הנאצית ככלי נשק, בעבודת כפייה של אסירים שרבים מהם מתו. אחרי המלחמה המדענים והתוכניות התחלקו בין אמריקה לרוסיה, ומשם התחיל המרוץ לחלל.' },
+      { y: '1957', n: 'ספוטניק 1',
+        t: 'כדור מתכת בגודל כדורסל עם ארבע אנטנות — החפץ הראשון שבני אדם שלחו להקיף את כדור הארץ. כל שעה וחצי הוא השלים סיבוב שלם, ושידר צפצוף שכל אחד בעולם יכול היה לקלוט ברדיו.' },
+      { y: '1969', n: 'סטרן 5',
+        t: 'הרקטה הגדולה ביותר שהטיסה בני אדם: גובה של בניין בן 36 קומות. כמעט כל משקלה היה דלק, והוא נשרף כולו בתוך 12 דקות. היא לקחה שלושה אנשים אל הירח והחזירה אותם.' },
+      { y: '2015', n: 'פאלקון 9',
+        t: 'בפעם הראשונה בהיסטוריה, רקטה סובבה את עצמה באוויר, הדליקה מנועים כדי לבלום, ונחתה בעמידה על ארבע רגליים. עד אז כל רקטה שימשה פעם אחת בלבד. מאותו רגע אפשר לתדלק ולשגר שוב.' },
     ];
     const list = $('#hi-list'), title = $('#hi-title'), text = $('#hi-text');
     let cur = -1, visited = 0;
@@ -485,7 +498,7 @@
     ERAS.forEach((e, i) => {
       const b = document.createElement('button');
       b.className = 'tl-item';
-      b.innerHTML = `<span class="yr">${e.y}</span><span class="nm">${e.n}<small>${e.s}</small></span>`;
+      b.innerHTML = `<span class="yr">${e.y}</span><span class="nm">${e.n}</span>`;
       b.addEventListener('click', () => show(i));
       list.appendChild(b);
     });
@@ -500,30 +513,26 @@
       if (s) s.show(i);
       if (!items[i].dataset.seen) {
         items[i].dataset.seen = '1';
-        visited++;
-        if (visited === ERAS.length) { addScore(10); FX.burst(undefined, innerHeight * .5, 80); }
+        if (++visited === ERAS.length) { addScore(10); FX.burst(undefined, innerHeight * .5, 80); }
       }
     }
     return { enter() { show(cur < 0 ? 0 : cur); } };
   })();
 
-  /* ---------- רקטה מול טיל מונחה ---------- */
+  /* ---------- רקטה מול טיל ---------- */
   Ctl.guided = (function () {
     const bPlain = $('#gd-plain'), bGuided = $('#gd-guided');
-    const go = $('#gd-go'), rst = $('#gd-reset'), verdict = $('#gd-verdict');
-    let guided = false, triedPlain = false, triedGuided = false;
+    const go = $('#gd-go'), verdict = $('#gd-verdict');
+    let guided = false, scoredHit = false, scoredMiss = false;
 
     function setMode(v) {
       guided = v;
       bPlain.classList.toggle('on', !v);
       bGuided.classList.toggle('on', v);
-      go.textContent = v ? '🎯 שגרו את הטיל המונחה!' : '🚀 שגרו את הרקטה!';
       const s = Stage3D.inst('guided');
       if (s) { s.reset(); s.setGuided(v); }
       verdict.className = 'verdict';
-      verdict.textContent = v
-        ? 'לטיל הזה יש מוח בראש. נראה אם זה עוזר…'
-        : 'לרקטה הזאת אין הגה. מכוונים — ומקווים.';
+      verdict.textContent = v ? 'עם מוח בראש. האם תפגע?' : 'בלי הגה ובלי עיניים. האם תפגע?';
     }
     bPlain.addEventListener('click', () => setMode(false));
     bGuided.addEventListener('click', () => setMode(true));
@@ -533,34 +542,23 @@
       if (s.state !== 'idle') s.reset();
       s.setGuided(guided);
       go.disabled = true;
-      verdict.className = 'verdict';
-      verdict.textContent = '📣 כולם סופרים בקול!';
-      Countdown.run(() => fire(s));
-    });
-
-    function fire(s) {
-      s.launch();
-      verdict.className = 'verdict';
-      verdict.textContent = '🚀 בדרך למטרה…';
-      s.onResult = (hit) => {
-        go.disabled = false;
-        if (hit) {
-          verdict.className = 'verdict good';
-          verdict.textContent = '🎯 פגיעה! המוח בראש תיקן את הכיוון תוך כדי טיסה.';
-          FX.burst(undefined, innerHeight * .45, 90);
-          if (!triedGuided) { triedGuided = true; addScore(10); }
-        } else {
-          verdict.className = 'verdict bad';
-          verdict.textContent = 'החטאנו. כוח המשיכה והרוח הסיטו אותה — ואין לה איך לתקן. נסו את הטיל המונחה!';
-          if (!triedPlain) { triedPlain = true; addScore(5); }
-        }
-      };
-      setTimeout(() => { go.disabled = false; }, 8000);
-    }
-
-    rst.addEventListener('click', () => {
-      const s = Stage3D.inst('guided'); if (s) { s.reset(); s.setGuided(guided); }
-      go.disabled = false;
+      Countdown.run(() => {
+        s.launch();
+        s.onResult = (hit) => {
+          go.disabled = false;
+          if (hit) {
+            verdict.className = 'verdict good';
+            verdict.textContent = 'פגיעה. המוח תיקן את הכיוון תוך כדי טיסה.';
+            FX.burst(undefined, innerHeight * .45, 90);
+            if (!scoredHit) { scoredHit = true; addScore(10); }
+          } else {
+            verdict.className = 'verdict bad';
+            verdict.textContent = 'החטאה. כוח המשיכה והרוח הסיטו אותה, ואין לה איך לתקן.';
+            if (!scoredMiss) { scoredMiss = true; addScore(5); }
+          }
+        };
+      });
+      setTimeout(() => { go.disabled = false; }, 9000);
     });
 
     setMode(false);
@@ -569,84 +567,73 @@
 
   /* ---------- רקטת הבקבוק ---------- */
   Ctl.bottle = (function () {
-    const ex = $('#bo-slider'), exOut = $('#bo-ex');
+    const bExp = $('#bo-explode');
     const wa = $('#bo-water'), waOut = $('#bo-w');
     function sync() {
-      exOut.textContent = ex.value + '%';
       waOut.textContent = wa.value + '%';
       const s = Stage3D.inst('bottle');
-      if (!s) return;
-      s.setExplode(ex.value / 100);
-      s.setWater(wa.value / 100);
+      if (s) s.setWater(wa.value / 100);
     }
-    ex.addEventListener('input', sync);
     wa.addEventListener('input', sync);
-    return { enter: sync };
+    bExp.addEventListener('click', () => {
+      const s = Stage3D.inst('bottle'); if (!s) return;
+      const now = !s.exploded;
+      s.setExploded(now);
+      bExp.textContent = now ? 'הרכיבו בחזרה' : 'פרקו את הרקטה';
+    });
+    return {
+      enter() {
+        sync();
+        const s = Stage3D.inst('bottle');
+        if (s) bExp.textContent = s.exploded ? 'הרכיבו בחזרה' : 'פרקו את הרקטה';
+      },
+    };
   })();
 
-  /* ---------- סימולטור השיגור ---------- */
-  Ctl.sim = (function () {
-    const wa = $('#sm-water'), waOut = $('#sm-w');
-    const ba = $('#sm-bar'), baOut = $('#sm-p');
-    const hOut = $('#sm-h'), vOut = $('#sm-v'), bOut = $('#sm-best');
-    const go = $('#sm-go'), rst = $('#sm-reset'), verdict = $('#sm-verdict');
-    let best = 0, shots = 0;
+  /* ---------- שיגורים אמיתיים ---------- */
+  Ctl.videos = (function () {
+    const CLIPS = [
+      { f: 'video/artemis.mp4', n: 'ארטמיס 1',
+        t: 'נובמבר 2022. רקטת SLS — הרקטה החזקה ביותר שנאס״א שיגרה אי פעם — יוצאת לדרך אל הירח. שני מנועי העזר מייצרים כל אחד כוח של יותר מכל מנועי סטרן 5 יחד.' },
+      { f: 'video/saturn5.mp4', n: 'אפולו 11',
+        t: 'יולי 1969. סטרן 5 מתרוממת עם שלושה אנשים בדרך לירח. שימו לב כמה זמן לוקח לה בכלל להתחיל לזוז — היא שוקלת כמעט 3,000 טון.' },
+      { f: 'video/falcon9.mp4', n: 'נחיתת פאלקון 9',
+        t: 'רקטה חוזרת מהחלל, מסובבת את עצמה, מדליקה מנועים כדי לבלום ונוחתת בעמידה. בדיוק מה שראינו בציר הזמן — הפעם באמת.' },
+    ];
+    const vid = $('#vid'), listEl = $('#vid-list'), missing = $('#vid-missing'), pathEl = $('#vid-path');
+    const title = $('#vid-title'), text = $('#vid-text');
+    let cur = -1;
 
-    function cfg() { return { w: wa.value / 100, b: ba.value / 10 }; }
-    function sync() {
-      const c = cfg();
-      waOut.textContent = wa.value + '%';
-      baOut.textContent = c.b.toFixed(1) + ' בר';
-      const s = Stage3D.inst('sim');
-      if (s) { const r = s.preview(c.w, c.b); vOut.textContent = Math.round(r.dv); }
-    }
-    wa.addEventListener('input', sync);
-    ba.addEventListener('input', sync);
-
-    function advise(w, h) {
-      if (w > 0.62) return ['bad', '💧 יותר מדי מים! לא נשאר מספיק אוויר שידחוף אותם החוצה.'];
-      if (w < 0.18) return ['bad', '💨 כמעט רק אוויר. אין מספיק מים לזרוק אחורה — אז אין ממה להידחף.'];
-      if (w >= 0.28 && w <= 0.45) return ['good', '🎯 בול! בערך שליש מים — בדיוק מה שנעשה בחוץ.'];
-      return ['', '🙂 לא רע! נסו להתקרב לשליש מים (33%) — שם מגיעים הכי גבוה.'];
-    }
-
-    go.addEventListener('click', () => {
-      const s = Stage3D.inst('sim'); if (!s) return;
-      if (s.state !== 'idle') { s.reset(); }
-      const c = cfg();
-      go.disabled = true;
-      verdict.className = 'verdict';
-      verdict.textContent = '📣 כולם סופרים בקול!';
-      Countdown.run(() => fire(s, c));
+    CLIPS.forEach((c, i) => {
+      const b = document.createElement('button');
+      b.className = 'tg';
+      b.textContent = c.n;
+      b.addEventListener('click', () => play(i));
+      listEl.appendChild(b);
     });
+    const btns = $$('.tg', listEl);
 
-    function fire(s, c) {
-      const r = s.launch();
-      if (!r) { go.disabled = false; return; }
-      shots++;
-      hOut.textContent = '…'; vOut.textContent = Math.round(r.dv);
-      verdict.className = 'verdict';
-      verdict.textContent = '🚀 בדרך למעלה…';
-      s.onLand = (apex) => {
-        const h = Math.round(apex);
-        hOut.textContent = h;
-        const [cls, msg] = advise(c.w, h);
-        verdict.className = 'verdict ' + cls;
-        verdict.textContent = msg;
-        if (h > best) {
-          best = h; bOut.textContent = best;
-          FX.burst(undefined, innerHeight * .45, 80);
-          if (shots === 1) addScore(5);
-          if (cls === 'good') addScore(10);
-        }
-        go.disabled = false;
-      };
-      setTimeout(() => { go.disabled = false; }, 12000);
+    vid.addEventListener('error', () => { missing.classList.add('show'); });
+    vid.addEventListener('loadeddata', () => { missing.classList.remove('show'); });
+
+    function play(i) {
+      cur = i;
+      btns.forEach((b, k) => b.classList.toggle('on', k === i));
+      const c = CLIPS[i];
+      title.textContent = c.n;
+      text.textContent = c.t;
+      pathEl.textContent = c.f;
+      missing.classList.remove('show');
+      vid.src = c.f;
+      vid.loop = true;
+      vid.muted = true;
+      vid.play().catch(() => {});
     }
 
-    rst.addEventListener('click', () => { const s = Stage3D.inst('sim'); if (s) s.reset(); go.disabled = false; verdict.className = 'verdict'; verdict.textContent = 'בחרו כמה מים וכמה אוויר — ושגרו.'; hOut.textContent = '—'; });
-
-    return { enter() { const s = Stage3D.inst('sim'); if (s) s.reset(); sync(); } };
+    return {
+      enter() { if (cur < 0) play(0); else vid.play().catch(() => {}); },
+      leave() { vid.pause(); },
+    };
   })();
 
   /* ---------- סיום ---------- */
@@ -657,19 +644,18 @@
      ============================================================ */
   function boot() {
     if (!window.THREE) {
-      $('#loader').innerHTML = '<div class="lw"><p style="color:#ff5c6e">שגיאה בטעינת מנוע התלת־ממד.<br>ודאו שהתיקייה vendor/ נמצאת ליד הקובץ.</p></div>';
+      $('#loader').innerHTML = '<div class="lw"><p style="color:#e0364c">שגיאה בטעינת מנוע התלת־ממד</p></div>';
       return;
     }
-    try {
-      Stage3D.init();
-    } catch (e) {
+    try { Stage3D.init(); }
+    catch (e) {
       console.error(e);
-      $('#loader').innerHTML = '<div class="lw"><p style="color:#ff5c6e">הדפדפן לא תומך ב־WebGL.<br>נסו כרום או פיירפוקס מעודכנים.</p></div>';
+      $('#loader').innerHTML = '<div class="lw"><p style="color:#e0364c">הדפדפן לא תומך ב־WebGL</p></div>';
       return;
     }
     go(0);
-    setTimeout(() => $('#loader').classList.add('hide'), 650);
-    setTimeout(() => { const l = $('#loader'); if (l) l.remove(); }, 1400);
+    setTimeout(() => $('#loader').classList.add('hide'), 600);
+    setTimeout(() => { const l = $('#loader'); if (l) l.remove(); }, 1300);
   }
 
   if (document.readyState === 'complete') boot();

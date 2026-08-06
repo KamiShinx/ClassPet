@@ -1007,5 +1007,372 @@
     };
   });
 
+  /* ============================================================
+     והשמש שלנו? — מערכת שמש מיניאטורית שנוסעת בזמן
+     ============================================================ */
+  Stage.register('future', () => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1.6, .1, 900);
+    camera.position.set(0, 13, 24);
+    lightRig(scene);
+
+    const root = new THREE.Group(); scene.add(root);
+    const ORIGIN = new THREE.Vector3(0, 0, 0);
+    const lerp = THREE.MathUtils.lerp;
+    const ease = u => u * u * (3 - 2 * u);
+    const c01 = v => Math.max(0, Math.min(1, v));
+
+    const AU = 7;          // יחידות תלת-ממד לכל יחידה אסטרונומית
+    const GIANT_R = 5.6;   // הענק האדום כמעט נוגע במסלול כדור הארץ (רדיוס 7)
+    const C_BURN = new THREE.Color(0xff9a3c);
+
+    /* ---- ארבעת הפנימיים: המרחקים נכונים יחסית, הגדלים מוגזמים בכוונה ---- */
+    const PDEF = [
+      { n: 'כוכב חמה', au: .39,  r: .42, col: 0x9c948c, ph: .5 },
+      { n: 'נוגה',      au: .72,  r: .60, col: 0xf0d49a, ph: 2.2 },
+      { n: 'כדור הארץ', au: 1,    r: .68, col: 0x3f9bea, ph: 4.1 },
+      { n: 'מאדים',     au: 1.52, r: .48, col: 0xd4653c, ph: 5.6 },
+    ];
+    const planets = PDEF.map(d => {
+      const R = d.au * AU;
+      const mat = new THREE.MeshStandardMaterial({
+        color: d.col, emissive: new THREE.Color(d.col), emissiveIntensity: .4,
+        roughness: .8, metalness: .05, transparent: true, opacity: 1,
+      });
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(d.r, 30, 22), mat);
+      root.add(mesh);
+      // טבעת מסלול — בלעדיה קשה להבין מי מקיף את מי
+      const pts = [];
+      for (let k = 0; k <= 140; k++) {
+        const a = k / 140 * Math.PI * 2;
+        pts.push(new THREE.Vector3(Math.cos(a) * R, 0, Math.sin(a) * R));
+      }
+      const ring = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({ color: 0x6aa6e0, transparent: true, opacity: .3, depthWrite: false }));
+      root.add(ring);
+      // הפנימיים מקיפים מהר יותר — בדיוק כמו במערכת האמיתית
+      return { d, R, mesh, mat, ring, ang: d.ph, spd: .45 / d.au, burn: 0, col: new THREE.Color(d.col) };
+    });
+    const earth = planets[2];
+
+    /* ---- סימון כדור הארץ: טבעת שתמיד פונה למצלמה ותמיד נראית ---- */
+    const eRing = new THREE.Mesh(new THREE.RingGeometry(1.12, 1.3, 48),
+      new THREE.MeshBasicMaterial({
+        color: 0x4ab4ff, transparent: true, opacity: .85, side: THREE.DoubleSide,
+        depthWrite: false, depthTest: false,
+      }));
+    eRing.renderOrder = 6;
+    root.add(eRing);
+
+    /* ---- השמש. רדיוס הגאומטריה 1, והסקייל הוא שמשתנה ---- */
+    const sun = glowBall(1, 0xffd04a, 0xffb030, 1.25);
+    sun.userData.core.material.transparent = true;
+    // בלי כתיבה למאגר העומק — אחרת המעבר לננס הלבן נראה ככתם כהה
+    sun.userData.core.material.depthWrite = false;
+    sun.userData.core.renderOrder = 1;
+    root.add(sun);
+
+    /* ---- הננס הלבן: גוף נפרד שנחשף כשהשמש מתכווצת ---- */
+    const dwarf = glowBall(1, 0xeaf6ff, 0xa8e0ff, 3, false);
+    dwarf.userData.core.material.transparent = true;
+    dwarf.userData.core.material.depthWrite = false;
+    dwarf.userData.core.renderOrder = 2;
+    dwarf.visible = false;
+    root.add(dwarf);
+
+    /* ---- קליפת הגז שנפרשת החוצה בסוף: טבעת רכה שמתרחבת ומתפוגגת ---- */
+    const TEX_RING = radialTex([
+      [0, 'rgba(255,160,80,0)'], [.62, 'rgba(255,150,70,.10)'],
+      [.85, 'rgba(255,180,110,.95)'], [.97, 'rgba(255,140,70,.20)'], [1, 'rgba(255,120,50,0)'],
+    ], 256);
+    const shell = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: TEX_RING, color: 0xffb070, transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0,
+    }));
+    shell.visible = false; root.add(shell);
+
+    const PUFF_N = 520;
+    const puffDir = [], puffPos = new Float32Array(PUFF_N * 3);
+    for (let i = 0; i < PUFF_N; i++) {
+      const th = Math.acos(2 * Math.random() - 1), ph = Math.random() * Math.PI * 2;
+      puffDir.push(new THREE.Vector3(
+        Math.sin(th) * Math.cos(ph), Math.sin(th) * Math.sin(ph) * .75, Math.cos(th)
+      ).multiplyScalar(.78 + Math.random() * .42));
+    }
+    const puffGeo = new THREE.BufferGeometry();
+    puffGeo.setAttribute('position', new THREE.BufferAttribute(puffPos, 3));
+    const puff = new THREE.Points(puffGeo, new THREE.PointsMaterial({
+      size: 1.5, map: TEX_SPARK, transparent: true, depthWrite: false,
+      blending: THREE.AdditiveBlending, color: 0xffb066, opacity: 0, sizeAttenuation: true,
+    }));
+    puff.frustumCulled = false; puff.visible = false;
+    root.add(puff);
+
+    /* ---- ענן הלידה: הגז והאבק שמהם נבנתה כל המערכת ---- */
+    const CN = 760;
+    const cHome = new Float32Array(CN * 3);
+    const cPos = new Float32Array(CN * 3);
+    for (let i = 0; i < CN; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const r = 2 + 11 * Math.pow(Math.random(), .55);
+      cHome[i * 3] = Math.cos(a) * r;
+      cHome[i * 3 + 1] = (Math.random() - .5) * 5 * Math.max(.15, 1 - r / 15);
+      cHome[i * 3 + 2] = Math.sin(a) * r;
+    }
+    cPos.set(cHome);
+    const cloudGeo = new THREE.BufferGeometry();
+    cloudGeo.setAttribute('position', new THREE.BufferAttribute(cPos, 3));
+    const cloud = new THREE.Points(cloudGeo, new THREE.PointsMaterial({
+      size: 2.3, map: TEX_DUST, transparent: true, depthWrite: false,
+      color: 0x9d8fd0, opacity: 0, sizeAttenuation: true,
+    }));
+    cloud.frustumCulled = false; cloud.visible = false;
+    root.add(cloud);
+
+    /* ---- קו ההשוואה בין הננס הלבן לכדור הארץ ---- */
+    const cmp = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]),
+      new THREE.LineBasicMaterial({ color: 0x7fe0b0, transparent: true, opacity: 0, depthWrite: false })
+    );
+    cmp.visible = false; root.add(cmp);
+
+    /* ---- תוויות ---- */
+    const labels = Labeller();
+    const lSun = labels.add('', new THREE.Vector3(), 'yellow');
+    const lEarth = labels.add('כדור הארץ', new THREE.Vector3(), 'blue');
+    const lMerc = labels.add('כוכב חמה', new THREE.Vector3(), 'sm');
+    const lVen = labels.add('נוגה', new THREE.Vector3(), 'sm');
+    const lCmp = labels.add('אותו גודל!', new THREE.Vector3(), 'green sm');
+    lCmp.shown = false;
+
+    /* ---- ארבע נקודות הזמן. כל שורה = איך נראה הסוף של אותו שלב ---- */
+    const STATES = [
+      { dur: 4.4, mode: 'birth', name: 'השמש נדלקת', sub: 'כוכב חדש',
+        sunR: 1.05, ei: .92, emis: 0xffc070, haloK: 4.2, haloOp: .6, halo: 0xffa838,
+        dwarf: 0, form: 1, cloud: .34, dist: 33, earth: 0x3f9bea, eat: [0, 0, 0, 0] },
+      { dur: 2.8, mode: 'plain', name: 'השמש היום', sub: 'צהובה ורגועה',
+        sunR: 1.3, ei: 1.05, emis: 0xffdf9a, haloK: 4.4, haloOp: .66, halo: 0xffb030,
+        dwarf: 0, form: 1, cloud: 0, dist: 28, earth: 0x3f9bea, eat: [0, 0, 0, 0] },
+      { dur: 5.4, mode: 'grow', name: 'ענק אדום', sub: 'בלעה את חמה ואת נוגה',
+        sunR: GIANT_R, ei: .5, emis: 0xff5f2c, haloK: 2.25, haloOp: .45, halo: 0xff5a2a,
+        dwarf: 0, form: 1, cloud: 0, dist: 30, earth: 0xc2612a, eat: [1, 1, 0, 0] },
+      { dur: 5.4, mode: 'puff', name: 'ננס לבן', sub: 'בגודל כדור הארץ',
+        sunR: .68, ei: .9, emis: 0xffd0a0, haloK: 3, haloOp: .12, halo: 0xffc070,
+        dwarf: 1, form: 1, cloud: 0, dist: 27, earth: 0x9a8b80, eat: [1, 1, 0, 0] },
+    ];
+    // נקודת הפתיחה של השלב הראשון: עוד אין שמש, רק ענן
+    const SEED0 = { name: 'ענן גז ואבק', sub: 'עוד אין שמש',
+      sunR: .05, ei: .35, emis: 0xff6a20, haloK: 3, haloOp: .06, halo: 0xff7a30,
+      dwarf: 0, form: 0, cloud: 1, dist: 36, earth: 0x3f9bea, eat: [0, 0, 0, 0] };
+
+    [SEED0].concat(STATES).forEach(s => {
+      s.emisC = new THREE.Color(s.emis);
+      s.haloC = new THREE.Color(s.halo);
+      s.earthC = new THREE.Color(s.earth);
+    });
+    function cloneP(s) {
+      return {
+        name: s.name, sub: s.sub, sunR: s.sunR, ei: s.ei, haloK: s.haloK, haloOp: s.haloOp,
+        dwarf: s.dwarf, form: s.form, cloud: s.cloud, dist: s.dist,
+        emisC: s.emisC.clone(), haloC: s.haloC.clone(), earthC: s.earthC.clone(), eat: s.eat.slice(),
+      };
+    }
+    const seedOf = i => cloneP(i === 0 ? SEED0 : STATES[i - 1]);
+
+    const live = cloneP(STATES[1]);
+    let from = cloneP(STATES[0]);
+    let cur = 1, since = 99, t = 0, orbit = null;
+    const tmpV = new THREE.Vector3(), tmpV2 = new THREE.Vector3();
+
+    function select(i) {
+      i = Math.max(0, Math.min(STATES.length - 1, i));
+      // אין יציאה מוקדמת: לחיצה חוזרת חייבת להריץ את האנימציה מחדש
+      const smooth = (i === cur + 1);
+      from = smooth ? cloneP(live) : seedOf(i);
+      if (!smooth) planets.forEach((p, k) => { p.burn = from.eat[k]; });
+      cur = i; since = 0;
+      if (orbit) orbit.focus(ORIGIN, STATES[i].dist);
+    }
+
+    return {
+      scene, camera, labels,
+      count: STATES.length,
+      get index() { return cur; },
+      attachOrbitTo(dom) {
+        if (orbit) orbit.dispose();
+        orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 0, 0), { minR: 12, maxR: 80, autoRot: .06, maxPol: Math.PI - .3 });
+        this.orbit = orbit;
+        // מבט מלמעלה-באלכסון: כך המסלולים נקראים והענק האדום לא מסתיר את כדור הארץ
+        orbit.state.tPol = .40;
+        orbit.focus(ORIGIN, STATES[cur].dist);
+      },
+      onEnter() { labels.mountTo(Stage.host); },
+      select,
+      update(dt) {
+        t += dt; since += dt;
+        const S = STATES[cur];
+        const u = c01(since / S.dur), e = ease(u);
+
+        /* ---- ערכי הביניים: הכול נגזר מהזמן שעבר מאז הבחירה ---- */
+        let sunR;
+        if (S.mode === 'puff') {
+          // קודם הקליפה נפרשת, ורק אחר כך הליבה מתכווצת
+          sunR = lerp(from.sunR, S.sunR, ease(c01((u - .10) / .70)));
+        } else {
+          sunR = lerp(from.sunR, S.sunR, e);
+        }
+        const ei = lerp(from.ei, S.ei, e);
+        const haloK = lerp(from.haloK, S.haloK, e);
+        const haloOp = lerp(from.haloOp, S.haloOp, e);
+        const form = lerp(from.form, S.form, e);
+        const cloudA = lerp(from.cloud, S.cloud, e);
+        const dist = lerp(from.dist, S.dist, e);
+        const dwarfMix = S.mode === 'puff'
+          ? lerp(from.dwarf, S.dwarf, ease(c01((u - .48) / .32)))
+          : lerp(from.dwarf, S.dwarf, e);
+        live.sunR = sunR; live.ei = ei; live.haloK = haloK; live.haloOp = haloOp;
+        live.form = form; live.cloud = cloudA; live.dist = dist; live.dwarf = dwarfMix;
+        live.emisC.copy(from.emisC).lerp(S.emisC, e);
+        live.haloC.copy(from.haloC).lerp(S.haloC, e);
+        live.earthC.copy(from.earthC).lerp(S.earthC, e);
+        live.eat = S.eat.slice();
+        live.name = u < .4 ? from.name : S.name;
+        live.sub = u < .4 ? from.sub : S.sub;
+
+        // הבזק ההידלקות
+        const flash = S.mode === 'birth' ? Math.max(0, 1 - Math.abs(u - .42) / .16) : 0;
+
+        /* ---- השמש ---- */
+        const sMat = sun.userData.core.material;
+        TEX_SUN.offset.x += dt * .006;
+        sun.userData.core.rotation.y += dt * .06;
+        sun.userData.core.scale.setScalar(sunR * (1 + Math.sin(t * 1.6) * .012));
+        sMat.emissive.copy(live.emisC);
+        sMat.color.copy(live.emisC);
+        sMat.emissiveIntensity = ei + flash * 3.2;
+        sMat.opacity = 1 - dwarfMix;
+        sun.userData.halo.material.color.copy(live.haloC);
+        sun.userData.halo.material.opacity = (haloOp + flash * .5) * (1 - dwarfMix);
+        sun.userData.halo.scale.setScalar(sunR * haloK * (1 + flash * .6));
+        sun.visible = dwarfMix < .995 && sunR > .02;
+
+        /* ---- הננס הלבן ---- */
+        dwarf.visible = dwarfMix > .005;
+        if (dwarf.visible) {
+          dwarf.userData.core.scale.setScalar(sunR);
+          dwarf.userData.core.material.opacity = dwarfMix;
+          dwarf.userData.core.material.emissiveIntensity = 3;
+          dwarf.userData.halo.material.opacity = dwarfMix * (.75 + Math.sin(t * 3) * .12);
+          dwarf.userData.halo.scale.setScalar(sunR * 6);
+        }
+
+        /* ---- קליפת הגז שנפרשת ---- */
+        if (S.mode === 'puff') {
+          const q = c01(u / .82);
+          const rr = lerp(GIANT_R * .95, 12.5, 1 - Math.pow(1 - q, 1.8));
+          shell.visible = q < .999;
+          shell.scale.setScalar(Math.max(.01, rr * 2.35));
+          shell.material.opacity = .8 * Math.pow(1 - q, 1.6);
+          puff.visible = shell.visible;
+          const a = puffGeo.attributes.position.array;
+          for (let i = 0; i < PUFF_N; i++) {
+            a[i * 3] = puffDir[i].x * rr;
+            a[i * 3 + 1] = puffDir[i].y * rr;
+            a[i * 3 + 2] = puffDir[i].z * rr;
+          }
+          puffGeo.attributes.position.needsUpdate = true;
+          puff.material.opacity = .85 * Math.pow(1 - q, 1.4);
+        } else {
+          shell.visible = false; puff.visible = false;
+        }
+
+        /* ---- ענן הלידה ---- */
+        cloud.visible = cloudA > .02;
+        if (cloud.visible) {
+          const shrink = .45 + cloudA * .55;
+          const a = cloudGeo.attributes.position.array;
+          const sp = t * .1;
+          for (let i = 0; i < CN; i++) {
+            const hx = cHome[i * 3], hy = cHome[i * 3 + 1], hz = cHome[i * 3 + 2];
+            const ca = Math.cos(sp), sa = Math.sin(sp);
+            a[i * 3] = (hx * ca - hz * sa) * shrink;
+            a[i * 3 + 1] = hy * shrink;
+            a[i * 3 + 2] = (hx * sa + hz * ca) * shrink;
+          }
+          cloudGeo.attributes.position.needsUpdate = true;
+          cloud.material.opacity = cloudA * .6;
+        }
+
+        /* ---- כוכבי הלכת: מקיפים תמיד, גם באמצע מעבר ---- */
+        const settle = 1 + (1 - ease(form)) * .28;
+        planets.forEach((p, i) => {
+          p.ang += p.spd * dt;
+          const want = S.eat[i];
+          if (want > p.burn) {
+            // בשלב הענק הבליעה קורית בדיוק כשפני השמש מגיעים למסלול
+            const reached = S.mode === 'grow' ? (sunR > p.R * .90) : (u > .12);
+            if (reached) p.burn = Math.min(1, p.burn + dt * 1.4);
+          } else if (want < p.burn) {
+            p.burn = Math.max(0, p.burn - dt * 1.2);
+          }
+          const b = p.burn;
+          const rr = p.R * settle;
+          p.mesh.position.set(Math.cos(p.ang) * rr, (1 - ease(form)) * Math.sin(p.ang * 3 + i) * .9, Math.sin(p.ang) * rr);
+          p.mesh.rotation.y += dt * .6;
+          p.mesh.scale.setScalar(Math.max(.02, 1 - b * .7));
+          p.mesh.visible = b < .99 && form > .02;
+          const base = (i === 2) ? live.earthC : p.col;
+          p.mat.color.copy(base).lerp(C_BURN, b * .85);
+          p.mat.emissive.copy(base).lerp(C_BURN, b);
+          p.mat.emissiveIntensity = .4 + b * 2.6;
+          p.mat.opacity = form * (1 - b);
+          p.ring.material.opacity = form * (.3 - b * .2);
+          p.ring.material.color.setHex(b > .5 ? 0x8a6a5a : 0x6aa6e0);
+          p.ring.visible = form > .04;
+        });
+
+        /* ---- הסימון של כדור הארץ ---- */
+        eRing.position.copy(earth.mesh.position);
+        eRing.lookAt(camera.position);
+        eRing.scale.setScalar(1 + Math.sin(t * 2.2) * .07);
+        eRing.material.opacity = form * .85;
+        eRing.visible = form > .05;
+
+        /* ---- קו ההשוואה ננס-לבן / כדור הארץ ---- */
+        const showCmp = dwarfMix > .7;
+        cmp.visible = showCmp;
+        if (showCmp) {
+          const a = cmp.geometry.attributes.position.array;
+          a[0] = 0; a[1] = 0; a[2] = 0;
+          a[3] = earth.mesh.position.x; a[4] = earth.mesh.position.y; a[5] = earth.mesh.position.z;
+          cmp.geometry.attributes.position.needsUpdate = true;
+          cmp.material.opacity = (dwarfMix - .7) / .3 * .55;
+        }
+
+        /* ---- מצלמה: מתאימה את עצמה לגודל הנוכחי ---- */
+        if (orbit && u < 1) orbit.focus(ORIGIN, dist);
+
+        /* ---- תוויות ---- */
+        // "מעלה" של המסך בעולם — כך התווית תמיד יושבת מעל הגוף ולא עליו
+        const up = tmpV.set(0, 1, 0).applyQuaternion(camera.quaternion);
+        lSun.el.innerHTML = live.name + '<small>' + live.sub + '</small>';
+        // תווית השמש יושבת תמיד בצד ההפוך לכדור הארץ — כך השתיים לא נדרסות
+        lSun.pos.copy(tmpV2.copy(earth.mesh.position).setY(0).normalize())
+          .multiplyScalar(-(Math.max(sunR, 1.7) + 2.6)).addScaledVector(up, -1.5);
+        lEarth.pos.copy(earth.mesh.position).multiplyScalar(1.18).addScaledVector(up, .9);
+        lEarth.shown = form > .5;
+        // חמה ונוגה מסומנים רק כשהם רלוונטיים — אחרת הבמה מתמלאת בתוויות
+        const inner = (cur === 1 || cur === 2);
+        lMerc.pos.copy(planets[0].mesh.position).multiplyScalar(1.45).addScaledVector(up, 1.2);
+        lMerc.shown = inner && form > .6 && planets[0].burn < .3;
+        lVen.pos.copy(planets[1].mesh.position).multiplyScalar(1.25).addScaledVector(up, 1.2);
+        lVen.shown = inner && form > .6 && planets[1].burn < .3;
+        lCmp.shown = showCmp;
+        lCmp.pos.set(earth.mesh.position.x * .5, .9, earth.mesh.position.z * .5);
+        labels.project(camera, Stage.host);
+      },
+    };
+  });
+
   global.Stage3D = Stage;
 })(window);

@@ -1,0 +1,62 @@
+/* ============================================================
+   תוויות המוקרנות מנקודות בתלת-ממד — גרסה בהירה
+   ============================================================ */
+.labels {
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden; z-index: 4;
+}
+
+.l3d {
+  position: absolute;
+  /* left פיזי — ההקרנה מהתלת-ממד מחזירה פיקסלים משמאל */
+  top: 0; left: 0; right: auto;
+  white-space: nowrap;
+  font-size: clamp(14px, 1.15vw, 21px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #101f33;
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 2px solid #d5e3f2;
+  border-radius: 12px;
+  padding: 7px 14px;
+  box-shadow: 0 6px 20px rgba(20, 50, 90, .16);
+  transition: opacity .3s;
+  will-change: transform;
+}
+.l3d small {
+  display: block;
+  font-weight: 400;
+  font-size: .78em;
+  color: #56718f;
+  margin-top: 2px;
+  white-space: normal;
+  max-width: 15em;
+}
+
+/* נקודת עיגון */
+.l3d::after {
+  content: '';
+  position: absolute;
+  right: -6px; top: 50%;
+  width: 10px; height: 10px; margin-top: -5px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.9);
+}
+
+.l3d.blue   { border-color: #0094ff; color: #0069c4; }
+.l3d.yellow { border-color: #f5a421; color: #c97a00; }
+.l3d.green  { border-color: #1a9e5c; color: #127845; }
+.l3d.red    { border-color: #e0364c; color: #b31d31; }
+
+.l3d.blue small, .l3d.yellow small, .l3d.green small, .l3d.red small { color: #56718f; }
+
+/* תווית קומפקטית */
+.l3d.sm { font-size: clamp(13px, 1vw, 18px); padding: 5px 11px; }
+
+@media (max-width: 900px) {
+  .l3d { font-size: 13px; padding: 5px 10px; }
+  .l3d small { font-size: 11px; max-width: 12em; }
+}

@@ -60,11 +60,40 @@
       <h2 class="title">כשדוחפים משהו — <i>הוא דוחף בחזרה</i></h2>
       <div class="split wide-3d">
         <div class="stage"><div class="labels"></div></div>
-        <div class="panel">
-          <div class="card accent-b big">
-            <h4><span class="ic">🎈</span> הבלון יורה אוויר למטה</h4>
-            <p>והאוויר דוחף אותו למעלה. תמיד, בכל מקום: כוח לכיוון אחד
-            יוצר כוח שווה לכיוון ההפוך. זה <b>החוק השלישי של ניוטון</b>.</p>
+        <div class="panel fixed">
+          <div class="carousel" data-car="newton">
+            <div class="car-view">
+              <div class="car-item">
+                <div class="sign"><div class="sign-inner">
+                  <div class="sign-board">
+                    <h4>הבלון יורה אוויר למטה</h4>
+                    <p>והאוויר דוחף אותו למעלה. כוח לכיוון אחד יוצר תמיד
+                    כוח שווה לכיוון ההפוך.</p>
+                  </div>
+                  <img class="sign-miki" src="img/miki/sign.png" alt="">
+                </div></div>
+              </div>
+              <div class="car-item">
+                <div class="sign"><div class="sign-inner">
+                  <div class="sign-board">
+                    <h4>על קרח חלק</h4>
+                    <p>זרקו כדור טניס — תזוזו קצת. זרקו כדור באולינג — תעופו אחורה.
+                    מה שזורקים <b>כבד ומהיר יותר</b>, הדחיפה חזקה יותר.</p>
+                  </div>
+                  <img class="sign-miki" src="img/miki/sign.png" alt="">
+                </div></div>
+              </div>
+              <div class="car-item">
+                <div class="sign"><div class="sign-inner">
+                  <div class="sign-board">
+                    <h4>ולכן זה עובד בחלל</h4>
+                    <p>רקטה יורה גזים לוהטים במקום אוויר, ולא נשענת
+                    על <b>שום דבר מבחוץ</b>.</p>
+                  </div>
+                  <img class="sign-miki" src="img/miki/sign.png" alt="">
+                </div></div>
+              </div>
+            </div>
           </div>
           <div class="ctrl">
             <label>ניפוח <output id="nw-inf">55%</output></label>
@@ -73,16 +102,6 @@
           <div class="btn-row">
             <button class="btn" id="nw-go">שחררו את הבלון</button>
             <button class="btn ghost" id="nw-reset">↺</button>
-          </div>
-          <div class="card accent-y big">
-            <h4><span class="ic">🎳</span> על קרח חלק</h4>
-            <p>זרקו כדור טניס — תזוזו קצת. זרקו כדור באולינג — תעופו אחורה.
-            <b>מה שזורקים כבד ומהיר יותר, הדחיפה חזקה יותר.</b></p>
-          </div>
-          <div class="miki" data-clip="hay" data-h="30"></div>
-          <div class="card big">
-            <h4><span class="ic">🌌</span> ולכן זה עובד בחלל</h4>
-            <p>רקטה יורה גזים לוהטים במקום אוויר, ולא נשענת על שום דבר מבחוץ.</p>
           </div>
         </div>
       </div>
@@ -113,7 +132,7 @@
       <h2 class="title">בתוך <em>מנוע רקטי</em></h2>
       <div class="split wide-3d">
         <div class="stage"><div class="labels"></div></div>
-        <div class="panel">
+        <div class="panel fixed">
           <div class="btn-row">
             <button class="btn" id="en-explode">פרקו את המנוע</button>
             <button class="btn blue" id="en-fire">הצתה</button>
@@ -122,9 +141,9 @@
             <button class="tg on" id="en-liquid">דלק נוזלי</button>
             <button class="tg" id="en-solid">דלק מוצק</button>
           </div>
-          <div class="partlist" id="en-parts"></div>
-          <div class="card accent-b big" id="en-detail">
-            <h4><span class="ic">👆</span> <span id="en-title">בחרו חלק</span></h4>
+          <div class="chiprow" id="en-parts"></div>
+          <div class="card accent-b big detail" id="en-detail">
+            <h4><span id="en-title">בחרו חלק</span></h4>
             <p id="en-text">כל חלק במנוע עושה עבודה אחרת. לחצו על אחד מהם.</p>
           </div>
         </div>
@@ -155,10 +174,10 @@
       <h2 class="title">800 שנה של <em>רקטות</em></h2>
       <div class="split wide-3d">
         <div class="stage"><div class="labels"></div></div>
-        <div class="panel">
-          <div class="tl" id="hi-list"></div>
-          <div class="card accent-b big" id="hi-card">
-            <h4><span class="ic">📜</span> <span id="hi-title">בחרו תחנה</span></h4>
+        <div class="panel fixed">
+          <div class="chiprow" id="hi-list"></div>
+          <div class="card accent-b big detail" id="hi-card">
+            <h4><span id="hi-title">בחרו תחנה</span></h4>
             <p id="hi-text">כל דגם זז — אפשר לסובב אותו.</p>
           </div>
         </div>
@@ -192,33 +211,39 @@
       <div class="split wide-3d">
         <div class="stage"><div class="labels"></div></div>
         <div class="panel">
-          <div class="vs">
-            <div class="vs-card a">
-              <span class="ico">🚀</span>
-              <h5>רקטה</h5>
-              <p>מכוונים, משגרים — וזהו. ממשיכה לבד.</p>
-            </div>
-            <div class="vs-card b">
-              <span class="ico">🎯</span>
-              <h5>טיל מונחה</h5>
-              <p>אותה רקטה, עם מוח בראש שמתקן את הכיוון תוך כדי טיסה.</p>
-            </div>
-          </div>
           <div class="toggle-row">
             <button class="tg on" id="gd-plain">רקטה</button>
             <button class="tg" id="gd-guided">טיל מונחה</button>
             <button class="btn" id="gd-go">שגרו</button>
           </div>
           <div class="verdict" id="gd-verdict">האם תפגע בטבעת?</div>
-          <div class="card big">
-            <h4><span class="ic">📦</span> מה שמים בראש?</h4>
-            <div class="heads">
-              <div class="head-tile"><span class="ico">🛰️</span><span>לוויין</span></div>
-              <div class="head-tile"><span class="ico">👨‍🚀</span><span>אנשים</span></div>
-              <div class="head-tile"><span class="ico">💥</span><span>ראש קרב</span></div>
+          <div class="carousel" data-car="guided">
+            <div class="car-view">
+              <div class="car-item">
+                <div class="vs">
+                  <div class="vs-card a">
+                    <span class="ico">🚀</span>
+                    <h5>רקטה</h5>
+                    <p>מכוונים, משגרים — וזהו. ממשיכה לבד, בלי הגה ובלי עיניים.</p>
+                  </div>
+                  <div class="vs-card b">
+                    <span class="ico">🎯</span>
+                    <h5>טיל מונחה</h5>
+                    <p>אותה רקטה בדיוק, עם מוח קטן בראש שמתקן את הכיוון תוך כדי טיסה.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="car-item">
+                <div class="sign"><div class="sign-inner">
+                  <div class="sign-board">
+                    <h4>מה שמים בראש?</h4>
+                    <p>לוויין · אנשים · ראש קרב. אותו מנוע, אותו חוק פיזיקה —
+                    ההבדל הוא רק <b>מה מחליטים לשים למעלה</b>.</p>
+                  </div>
+                  <img class="sign-miki" src="img/miki/sign.png" alt="">
+                </div></div>
+              </div>
             </div>
-            <p style="margin-top:12px">אותו מנוע, אותו גוף, אותו חוק פיזיקה.
-            ההבדל היחיד הוא <b>מה מחליטים לשים למעלה</b>.</p>
           </div>
         </div>
       </div>

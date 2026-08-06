@@ -143,6 +143,43 @@
     };
   })();
 
+
+  /* ============================================================
+     קרוסלה — פאנל שלא נגלל: פריט אחד בכל פעם
+     ============================================================ */
+  function initCarousel(root) {
+    const items = $$('.car-item', root);
+    if (!items.length) return null;
+    const dots = document.createElement('div'); dots.className = 'car-dots';
+    const prev = document.createElement('button'); prev.className = 'car-arrow'; prev.innerHTML = '→';
+    const next = document.createElement('button'); next.className = 'car-arrow'; next.innerHTML = '←';
+    const nav = document.createElement('div'); nav.className = 'car-nav';
+    nav.append(prev, dots, next);
+    root.appendChild(nav);
+    let i = 0;
+    const dotEls = items.map((_, k) => {
+      const d = document.createElement('button');
+      d.className = 'car-dot';
+      d.addEventListener('click', () => show(k));
+      dots.appendChild(d);
+      return d;
+    });
+    function show(k) {
+      i = clamp(k, 0, items.length - 1);
+      items.forEach((el, n) => el.classList.toggle('on', n === i));
+      dotEls.forEach((d, n) => d.classList.toggle('on', n === i));
+      prev.disabled = i === 0;
+      next.disabled = i === items.length - 1;
+      if (root.onShow) root.onShow(i);
+    }
+    prev.addEventListener('click', () => show(i - 1));
+    next.addEventListener('click', () => show(i + 1));
+    show(0);
+    return { show, get index() { return i; }, count: items.length };
+  }
+  const carousels = {};
+  $$('.carousel').forEach(c => { carousels[c.dataset.car || c.id] = initCarousel(c); });
+
   /* ============================================================
      ניקוד + טיימר
      ============================================================ */
@@ -347,7 +384,7 @@
       list.innerHTML = '';
       data.forEach(p => {
         const b = document.createElement('button');
-        b.className = 'pl' + (p.k === cur ? ' on' : '');
+        b.className = (p.k === cur ? 'on' : '');
         b.innerHTML = `<span class="sw" style="background:${p.c}"></span><span>${p.n}</span>`;
         b.addEventListener('click', () => pick(p));
         list.appendChild(b);
@@ -482,7 +519,7 @@
       { y: '1232', n: 'חץ האש הסיני',
         t: 'לוחמים סינים מילאו קנה במבוק באבק שריפה וקשרו אותו לחץ. האבק בער, הגזים יצאו מהקצה, והחץ טס בכוחות עצמו. זו הרקטה הראשונה בעולם — והעיקרון שלה לא השתנה מאז.' },
       { y: '1926', n: 'הרקטה של גודארד',
-        t: 'רוברט גודארד שיגר בשדה של דודתו את הרקטה הראשונה בעולם שרצה על דלק נוזלי. היא עלתה 12 מטר, עפה שתי שניות וחצי ונפלה בשדה כרוב. בעיתונים צחקו עליו. היום כל רקטה בעולם בנויה לפי הרעיון שלו.' },
+        t: 'שימו לב שהמנוע יושב דווקא בראש ולא בתחתית — גודארד חשב שכך הרקטה תיגרר ישר, כמו בלון שמושכים בחוט. זה לא עבד, וכל הרקטות מאז שמות את המנוע למטה. היא עלתה 12 מטר, עפה שתי שניות וחצי ונפלה בשדה כרוב.' },
       { y: '1942', n: 'V-2',
         t: 'הרקטה הראשונה שהגיעה עד לחלל — 188 קילומטר. היא נבנתה בגרמניה הנאצית ככלי נשק, בעבודת כפייה של אסירים שרבים מהם מתו. אחרי המלחמה המדענים והתוכניות התחלקו בין אמריקה לרוסיה, ומשם התחיל המרוץ לחלל.' },
       { y: '1957', n: 'ספוטניק 1',
@@ -491,18 +528,19 @@
         t: 'הרקטה הגדולה ביותר שהטיסה בני אדם: גובה של בניין בן 36 קומות. כמעט כל משקלה היה דלק, והוא נשרף כולו בתוך 12 דקות. היא לקחה שלושה אנשים אל הירח והחזירה אותם.' },
       { y: '2015', n: 'פאלקון 9',
         t: 'בפעם הראשונה בהיסטוריה, רקטה סובבה את עצמה באוויר, הדליקה מנועים כדי לבלום, ונחתה בעמידה על ארבע רגליים. עד אז כל רקטה שימשה פעם אחת בלבד. מאותו רגע אפשר לתדלק ולשגר שוב.' },
+      { y: 'מחר', n: 'סטארשיפ',
+        t: 'הרקטה הגדולה והחזקה ביותר שנבנתה אי פעם — 121 מטר, גבוהה יותר מסטרן 5. היא עשויה מפלדת אל-חלד, שני החלקים שלה אמורים לחזור ולנחות, והיא נבנתה כדי לקחת אנשים למאדים. זה הפרק שעדיין נכתב.' },
     ];
     const list = $('#hi-list'), title = $('#hi-title'), text = $('#hi-text');
     let cur = -1, visited = 0;
 
     ERAS.forEach((e, i) => {
       const b = document.createElement('button');
-      b.className = 'tl-item';
-      b.innerHTML = `<span class="yr">${e.y}</span><span class="nm">${e.n}</span>`;
+      b.innerHTML = `<span class="yr">${e.y}</span><span>${e.n}</span>`;
       b.addEventListener('click', () => show(i));
       list.appendChild(b);
     });
-    const items = $$('.tl-item', list);
+    const items = $$('button', list);
 
     function show(i) {
       cur = i;
@@ -592,12 +630,15 @@
 
   /* ---------- שיגורים אמיתיים ---------- */
   Ctl.videos = (function () {
+    // ← כאן מדביקים מזהי יוטיוב. המזהה הוא מה שמופיע אחרי v= בכתובת.
+    //   דוגמה: https://www.youtube.com/watch?v=ABCdefGH123  ->  yt: 'ABCdefGH123'
+    //   אם משאירים ריק, השקף ינסה לנגן את הקובץ המקומי מהתיקייה video/.
     const CLIPS = [
-      { f: 'video/artemis.mp4', n: 'ארטמיס 1',
+      { yt: '', f: 'video/artemis.mp4', n: 'ארטמיס 1',
         t: 'נובמבר 2022. רקטת SLS — הרקטה החזקה ביותר שנאס״א שיגרה אי פעם — יוצאת לדרך אל הירח. שני מנועי העזר מייצרים כל אחד כוח של יותר מכל מנועי סטרן 5 יחד.' },
-      { f: 'video/saturn5.mp4', n: 'אפולו 11',
+      { yt: '', f: 'video/saturn5.mp4', n: 'אפולו 11',
         t: 'יולי 1969. סטרן 5 מתרוממת עם שלושה אנשים בדרך לירח. שימו לב כמה זמן לוקח לה בכלל להתחיל לזוז — היא שוקלת כמעט 3,000 טון.' },
-      { f: 'video/falcon9.mp4', n: 'נחיתת פאלקון 9',
+      { yt: '', f: 'video/falcon9.mp4', n: 'נחיתת פאלקון 9',
         t: 'רקטה חוזרת מהחלל, מסובבת את עצמה, מדליקה מנועים כדי לבלום ונוחתת בעמידה. בדיוק מה שראינו בציר הזמן — הפעם באמת.' },
     ];
     const vid = $('#vid'), listEl = $('#vid-list'), missing = $('#vid-missing'), pathEl = $('#vid-path');
@@ -616,23 +657,42 @@
     vid.addEventListener('error', () => { missing.classList.add('show'); });
     vid.addEventListener('loadeddata', () => { missing.classList.remove('show'); });
 
+    const frame = document.createElement('iframe');
+    frame.id = 'vid-frame';
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture';
+    frame.allowFullscreen = true;
+    frame.style.cssText = 'width:100%;height:100%;border:0;display:none';
+    vid.parentNode.insertBefore(frame, vid);
+
     function play(i) {
       cur = i;
       btns.forEach((b, k) => b.classList.toggle('on', k === i));
       const c = CLIPS[i];
       title.textContent = c.n;
       text.textContent = c.t;
-      pathEl.textContent = c.f;
       missing.classList.remove('show');
-      vid.src = c.f;
-      vid.loop = true;
-      vid.muted = true;
-      vid.play().catch(() => {});
+      if (c.yt) {
+        // הטמעה מיוטיוב — דורש אינטרנט בכיתה
+        vid.style.display = 'none';
+        vid.removeAttribute('src');
+        frame.style.display = 'block';
+        frame.src = 'https://www.youtube-nocookie.com/embed/' + c.yt +
+                    '?rel=0&modestbranding=1&playsinline=1';
+      } else {
+        frame.style.display = 'none';
+        frame.removeAttribute('src');
+        vid.style.display = 'block';
+        pathEl.textContent = c.f;
+        vid.src = c.f;
+        vid.loop = true;
+        vid.muted = true;
+        vid.play().catch(() => {});
+      }
     }
 
     return {
-      enter() { if (cur < 0) play(0); else vid.play().catch(() => {}); },
-      leave() { vid.pause(); },
+      enter() { if (cur < 0) play(0); else if (!CLIPS[cur].yt) vid.play().catch(() => {}); },
+      leave() { vid.pause(); frame.removeAttribute('src'); },
     };
   })();
 

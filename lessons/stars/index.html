@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MAKE · חיים של כוכב</title>
+<link rel="icon" href="img/miki-mark.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="labels.css">
+</head>
+<body>
+
+<div id="page-bg"></div>
+
+<div id="loader"><div class="lw">
+  <div class="miki" data-clip="like" data-h="20"></div>
+  <p>רגע…</p>
+</div></div>
+
+<div id="deck">
+
+  <header id="topbar">
+    <div id="brand">
+      <img src="img/miki-logo-blue.png" alt="MAKE">
+      <div class="brand-txt">
+        <b>MAKE</b>
+        <span>אקדמיה לסייבר וחדשנות · מעלה אדומים</span>
+      </div>
+    </div>
+    <div id="progress-wrap"><div id="dots"></div></div>
+    <div id="score">⭐ <span id="score-n">0</span></div>
+    <div id="timer">⏱ <b id="timer-t">15:00</b></div>
+  </header>
+
+  <main id="slides">
+
+    <!-- ---------- 1 · פתיחה ---------- -->
+    <section class="slide" data-id="hero" data-scene="sun" data-kind="fun">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">MISSION · 15 דקות</div>
+          <h1 class="big">לכוכבים<br>יש <em>חיים</em></h1>
+          <p class="sub">הם נולדים, הם גדלים, והם מתים.
+          גם השמש שלנו — והיא בדיוק באמצע.</p>
+          <div class="mission-list">
+            <div><span class="n">1</span><span>מה זה בכלל <b>כוכב</b></span></div>
+            <div><span class="n">2</span><span>איך כוכב <b>נדלק</b> בפעם הראשונה</span></div>
+            <div><span class="n">3</span><span>שתי דרכים <b>למות</b></span></div>
+            <div><span class="n">4</span><span>ומה זה <b>חור שחור</b> 🕳️</span></div>
+          </div>
+          <button class="btn" data-go="next">יוצאים לדרך ←</button>
+        </div>
+        <div class="stage"><div class="labels"></div></div>
+      </div>
+    </section>
+
+    <!-- ---------- 2 · מה זה כוכב ---------- -->
+    <section class="slide" data-id="star" data-scene="sun" data-kind="learn">
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">השמש היא <em>כוכב</em></h2>
+      <div class="split wide-3d">
+        <div class="stage"><div class="labels"></div></div>
+        <div class="panel">
+          <div class="card accent-y big">
+            <h4><span class="ic">☀️</span> כדור ענק של גז לוהט</h4>
+            <p>כוכב הוא לא סלע. הוא כדור עצום של גז בוער שמייצר אור <b>בעצמו</b>.
+            כל הכוכבים שאתם רואים בלילה הם שמשות — רק רחוקות מאוד.</p>
+          </div>
+          <div class="toggle-row">
+            <button class="tg" id="sn-earth">כדור הארץ להשוואה</button>
+            <button class="tg" id="sn-cut">מה יש בפנים</button>
+          </div>
+          <div class="card accent-b big">
+            <h4><span class="ic">🔥</span> תנור בלב</h4>
+            <p>במרכז השמש הלחץ כל כך עצום שחלקיקים זעירים נדחסים זה לזה
+            ומשחררים אנרגיה. זה מה שגורם לה להאיר — כבר <b>4.6 מיליארד שנה</b>.</p>
+          </div>
+          <div class="card big">
+            <h4><span class="ic">🌍</span> כמה היא גדולה?</h4>
+            <p>אפשר לדחוס לתוך השמש <b>מיליון</b> כדורי ארץ. והיא נחשבת כוכב בינוני.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 3 · שאלה 1 ---------- -->
+    <section class="slide" data-id="q1" data-scene="" data-kind="fun">
+      <span class="tag fun">שאלה</span>
+      <div class="quiz" data-quiz="q1" data-answer="2">
+        <div class="q-text">מה ההבדל בין <em>השמש</em> לבין כוכב אחר בשמיים?</div>
+        <div class="q-opts cols-2">
+          <button class="opt"><span class="k">א</span><span>השמש חמה יותר מכולם</span></button>
+          <button class="opt"><span class="k">ב</span><span>השמש היא לא באמת כוכב</span></button>
+          <button class="opt"><span class="k">ג</span><span>רק זה שהיא הכי קרובה אלינו</span></button>
+          <button class="opt"><span class="k">ד</span><span>השמש היא הגדולה ביותר</span></button>
+        </div>
+        <div class="explain">
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>השמש היא כוכב רגיל לגמרי — בינוני בגודלו ובחומו.
+          היא נראית ענקית ומסנוורת <b>רק כי היא קרובה</b>. הכוכב הבא בתור
+          רחוק ממנה פי רבע מיליון.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 4 · לידת כוכב ---------- -->
+    <section class="slide" data-id="birth" data-scene="birth" data-kind="learn">
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">איך כוכב <em>נדלק</em>?</h2>
+      <div class="split wide-3d">
+        <div class="stage"><div class="labels"></div></div>
+        <div class="panel">
+          <div class="card accent-b big">
+            <h4><span class="ic">☁️</span> הכול מתחיל בענן</h4>
+            <p>ענן עצום של גז ואבק שמרחף בחלל. כוח המשיכה מושך את כל
+            החלקיקים פנימה, והענן מתחיל <b>להתכווץ</b>.</p>
+          </div>
+          <div class="ctrl">
+            <label>לחצו את הענן <output id="bi-out">0%</output></label>
+            <input type="range" id="bi-slider" min="0" max="100" value="0">
+          </div>
+          <div class="verdict" id="bi-verdict">גררו את המחוון עד הסוף</div>
+          <div class="card accent-y big">
+            <h4><span class="ic">🌡️</span> להידחס זה להתחמם</h4>
+            <p>ככל שהענן מתכווץ הוא נעשה חם יותר. וכשהמרכז מגיע ל<b>מיליון מעלות</b> —
+            התנור נדלק, והכוכב מתחיל להאיר. מאותו רגע הוא חי.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 5 · שאלה 2 ---------- -->
+    <section class="slide" data-id="q2" data-scene="" data-kind="fun">
+      <span class="tag fun">שאלה</span>
+      <div class="quiz" data-quiz="q2" data-answer="1">
+        <div class="q-text">מה מכווץ את ענן הגז ומדליק ממנו <em>כוכב</em>?</div>
+        <div class="q-opts cols-2">
+          <button class="opt"><span class="k">א</span><span>הרוח בחלל</span></button>
+          <button class="opt"><span class="k">ב</span><span>כוח המשיכה</span></button>
+          <button class="opt"><span class="k">ג</span><span>כוכבים אחרים דוחפים אותו</span></button>
+          <button class="opt"><span class="k">ד</span><span>הוא פשוט מתקרר</span></button>
+        </div>
+        <div class="explain">
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>אותו כוח בדיוק שמפיל תפוח מהעץ. בחלל הוא עובד לאט —
+          <b>מיליוני שנים</b> — אבל בסוף הוא דוחס ענן ענק לכדור אחד לוהט.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 6 · מחזור החיים ---------- -->
+    <section class="slide" data-id="life" data-scene="lifecycle" data-kind="learn">
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">שתי דרכים <em>למות</em></h2>
+      <div class="split wide-3d">
+        <div class="stage"><div class="labels"></div></div>
+        <div class="panel">
+          <div class="toggle-row">
+            <button class="tg on" id="lf-small">☀️ כוכב רגיל</button>
+            <button class="tg" id="lf-big">💥 כוכב ענק</button>
+          </div>
+          <div class="tl" id="lf-list"></div>
+          <div class="card accent-b big" id="lf-card">
+            <h4><span class="ic">🔭</span> <span id="lf-title">בחרו שלב</span></h4>
+            <p id="lf-text">כל כוכב עובר את השלבים האלה — השאלה היחידה היא כמה הוא גדול.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 7 · שאלה 3 ---------- -->
+    <section class="slide" data-id="q3" data-scene="" data-kind="fun">
+      <span class="tag fun">שאלה</span>
+      <div class="quiz" data-quiz="q3" data-answer="2">
+        <div class="q-text">מה יקרה ל<em>שמש שלנו</em> בסוף החיים שלה?</div>
+        <div class="q-opts cols-2">
+          <button class="opt"><span class="k">א</span><span>תתפוצץ בסופרנובה</span></button>
+          <button class="opt"><span class="k">ב</span><span>תהפוך לחור שחור</span></button>
+          <button class="opt"><span class="k">ג</span><span>תתנפח, ואז תתכווץ לננס לבן</span></button>
+          <button class="opt"><span class="k">ד</span><span>פשוט תיכבה ותישאר כמו שהיא</span></button>
+        </div>
+        <div class="explain">
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>השמש <b>קטנה מדי</b> בשביל סופרנובה או חור שחור.
+          היא תתנפח לענק אדום, תשיל את השכבות החיצוניות שלה,
+          ומה שיישאר הוא גחלת לוהטת בגודל כדור הארץ — <b>ננס לבן</b>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 8 · חור שחור ---------- -->
+    <section class="slide" data-id="blackhole" data-scene="blackhole" data-kind="learn">
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">חור <em>שחור</em></h2>
+      <div class="split wide-3d">
+        <div class="stage"><div class="labels"></div></div>
+        <div class="panel">
+          <div class="card accent-b big">
+            <h4><span class="ic">🕳️</span> למה הוא שחור?</h4>
+            <p>כשכוכב ענק מת, המרכז שלו נדחס לנקודה קטנטנה וכבדה בטירוף.
+            כוח המשיכה שם כל כך חזק ש<b>אפילו אור לא מצליח לברוח</b>.
+            אין אור שיוצא — אז אנחנו רואים שחור.</p>
+          </div>
+          <div class="card accent-y big">
+            <h4><span class="ic">🚧</span> קו האל־חזור</h4>
+            <p>סביב החור יש גבול בלתי נראה שנקרא <b>אופק האירועים</b>.
+            כל עוד נשארים מחוץ לו אפשר להתרחק. מי שחוצה אותו — לא חוזר.</p>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="bh-throw">שלחו כוכב פנימה</button>
+            <button class="btn ghost" id="bh-reset">↺</button>
+          </div>
+          <div class="card big">
+            <h4><span class="ic">🌀</span> הוא לא שואב אבק</h4>
+            <p>חור שחור לא "שואב" את כל מה שסביבו. אם השמש הייתה הופכת פתאום
+            לחור שחור, <b>כדור הארץ היה ממשיך להקיף אותה בדיוק כמו היום</b> —
+            רק בחושך.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 9 · שאלה 4 ---------- -->
+    <section class="slide" data-id="q4" data-scene="" data-kind="fun">
+      <span class="tag fun">שאלה</span>
+      <div class="quiz" data-quiz="q4" data-answer="0">
+        <div class="q-text">אם נחליף את השמש בחור שחור באותו משקל — מה יקרה <em>לכדור הארץ</em>?</div>
+        <div class="q-opts cols-2">
+          <button class="opt"><span class="k">א</span><span>ימשיך להקיף בדיוק אותו מסלול</span></button>
+          <button class="opt"><span class="k">ב</span><span>יישאב פנימה מיד</span></button>
+          <button class="opt"><span class="k">ג</span><span>יעוף מהמערכת החוצה</span></button>
+          <button class="opt"><span class="k">ד</span><span>יתפוצץ</span></button>
+        </div>
+        <div class="explain">
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>כוח המשיכה תלוי ב<b>משקל</b>, לא בגודל. אותו משקל — אותו כוח,
+          אותו מסלול. פשוט יהיה חושך וקור. חורים שחורים מסוכנים רק
+          כשמתקרבים אליהם ממש.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 10 · השמש שלנו ---------- -->
+    <section class="slide" data-id="future" data-scene="lifecycle" data-kind="learn">
+      <span class="tag learn">הקנייה</span>
+      <h2 class="title">והשמש <em>שלנו</em>?</h2>
+      <div class="split wide-3d">
+        <div class="stage"><div class="labels"></div></div>
+        <div class="panel">
+          <div class="tl" id="fu-list"></div>
+          <div class="card accent-y big" id="fu-card">
+            <h4><span class="ic">⏳</span> <span id="fu-title">בחרו נקודה בזמן</span></h4>
+            <p id="fu-text">השמש נמצאת בערך באמצע החיים שלה.</p>
+          </div>
+          <div class="card big">
+            <h4><span class="ic">😌</span> ויש עוד המון זמן</h4>
+            <p>כל זה יקרה בעוד <b>מיליארדי שנים</b>. אין לכם מה לדאוג
+            בקשר לשיעורי הבית של מחר.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 11 · שאלה 5 ---------- -->
+    <section class="slide" data-id="q5" data-scene="" data-kind="fun">
+      <span class="tag fun">שאלה אחרונה</span>
+      <div class="quiz" data-quiz="q5" data-answer="1">
+        <div class="q-text">מאיפה הגיע הברזל שבתוך <em>הדם שלכם</em>?</div>
+        <div class="q-opts cols-2">
+          <button class="opt"><span class="k">א</span><span>נוצר כאן בכדור הארץ</span></button>
+          <button class="opt"><span class="k">ב</span><span>מכוכב שהתפוצץ לפני מיליארדי שנים</span></button>
+          <button class="opt"><span class="k">ג</span><span>מהשמש</span></button>
+          <button class="opt"><span class="k">ד</span><span>מהירח</span></button>
+        </div>
+        <div class="explain">
+          <div class="miki" data-clip="like" data-h="20"></div>
+          <div>כל החומרים הכבדים ביקום — ברזל, זהב, החמצן שאתם נושמים —
+          נוצרו בתוך כוכבים ופוזרו בחלל כשהם התפוצצו.
+          <b>אתם עשויים מאבק של כוכבים.</b> ממש.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 12 · סיום ---------- -->
+    <section class="slide" data-id="finale" data-scene="sun" data-kind="fun">
+      <span class="tag fun">סיכום</span>
+      <div class="finale">
+        <div>
+          <h1 class="big">אבק של <em>כוכבים</em></h1>
+          <div class="steps">
+            <div class="step"><span class="n">1</span><span>ענן גז מתכווץ בגלל <b>כוח המשיכה</b></span></div>
+            <div class="step"><span class="n">2</span><span>הוא מתחמם עד ש<b>נדלק</b> — נולד כוכב</span></div>
+            <div class="step"><span class="n">3</span><span>כוכב רגיל מסיים כ<b>ננס לבן</b></span></div>
+            <div class="step"><span class="n">4</span><span>כוכב ענק מתפוצץ ב<b>סופרנובה</b></span></div>
+            <div class="step"><span class="n">5</span><span>ומשאיר <b>כוכב נויטרונים</b> או <b>חור שחור</b></span></div>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:18px;margin-top:14px">
+            <div class="miki" data-clip="jump" data-h="26"></div>
+            <div class="kv" style="flex:1">
+              <span class="chip">כוכב = <b>שמש</b></span>
+              <span class="chip">גדול יותר = <b>מת מהר יותר</b></span>
+              <span class="chip">אנחנו = <b>אבק כוכבים</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="stage"><div class="labels"></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav id="nav">
+    <button class="navbtn" id="prev">→ הקודם</button>
+    <button class="navbtn primary" id="next">הבא ←</button>
+  </nav>
+
+</div>
+
+<div id="countdown"><b></b></div>
+<canvas id="fx"></canvas>
+
+<script src="vendor/three.min.js"></script>
+<script src="space-scenes.js"></script>
+<script src="deck.js"></script>
+</body>
+</html>

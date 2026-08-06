@@ -1,0 +1,93 @@
+/* ============================================================
+   תוויות HTML המוקרנות מנקודות בתלת-ממד
+   ============================================================ */
+.labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 4;
+}
+
+.l3d {
+  position: absolute;
+  /* חייב להיות left פיזי — ההקרנה מהתלת-ממד מחזירה פיקסלים משמאל */
+  top: 0; left: 0; right: auto;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #eaf2ff;
+  background: rgba(8, 13, 28, 0.74);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(140, 178, 235, 0.3);
+  border-radius: 11px;
+  padding: 6px 11px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+  transition: opacity .3s;
+  will-change: transform;
+}
+.l3d b { color: #fff; font-weight: 800; }
+.l3d small {
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  color: #93a7c8;
+  margin-top: 1px;
+  white-space: normal;
+  max-width: 190px;
+}
+
+/* נקודת עיגון קטנה */
+.l3d::after {
+  content: '';
+  position: absolute;
+  right: -5px; top: 50%;
+  width: 8px; height: 8px; margin-top: -4px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 12px currentColor;
+  opacity: .85;
+}
+
+.l3d.blue   { border-color: rgba(0,148,255,.6);  color: #7ec6ff; }
+.l3d.blue b, .l3d.blue { }
+.l3d.yellow { border-color: rgba(255,198,30,.6); color: #ffd24d; }
+.l3d.green  { border-color: rgba(47,208,122,.6); color: #6ce7a8; }
+.l3d.red    { border-color: rgba(255,92,110,.6); color: #ff93a0; }
+
+.l3d.blue b, .l3d.yellow b, .l3d.green b, .l3d.red b { color: #fff; }
+.l3d.blue small, .l3d.yellow small, .l3d.green small, .l3d.red small { color: #93a7c8; }
+
+/* תווית קטנה למשחק ההרכבה */
+.l3d.sm {
+  font-size: 12px;
+  padding: 4px 9px;
+  background: rgba(8, 13, 28, 0.62);
+  color: #ffd24d;
+  border-color: rgba(255,198,30,.45);
+}
+
+/* מד גובה בסימולטור */
+.l3d.alt {
+  font-family: 'SecularOne', monospace;
+  font-size: 15px;
+  color: #ffd24d;
+  border-color: rgba(255,198,30,.65);
+  background: rgba(8, 13, 28, 0.8);
+  direction: ltr;
+}
+.l3d.alt b { font-size: 24px; color: #ffd24d; letter-spacing: .5px; }
+.l3d.apex {
+  font-size: 14px;
+  color: #6ce7a8;
+  border-color: rgba(47,208,122,.7);
+  background: rgba(8, 20, 16, 0.82);
+}
+.l3d.apex b { color: #6ce7a8; font-size: 19px; }
+
+@media (max-width: 900px) {
+  .l3d { font-size: 11.5px; padding: 4px 8px; }
+  .l3d small { font-size: 10px; max-width: 140px; }
+}

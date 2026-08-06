@@ -380,6 +380,69 @@
     };
   })();
 
+
+  /* ---------- שכבות השמש ---------- */
+  Ctl.layers = (function () {
+    const LAYERS = [
+      { k: 'core', c: '#fff4d0', n: 'הליבה',
+        t: 'כאן קורה הכול. הלחץ עצום כל כך שחלקיקים נדחסים זה לזה ומשחררים אנרגיה, והטמפרטורה מגיעה ל-15 מיליון מעלות. כל האור והחום של השמש נוצרים בחלק הזה בלבד.' },
+      { k: 'rad', c: '#ffd06a', n: 'אזור הקרינה',
+        t: 'האנרגיה שנוצרה בליבה מנסה לצאת החוצה — אבל צפוף כאן כל כך שהיא נתקעת ומוקפצת שוב ושוב. לחלקיק אור לוקח בערך 100 אלף שנה רק לעבור את השכבה הזאת.' },
+      { k: 'conv', c: '#ff9a34', n: 'אזור ההסעה',
+        t: 'כאן הגז החם עולה למעלה, מתקרר, ושוקע חזרה — בדיוק כמו מים רותחים בסיר. התנועה הזאת מעבירה את החום עד לפני השטח.' },
+      { k: 'photo', c: '#ff7a18', n: 'פני השטח',
+        t: 'השכבה שאנחנו רואים בפועל. "רק" 5,500 מעלות, ומכוסה בתאים ענקיים של גז רותח שכל אחד מהם בגודל של מדינה.' },
+      { k: 'corona', c: '#ffb24a', n: 'הקורונה',
+        t: 'העטרה שמסביב לשמש, שנראית רק בליקוי חמה. והמוזר ביותר: היא חמה פי מאתיים מפני השטח שמתחתיה, ואף אחד עדיין לא יודע בוודאות למה.' },
+    ];
+    const list = $('#ly-list'), title = $('#ly-title'), text = $('#ly-text');
+    let cur = null;
+    function render() {
+      list.innerHTML = '';
+      LAYERS.forEach(l => {
+        const b = document.createElement('button');
+        b.className = (l.k === cur ? 'on' : '');
+        b.innerHTML = '<span class="sw" style="background:' + l.c + '"></span><span>' + l.n + '</span>';
+        b.addEventListener('click', () => pick(l));
+        list.appendChild(b);
+      });
+    }
+    function pick(l) {
+      cur = l.k; title.textContent = l.n; text.textContent = l.t;
+      const s = Stage3D.inst('layers'); if (s) s.select(l.k);
+      render();
+    }
+    render();
+    return { enter() { const s = Stage3D.inst('layers'); if (s) s.select(cur); } };
+  })();
+
+  /* ---------- קנה מידה ---------- */
+  Ctl.scale = (function () {
+    const NOTE = [
+      'כדור הארץ נראה ענק — עד ששמים אותו ליד השמש.',
+      'ועכשיו השמש היא הנקודה. בטלגזה כל כך גדולה, שאם היינו שמים אותה במקום השמש היא הייתה בולעת את כדור הארץ ואת מאדים.',
+      'ויש עוד יותר גדולות. סטפנסון 2-18 היא מהכוכבים הגדולים שהתגלו אי פעם — אור צריך שעות שלמות רק כדי להקיף אותה.',
+      'וזה עדיין כלום. TON 618 הוא חור שחור ענק-על. הכדור השחור הזה גדול יותר מכל מערכת השמש שלנו — פי אלפי מונים.',
+    ];
+    const RAT = ['×109', '×764', '×2.8', '×130'];
+    const bPrev = $('#sc-prev'), bNext = $('#sc-next');
+    const stepEl = $('#sc-step'), ratioEl = $('#sc-ratio'), textEl = $('#sc-text');
+    let i = 0, best = 0;
+    function show(k) {
+      i = clamp(k, 0, NOTE.length - 1);
+      const s = Stage3D.inst('scale'); if (s) s.show(i);
+      stepEl.textContent = i + 1;
+      ratioEl.textContent = RAT[i];
+      textEl.textContent = NOTE[i];
+      bPrev.disabled = i === 0;
+      bNext.disabled = i === NOTE.length - 1;
+      if (i > best) { best = i; if (i === NOTE.length - 1) { addScore(10); FX.burst(undefined, innerHeight * .45, 100); } }
+    }
+    bPrev.addEventListener('click', () => show(i - 1));
+    bNext.addEventListener('click', () => show(i + 1));
+    return { enter() { const s = Stage3D.inst('scale'); if (s) { s.show(-1); s.show(i); } show(i); } };
+  })();
+
   /* ---------- מחזור החיים ---------- */
   Ctl.life = (function () {
     const SMALL = [

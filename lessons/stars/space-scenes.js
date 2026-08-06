@@ -785,5 +785,174 @@
     };
   });
 
+
+  /* ============================================================
+     שכבות השמש — חתך אמיתי
+     ============================================================ */
+  Stage.register('layers', () => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1.6, .1, 900);
+    camera.position.set(11, 5, 20);
+    lightRig(scene);
+
+    const root = new THREE.Group(); scene.add(root);
+    const clip = new THREE.Plane(new THREE.Vector3(1, 0, 0), 0);
+
+    // מבפנים החוצה
+    const SHELLS = [
+      { k: 'core',  r: 1.9, col: 0xfff4d0, op: 1,   emis: 2.4 },
+      { k: 'rad',   r: 3.5, col: 0xffd06a, op: .95, emis: 1.1 },
+      { k: 'conv',  r: 4.6, col: 0xff9a34, op: .95, emis: .9 },
+      { k: 'photo', r: 5.0, col: 0xff7a18, op: 1,   emis: 1.3 },
+    ];
+    const meshes = {};
+    SHELLS.forEach(sh => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(sh.r, 64, 44), new THREE.MeshStandardMaterial({
+        color: sh.col, emissive: sh.col, emissiveIntensity: sh.emis,
+        roughness: 1, metalness: 0, side: THREE.DoubleSide,
+        transparent: true, opacity: sh.op, clippingPlanes: [clip],
+      }));
+      root.add(m); meshes[sh.k] = m;
+    });
+    // מרקם על פני השטח
+    meshes.photo.material.emissiveMap = TEX_SUN;
+    meshes.conv.material.emissiveMap = TEX_SUN;
+
+    // קורונה
+    const corona = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: TEX_GLOW, color: 0xffb24a, transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false, opacity: .55,
+    }));
+    corona.scale.setScalar(18); root.add(corona);
+    meshes.corona = corona;
+
+    const labels = Labeller();
+    const L = {
+      core:  labels.add('הליבה', new THREE.Vector3(-1.0, .9, 0), 'red'),
+      rad:   labels.add('אזור הקרינה', new THREE.Vector3(-2.7, 1.6, 0), 'yellow'),
+      conv:  labels.add('אזור ההסעה', new THREE.Vector3(-4.1, 2.4, 0), ''),
+      photo: labels.add('פני השטח', new THREE.Vector3(-4.6, -2.6, 0), 'yellow'),
+      corona: labels.add('הקורונה', new THREE.Vector3(-7.6, 5.2, 0), 'blue'),
+    };
+
+    let t = 0, orbit = null, sel = null;
+
+    return {
+      scene, camera, labels,
+      attachOrbitTo(dom) {
+        if (orbit) orbit.dispose();
+        orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 0, 0), { minR: 10, maxR: 50, autoRot: .08 });
+        this.orbit = orbit;
+      },
+      onEnter() { labels.mountTo(Stage.host); },
+      select(key) {
+        sel = key;
+        SHELLS.forEach(sh => {
+          const m = meshes[sh.k];
+          const dim = sel && sel !== sh.k;
+          m.material.opacity = dim ? sh.op * .22 : sh.op;
+          m.material.emissiveIntensity = (sel === sh.k ? sh.emis * 1.5 : sh.emis);
+        });
+        corona.material.opacity = sel === 'corona' ? .95 : (sel ? .18 : .55);
+        Object.entries(L).forEach(([k, l]) => l.shown = !sel || sel === k);
+      },
+      update(dt) {
+        t += dt;
+        root.rotation.y += dt * .05;
+        TEX_SUN.offset.x += dt * .006;
+        corona.scale.setScalar(18 + Math.sin(t * .9) * .6);
+        labels.project(camera, Stage.host);
+      },
+    };
+  });
+
+  /* ============================================================
+     קנה מידה — צעד אחרי צעד, כי בבת אחת אי אפשר להראות את זה
+     ============================================================ */
+  Stage.register('scale', () => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1.6, .1, 900);
+    camera.position.set(0, 0, 30);
+    lightRig(scene);
+
+    const small = new THREE.Group(); scene.add(small);
+    const big = new THREE.Group(); scene.add(big);
+
+    function ball(r, col, glow, emis, dark) {
+      const g = new THREE.Group();
+      const mat = dark
+        ? new THREE.MeshBasicMaterial({ color: 0x05070d })
+        : M.glow(col, emis || 1);
+      if (!dark) { mat.emissiveMap = TEX_SUN; mat.emissive = new THREE.Color(0xffffff); mat.color = new THREE.Color(col); }
+      const core = new THREE.Mesh(new THREE.SphereGeometry(1, 56, 40), mat);
+      g.add(core);
+      if (!dark) {
+        const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+          map: TEX_GLOW, color: glow || col, transparent: true,
+          blending: THREE.AdditiveBlending, depthWrite: false, opacity: .55,
+        }));
+        halo.scale.setScalar(4.2); g.add(halo); g.userData.halo = halo;
+      }
+      g.scale.setScalar(r);
+      return g;
+    }
+
+    const labels = Labeller();
+    const lS = labels.add('', new THREE.Vector3(), 'blue');
+    const lB = labels.add('', new THREE.Vector3(), 'yellow');
+    const lX = labels.add('', new THREE.Vector3(), 'red');
+
+    // כל צעד: הגדול של הצעד הקודם הופך לקטן של הבא
+    const STEPS = [
+      { s: { n: 'כדור הארץ', c: 0x3f9bea, dark: false }, b: { n: 'השמש', c: 0xffb020, dark: false }, ratio: 109 },
+      { s: { n: 'השמש', c: 0xffb020, dark: false }, b: { n: 'בטלגזה', c: 0xff5528, dark: false }, ratio: 764 },
+      { s: { n: 'בטלגזה', c: 0xff5528, dark: false }, b: { n: 'סטפנסון 2-18', c: 0xff3a18, dark: false }, ratio: 2.8 },
+      { s: { n: 'סטפנסון 2-18', c: 0xff3a18, dark: false }, b: { n: 'TON 618', c: 0x000000, dark: true }, ratio: 130 },
+    ];
+
+    let sMesh = null, bMesh = null, cur = -1, t = 0, orbit = null;
+    const BIG_R = 9;
+
+    return {
+      scene, camera, labels,
+      attachOrbitTo(dom) {
+        if (orbit) orbit.dispose();
+        orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 0, 0), { minR: 16, maxR: 70, autoRot: .05 });
+        this.orbit = orbit;
+      },
+      onEnter() { labels.mountTo(Stage.host); },
+      count: STEPS.length,
+      show(i) {
+        i = Math.max(0, Math.min(STEPS.length - 1, i));
+        if (i === cur) return;
+        cur = i;
+        const st = STEPS[i];
+        if (sMesh) small.remove(sMesh);
+        if (bMesh) big.remove(bMesh);
+        const sr = Math.max(BIG_R / st.ratio, .035);
+        sMesh = ball(sr, st.s.c, st.s.c, 1.3, st.s.dark);
+        bMesh = ball(BIG_R, st.b.c, st.b.c, st.b.dark ? 0 : .9, st.b.dark);
+        small.add(sMesh); big.add(bMesh);
+        // הקטן יושב בצד, מחוץ לגדול, כדי שתמיד יהיה נראה
+        const x = -(BIG_R + Math.max(2.2, sr * 2 + 2));
+        small.position.set(x, 0, 0);
+        big.position.set(0, 0, 0);
+        lS.el.innerHTML = st.s.n;
+        lB.el.innerHTML = st.b.n;
+        lX.el.innerHTML = 'גדול פי <b>' + (st.ratio >= 10 ? Math.round(st.ratio).toLocaleString('en-US') : st.ratio) + '</b>';
+        lS.pos.set(x, -Math.max(sr, .9) - 1.6, 0);
+        lB.pos.set(0, BIG_R + 1.4, 0);
+        lX.pos.set(x / 2, -BIG_R - 1.6, 0);
+        if (orbit) orbit.focus(new THREE.Vector3(x / 2.2, 0, 0), 34);
+      },
+      update(dt) {
+        t += dt;
+        if (bMesh) bMesh.rotation.y += dt * .08;
+        if (sMesh) sMesh.rotation.y += dt * .3;
+        labels.project(camera, Stage.host);
+      },
+    };
+  });
+
   global.Stage3D = Stage;
 })(window);

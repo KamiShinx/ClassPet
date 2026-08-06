@@ -178,16 +178,16 @@
         <div class="stage"><div class="labels"></div><div class="miki stage-corner " data-clip="hay" data-h="20"></div></div>
         <div class="panel fixed">
           <div class="card accent-b big">
-            <h4>בכל צעד הגדול הקודם הופך <b>לנקודה</b></h4>
-            <p id="sc-text">כדור הארץ נראה ענק — עד ששמים אותו ליד השמש.</p>
+            <h4>גללו עם הגלגלת <b>והתרחקו</b></h4>
+            <p id="sc-text">כל גוף שנראה ענק הופך לנקודה ברגע שמגיע הבא בתור.</p>
           </div>
-          <div class="readout">
-            <div class="ro"><b id="sc-step">1</b><span>צעד</span></div>
-            <div class="ro"><b id="sc-ratio">×109</b><span>גדול פי</span></div>
+          <div class="ctrl">
+            <label>כמה רחוק <output id="sc-name">הירח</output></label>
+            <input type="range" id="sc-zoom" min="0" max="1000" value="0">
           </div>
           <div class="btn-row">
-            <button class="btn ghost" id="sc-prev">→ אחורה</button>
-            <button class="btn" id="sc-next">קדימה ←</button>
+            <button class="btn ghost" id="sc-in">🔍 להתקרב</button>
+            <button class="btn" id="sc-out">להתרחק 🔭</button>
           </div>
         </div>
       </div>

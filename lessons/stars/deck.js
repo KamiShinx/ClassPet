@@ -405,29 +405,52 @@
 
   /* ---------- קנה מידה ---------- */
   Ctl.scale = (function () {
-    const NOTE = [
-      'כדור הארץ נראה ענק — עד ששמים אותו ליד השמש.',
-      'ועכשיו השמש היא הנקודה. בטלגזה כל כך גדולה, שאם היינו שמים אותה במקום השמש היא הייתה בולעת את כדור הארץ ואת מאדים.',
-      'ויש עוד יותר גדולות. סטפנסון 2-18 היא מהכוכבים הגדולים שהתגלו אי פעם — אור צריך שעות שלמות רק כדי להקיף אותה.',
-      'וזה עדיין כלום. TON 618 הוא חור שחור ענק-על. הכדור השחור הזה גדול יותר מכל מערכת השמש שלנו — פי אלפי מונים.',
-    ];
-    const RAT = ['×109', '×764', '×2.8', '×130'];
-    const bPrev = $('#sc-prev'), bNext = $('#sc-next');
-    const stepEl = $('#sc-step'), ratioEl = $('#sc-ratio'), textEl = $('#sc-text');
-    let i = 0, best = 0;
-    function show(k) {
-      i = clamp(k, 0, NOTE.length - 1);
-      const s = Stage3D.inst('scale'); if (s) s.show(i);
-      stepEl.textContent = i + 1;
-      ratioEl.textContent = RAT[i];
-      textEl.textContent = NOTE[i];
-      bPrev.disabled = i === 0;
-      bNext.disabled = i === NOTE.length - 1;
-      if (i > best) { best = i; if (i === NOTE.length - 1) { addScore(10); FX.burst(undefined, innerHeight * .45, 100); } }
+    const NOTE = {
+      'הירח': 'הירח נראה גדול בשמיים — אבל הוא קטן בהרבה מכדור הארץ.',
+      'כדור הארץ': 'כל מה שאנחנו מכירים נמצא על הכדור הזה.',
+      'צדק': 'צדק הוא כוכב הלכת הגדול ביותר. אפשר לדחוס לתוכו יותר מאלף כדורי ארץ.',
+      'השמש': 'ועכשיו כדור הארץ הוא נקודה. השמש גדולה ממנו פי 109.',
+      'סיריוס': 'הכוכב הבהיר ביותר בשמי הלילה — וגדול מהשמש פי שניים בערך.',
+      'ארקטורוס': 'ענק אדום. אם היה במקום השמש, הוא היה מגיע כמעט עד כוכב חמה.',
+      'בטלגזה': 'ענקית אמיתית. במקום השמש היא הייתה בולעת את כדור הארץ ואת מאדים.',
+      'סטפנסון 2-18': 'מהכוכבים הגדולים שהתגלו אי פעם. לאור לוקח שעות שלמות רק להקיף אותו.',
+      'TON 618': 'וזה עדיין כלום. חור שחור ענק-על, גדול יותר מכל מערכת השמש שלנו.',
+    };
+    const sl = $('#sc-zoom'), nameEl = $('#sc-name'), textEl = $('#sc-text');
+    const bIn = $('#sc-in'), bOut = $('#sc-out');
+    let last = '', reached = false;
+
+    function paint() {
+      const s = Stage3D.inst('scale'); if (!s) return;
+      const f = s.focus;
+      if (f.name !== last) {
+        last = f.name;
+        nameEl.textContent = f.name;
+        textEl.textContent = NOTE[f.name] || '';
+        if (f.i === 8 && !reached) {
+          reached = true; addScore(10);
+          FX.burst(undefined, innerHeight * .45, 110);
+        }
+      }
+      const z = Math.round(s.zoom * 1000);
+      if (Math.abs(z - sl.value) > 2) { sl.value = z; sl.style.setProperty('--pct', (z / 10) + '%'); }
     }
-    bPrev.addEventListener('click', () => show(i - 1));
-    bNext.addEventListener('click', () => show(i + 1));
-    return { enter() { const s = Stage3D.inst('scale'); if (s) { s.show(-1); s.show(i); } show(i); } };
+    sl.addEventListener('input', () => {
+      const s = Stage3D.inst('scale'); if (s) s.setZoom(sl.value / 1000);
+    });
+    bIn.addEventListener('click', () => { const s = Stage3D.inst('scale'); if (s) s.step(-1); });
+    bOut.addEventListener('click', () => { const s = Stage3D.inst('scale'); if (s) s.step(1); });
+
+    let raf = 0;
+    return {
+      enter() {
+        const s = Stage3D.inst('scale'); if (s) s.setZoom(0);
+        last = '';
+        cancelAnimationFrame(raf);
+        (function loop() { raf = requestAnimationFrame(loop); paint(); })();
+      },
+      leave() { cancelAnimationFrame(raf); },
+    };
   })();
 
   /* ---------- מחזור החיים ---------- */

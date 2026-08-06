@@ -867,89 +867,142 @@
   });
 
   /* ============================================================
-     קנה מידה — צעד אחרי צעד, כי בבת אחת אי אפשר להראות את זה
+     קנה מידה — זום רציף החוצה. גלגלת העכבר מרחיקה, והיחסים
+     נשמרים כל הדרך, כך שהתחושה של "כמה זה גדול" לא נשברת.
      ============================================================ */
   Stage.register('scale', () => {
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, 1.6, .1, 900);
-    camera.position.set(0, 0, 30);
+    const camera = new THREE.PerspectiveCamera(42, 1.6, .01, 5000);
+    camera.position.set(0, 0, 10);
+    camera.lookAt(0, 0, 0);
     lightRig(scene);
 
-    const small = new THREE.Group(); scene.add(small);
-    const big = new THREE.Group(); scene.add(big);
-
-    function ball(r, col, glow, emis, dark) {
-      const g = new THREE.Group();
-      const mat = dark
-        ? new THREE.MeshBasicMaterial({ color: 0x05070d })
-        : M.glow(col, emis || 1);
-      if (!dark) { mat.emissiveMap = TEX_SUN; mat.emissive = new THREE.Color(0xffffff); mat.color = new THREE.Color(col); }
-      const core = new THREE.Mesh(new THREE.SphereGeometry(1, 56, 40), mat);
-      g.add(core);
-      if (!dark) {
-        const halo = new THREE.Sprite(new THREE.SpriteMaterial({
-          map: TEX_GLOW, color: glow || col, transparent: true,
-          blending: THREE.AdditiveBlending, depthWrite: false, opacity: .55,
-        }));
-        halo.scale.setScalar(4.2); g.add(halo); g.userData.halo = halo;
-      }
-      g.scale.setScalar(r);
-      return g;
-    }
-
-    const labels = Labeller();
-    const lS = labels.add('', new THREE.Vector3(), 'blue');
-    const lB = labels.add('', new THREE.Vector3(), 'yellow');
-    const lX = labels.add('', new THREE.Vector3(), 'red');
-
-    // כל צעד: הגדול של הצעד הקודם הופך לקטן של הבא
-    const STEPS = [
-      { s: { n: 'כדור הארץ', c: 0x3f9bea, dark: false }, b: { n: 'השמש', c: 0xffb020, dark: false }, ratio: 109 },
-      { s: { n: 'השמש', c: 0xffb020, dark: false }, b: { n: 'בטלגזה', c: 0xff5528, dark: false }, ratio: 764 },
-      { s: { n: 'בטלגזה', c: 0xff5528, dark: false }, b: { n: 'סטפנסון 2-18', c: 0xff3a18, dark: false }, ratio: 2.8 },
-      { s: { n: 'סטפנסון 2-18', c: 0xff3a18, dark: false }, b: { n: 'TON 618', c: 0x000000, dark: true }, ratio: 130 },
+    // רדיוסים אמיתיים במטרים. הטווח הוא שמונה סדרי גודל,
+    // ולכן לא מרימים מצלמה אלא מחשבים כל גוף מחדש לפי רוחב התצוגה.
+    const R_EARTH = 6.371e6;
+    const BODIES = [
+      { n: 'הירח',          r: 1.737e6,  c: 0xc9cbd2, glow: 0x9aa0ad, lit: false },
+      { n: 'כדור הארץ',     r: R_EARTH,  c: 0x2f7fd4, glow: 0x4aa8ff, lit: false },
+      { n: 'צדק',           r: 6.991e7,  c: 0xd8a878, glow: 0xc09060, lit: false },
+      { n: 'השמש',          r: 6.957e8,  c: 0xffb020, glow: 0xffa030, lit: true  },
+      { n: 'סיריוס',        r: 1.19e9,   c: 0xd6e8ff, glow: 0x9fd0ff, lit: true  },
+      { n: 'ארקטורוס',      r: 1.78e10,  c: 0xffb469, glow: 0xff9a40, lit: true  },
+      { n: 'בטלגזה',        r: 5.32e11,  c: 0xff5528, glow: 0xff5a24, lit: true  },
+      { n: 'סטפנסון 2-18',  r: 1.50e12,  c: 0xff3a18, glow: 0xff4418, lit: true  },
+      { n: 'TON 618',       r: 1.95e14,  c: 0x05070d, glow: 0x000000, lit: false, hole: true },
     ];
 
-    let sMesh = null, bMesh = null, cur = -1, t = 0, orbit = null;
-    const BIG_R = 9;
+    // כל גוף נבנה ברדיוס 1 ומוקטן/מוגדל בכל פריים
+    const objs = BODIES.map(b => {
+      const g = new THREE.Group();
+      let core;
+      if (b.hole) {
+        core = new THREE.Mesh(new THREE.SphereGeometry(1, 56, 40), new THREE.MeshBasicMaterial({ color: 0x05070d }));
+        g.add(core);
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(1.22, .045, 12, 96),
+          new THREE.MeshBasicMaterial({ color: 0xffd48a, transparent: true, opacity: .95, blending: THREE.AdditiveBlending, depthWrite: false }));
+        ring.rotation.x = Math.PI / 2.1; g.add(ring);
+        const disk = new THREE.Mesh(new THREE.RingGeometry(1.4, 3.6, 96, 1),
+          new THREE.MeshBasicMaterial({ map: TEX_GLOW, color: 0xff9020, transparent: true, opacity: .5, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false }));
+        disk.rotation.x = -Math.PI / 2.4; g.add(disk);
+        g.userData.disk = disk;
+      } else if (b.lit) {
+        const mat = M.glow(b.c, 1.1);
+        mat.emissiveMap = TEX_SUN;
+        mat.emissive = new THREE.Color(0xffffff);
+        mat.color = new THREE.Color(b.c);
+        core = new THREE.Mesh(new THREE.SphereGeometry(1, 56, 40), mat);
+        g.add(core);
+        const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+          map: TEX_GLOW, color: b.glow, transparent: true,
+          blending: THREE.AdditiveBlending, depthWrite: false, opacity: .5,
+        }));
+        halo.scale.setScalar(4.2); g.add(halo);
+      } else {
+        core = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 34), M.paint(b.c, .85));
+        g.add(core);
+      }
+      g.userData.core = core;
+      g.visible = false;
+      scene.add(g);
+      return g;
+    });
+
+    const labels = Labeller();
+    const L = BODIES.map(b => { const l = labels.add(b.n, new THREE.Vector3(), b.hole ? 'red' : 'blue'); l.shown = false; return l; });
+
+    // z = log10 של רוחב התצוגה במטרים
+    const Z_MIN = Math.log10(BODIES[0].r * 2.9);
+    const Z_MAX = Math.log10(BODIES[BODIES.length - 1].r * 2.8);
+    let z = Z_MIN, zT = Z_MIN, t = 0, host = null, dom = null;
+
+    // חצי-רוחב התצוגה ביחידות עולם, במרחק מצלמה קבוע
+    const VIEW = Math.tan(THREE.MathUtils.degToRad(42) / 2) * 10;
+
+    function onWheel(e) {
+      e.preventDefault();
+      zT = THREE.MathUtils.clamp(zT + Math.sign(e.deltaY) * .12, Z_MIN, Z_MAX);
+    }
+    let px = 0, drag = false;
+    const down = e => { drag = true; px = e.clientY; };
+    const move = e => { if (!drag) return; zT = THREE.MathUtils.clamp(zT + (e.clientY - px) * .006, Z_MIN, Z_MAX); px = e.clientY; };
+    const up = () => { drag = false; };
 
     return {
       scene, camera, labels,
-      attachOrbitTo(dom) {
-        if (orbit) orbit.dispose();
-        orbit = attachOrbit(camera, dom, new THREE.Vector3(0, 0, 0), { minR: 16, maxR: 70, autoRot: .05 });
-        this.orbit = orbit;
+      attachOrbitTo(el) {
+        if (dom) {
+          dom.removeEventListener('wheel', onWheel);
+          dom.removeEventListener('pointerdown', down);
+          dom.removeEventListener('pointermove', move);
+        }
+        dom = el;
+        dom.addEventListener('wheel', onWheel, { passive: false });
+        dom.addEventListener('pointerdown', down);
+        dom.addEventListener('pointermove', move);
+        window.addEventListener('pointerup', up);
+        dom.style.cursor = 'ns-resize';
+        dom.style.touchAction = 'none';
       },
-      onEnter() { labels.mountTo(Stage.host); },
-      count: STEPS.length,
-      show(i) {
-        i = Math.max(0, Math.min(STEPS.length - 1, i));
-        if (i === cur) return;
-        cur = i;
-        const st = STEPS[i];
-        if (sMesh) small.remove(sMesh);
-        if (bMesh) big.remove(bMesh);
-        const sr = Math.max(BIG_R / st.ratio, .035);
-        sMesh = ball(sr, st.s.c, st.s.c, 1.3, st.s.dark);
-        bMesh = ball(BIG_R, st.b.c, st.b.c, st.b.dark ? 0 : .9, st.b.dark);
-        small.add(sMesh); big.add(bMesh);
-        // הקטן יושב בצד, מחוץ לגדול, כדי שתמיד יהיה נראה
-        const x = -(BIG_R + Math.max(2.2, sr * 2 + 2));
-        small.position.set(x, 0, 0);
-        big.position.set(0, 0, 0);
-        lS.el.innerHTML = st.s.n;
-        lB.el.innerHTML = st.b.n;
-        lX.el.innerHTML = 'גדול פי <b>' + (st.ratio >= 10 ? Math.round(st.ratio).toLocaleString('en-US') : st.ratio) + '</b>';
-        lS.pos.set(x, -Math.max(sr, .9) - 1.6, 0);
-        lB.pos.set(0, BIG_R + 1.4, 0);
-        lX.pos.set(x / 2, -BIG_R - 1.6, 0);
-        if (orbit) orbit.focus(new THREE.Vector3(x / 2.2, 0, 0), 34);
+      onEnter() { host = Stage.host; labels.mountTo(host); },
+      get zoom() { return (z - Z_MIN) / (Z_MAX - Z_MIN); },
+      // 0..1 לאורך כל הטווח
+      setZoom(v) { zT = Z_MIN + THREE.MathUtils.clamp(v, 0, 1) * (Z_MAX - Z_MIN); },
+      step(dir) { zT = THREE.MathUtils.clamp(zT + dir * (Z_MAX - Z_MIN) / 8, Z_MIN, Z_MAX); },
+      // שם הגוף שהכי "ממלא" את המסך כרגע — לשימוש בטקסט שלצד הבמה
+      // הגוף הגדול ביותר שנכנס כרגע בשלמותו — הוא "הכוכב של הרגע"
+      get focus() {
+        const half = Math.pow(10, z) / 2;
+        let best = 0;
+        BODIES.forEach((b, i) => { if (b.r / half <= .78) best = i; });
+        return { i: best, name: BODIES[best].n };
       },
       update(dt) {
         t += dt;
-        if (bMesh) bMesh.rotation.y += dt * .08;
-        if (sMesh) sMesh.rotation.y += dt * .3;
-        labels.project(camera, Stage.host);
+        z += (zT - z) * Math.min(1, dt * 4);
+        const half = Math.pow(10, z) / 2;       // חצי רוחב התצוגה במטרים
+        const k = VIEW / half;                  // מטרים -> יחידות עולם
+
+        // הגדול ביותר שנכנס בשלמותו תופס עד 0.78 מחצי-הגובה.
+        // כל מה שגדול מזה פשוט עוד לא "הגיע התור שלו".
+        const FIT = VIEW * .78;
+        const FLOOR = -VIEW * .80;
+        objs.forEach((g, i) => {
+          const b = BODIES[i];
+          const rr = b.r * k;
+          const vis = rr > VIEW * .0035 && rr <= FIT;
+          g.visible = vis;
+          if (!vis) { L[i].shown = false; return; }
+          g.scale.setScalar(rr);
+          // כולם יושבים על אותו קו תחתון — ההשוואה מיידית
+          g.position.set(0, FLOOR + rr, -i * .002);
+          g.rotation.y += dt * .05 / Math.max(.12, rr / VIEW);
+          if (g.userData.disk) g.userData.disk.rotation.z += dt * .35;
+          // תווית רק למי שגדול מספיק כדי לזהות, וצמודה לראש הגוף
+          L[i].shown = rr > VIEW * .028;
+          L[i].pos.set(0, FLOOR + rr * 2 + VIEW * .07, 0);
+        });
+        labels.project(camera, host);
       },
     };
   });

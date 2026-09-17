@@ -1,6 +1,6 @@
 # Minecraft Modding — 20-Week Course Plan
 
-> **Students:** ~11–13, zero coding experience
+> **Students:** 8 kids, ~11–13, zero coding experience
 > **Format:** 1×/week, 90 min scheduled (~65–70 min realistic) + homework
 > **Stack:** Minecraft Java 26.2 · NeoForge · Java 25 · Google Antigravity + Gemini
 > **Status:** Proposed shape — per-lesson materials not yet built
@@ -48,19 +48,19 @@ against Mojang's terms and an admin nightmare. Keep it clean:
 2. **Treat them as 9 stations, not 9 users.** Sign each account in once, on a designated
    MAKE-owned laptop, with "stay signed in". Students sit down to an already-authenticated
    launcher. Nobody types a password.
-3. **Rotate.** 9 stations + a teacher-hosted LAN server = a 9-player showcase round. Two
-   or three rounds covers a full class.
-4. **Kids who already own Minecraft use their own account** on their own laptop. In this
-   age group that is usually most of the class — the 9 stations exist to cover the
-   students who don't, so nobody is left out.
-5. **Showcase days only.** Roughly weeks 10 and 20. The rest of the term is `runClient`.
+3. **8 students, 9 licences — one each, plus a spare.** Nothing is shared, so there is no
+   rotation to manage and no abuse vector.
+4. **Showcase days only.** Roughly weeks 10 and 20. The rest of the term is `runClient`.
+
+See `02-how-testing-works.md` for the full picture of how students run and play their
+mods day to day.
 
 ---
 
 ## 2. The three real risks
 
 ### Risk 1 — Setup eats the term
-25 different laptops, Java 25, a multi-GB first build. Left to chance this consumes
+8 different laptops, Java 25, a multi-GB first build. Left to chance this consumes
 weeks 1–4 and kills momentum.
 
 **Mitigation:** a pre-built starter repo (pinned versions, Gradle wrapper so no Gradle
@@ -142,9 +142,8 @@ Pick one track, four weeks, teacher floats between groups:
 
 ## 5. Still open
 
-- **Class size?** Decides station rotation and how much floating support is realistic.
-- **Antigravity free-tier limits** with ~25 students hitting Gemini simultaneously — needs
+- **Antigravity free-tier limits** with 8 students hitting Gemini simultaneously — needs
   a live check before week 1; a rate-limit wall mid-lesson would be fatal.
 - **Do students have admin rights on their own laptops** to install a JDK?
-- **Is there a second adult in the room?** With 11–13 and zero coding, one teacher for 25
-  is the difference between Block D being a project and being chaos.
+- **Second adult?** With 8 kids this is far less critical than at 25 — one teacher is
+  workable, especially once the Block D project groups form.

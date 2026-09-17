@@ -147,3 +147,10 @@ Pick one track, four weeks, teacher floats between groups:
 - **Do students have admin rights on their own laptops** to install a JDK?
 - **Second adult?** With 8 kids this is far less critical than at 25 — one teacher is
   workable, especially once the Block D project groups form.
+
+---
+
+> **⚠ Superseded in part.** The week-by-week breakdown in §3 is organised by API topic
+> ("W5 recipes, W6 loot tables"), which teaches a topic list Gemini has already memorised.
+> See `03-why-this-has-value.md` for the re-shaped course, organised by difficulty of
+> thinking instead. The logistics in §1–§2 (accounts, setup risk, grounding) still stand.

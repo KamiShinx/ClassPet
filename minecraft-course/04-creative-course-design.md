@@ -3,6 +3,8 @@
 > **Date:** 2026-09-23 · **Status:** recommendation, not yet approved by Ben
 > **Built from:** 145 YouTube videos (~56 h) transcribed and watched frame by frame, 20 batch analyses, and a
 > two-round debate between five reviewers with opposing briefs. Evidence lives in `research/` (see §10).
+> **Pedagogy:** `05-ministry-pedagogy-applied.md` rewrites the blocks below in the Ministry of Education's CS
+> curriculum format (objectives, teaching methods, practical + theory assessment) and adds five changes (05 §4).
 > **Supersedes:** the week-by-week shape in `03-why-this-has-value.md` §5. The pedagogy in 03 (spec first, judge
 > the machine) is kept, and folded into the card (§2).
 

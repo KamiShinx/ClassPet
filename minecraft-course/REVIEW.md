@@ -371,6 +371,14 @@ From the middle-school CS curriculum you sent (its pedagogy only, not the Python
 
 ## 14. Still open
 
+- **🔴 NEW BLOCKER (found 23 Sep): Google Antigravity can't be used by these kids.** Google's FAQ: "Antigravity
+  is unavailable to under-18 users", and it's for personal Google accounts (Ministry student accounts are
+  Workspace). The whole plan assumed Gemini inside Antigravity. Likely replacement: the Gemini web app + a free
+  code editor where the kid pastes code and runs the mod (still to check: Gemini web for under-13s and Ministry
+  accounts). This changes the starter workspace and the grounding setup (the rules file and reference folder would
+  be pasted into Gemini instead of read by it).
+  💬
+
 - **Where the platform lives** (make-class is off the table). Options: a small web app of its own, a Google
   Sites/Docs setup, or paper cards for v1.
   💬

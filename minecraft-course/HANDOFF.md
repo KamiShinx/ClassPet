@@ -4,6 +4,15 @@
 > **Last session:** 2026-09-17 · **Branch:** `claude/minecraft-modding-course-fsj9o7`
 > Read this file first, then the four numbered docs beside it.
 
+> **UPDATE 2026-09-23: read `04-creative-course-design.md` before anything below.** Ben moved the course's
+> centre to the creative side (each kid's own world, creatures and items in 3D, lore) with Gemini writing the
+> code. 145 videos were researched and five reviewers debated it (`research/`). Result: the card (lore + design +
+> Gemini spec in one) is the unit of work, lore counts only once it's in the game, a cold playtest every week,
+> items → 3D → effects → mobs order. Decided the same day: kids' laptops are **Windows only**; kid-facing text is
+> **Hebrew**; the course will be hosted on/beside MAKE's system (make-class.web.app, FlutterFlow + Firebase,
+> source not yet available). The starter workspace (§8) is still the next build, but only after Ben's
+> pre-week-1 tests in 04 §7 (Hebrew in-game rendering, Blockbench mob export, install on the school network).
+
 ---
 
 ## 0. TL;DR for the next instance

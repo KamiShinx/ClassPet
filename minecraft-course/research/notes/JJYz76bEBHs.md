@@ -1,0 +1,42 @@
+# Character Design Crash Course (Map Crow, 7.8 min)
+
+**What it is:** An RPG illustrator does a full worked example (a "witch knight," rolled from a random d10 table) live, narrating his process from concept words through silhouette thumbnails, gesture, and inked final drawing.
+**Substance:** substantive: it's a real start-to-finish process with a genuine method (word list -> silhouette iteration -> body language -> gesture -> detail), not just abstract tips; the first ~25 sec is a plug for his own map zine.
+
+## Ideas, in the video's order
+- [0:00:28] Two things matter most in character design: silhouette and body language (states this as his personal priority, not universal law).
+- [0:00:28] Use a random table to force a design prompt instead of picking freely (he rolled a d10 "kinds of knights" table and got "witch" -> witch knight).
+- [0:00:51] Before drawing, make a written "inventory of symbols" — a list of words/objects associated with each concept (witch: pointy hat, broom, cauldron, cats, frogs, dressed in black) to either use or subvert.
+- [0:01:04] Silhouette = the exterior shape/outline, not interior linework; work in small thumbnails, not full drawings.
+- [0:01:04] Iterate many silhouette thumbnails (half a dozen+) before picking — rarely is the first idea the best, and you can't judge "best" without comparisons (generic but concretely modeled on screen).
+- [0:01:42] While iterating, vary body proportions and sizes, look for repeating shapes/motifs to reuse, and push proportions until you almost lose the original idea, to see what you find.
+- [0:02:00] Move to "body language" next: choose a mood/stance (aggressive? sad?) and pose the silhouette — skip formal T-poses/turnarounds entirely, calling them "basically worthless" for character illustration.
+- [0:02:29] Posing in multiple stances is also a silhouette stress-test: if the silhouette stops reading once you change the pose, it wasn't a strong silhouette to begin with.
+- [0:02:55] Cites Steven Universe and Pokemon as examples where the character is identifiable from silhouette alone in any pose.
+- [0:03:20] During gesture/rough drawing: don't erase, don't chase details (faces, fashion) early — get proportions and body language locked first, since fixing proportion after details are drawn means starting over.
+- [0:04:40] Build the costume out of material logic, not decoration for its own sake — witch's hat forged as cast iron armor because "cauldrons are made of metal, and so are knights" (a concrete example of resonance between two combined concepts).
+- [0:05:09] A design detail can be functionally silly as long as it communicates instantly — a shield with the handle facing the opponent is "clearly an awful idea" but reads as "shield" instantly through shape.
+- [0:05:31] Add loose/flowing elements (a skirt) purely to break up a stiff design and add implied movement.
+- [0:05:53] Repeat a shape motif across separate parts (points/spikes on shoes and armor) to visually unify the whole design.
+- [0:06:12] Core thesis: the goal isn't just combining two ideas (knight + witch), it's finding resonance — places where the two ideas reinforce the same visual/material logic, not just coexist.
+- [0:06:34] Practical craft note: freehand curves, but use a ruler for straight weapon edges, since straight lines are hard to fake convincingly by hand.
+- [0:06:54] Finish by balancing values (dark/light distribution) and checking that emphasis lands where intended, rather than adding endless extra detail.
+
+## What the frames add
+This video is a screen-recorded drawing demo, so the frames ARE the content in a way the transcript alone can't capture. Sheet 1 shows the actual d10 random table list on paper (00:00:40 — ten knight variants: Brewery, Butcher, Graveyard, Garden, Haberdasher, Library, Menagerie, Pirate, Scarecrow, Witch) and the handwritten symbol-inventory list (00:01:04-01:52: "pointy hat, broom, cat, crooked, cauldron, frog, dressed black") next to four tiny thumbnail silhouette sketches of witch-knight variants — a genuinely reusable worksheet template. Sheet 2 shows five stick-figure body-language thumbnails with two checkmarked as keeping the pose (00:02:24-02:32), demonstrating the "test the silhouette in multiple poses" idea concretely. Sheets 3-4 show the full gesture-to-final-line pipeline: loose armature (00:04:16) -> rough shapes (00:04:48-05:12) -> full ink linework (00:05:20 onward) -> ruler used only for the weapon shaft (00:06:32-06:48) -> finished witch-knight with broom, round shield, spiky armor, pointed hat and skirt (00:07:36). The finished character is a strong illustration of "resonance" (cauldron-textured armor, broom-as-staff) that the narration describes but the frames prove.
+
+## For our class (11-13, Minecraft mod, Gemini writes the code)
+### Becomes something kids do
+- **Random mob-concept roller (10 min)**: a d10 (or spinner/dice-roll web tool) table of base creature types crossed with a second d10 of "modifiers" (kids can write their own two lists) — forces a concrete starting prompt like "witch + knight" instead of a blank page. Comes from [0:00:28].
+- **Symbol inventory worksheet (10-15 min)**: before any drawing/Blockbench, kid writes 5-8 words/objects they associate with each of their two concepts, then circles which ones they'll use and which they'll subvert. Directly reusable as a printable worksheet. Comes from [0:00:51].
+- **Silhouette thumbnail sheet (15-20 min)**: kid draws 6+ tiny black-shape thumbnails (no detail, just outline) of their mob idea before picking one — can be done on paper even by kids who "can't draw," since it's pure blob-shape experimentation, not rendering. Comes from [0:01:04]-[0:01:42].
+- **"Material logic" prompt card**: a tooltip asking "what is this character made of / where do its materials come from, and does that material show up in BOTH halves of your mash-up?" — turns the cauldron-armor idea into a repeatable design question. Comes from [0:04:40] and [0:06:12].
+
+### Survives the move to Minecraft?
+Silhouette-first design survives directly and maps almost perfectly onto Blockbench: a cube-based model IS a silhouette exercise, since there's no linework or rendering to hide behind, only shape and proportion. The "test the silhouette in multiple poses" idea has a real Minecraft equivalent — check the mob model from the front, side, and in motion (walking animation) in Blockbench's preview, since a shape that only reads from one angle will look broken in-game. "Repeat a shape motif across parts" (spikes on shoes AND armor) is very buildable in cubes (e.g., repeat one small pointed cube shape at 2-3 places on the model) and is actually easier for a non-artist kid than drawing repeated motifs by hand. The random-table prompt and symbol-inventory worksheet need zero drawing skill and transfer as-is.
+
+### Doesn't transfer
+The entire gesture-drawing/inking/values pipeline (loose armature -> ruler for straight edges -> value balancing) is 2D illustration craft that has no Blockbench equivalent — cubes don't have "gesture" or "ink weight" or tonal values in the painterly sense. Body-language-through-drawn-pose is largely lost too: a static Blockbench model has a fixed rest pose (maybe one simple stance), not the expressive dynamic posing this video spends two minutes on; at most a kid could pick ONE stance for the model's idle animation, but nuanced "sad vs aggressive" posing is out of reach for both the tool and an 11-13-year-old's Java/animation skill in this course. "Loose flowing cloth for movement" (the skirt) is very hard in Blockbench, which has no cloth simulation — flowing elements read as stiff geometric flaps at best.
+
+## Honest caveats
+This is a strong how-to for a working illustrator's personal process but the presenter states up front it's "for my money" — i.e., his own priority ranking of silhouette + body language, not a claim that these are the only two things that matter (other batch videos, e.g. Proko, add value/anatomy/story that this video doesn't cover). The "T-poses are basically worthless" claim is a strong personal opinion specific to illustration workflow — it directly CONTRADICTS the reality of building a Minecraft mob, where a T-pose-like base rig is closer to how Blockbench models are actually built (a neutral rest pose is normal for game assets, unlike for illustration). Flag this contradiction explicitly for the "for our class" section: for a Minecraft mod, a clear default/rest pose is a feature, not a cop-out.

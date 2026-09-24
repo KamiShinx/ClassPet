@@ -1,0 +1,201 @@
+[
+ {
+  "id": "D1TFx9iZB08",
+  "title": "Who Designed the BEST UI/UX Cards?",
+  "verdict": "core",
+  "topics": ["ui"],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:48",
+    "to": "0:01:40",
+    "what": "white space inside buttons, consistent line-heights on headlines, cards feel thin/sparse if too spaced out"
+   },
+   {
+    "from": "0:04:54",
+    "to": "0:05:54",
+    "what": "rule: a shadow must be darker than what it sits on, not lighter; simplify a busy watermarked card"
+   },
+   {
+    "from": "0:06:40",
+    "to": "0:07:37",
+    "what": "decluttering: overlapping semi-transparent layers create noise, swap for simple flat icons"
+   }
+  ],
+  "tool_specific": "Figma",
+  "needs_frames": true,
+  "why": "Rapid before/after fixes on real submissions -- white space, contrast, shadow logic, decluttering -- confirms the known pattern: review episodes are short, concrete design rules, not Figma clicking.",
+  "sampled": false
+ },
+ {
+  "id": "EKjCC4PwjFo",
+  "title": "Designing Forms in Figma - UI/UX Challenge",
+  "verdict": "useful",
+  "topics": ["ui", "accessibility"],
+  "level": "needs a guide",
+  "best": [
+   {
+    "from": "0:00:00",
+    "to": "0:01:33",
+    "what": "minimum viable form: a contact form needs about 2-3 fields (name/email/message + submit), nothing more"
+   },
+   {
+    "from": "0:02:24",
+    "to": "0:03:15",
+    "what": "why a text field needs a visible stroke/border for contrast against a light background -- an accessibility point, not decoration"
+   },
+   {
+    "from": "0:08:32",
+    "to": "0:09:27",
+    "what": "a form field needs three states -- default, focus, error -- and what should visually change for each"
+   }
+  ],
+  "tool_specific": "Figma",
+  "needs_frames": true,
+  "why": "Matches the known challenge-video pattern: a handful of good concepts up front (field count, contrast, default/focus/error), then 15+ minutes of Figma auto-layout/component-variant/prototype mechanics the kids will never do since Gemini builds the UI. Pull the three clips, skip the rest.",
+  "sampled": false
+ },
+ {
+  "id": "OiQ54LUy29E",
+  "title": "Who made the BEST UI/UX Layout from THIS Challenge?",
+  "verdict": "core",
+  "topics": ["ui"],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:01:35",
+    "to": "0:04:13",
+    "what": "a 'muddy' busy photo-watermark background fixed by stripping to flat color + high-contrast type, removing wide letter-spacing on sentences"
+   },
+   {
+    "from": "0:11:11",
+    "to": "0:11:59",
+    "what": "closing summary of the whole episode in one breath: simplify, mind columns/rows, align with white space, don't throw things around randomly"
+   }
+  ],
+  "tool_specific": "Figma",
+  "needs_frames": true,
+  "why": "Same review pattern as the cards episode confirmed again: real entries, fast simplify/align/contrast fixes, and a clean closing rule that's quotable on its own.",
+  "sampled": false
+ },
+ {
+  "id": "QKrglAsEgY8",
+  "title": "Who Designed the BEST Sub Page for this Layout?",
+  "verdict": "core",
+  "topics": ["ui", "ux"],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:55",
+    "to": "0:01:51",
+    "what": "decluttering a busy title treatment and tightening list-item spacing"
+   },
+   {
+    "from": "0:02:33",
+    "to": "0:03:16",
+    "what": "a submission that added labels nobody asked for gets rejected outright -- scope creep as a UX mistake, not just a look problem"
+   },
+   {
+    "from": "0:05:00",
+    "to": "0:05:56",
+    "what": "text wrapped to look clickable when it isn't -- a false-affordance mistake, the same idea Kole Jain's video names as 'signifiers'"
+   }
+  ],
+  "tool_specific": "Figma",
+  "needs_frames": true,
+  "why": "Confirms the review pattern a third time; the scope-creep and false-affordance moments are genuinely transferable UX lessons, not just visual polish, and cross-link nicely to the Kole Jain video.",
+  "sampled": false
+ },
+ {
+  "id": "C95S7gW2-_U",
+  "title": "Designing Dashboards in Figma | UI/UX Challenge",
+  "verdict": "useful",
+  "topics": ["ui", "data"],
+  "level": "needs a guide",
+  "best": [
+   {
+    "from": "0:00:47",
+    "to": "0:01:39",
+    "what": "what a dashboard needs: a sidebar nav, a date picker, and 3-4 headline stat numbers above a trend chart"
+   },
+   {
+    "from": "0:08:15",
+    "to": "0:08:56",
+    "what": "stat cards laid out three-in-a-row above the chart to save vertical space -- a reusable dashboard layout idea"
+   }
+  ],
+  "tool_specific": "Figma",
+  "needs_frames": true,
+  "why": "Fits the challenge pattern exactly: the requirements list is a good 'what goes on a stats page' checklist for a Sheets-backed dashboard, but the remaining ~14 minutes are Figma auto-layout, icon-plugin and chart-plugin clicking they will never do.",
+  "sampled": false
+ },
+ {
+  "id": "EcbgbKtOELY",
+  "title": "Every UI/UX Concept Explained in Under 10 Minutes",
+  "verdict": "core",
+  "topics": ["ui", "ux", "accessibility"],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:00",
+    "to": "0:01:24",
+    "what": "signifiers: grouping, a selected-state highlight, and greyed-out text all communicate function without any instructions"
+   },
+   {
+    "from": "0:02:05",
+    "to": "0:03:03",
+    "what": "grids are optional, white space is not -- concrete spacing values for a simple hero section"
+   },
+   {
+    "from": "0:06:47",
+    "to": "0:08:36",
+    "what": "every button needs 4 states (default/hover/active/disabled), inputs need focus/error states, and microinteractions confirm an action happened"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "The single best dense primer for this course: signifiers, hierarchy, white space, type, color, dark mode, icon sizing, UI states and microinteractions in under 10 minutes with concrete before/afters, and no tool-clicking to sit through.",
+  "sampled": false
+ },
+ {
+  "id": "zjfViRCjT5U",
+  "title": "How a web application works",
+  "verdict": "useful",
+  "topics": ["web", "backend"],
+  "level": "needs a guide",
+  "best": [
+   {
+    "from": "0:16:58",
+    "to": "0:17:55",
+    "what": "plain split: HTML is the text, CSS is the appearance, JS is the interaction -- and that's the whole front-end/back-end line"
+   },
+   {
+    "from": "0:21:40",
+    "to": "0:23:38",
+    "what": "MVC explained as three worker teams -- model handles the database, view is what the user sees, controller sits between them -- maps directly onto Sheet = model, HTML = view, Apps Script functions = controller"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": false,
+  "why": "Adds one real thing the library's Academind and code.org videos don't cover: the MVC pattern, which maps cleanly onto their Sheets+Apps Script+HTML stack. But at 35 minutes it re-explains its own IKEA-store analogy at length and drifts into Docker/Kubernetes/AWS/enterprise-scaling territory the course doesn't need -- pull the two clips, skip the rest.",
+  "sampled": false
+ },
+ {
+  "id": "tpTQurUhX_M",
+  "title": "Create WBS Process and the Work Breakdown Structure (WBS)",
+  "verdict": "useful",
+  "topics": ["planning"],
+  "level": "needs a guide",
+  "best": [
+   {
+    "from": "0:14:31",
+    "to": "0:16:19",
+    "what": "worked example: break a website project into deliverables (UX / servers / database, then pages/CSS/images, schema/tables) -- a hierarchical breakdown pattern they could copy for their own app"
+   }
+  ],
+  "tool_specific": "PMP/PMBOK exam prep",
+  "needs_frames": true,
+  "why": "Fails the 14-year-old test for 16 of its 18 minutes: knowledge-area mapping, ITTO lists, a scope-baseline equation, and repeated PMP-exam and 'smash the like button' plugs -- none of it usable by a solo teen on a 4-8 week project. The one website-breakdown example is worth stealing for a 'how to break your project into pieces' guide page; nothing else earns a spot.",
+  "sampled": false
+ }
+]

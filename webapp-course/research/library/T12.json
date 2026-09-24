@@ -1,0 +1,76 @@
+[
+  {
+    "id": "6PGjPPnMrcs",
+    "title": "1 - Debugging - Introduction",
+    "verdict": "skip",
+    "topics": ["debug"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "SAP",
+    "needs_frames": false,
+    "why": "Defines debugging and shows how to set a breakpoint, but entirely through SAP GUI mechanics (executable statements, transaction code /h, session breakpoints in ABAP) with no analog to setting a breakpoint in a browser/Apps Script debugger.",
+    "sampled": false
+  },
+  {
+    "id": "C6OV5HcFyso",
+    "title": "7 - Debugging - Operations on Internal Tables , Changing Variable Values , Goto Statement",
+    "verdict": "skip",
+    "topics": ["debug"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "SAP",
+    "needs_frames": false,
+    "why": "The idea of inspecting/editing a variable while paused to test a hypothesis is a real debugging skill, but the whole video is SAP GUI clicks (internal tables, 'services of that tool', Goto Statement/Shift+F12) with zero transfer to a JS/Apps Script debugger.",
+    "sampled": false
+  },
+  {
+    "id": "LluIn-9oCM4",
+    "title": "Processes of Scope Management Knowledge Area",
+    "verdict": "skip",
+    "topics": ["planning"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "A PMBOK-mapping overview of six formal PMP processes (plan scope management, collect requirements, define scope, create WBS, validate scope, control scope) named and defined abstractly with no concrete example; pure PMP exam jargon, not something a teen would ever apply.",
+    "sampled": false
+  },
+  {
+    "id": "5nRuHDvPDb8",
+    "title": "Scope Management - The Basics",
+    "verdict": "useful",
+    "topics": ["planning"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:03:22", "to": "0:09:37", "what": "Product scope (what the thing does/looks like) vs. project scope (all the work needed to build it), and scope creep as uncontrolled extra work sneaking in"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Under the PMP framing, two ideas genuinely transfer: separating 'what the app should do' from 'the work to build it', and naming scope creep (kids keep adding features mid-build) - but it's wrapped in PMBOK exam talk and a construction-building example, so it needs a guide to translate into web-app terms rather than being teen-watchable as-is.",
+    "sampled": false
+  },
+  {
+    "id": "XcIVo2h9g2E",
+    "title": "6 - Debugging - Static and Dynamic Breakpoints",
+    "verdict": "skip",
+    "topics": ["debug"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "SAP",
+    "needs_frames": false,
+    "why": "Entire topic is a multi-user/shared-server concern (a breakpoint one SAP user sets can freeze the program for every other user, including customers in production) - meaningless for a kid debugging their own script alone in their own editor.",
+    "sampled": false
+  },
+  {
+    "id": "I4vl38imtk0",
+    "title": "17 - Debugging - Way to Debug a Dialog Screen or Pop Up Screen",
+    "verdict": "skip",
+    "topics": ["debug"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "SAP",
+    "needs_frames": false,
+    "why": "A niche SAP GUI trick (drag a notepad file with 3 lines of SAP system-command code onto a pop-up window to force it into debug mode) with no equivalent concept or transfer to web/Apps Script debugging at all.",
+    "sampled": false
+  }
+]

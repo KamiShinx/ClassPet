@@ -1,0 +1,70 @@
+[
+  {
+    "id": "W2EdffbwgcM",
+    "title": "#1 What is Project Management? Is it an Art or Science? | Project Planning & Control",
+    "verdict": "useful",
+    "topics": ["planning"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:00:14", "to": "0:11:06", "what": "defines a project as temporary + unique, contrasted with a repeating 'process', with relatable examples (exam vs. quiz, phone models)"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "the project-vs-process definition is a genuinely useful framing, but it's buried in a long call-and-response classroom discussion that spends its second half on 'is management art or science' (Taylor, Newton, Avogadro) which has nothing to teach a teen coder.",
+    "sampled": false
+  },
+  {
+    "id": "5MDr9iOMxcM",
+    "title": "#7 Time Management | Overview | Project Planning & Control",
+    "verdict": "core",
+    "topics": ["planning"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:04:20", "to": "0:13:57", "what": "work breakdown structure as 'divide and conquer': break a project into objectives, then activities, worked through a relatable example (organizing a guest lecture/event)"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "the WBS/divide-and-conquer idea and the worked event-planning example map directly onto breaking a solo app project into tasks and objectives; skip past the PMBOK/clause-number jargon in the first 3 minutes.",
+    "sampled": false
+  },
+  {
+    "id": "yMO9dMX0iCk",
+    "title": "#38 Minimum Moment Concept | Project Planning & Control",
+    "verdict": "skip",
+    "topics": [],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "pure resource-histogram-leveling math (moment formulas, improvement-factor derivation) for construction scheduling; explicitly the kind of engineering scheduling maths the brief excludes, no transfer to a teen planning an app.",
+    "sampled": false
+  },
+  {
+    "id": "kouipb1-CyY",
+    "title": "#30 Time-Cost Trade-off: Problem- 3, Tabulation Approach | Project Planning & Control",
+    "verdict": "skip",
+    "topics": [],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "CPM crashing worked problem with a cost-slope tabulation method; this is exactly the CPM-crashing/time-cost trade-off content the brief says does not transfer.",
+    "sampled": false
+  },
+  {
+    "id": "Hr-arfbX37w",
+    "title": "#5 Project Stakeholders, Phases & Organization | Project Planning & Control",
+    "verdict": "useful",
+    "topics": ["planning"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:00:15", "to": "0:02:12", "what": "stakeholders = everyone with a stake in a project, whose objectives you have to understand and balance"},
+      {"from": "0:08:50", "to": "0:11:57", "what": "project life-cycle phases: idea -> business case -> pre-project planning -> execute -> operate -> decommission"},
+      {"from": "0:19:53", "to": "0:21:35", "what": "cost-vs-influence curve: you can change things cheaply early, but changes get expensive once you're deep into building"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "the stakeholder concept, the phase list, and especially the 'decide early because changes get expensive later' curve transfer well to a teen's solo project (users = stakeholders, plan before you build); the rest is construction/EPC/refinery/subcontractor detail a teen doesn't need.",
+    "sampled": false
+  }
+]

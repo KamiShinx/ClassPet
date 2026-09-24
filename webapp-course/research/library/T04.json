@@ -1,0 +1,53 @@
+[
+  {
+    "id": "t0OIk9FuMgM",
+    "title": "UI UX Full Course 2026 | UI UX Design | UI UX Training | UI UX Course For Beginners |Simplilearn",
+    "verdict": "skip",
+    "topics": ["ui", "ux"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "Adobe XD",
+    "needs_frames": false,
+    "why": "Only first 30 min heard (of 392 min / 6.5h): a stitched compilation of older Simplilearn shorts - a generic UI vs UX definitions recap (skills, tasks, difference, research techniques - all content already covered by concise videos elsewhere in this library) that pivots at 0:18 into an Adobe XD tool walkthrough kids won't use, since Gemini builds the UI. Padded marathon, no unique value found in the sampled window.",
+    "sampled": true
+  },
+  {
+    "id": "Qad_XgZ1lZc",
+    "title": "Ui UX Full Course 2026 | UI UX Tutorial For Beginners | UI UX Training | UI UX Course | Simpliearn",
+    "verdict": "skip",
+    "topics": ["ui", "ux", "ai", "career"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "AI design tools (Chroma, FontJoy, Adobe Firefly, Visly/Vizcom AI, Looka, FigJam)",
+    "needs_frames": false,
+    "why": "Only first 30 min heard (of 554.5 min / 9.2h). Opening is word-for-word identical to pLCy3dKk4wA (same stitched script, same order): a UI/UX basics recap, then a tour of six AI design tools (color/font/logo/wireframe generators), then a UX-designer salary discussion starts right at the 30-min mark. Tool-specific and career content, off-topic for this course, and duplicated by a sibling upload.",
+    "sampled": true
+  },
+  {
+    "id": "pLCy3dKk4wA",
+    "title": "UI UX Full Course 2026 | UI UX Design Tutorial | UI UX Design Course | UI UX Design | Simplilearn",
+    "verdict": "skip",
+    "topics": ["ui", "ux", "ai", "career"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "AI design tools (Chroma, FontJoy, Adobe Firefly, Visly/Vizcom AI, Looka, FigJam)",
+    "needs_frames": false,
+    "why": "Only first 30 min heard (of 553.9 min / 9.2h); this is a near-exact duplicate of Qad_XgZ1lZc's first 30 minutes - identical script, identical order (UI/UX basics, then the same AI-tools tour, then the same salary section starting at 30:00). Skip as a redundant re-upload with the same off-topic content.",
+    "sampled": true
+  },
+  {
+    "id": "h87xnT004Aw",
+    "title": "UI UX Design Full Course 2026 | UI UX Design Tutorial | Learn UI UX Design In 24 Hours | Simplilearn",
+    "verdict": "useful",
+    "topics": ["ui", "ux"],
+    "level": "teen-friendly",
+    "best": [
+      {"from": "0:03:29", "to": "0:09:45", "what": "Concrete narrative (Sam builds a homework app) that walks the whole UX process - user research, wireframing, visual design, information architecture, usability testing - without requiring any tool knowledge"},
+      {"from": "0:18:05", "to": "0:21:38", "what": "Clean, simple breakdown of UI vs UX vs product design using a restaurant analogy"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Only first 30 min heard (of 1423.7 min / ~23.7h, the group's biggest single video). The opening 'Sam' story segment is genuinely good - concrete, teen-friendly, tool-agnostic walkthrough of the full UX process - and the UI/UX/product-design distinction segment is unusually clear. But it's a handful of good minutes inside a day-long marathon whose remainder (per the sampled window's end and the title/agenda) turns into a 6-month career roadmap, 2026 tool trends, and personal-branding/portfolio advice - useful only as isolated segments, not as a video to hand a kid whole.",
+    "sampled": true
+  }
+]

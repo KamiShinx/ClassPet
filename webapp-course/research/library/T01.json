@@ -1,0 +1,172 @@
+[
+ {
+  "id": "kbZejnPXyLM",
+  "title": "Free Figma UX Design UI Essentials Course",
+  "verdict": "useful",
+  "topics": [
+   "ui",
+   "ux",
+   "planning"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:09:52",
+    "to": "0:15:09",
+    "what": "clean, plain-language UI vs UX explanation (own banking-app example) -- same script also exists as the standalone clip rX9vee7ITVE"
+   },
+   {
+    "from": "0:15:41",
+    "to": "0:24:09",
+    "what": "what a persona and a task flow are and why you scope a brief to one flow instead of designing everything -- the one segment in this 3h video with no Figma-mechanics equivalent elsewhere in the playlist"
+   },
+   {
+    "from": "0:28:27",
+    "to": "0:31:05",
+    "what": "wireframe (lo-fi) vs high-fidelity mockup, and why you test with lo-fi first -- duplicated verbatim as the standalone clip UU_eyUGWIEI (already core)"
+   }
+  ],
+  "tool_specific": "Figma",
+  "needs_frames": true,
+  "why": "177-minute Figma software course (frames, type tool, rectangle/color-picker mechanics, icon import, pages, prototype transitions/easing, comment threads, Teams pricing) with three short conceptual segments worth lifting out; everything else is click-by-click Figma tutorial the kids will never use since Gemini builds their UI. Sampled: first 15 min, six ~3-min windows spread through the middle, last 10 min.",
+  "sampled": true
+ },
+ {
+  "id": "_d8GG2QZYAM",
+  "title": "What is Figma?",
+  "verdict": "skip",
+  "topics": [
+   "ui"
+  ],
+  "level": "teen-friendly",
+  "best": [],
+  "tool_specific": "Figma",
+  "needs_frames": false,
+  "why": "Word-for-word re-cut of kbZejnPXyLM 0:05:39-0:09:21 (\"what Figma is/isn't for, rapid prototyping vs coding\"). A Figma product pitch, not a design concept; duplicate, skip.",
+  "sampled": false
+ },
+ {
+  "id": "Yo3tpdiXJQk",
+  "title": "Share Editing with other UX designers in Figma",
+  "verdict": "skip",
+  "topics": [
+   "career"
+  ],
+  "level": "teen-friendly",
+  "best": [],
+  "tool_specific": "Figma",
+  "needs_frames": false,
+  "why": "Word-for-word re-cut of kbZejnPXyLM 2:49:22-2:56:34: Figma's Drafts/Teams/Team-Projects structure and the free-tier paywall (1 team project, 3 files). Entirely about Figma's own account/pricing model -- not applicable to Apps Script + Sheets. Skip.",
+  "sampled": false
+ },
+ {
+  "id": "p-onEUMZW7I",
+  "title": "Do I Need to Know Adobe Illustrator to Use Figma?",
+  "verdict": "skip",
+  "topics": [],
+  "level": "teen-friendly",
+  "best": [],
+  "tool_specific": "Adobe Illustrator",
+  "needs_frames": false,
+  "why": "Whether a UX designer also needs Illustrator, with a live copy-paste demo between the two apps. Two enterprise design tools the kids will never touch; nothing transfers. Skip.",
+  "sampled": false
+ },
+ {
+  "id": "UU_eyUGWIEI",
+  "title": "What is Low Fidelity Wireframes vs High Fidelity Wireframes in Figma",
+  "verdict": "core",
+  "topics": [
+   "ui",
+   "planning"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:03",
+    "to": "0:02:47",
+    "what": "whole video: lo-fi vs hi-fi wireframes, why you test with boring gray/one-color lo-fi first so feedback is about the flow and not the colors/fonts"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "3-minute standalone version of a genuinely transferable planning concept from the brief's own example list. Despite the title, nothing said requires Figma -- it's about process (sketch the flow cheap and plain before you make it pretty), which maps directly onto sketching a Sheet-backed app before building it in Gemini. Best kept as the short standalone rather than the 3-hour course.",
+  "sampled": true
+ },
+ {
+  "id": "uvUnXa_uBNQ",
+  "title": "Frames vs Groups in Figma",
+  "verdict": "skip",
+  "topics": [],
+  "level": "too advanced",
+  "best": [],
+  "tool_specific": "Figma",
+  "needs_frames": false,
+  "why": "A deep dive into Figma's own object model (frames clip/nest/auto-layout, groups don't) and constraints. Entirely Figma's internal data structure, not a general UI concept, and confusing even for the presenter's own admission (\"what a confusing video\"). Skip.",
+  "sampled": true
+ },
+ {
+  "id": "rX9vee7ITVE",
+  "title": "UI vs UX Design in Figma",
+  "verdict": "core",
+  "topics": [
+   "ui",
+   "ux",
+   "user testing"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:04",
+    "to": "0:01:42",
+    "what": "UI = how it looks, UX = how it works; UX starts when you put it in someone's hands and test"
+   },
+   {
+    "from": "0:02:46",
+    "to": "0:04:56",
+    "what": "the bank app: pretty but Enter doesn't submit, clickable names show no sign they're clickable, no hand cursor"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": false,
+  "why": "Six minutes, no Figma needed; the bank-app complaints are concrete UX bugs kids can spot in their own apps and name to Gemini (Enter submits the form, show that it's clickable).",
+  "sampled": false
+ },
+ {
+  "id": "k9ZfioRgGMM",
+  "title": "Where to get Free icons for Figma",
+  "verdict": "useful",
+  "topics": [
+   "icons",
+   "svg",
+   "assets",
+   "licensing"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:04",
+    "to": "0:04:23",
+    "what": "free vs free-with-credit licences; SVG vs PNG: 1 KB, scalable, recolourable"
+   }
+  ],
+  "tool_specific": "partial (Figma import steps after 0:04:23)",
+  "needs_frames": true,
+  "why": "SVG vs PNG and 'check the licence' carry over to web apps (Gemini can paste SVG icons straight into the HTML); the Figma community half is tool mechanics.",
+  "sampled": false
+ },
+ {
+  "id": "lUJ9nnnjsAs",
+  "title": "Micro Interactions using interactive components in Figma",
+  "verdict": "skip",
+  "topics": [
+   "figma",
+   "hover states"
+  ],
+  "level": "teen-friendly",
+  "best": [],
+  "tool_specific": "Figma interactive components (beta-era)",
+  "needs_frames": false,
+  "why": "Only Figma variant wiring; hover/toggle states are covered better by the UI-states and juice videos.",
+  "sampled": false
+ }
+]

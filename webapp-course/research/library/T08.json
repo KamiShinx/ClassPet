@@ -1,0 +1,779 @@
+[
+  {
+    "id": "xTDoRMNYGUQ",
+    "title": "Topic 04, Part 01 - The Stages of Database Development",
+    "verdict": "useful",
+    "topics": [
+      "data",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:05:36",
+        "what": "three stages of DB development (requirements analysis -> design -> build) and why iterating early beats iterating late, via a house-building analogy"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Correct, clear talk on gathering requirements before designing tabs and building, which maps onto planning a Sheets app; but at 20 min it drifts into enterprise-specific sourcing methods (JAD sessions, formal business-rule policy, use cases) that are overkill for this course — trim to the first stages+iteration segment for a guide.",
+    "sampled": false
+  },
+  {
+    "id": "rqQxPSPibS8",
+    "title": "Topic 04, Part 02 - Entity Classes vs. Entity Instances",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:08:04",
+        "what": "entity class (table blueprint) vs entity instance (a row), via a customer/item example with concrete attribute values"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Correct, concrete, well-paced; the class/instance analogy maps cleanly onto 'a Sheet tab's header row vs a data row,' and the closing diagram (mapping an item's attributes to real values) is worth seeing, not just hearing.",
+    "sampled": false
+  },
+  {
+    "id": "xtS0-pVvnKg",
+    "title": "Topic 04, Part 03 - Attributes (Columns) and Identifiers (Keys)",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:06:33",
+        "what": "columns/data types/null/default/constraints, then primary keys, foreign keys, and composite keys"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Clean, correct rundown of what a column and a key are for, nearly 1:1 with designing a Sheet tab's header row and choosing an ID column — fully followable by audio alone.",
+    "sampled": false
+  },
+  {
+    "id": "5S9LSy_QE8M",
+    "title": "Topic 04, Part 04 - Depicting Entities in Entity Relationship Diagrams",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:58",
+        "to": "0:07:55",
+        "what": "building an entity box up from name-only to PK/FK-only to full attribute list, with bold type meaning 'required'"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Directly teaches how to sketch a Sheet tab as a box with a primary key and required/optional columns; the bold-vs-plain required/optional convention only makes sense watched on screen.",
+    "sampled": false
+  },
+  {
+    "id": "ZWxuffTEyyg",
+    "title": "Topic 04, Part 05 - Types of Conceptual Relationships in Entity Relationship Models",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:02:49",
+        "to": "0:06:29",
+        "what": "unary/binary/ternary relationship degree, and why a 3-way relationship needs a 4th linking table"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Binary (two-tab) relationships are what kids will actually build; the ternary doctor/patient/drug example previews why some designs need an extra linking tab, directly useful when planning a multi-tab Sheet.",
+    "sampled": false
+  },
+  {
+    "id": "1DAnVydNmxc",
+    "title": "Topic 04, Part 06 - Conceptual Crow's Foot Relationship Symbols",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "No caption file exists; judged from title only. Title suggests an intro to crow's-foot relationship symbols before cardinalities are added — likely overlaps with Part 08 (Oxda-LTLTOc), which re-teaches the same three symbols combined with min/max cardinality, so this may be a skippable duplicate; needs an actual watch before deciding.",
+    "sampled": false
+  },
+  {
+    "id": "Kzp5wkP9Lo8",
+    "title": "Topic 04, Part 07 - Binary Relationships and Cardinalities",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:04:56",
+        "to": "0:10:26",
+        "what": "why many-to-many can't be built directly, fixed with a junction/intersection table (items-suppliers example)"
+      },
+      {
+        "from": "0:10:58",
+        "to": "0:16:15",
+        "what": "max/min cardinality (one-or-many, required-or-optional) explained plainly with the employee/department example"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "The clearest treatment in this batch of one-to-many and many-to-many modeling — the junction-table example is exactly the pattern kids need for linking Sheet tabs (e.g. students<->skills); 27 min total is long and repetitive, so a guide should point to the two best segments rather than the full video.",
+    "sampled": false
+  },
+  {
+    "id": "Oxda-LTLTOc",
+    "title": "Topic 04, Part 08 - Crow's Foot Symbols with Cardinalities",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:57",
+        "to": "0:04:01",
+        "what": "the three crow's-foot symbols (zero, one, many) and how the near end vs far end of a relationship line shows min vs max cardinality"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Teaches the actual notation for reading and drawing relationship lines between tabs — short, concrete, directly reusable when a kid sketches a Sheet data model on a whiteboard.",
+    "sampled": false
+  },
+  {
+    "id": "9gxxu5E2-SQ",
+    "title": "Topic 04, Part 09 - Strong vs. Weak Entities",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:05:13",
+        "what": "why some tables (e.g. a join table) can't get a new row unless a matching row already exists elsewhere, via the familiar employee/skill/department example"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Plain, concrete explanation of the actual referential-integrity problem kids will hit linking Sheet tabs (a row that needs a valid matching ID in another tab) — short and fully audio-followable.",
+    "sampled": false
+  },
+  {
+    "id": "lkWB-R0DM6M",
+    "title": "Topic 04, Part 10 - Types of Weak Entities",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Correct but goes into formal ER-notation nuances (ID-dependent vs non-ID-dependent weak entities, rounded corners, solid vs dashed relationship lines, composite keys inheriting a parent's primary key) — more relational-schema detail than is needed to plan simple Sheet-tab lookups for this course.",
+    "sampled": false
+  },
+  {
+    "id": "zf0_jg1rXrs",
+    "title": "Topic 04, Part 11 - Supertype and Subtype Entities",
+    "verdict": "useful",
+    "topics": [
+      "data",
+      "planning",
+      "character"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:01:29",
+        "to": "0:08:05",
+        "what": "supertype vs subtype concept, exclusive vs inclusive, using university people (student/faculty/staff)"
+      },
+      {
+        "from": "0:08:05",
+        "to": "0:15:40",
+        "what": "ER diagram walkthrough of exclusive (student->undergrad/grad) and inclusive (student->clubs) subtype tables"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "clear inheritance concept (shared attributes vs type-specific ones) fits character design, but the discriminator/exclusive-inclusive nuance needs translating into Sheet-tab terms for teens",
+    "sampled": false
+  },
+  {
+    "id": "On4ITNnhSKc",
+    "title": "Topic 04, Part 12 - Recursive Relationships",
+    "verdict": "core",
+    "topics": [
+      "data",
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:56",
+        "to": "0:05:25",
+        "what": "manager/employee self-referencing table example showing a whole hierarchy stored in one table"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "short, clear, one strong worked example directly transferable to any tree/hierarchy a kid would model in a single Sheet tab",
+    "sampled": false
+  },
+  {
+    "id": "dFZurHNWKV0",
+    "title": "Topic 05, Part 01 - Transitioning from a Data Model to a Database",
+    "verdict": "useful",
+    "topics": [
+      "data",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:04:40",
+        "to": "0:13:37",
+        "what": "checklist for turning an entity into a real table: naming, data types, null/unique status, defaults, constraints"
+      }
+    ],
+    "tool_specific": "SQL Server",
+    "needs_frames": true,
+    "why": "good checklist mindset for turning a diagram into real columns, but it's framed for a DBA implementing in Oracle/SQL Server, not for a kid filling in a Sheet tab",
+    "sampled": false
+  },
+  {
+    "id": "lWUbO7onyN0",
+    "title": "Topic 05, Part 02 - A Review of Normalization",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:54",
+        "to": "0:04:41",
+        "what": "the three modification anomalies (insert/update/delete problems) explained plainly"
+      },
+      {
+        "from": "0:11:59",
+        "to": "0:15:36",
+        "what": "worked example: splitting one messy customer table into three clean, normalized tables"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "the anomalies and the worked split-into-three-tables example map well onto messy vs. well-structured Sheet tabs, but candidate-key/determinant/BCNF jargon needs a guide to translate for 14-15 year olds",
+    "sampled": false
+  },
+  {
+    "id": "QF3srvfb4GU",
+    "title": "Topic 05, Part 03 - Denormalization",
+    "verdict": "useful",
+    "topics": [
+      "data",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:12:26",
+        "to": "0:19:11",
+        "what": "the three denormalization strategies (merge tables, add a redundant column, add a precomputed column) with the customer/zip-code example"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "the core trade-off (fewer lookups vs. risk of stale duplicate data) is exactly the call kids make structuring Sheet tabs, but at 28 minutes with heavy SQL-DBA framing it needs trimming and a guide",
+    "sampled": false
+  },
+  {
+    "id": "O3ZHi2nW7tI",
+    "title": "Topic 05, Part 04 - Examples of Denormalization",
+    "verdict": "useful",
+    "topics": [
+      "data",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:04:56",
+        "to": "0:14:09",
+        "what": "caching a course's current-enrollment count and a student's GPA instead of recalculating every time, kept accurate via a trigger"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "the cached-value-updated-by-a-trigger pattern maps almost 1:1 onto an Apps Script onEdit trigger updating a summary cell — strong guide material, not quite plug-and-play for teens as is",
+    "sampled": false
+  },
+  {
+    "id": "WNCzKgmj8zA",
+    "title": "Topic 05, Part 05 - Considerations for Modeling One-to-One Binary Relationships",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:03:22",
+        "to": "0:12:50",
+        "what": "where to put the reference column in a 1:1 relationship depending on which side is optional (locker/employee, bed/patient)"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "correct and clearly taught, but a narrow relational-DB nuance (foreign-key placement to avoid nulls) that rarely comes up when structuring simple Sheet-backed apps",
+    "sampled": false
+  },
+  {
+    "id": "oeRlzvmUB8Q",
+    "title": "Topic 05, Part 06 - Considerations for Modeling One-to-Many Binary Relationships",
+    "verdict": "core",
+    "topics": [
+      "data",
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:03:34",
+        "to": "0:13:12",
+        "what": "why the reference column goes on the 'many' side (player/team), and the mess that results from doing it the other way"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "the single most directly transferable relational-modeling rule for structuring linked Sheet tabs, taught with a concrete, teen-followable example and a clear before/after",
+    "sampled": false
+  },
+  {
+    "id": "6XSE3PWo29s",
+    "title": "Topic 05, Part 07 - Considerations for Modeling Many-to-Many Relationships",
+    "verdict": "core",
+    "topics": [
+      "data",
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:02:57",
+        "to": "0:08:00",
+        "what": "why many-to-many needs a third lookup tab, with the student/class enrollment example"
+      },
+      {
+        "from": "0:11:10",
+        "to": "0:21:43",
+        "what": "composite key vs. surrogate key: whether the same pair (e.g. player + item, customer + product) is allowed to repeat"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "directly teaches the junction-tab pattern kids need for any many-to-many relationship in their Sheet (inventories, ratings, tags) with two clear worked examples",
+    "sampled": false
+  },
+  {
+    "id": "u6-yuru14iI",
+    "title": "Topic 05, Part 08 - Implementing and using Recursive Relationships",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:59",
+        "to": "0:09:38",
+        "what": "three recursive-relationship patterns with data: sponsorship (1:1), referrals (1:many), doctors treating doctors (many:many via a lookup table)"
+      }
+    ],
+    "tool_specific": "SQL",
+    "needs_frames": true,
+    "why": "adds a genuinely new pattern (recursive many-to-many via a lookup tab) beyond Part 12, but most of the runtime is SQL self-join syntax the kids won't use in Apps Script",
+    "sampled": false
+  },
+  {
+    "id": "v236n7bLCYk",
+    "title": "Topic 06, Part 01 - The Database Processing Environment and Major Database Administration Functions",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:30",
+        "to": "0:04:45",
+        "what": "diagram of the database processing environment and the three DBA functions (concurrency, security, backup)"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Short admin overview naming the three DBA functions (concurrency control, security, backup/recovery) - good unit framing for the teacher, but abstract/enterprise-flavored (COBOL, stored procedures, triggers) for a direct teen watch.",
+    "sampled": false
+  },
+  {
+    "id": "-CXWjbYX1MY",
+    "title": "Topic 06, Part 02 - Introduction to Concurrency Control",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:05:16",
+        "what": "why concurrent users on the same data cause problems, and the lock-everything vs lock-nothing accessibility trade-off"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Clear, jargon-light explanation of exactly why 15 kids clicking the same Sheet at once is a problem - the accessibility trade-off (full lock vs no lock) maps straight onto choosing LockService.",
+    "sampled": false
+  },
+  {
+    "id": "PydAvj0eu8o",
+    "title": "Topic 06, Part 03 - Introduction to Database Transactions",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:06:28",
+        "to": "0:15:14",
+        "what": "worked example: a multi-step sale recorded across three tables that fails partway through, and why rollback keeps the data clean"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Explains commit/rollback with relatable analogies (an unsaved Word doc, an unsent text) plus a concrete before/after table walkthrough of a failed multi-step update - this is the transactions half of 'why we lock the sheet at all.'",
+    "sampled": false
+  },
+  {
+    "id": "cy4uGB7Gc-U",
+    "title": "Topic 06, Part 04 - The Lost Update Problem",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:04:49",
+        "to": "0:12:20",
+        "what": "two salespeople editing the same inventory value at once, and one person's update silently disappearing"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "This IS the race-condition story the LockService lesson is built around - two users read the same value, both write back, one write vanishes. Directly teen-followable and the single highest-priority video in this batch.",
+    "sampled": false
+  },
+  {
+    "id": "ch65WIjhF4M",
+    "title": "Topic 06, Part 05 - Dirty Reads, Inconsistent Reads, and Phantom Reads",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:01:01",
+        "to": "0:05:32",
+        "what": "three named concurrency problems defined in turn: dirty reads, inconsistent (non-repeatable) reads, phantom reads"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Correct and short, and a natural sequel to the Lost Update video, but it piles three new vocab terms into six minutes - better as optional deeper reading via the guide than a core watch for every kid.",
+    "sampled": false
+  },
+  {
+    "id": "O3ey0Mggz84",
+    "title": "Topic 06, Part 06 - Introduction to Resource Locking",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "nocaps: no caption file exists, judged from title/series position only. It sits between Lost Update (Part 4) and Optimistic vs Pessimistic Locking (Part 7), so it almost certainly introduces locking itself (likely lock granularity, deadlocks) - the direct conceptual bridge to LockService. Worth a manual watch before deciding to show it straight to kids, since deadlock detail could tip it too advanced.",
+    "sampled": false
+  },
+  {
+    "id": "x1wZPXKz40k",
+    "title": "Topic 06, Part 07 - Optimistic vs. Pessimistic Locking",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:14:16",
+        "what": "pessimistic vs optimistic locking explained conceptually, with Wikipedia (mostly reads) vs credit-card processing (mostly writes) as contrasting real examples"
+      }
+    ],
+    "tool_specific": "SQL",
+    "needs_frames": true,
+    "why": "Directly explains the two locking philosophies LockService embodies - pessimistic locking is exactly 'lock the Sheet range, do the write, then unlock.' Long (22 min) and the last third turns into SQL pseudocode, so trim to the conceptual first two-thirds for the class.",
+    "sampled": false
+  },
+  {
+    "id": "BwaFhBCPDdc",
+    "title": "Topic 06, Part 08 - ACID Transactions and Transaction Isolation Levels",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:05:06",
+        "what": "the ACID acronym defined: atomic, consistent, isolated, durable"
+      }
+    ],
+    "tool_specific": "SQL",
+    "needs_frames": false,
+    "why": "The ACID definitions are exactly the 'why we lock the sheet at all' answer, but the back two-thirds (four SQL transaction isolation levels, bank vs Wikipedia performance tuning) is enterprise-DBA depth this course doesn't need - clip the intro for the guide.",
+    "sampled": false
+  },
+  {
+    "id": "aDMA0AsHvRE",
+    "title": "Topic 06, Part 09 - Non-Scrollable vs. Scrollable Cursors",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL",
+    "needs_frames": false,
+    "why": "Cursors are a SQL result-set paging mechanism with no equivalent in Apps Script/Sheets - off-topic and too advanced for a Sheet-backed class project, as flagged.",
+    "sampled": false
+  },
+  {
+    "id": "sRE-ZmMbMIU",
+    "title": "Topic 06, Part 10 - Introduction to Database Security",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL",
+    "needs_frames": false,
+    "why": "DBA authentication/authorization model with SQL-Server-specific CREATE LOGIN/CREATE USER syntax; the least-privilege idea is sound but there is no login system in this course to secure - off-topic and too advanced.",
+    "sampled": false
+  },
+  {
+    "id": "05Wbt1el5A8",
+    "title": "Topic 06, Part 11 - Database Security - Permissions and Roles",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL",
+    "needs_frames": false,
+    "why": "SQL Server DBA permissions/roles/GRANT-DENY syntax; no analogue in an Apps Script + Sheets access model, and off-topic for 14-15 year olds building a single-owner app.",
+    "sampled": false
+  },
+  {
+    "id": "ad3fQ1it0DU",
+    "title": "Topic 06, Part 12 - Overview of Database Backup and Recovery",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL",
+    "needs_frames": false,
+    "why": "Transaction-log rollback/roll-forward mechanics are enterprise DBA territory; Sheets' built-in version history already covers the practical need at this course's level.",
+    "sampled": false
+  },
+  {
+    "id": "TjrPQnBagrY",
+    "title": "Topic 06, Part 13 - Additional DBA Responsibilities",
+    "verdict": "skip",
+    "topics": [
+      "career"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "A rundown of the DBA career/documentation role, not a design or coding topic relevant to kids vibe-coding apps.",
+    "sampled": false
+  },
+  {
+    "id": "Zc54pFX6VxY",
+    "title": "Topic 07, Part 01 - Introduction to Database Indexes",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:03:17",
+        "to": "0:07:05",
+        "what": "Textbook-index analogy for why a sorted lookup structure (index) beats scanning every page/row"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Short, code-free, and uses a textbook-index analogy any teen gets instantly; teaches the real transferable idea (why lookups can be slow and how organizing data fixes it) without any SQL Server baggage.",
+    "sampled": false
+  },
+  {
+    "id": "kpXXHCfN8zI",
+    "title": "Topic 07, Part 02 - An Intuitive Overview of Database Indexes",
+    "verdict": "core",
+    "topics": [
+      "data"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:06:40",
+        "to": "0:22:14",
+        "what": "Binary search walkthrough plus live Excel demo comparing naive vs. sorted/indexed search time as row counts scale up"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "The best explanation in the batch of why sorted/indexed lookup beats scanning, with a concrete Excel table showing the search-time gap explode as data grows -- genuinely useful even for a Sheets-based app; it's long (27 min) so point kids at the middle segment rather than the whole thing.",
+    "sampled": false
+  },
+  {
+    "id": "ZHgPdrCiEHU",
+    "title": "Topic 07, Part 03 - Index Concepts",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:09:44",
+        "to": "0:13:45",
+        "what": "The trade-off: indexes cost storage space and must be rebuilt on every insert/update/delete"
+      }
+    ],
+    "tool_specific": "SQL Server",
+    "needs_frames": true,
+    "why": "The storage/rebuild trade-off concept is genuinely useful, but it's wrapped around SQL Server-specific large-object data types (text/ntext/image/XML) that don't exist in Sheets -- teacher material, trim to the trade-off segment.",
+    "sampled": false
+  },
+  {
+    "id": "pH-WsPCZWC8",
+    "title": "Topic 07, Part 04 - B-Tree Indexes",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL Server",
+    "needs_frames": false,
+    "why": "Deep B-tree internals (node splitting, rebalancing, leaf-pointer chaining) are pure CS/DBA implementation detail with no Sheets analogue; the sorted-search intuition is already covered better and more briefly in Part 02.",
+    "sampled": false
+  },
+  {
+    "id": "kqjAf3YOYnE",
+    "title": "Topic 07, Part 05 - Clustered vs. Non-Clustered Indexes",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL Server",
+    "needs_frames": false,
+    "why": "Storage-engine internals specific to how SQL Server physically stores tables; no counterpart in a Google Sheets database.",
+    "sampled": false
+  },
+  {
+    "id": "m8ofgRPCQ_k",
+    "title": "Topic 07, Part 06 - Implementing Indexes in SQL Server",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL Server",
+    "needs_frames": false,
+    "why": "A straight SQL Server Management Studio tool tutorial for creating indexes -- exactly the kind of tool-specific walkthrough this course should skip.",
+    "sampled": false
+  },
+  {
+    "id": "ySLtOpvcuco",
+    "title": "Topic 07, Part 07 - Other Types of Indexes",
+    "verdict": "skip",
+    "topics": [
+      "data"
+    ],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "SQL Server",
+    "needs_frames": false,
+    "why": "Bitmap and hash index internals are niche DBA data structures with no relevance to Apps Script + Sheets apps.",
+    "sampled": false
+  },
+  {
+    "id": "9xzYk81akIE",
+    "title": "Topic 07, Part 08 - Index Considerations and Guidelines",
+    "verdict": "useful",
+    "topics": [
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:57",
+        "to": "0:03:29",
+        "what": "General guideline: index selectively, weigh storage/rebuild cost against how often the table is updated"
+      }
+    ],
+    "tool_specific": "SQL Server",
+    "needs_frames": false,
+    "why": "A reasonable teacher-facing summary of index trade-offs (don't over-index, update frequency matters, uniqueness matters), but still framed for a DBA managing SQL Server, not something to hand kids directly.",
+    "sampled": false
+  }
+]

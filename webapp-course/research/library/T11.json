@@ -1,0 +1,107 @@
+[
+  {
+    "id": "AJ11dV1dYqI",
+    "title": "System Design Interview Questions & Answers | System Design Interview Preparation Guide | @SCALER",
+    "verdict": "skip",
+    "topics": ["career", "planning"],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Interview-prep framework (gather requirements -> estimate QPS/storage -> CAP tradeoffs -> hash functions for a URL shortener); the one transferable idea, start on a single server before optimizing, is told better and more concretely by the Delicious story in 8telu1SoCKM/895XCPFr4-k, so this is redundant on top of being interview-framed.",
+    "sampled": true
+  },
+  {
+    "id": "8telu1SoCKM",
+    "title": "System Design Course For Beginners | HLD Of Tinder, Uber and Twitter X | LLD | Interviews | @SCALER",
+    "verdict": "useful",
+    "topics": ["web", "data"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:15:40", "to": "0:19:23", "what": "Delicious story: one laptop -> DNS/static IP -> app server + database, then why user growth forces vertical vs horizontal scaling"},
+      {"from": "0:19:23", "to": "0:26:45", "what": "Why you need a load balancer once there's more than one server (single point of failure, routing traffic)"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "First 30 min is two stitched-together standalone lessons: a LinkedIn schema-design segment (word-for-word duplicate of zBZEz1vZdIQ, skip that part) and the Delicious story, which is a clear, jargon-light narrative of client/server/DNS/database growth pains - solid 'how the web works' raw material for a guide to adapt.",
+    "sampled": true
+  },
+  {
+    "id": "tPjNWR8Ir4c",
+    "title": "Horizontal vs Vertical Scaling in Hindi | System Design Basics | Scaling in System Design सीखें",
+    "verdict": "skip",
+    "topics": [],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Hindi-language video; the small.en Whisper transcript is garbled and incoherent (loops like 'value value value value', repeated 'for example, for example') - unwatchable as captions, and per the triage rule a Hindi-language video is a skip for Israeli teens regardless of underlying content.",
+    "sampled": false
+  },
+  {
+    "id": "895XCPFr4-k",
+    "title": "Data Structures, Algorithms and System Design Complete Course 2026 | Learn DS Algo & System Design",
+    "verdict": "skip",
+    "topics": [],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "First 30 min is a near word-for-word duplicate of 8telu1SoCKM (same LinkedIn schema segment, same Delicious scaling story, same load-balancer intro, same phrasing). The parent course is a Data-Structures-and-Algorithms interview prep marathon (583 min), which is out of scope beyond this duplicated opening.",
+    "sampled": true
+  },
+  {
+    "id": "tVwEGkQ6idg",
+    "title": "Introduction to Database Sharding | Complete Sharding Tutorial | System Design Concept | @SCALER",
+    "verdict": "skip",
+    "topics": [],
+    "level": "too advanced",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Database sharding (partitioning data across dozens/hundreds of database machines with shard keys and hash functions) has no analogue in a single Google Sheet backend. The opening motivation ('why one server gets overloaded') covers the same ground as the Delicious story already in 8telu1SoCKM, so nothing new transfers even from the intro.",
+    "sampled": true
+  },
+  {
+    "id": "mJ_JZCKTki8",
+    "title": "CAP Theorem and Caching in System Design Simplified 2026 | Distributed System | Scaler",
+    "verdict": "useful",
+    "topics": ["data", "web"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:11:43", "to": "0:21:24", "what": "Caching explained via a fridge/milk-tea analogy: what a cache is, hit vs miss, browser caching, write-through cache"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Two halves: CAP theorem (consistency-vs-availability tradeoff via a phone-reminder-service analogy) is real distributed-systems territory, skip that half. But the caching half is exactly the 'caching as an idea' the brief calls out - clear, well-analogized, and teen-followable with light guidance on top.",
+    "sampled": false
+  },
+  {
+    "id": "ZotHUoS-RCE",
+    "title": "Uber System Design | High Level Design of Uber, Ola, Lyft, Careem | Software Architecture @SCALER",
+    "verdict": "useful",
+    "topics": ["web", "api"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:16:09", "to": "0:20:35", "what": "HTTP request/response vs an always-open WebSocket connection, explained simply (synchronous vs asynchronous communication)"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Almost entirely Uber-scale HLD (QPS math, geohashing, quad trees, Google S2, functional/non-functional requirement checklists) - way beyond a Sheets-backed app. But the short WebSocket-vs-HTTP segment is a clean, usable explanation of a real API concept a guide could point to.",
+    "sampled": true
+  },
+  {
+    "id": "zBZEz1vZdIQ",
+    "title": "Relational Data Modelling | Schema Design Using Linkedin | Exclusive Tips & Tricks 2026",
+    "verdict": "useful",
+    "topics": ["data"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:00:00", "to": "0:13:35", "what": "Whole video: turning a LinkedIn feature list into a schema - one-to-many vs many-to-many, mapping tables, splitting entities to avoid null-heavy columns"}
+    ],
+    "tool_specific": "SQL",
+    "needs_frames": true,
+    "why": "Clean, complete, focused lesson on schema/relationship design - exactly the database-design skill the brief wants for the Sheets backend. Needs a guide to translate SQL/RDBMS terms ('select star from...', 'entity') into Google Sheets tabs, but the underlying design logic (how to model many-to-many with a link sheet) is directly reusable. Note: this exact segment is duplicated inside both 8telu1SoCKM and 895XCPFr4-k - this standalone version is the best copy to point kids/teacher to.",
+    "sampled": false
+  }
+]

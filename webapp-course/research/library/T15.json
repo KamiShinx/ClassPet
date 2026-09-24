@@ -1,0 +1,698 @@
+[
+  {
+    "id": "H0XScE08hy8",
+    "title": "Debugging JavaScript - Chrome DevTools 101 (Chrome for Developers)",
+    "verdict": "core",
+    "topics": [
+      "debug",
+      "web"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:01:05",
+        "to": "0:06:39",
+        "what": "breakpoints, stepping, watch expressions, scope, and live-editing to fix a real type-coercion bug"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Official Chrome channel, tight 7 min, one relatable bug (string+number coercion) walked start to finish through the exact tool the kids will use.",
+    "sampled": false
+  },
+  {
+    "id": "ZaOZFkHTloM",
+    "title": "Debugging JavaScript in Chrome DevTools | STOP using console log (xplodivity)",
+    "verdict": "useful",
+    "topics": [
+      "debug",
+      "web"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:33",
+        "to": "0:05:28",
+        "what": "breakpoints, watch, call stack, scope basics"
+      },
+      {
+        "from": "0:08:12",
+        "to": "0:10:55",
+        "what": "step vs. step-into vs. step-out, clearer than video 1's version"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Correct and goes deeper than video 1 (step vs step-into, var/let/const global-scope aside), but 12 min and drier - duplicates video 1's ground rather than complementing it.",
+    "sampled": false
+  },
+  {
+    "id": "y0ue4ZZlZwg",
+    "title": "A Beginner's Guide to Chrome Developer Tools | Elements | Console | Network | Performance (Bella Capilla)",
+    "verdict": "skip",
+    "topics": [
+      "debug",
+      "web"
+    ],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "No caption file available (checked caps/ again, still missing) so judged from title only: a third Chrome DevTools walkthrough on top of the two already vetted in this same batch (H0XScE08hy8 = core, ZaOZFkHTloM = useful) - redundant coverage of the same specific topic that can't even be verified for quality, so it doesn't earn a slot over the two already confirmed videos.",
+    "sampled": false
+  },
+  {
+    "id": "fdaqudiSo5c",
+    "title": "#HowICode Rubber Duck Debugging (Google for Developers)",
+    "verdict": "core",
+    "topics": [
+      "debug"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:00:56",
+        "what": "whole video: a coding artist explains rubber-duck debugging and a real bug (step-sequencer counter reset) she found by talking it through"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "56-second real-world illustration of talking through a bug out loud, with a genuine concrete example (a scheduling variable reset at the wrong time) that makes the technique memorable; short enough to have zero padding.",
+    "sampled": false
+  },
+  {
+    "id": "AGWyx96lP8U",
+    "title": "How I Plan My Coding Projects - 9 Steps (Tech With Tim)",
+    "verdict": "core",
+    "topics": [
+      "planning",
+      "data"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:32",
+        "to": "0:09:17",
+        "what": "steps 1-6: goal, user stories, data models, ruthless MVP cut, paper wireframe, thinking about project future (skip the sponsor read 0:03:49-0:04:55)"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Stack-agnostic 9-step process that maps almost 1:1 onto the course (goal -> user stories -> data model -> MVP -> wireframe); skip the sponsor segment and the stack-picking section (React/Mongo/Rust/Django) which doesn't apply to their fixed Apps Script/Sheets stack.",
+    "sampled": false
+  },
+  {
+    "id": "MHqz8oNSraI",
+    "title": "What is MVP? Minimum Viable Product Explained with Real Examples (Eleken)",
+    "verdict": "core",
+    "topics": [
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:33",
+        "to": "0:02:41",
+        "what": "skateboard-to-car metaphor for what an MVP is and isn't"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Best single explanation of MVP for teens: the skateboard-not-half-a-car metaphor plus real Airbnb/Buffer/Uber examples, short and correct.",
+    "sampled": false
+  },
+  {
+    "id": "aGVnI7hdo2E",
+    "title": "How to Use Trello - Full Beginner's Guide (TechZG)",
+    "verdict": "skip",
+    "topics": [
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "Trello",
+    "needs_frames": false,
+    "why": "Pure Trello UI click-through (signup, power-ups, teams) - the course doesn't use kanban tools with Gemini, and it barely explains the underlying task-breakdown concept that would transfer.",
+    "sampled": false
+  },
+  {
+    "id": "pTtt4Ui1OA4",
+    "title": "What is Scope Creep | Explained in 2 min (Productivity Guy)",
+    "verdict": "core",
+    "topics": [
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:02:10",
+        "what": "whole video: what scope creep is, why it happens, how to guard against it"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Short, correct, directly relevant to a fixed-length project - pairs perfectly with the MVP video.",
+    "sampled": false
+  },
+  {
+    "id": "MYrKrJrDTSM",
+    "title": "Edge Cases - Coding Concepts (Coding with Tom)",
+    "verdict": "core",
+    "topics": [
+      "debug",
+      "testing"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:01:41",
+        "what": "digit-counting bug: what an edge case is and how to judge how much to handle"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Clean, correct definition of edge cases with a simple bug and an honest judgment call on how much to handle; the second array-parsing example escalates past beginner level - show only the first half.",
+    "sampled": false
+  },
+  {
+    "id": "MMa4AVdBCZY",
+    "title": "How to Write Test Cases for Manual Testing? (QA Madness)",
+    "verdict": "useful",
+    "topics": [
+      "testing"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:36",
+        "to": "0:03:53",
+        "what": "positive/negative/destructive test types plus the 8-part test case structure"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Correct and the positive/negative/destructive framing transfers fine to a browser game, but the full 8-field enterprise test-case format is overkill for kids - good raw material for the teacher to build a simplified template from.",
+    "sampled": false
+  },
+  {
+    "id": "6jf4T8UQMTk",
+    "title": "Manual Testing Basics for Beginners - Real-Time Example (Scoop Labs)",
+    "verdict": "skip",
+    "topics": [
+      "testing"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:10:36",
+        "to": "0:12:17",
+        "what": "error vs bug vs defect vs failure definitions + what exploratory testing is"
+      }
+    ],
+    "tool_specific": "Jira/Azure DevOps",
+    "needs_frames": false,
+    "why": "Correct but entirely enterprise QA-process content (business analyst, Jira user stories, regression test suites, manual-vs-automation cost tables); rambling and repetitive; almost nothing here maps onto a kid testing their own solo Apps Script app.",
+    "sampled": false
+  },
+  {
+    "id": "hwP7WQkmECE",
+    "title": "Git Explained in 100 Seconds (Fireship)",
+    "verdict": "core",
+    "topics": [
+      "debug",
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:01:39",
+        "what": "the whole 100 seconds: repo, commit, head, branch, merge, merge conflict in one clean pass"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Fast, correct, jargon-light primer that nails the core mental model (commits/branches/merge) in under two minutes; a great hook before any hands-on practice.",
+    "sampled": false
+  },
+  {
+    "id": "r8jQ9hVA2qs",
+    "title": "A brief introduction to Git for beginners | GitHub (GitHub)",
+    "verdict": "skip",
+    "topics": [
+      "debug",
+      "planning"
+    ],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "No caption file available (checked caps/ again, still missing) so judged from title only: this batch already has a vetted concept primer (hwP7WQkmECE, core) and a vetted hands-on walkthrough (tRZGeaHPoaw, useful) covering git - a third unverified 'brief intro' doesn't add enough to justify a slot without being able to confirm its content.",
+    "sampled": false
+  },
+  {
+    "id": "tRZGeaHPoaw",
+    "title": "Git and GitHub Tutorial for Beginners (Kevin Stratvert)",
+    "verdict": "useful",
+    "topics": [
+      "debug",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:17:52",
+        "what": "full local git workflow: init, add, commit, status, diff, staging, restore, log"
+      },
+      {
+        "from": "0:23:12",
+        "to": "0:32:35",
+        "what": "branching, merging back to main, and resolving a real merge conflict"
+      }
+    ],
+    "tool_specific": "GitHub (Issues/PRs/Releases UI)",
+    "needs_frames": true,
+    "why": "Accurate, patient, beginner-safe walkthrough of real git/GitHub commands including a genuine merge conflict resolution; correct but long (45 min), and the back half (GitHub Issues, Projects, Wiki, Security, Releases) is project-management overhead this course doesn't need - trim to the local-git and branch/merge sections.",
+    "sampled": false
+  },
+  {
+    "id": "j_uf3eJtLkw",
+    "title": "API Explained: The Restaurant and Waiter Analogy Revealed! (Ram N Java)",
+    "verdict": "core",
+    "topics": [
+      "api"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:02:22",
+        "what": "whole video: waiter/restaurant analogy for what an API is and why it hides implementation detail"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Short, correct, memorable analogy that gives kids the right mental model for 'API' before they ever write a fetch call; no code, no filler.",
+    "sampled": false
+  },
+  {
+    "id": "Qblfirx_smU",
+    "title": "Learn to Fetch API in JavaScript using PokeAPI | 7 minutes (Arya)",
+    "verdict": "core",
+    "topics": [
+      "api",
+      "debug"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:03:44",
+        "what": "fetch + .then chain returning JSON from PokeAPI, inspecting the response shape"
+      },
+      {
+        "from": "0:06:32",
+        "to": "0:07:05",
+        "what": "key gotcha: fetch does NOT reject on a wrong/bad endpoint, only on network failure - you must check the response yourself"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Tight 7-minute walkthrough of fetch using both .then and async/await on a fun real API; the 'fetch doesn't throw on HTTP errors' point is exactly the debugging trap kids will hit.",
+    "sampled": false
+  },
+  {
+    "id": "zOrejGF0oBA",
+    "title": "JavaScript | How to Fetch Data from an API (Gui Datilio)",
+    "verdict": "useful",
+    "topics": [
+      "api",
+      "ui",
+      "debug"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:34",
+        "to": "0:06:55",
+        "what": "wiring up index.html/styles.css/script.js into a first working fetch + render"
+      },
+      {
+        "from": "0:07:27",
+        "to": "0:11:29",
+        "what": "button click handler reads input, calls the API, injects the result into the DOM"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Good complement to the other fetch video - shows an API result actually landing in a page (input box, button, DOM update) instead of just a console log - but it's slow, meandering, and hits several live typos/bugs that need a guide's narration to stay useful instead of confusing.",
+    "sampled": false
+  },
+  {
+    "id": "dwI5b-wRLic",
+    "title": "The Two Types of Random in Game Design (Game Maker's Toolkit)",
+    "verdict": "core",
+    "topics": [
+      "game-design",
+      "game-feel"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:05:29",
+        "to": "0:08:40",
+        "what": "input vs output randomness defined, with XCOM/roguelike/deckbuilder examples"
+      },
+      {
+        "from": "0:11:18",
+        "to": "0:12:29",
+        "what": "how designers tame randomness so it feels fair: pity timers, guaranteed-good crates, Tetris bag system, Pandemic deck-stacking"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Correct, well-sourced, and directly useful for kids designing loot drops or turn outcomes in a turn-based/idle game - the input-vs-output-randomness distinction is a genuinely transferable design tool, not trivia.",
+    "sampled": false
+  },
+  {
+    "id": "IqxVwvNEp68",
+    "title": "Game Economist Explains How to Implement Faucets and Sinks in a Game (Economics Design)",
+    "verdict": "useful",
+    "topics": [
+      "game-design",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:02",
+        "to": "0:03:17",
+        "what": "faucets vs. sinks defined via concrete examples (battle pass as a sink, timing faucets early/sinks later)"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Correct, transferable economy-design ideas (faucets/sinks, pacing, battle-pass-as-sink) buried in a web3/NFT-heavy interview fragment with no on-screen basics - a guide would need to strip the blockchain talk before kids could use it for a Sheets-backed idle/turn-based currency.",
+    "sampled": false
+  },
+  {
+    "id": "Lu-RjxeDpU8",
+    "title": "Idle Games: The Mechanics and Monetization of Self-Playing Games (GDC Festival of Gaming)",
+    "verdict": "core",
+    "topics": [
+      "game-design",
+      "game-feel",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:12:54",
+        "to": "0:14:36",
+        "what": "why idle games work: progress without interaction, the celebratory 'welcome back' return moment"
+      },
+      {
+        "from": "0:19:58",
+        "to": "0:24:46",
+        "what": "exponential growth + prestige/reset explained with the actual curve math - directly portable to a turn-based/idle Sheets game"
+      },
+      {
+        "from": "0:25:19",
+        "to": "0:26:54",
+        "what": "'make it bumpy' - deliberately uneven pacing curves, plus rapid-iteration/regular-updates as a success factor"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "The single most directly applicable video in the batch - a real GDC talk on exactly the genre (idle/self-playing games with a resource economy) the kids are building, correct and well-explained; only the back-half monetization/ARPU/LTV business-metrics section is over the kids' heads and should be trimmed by a guide.",
+    "sampled": false
+  },
+  {
+    "id": "G1bd75R10m4",
+    "title": "How to Code a Simple State Machine (Unity Tutorial) (Infallible Code)",
+    "verdict": "useful",
+    "topics": [
+      "game-design",
+      "debug"
+    ],
+    "level": "too advanced",
+    "best": [
+      {
+        "from": "0:00:33",
+        "to": "0:01:38",
+        "what": "the problem statement: enum + if-statement state tracking for turn-based combat becomes unmanageable - the exact scenario the kids' turn-based games will hit"
+      }
+    ],
+    "tool_specific": "Unity/C#",
+    "needs_frames": true,
+    "why": "The underlying idea (turn-based combat as explicit states: begin/player-turn/enemy-turn/win/lose, each with its own behavior) maps well onto a JS idle/turn-based game, but the entire explanation is delivered through C# abstract classes, coroutines, IEnumerator and the open-closed principle - too much OOP/Unity syntax for non-coders steering Gemini; only the opening problem-framing transfers cleanly.",
+    "sampled": false
+  },
+  {
+    "id": "4HuI9oHYpNs",
+    "title": "Skeleton Loaders vs Spinners - Which Loading UI Feels Faster? (Coding with Chan)",
+    "verdict": "core",
+    "topics": [
+      "ui",
+      "ux"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:01:40",
+        "what": "whole video: spinners = uncertainty, skeletons = set expectations; rule of thumb skeleton-for-layout vs spinner-for-quick-actions"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Short, correct, and immediately usable - a clean rule of thumb any kid could apply when designing a loading state, with no jargon or tool lock-in.",
+    "sampled": false
+  },
+  {
+    "id": "qa5nWjZggRU",
+    "title": "Design great loading states: what items should my skeleton display? | Tech Takes (Nick Basile)",
+    "verdict": "skip",
+    "topics": [
+      "ui",
+      "ux"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:01:08",
+        "to": "0:02:11",
+        "what": "design-for-the-max-state-then-work-back tip for sizing an unknown-length skeleton list"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Duplicates video 4's exact topic but as a 17-minute rambling design/dev podcast full of professional-workplace tangents (Figma-to-code handoff, an insurance-company workflow, blockchain compute waits) that don't apply to a classroom Apps Script project - one good nugget (design for the max item count) doesn't justify the runtime given video 4 already covers the core rule better.",
+    "sampled": false
+  },
+  {
+    "id": "8ZtInClXe1Q",
+    "title": "How NOT to Store Passwords! - Computerphile",
+    "verdict": "skip",
+    "topics": [
+      "data",
+      "web"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:06:37",
+        "to": "0:08:16",
+        "what": "hashing + salting explained clearly, with rainbow tables as the attack it defeats"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Clear and correct build-up from plaintext to encryption to hash+salt with good analogies, but it's the weaker, older sibling of video 7 (references a 2013 Adobe breach, never names bcrypt/argon2 as the actual modern answer) - duplicated and superseded.",
+    "sampled": false
+  },
+  {
+    "id": "mQHiil7R2Wc",
+    "title": "You're Storing Passwords Wrong. Here's The Fix (LearnThatStack)",
+    "verdict": "useful",
+    "topics": [
+      "data",
+      "web"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:04:25",
+        "to": "0:07:44",
+        "what": "salting defeats rainbow tables + why bcrypt/argon2 (deliberately slow, memory-hard) beat fast hashes like SHA-256 for passwords"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Correct, current, and well-taught (meat-grinder analogy for one-way hashing is genuinely teen-accessible), but it's solving real backend security engineering - the kids' 'storing passwords in a Sheet' problem is much simpler, so this is best used as teacher background/AI-literacy material rather than something kids implement.",
+    "sampled": false
+  },
+  {
+    "id": "IO11PLB2UV8",
+    "title": "Demo Day: how to deliver a startup pitch deck (Slidebean)",
+    "verdict": "skip",
+    "topics": [
+      "career"
+    ],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Investor demo-day pitch mechanics (5-second hooks, hockey-stick growth slides, VC/accelerator dynamics, fundraising slides) - pure startup-investor content, exactly the career/pitch-deck material the brief says to skip; nothing here maps to a kid showing a game to classmates.",
+    "sampled": false
+  },
+  {
+    "id": "v-yTR-BgQGE",
+    "title": "How to Build a Landing Page (Full Guide for Beginners) (Hostinger Academy)",
+    "verdict": "skip",
+    "topics": [
+      "ui"
+    ],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Whole video is conversion-marketing copywriting (headline formulas, social proof, CTA placement) for a Hostinger product landing page - about persuading a buyer, not designing an app/game UI; off-topic generic marketing tutorial as the brief warned to watch for.",
+    "sampled": false
+  },
+  {
+    "id": "LPZh9BOjkQs",
+    "title": "Large Language Models explained briefly (3Blue1Brown)",
+    "verdict": "core",
+    "topics": [
+      "ai"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:03:33",
+        "what": "How LLMs predict the next word, probability sampling, and what training/parameters actually are - the accessible core"
+      },
+      {
+        "from": "0:04:22",
+        "to": "0:06:32",
+        "what": "Transformers/attention in one pass - correct but denser, good for a guided second watch"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Rigorous and correct top-tier explainer; teen-followable with an adult unpacking a few terms (backpropagation, parameters, attention), and the animated diagrams carry real teaching weight that the transcript alone loses.",
+    "sampled": false
+  },
+  {
+    "id": "u8tjByJtFrg",
+    "title": "Why Does AI Hallucinate? The Probability Problem Behind LLM Hallucinations, Explained (Harper Carroll AI)",
+    "verdict": "core",
+    "topics": [
+      "ai",
+      "debug"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:00:00",
+        "to": "0:02:12",
+        "what": "'Cat in the hat vs. cat in the house' - why sampling from a probability distribution produces hallucination"
+      },
+      {
+        "from": "0:03:49",
+        "to": "0:04:21",
+        "what": "Mitigation: grounding the model with web search / a database (why Gemini can still be wrong and what reduces it)"
+      }
+    ],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "Short, correct, and entirely carried by a clean spoken analogy no visuals needed - directly useful for kids who'll see Gemini confidently invent a wrong answer while vibe-coding; complements rather than duplicates the 3Blue1Brown video.",
+    "sampled": false
+  },
+  {
+    "id": "b49qBJM8rTk",
+    "title": "Vibe Coding Best Practices in 2026 (Full Tutorial) (Bo Sar)",
+    "verdict": "useful",
+    "topics": [
+      "planning",
+      "testing",
+      "debug",
+      "ai"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:01:08",
+        "to": "0:02:14",
+        "what": "Write a 10-minute mini-PRD before prompting - what/who/core features/scope, so the AI isn't guessing"
+      },
+      {
+        "from": "0:03:55",
+        "to": "0:05:35",
+        "what": "Test real user flows as you build instead of waiting until the end"
+      },
+      {
+        "from": "0:05:35",
+        "to": "0:07:13",
+        "what": "Git/version control as the safety net when AI changes more than you asked for, incl. rollback checkpoints"
+      }
+    ],
+    "tool_specific": "Emergent (paid AI app-builder, ~14 min of the 26 is a product demo)",
+    "needs_frames": false,
+    "why": "Three of the six 'best practices' (plan first, test continuously, git as safety net) are genuinely correct and exactly what these kids need for Gemini+Apps Script; the rest (Stripe payments and auth as 'the foundation of every app', picking integrated SaaS stacks, 'you're building a business') is irrelevant or actively misleading for a Sheets-backed classroom game, and roughly half the runtime is a sponsored demo of one paid tool - pull the three good clips, skip the rest.",
+    "sampled": false
+  },
+  {
+    "id": "QlSJCCctsnw",
+    "title": "How to Write a Good Bug Report (Step-by-Step Guide + Real Examples) | ClickUp",
+    "verdict": "useful",
+    "topics": [
+      "debug",
+      "testing"
+    ],
+    "level": "teen-friendly",
+    "best": [
+      {
+        "from": "0:01:06",
+        "to": "0:03:46",
+        "what": "The six-part bug report: descriptive title, priority/severity, environment details, reproduction steps, screenshots/video"
+      }
+    ],
+    "tool_specific": "ClickUp",
+    "needs_frames": false,
+    "why": "The checklist itself (specific title, repro steps, environment info, visual proof) is correct, simple, and exactly what a kid should do when reporting a bug to a teammate or describing one to Gemini, but the video is a ClickUp ad from beginning to end - needs our own write-up around the same six steps, not the video itself.",
+    "sampled": false
+  },
+  {
+    "id": "mWl99g9El2A",
+    "title": "3 Tips to ask question on Stack Overflow the right way to get answers (1littlecoder)",
+    "verdict": "useful",
+    "topics": [
+      "debug",
+      "planning"
+    ],
+    "level": "needs a guide",
+    "best": [
+      {
+        "from": "0:02:45",
+        "to": "0:05:31",
+        "what": "What a minimal reproducible example is and why it gets answers"
+      },
+      {
+        "from": "0:05:31",
+        "to": "0:07:45",
+        "what": "Search for duplicates / check docs first, then show what you already tried"
+      }
+    ],
+    "tool_specific": "Stack Overflow",
+    "needs_frames": false,
+    "why": "The underlying habit (isolate the smallest failing example, say what you already tried, don't ask what's already answered) is exactly the skill for getting good debugging help from Gemini, but it's framed entirely around Stack Overflow, delivered a bit ramblingly, and needs a guide to retarget it at 'how to ask Gemini' rather than 'how to ask this website'.",
+    "sampled": false
+  }
+]

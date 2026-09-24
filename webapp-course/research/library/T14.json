@@ -1,0 +1,152 @@
+[
+  {
+    "id": "wIuVvCuiJhU",
+    "title": "world's shortest UI/UX design course",
+    "verdict": "core",
+    "topics": ["ui", "ux", "planning"],
+    "level": "teen-friendly",
+    "best": [
+      {"from": "0:00:00", "to": "0:06:37", "what": "whole video: user flow -> wireframe -> design system -> design principles -> copy -> illustrations, one real project start to finish"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Tight, correct, practical walk through the whole design process on one real project; names tools (Figma, Balsamiq) in passing but teaches the transferable steps, not tool mechanics.",
+    "sampled": false
+  },
+  {
+    "id": "EcbgbKtOELY",
+    "title": "Every UI/UX Concept Explained in Under 10 Minutes",
+    "verdict": "useful",
+    "topics": ["ui", "ux"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "nocaps, judged from title only. Same channel (Kole Jain) as HE4rLEQpiXY, which was strong and conceptual, so likely a decent rapid-fire glossary video, but unverified -- worth a quick human watch before slotting as core.",
+    "sampled": false
+  },
+  {
+    "id": "c9Wg6Cb_YlU",
+    "title": "UI / UX Design Tutorial – Wireframe, Mockup & Design in Figma",
+    "verdict": "skip",
+    "topics": ["ui"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "Figma",
+    "needs_frames": false,
+    "why": "nocaps, judged from title only: this is an 86-minute Figma software tutorial (freeCodeCamp). Kids won't use Figma -- Gemini builds the UI -- and wIuVvCuiJhU already covers the transferable concepts in 7 minutes.",
+    "sampled": false
+  },
+  {
+    "id": "YlN28RNChl0",
+    "title": "This Video Will Take You From Junior to Senior UX/UI Designer",
+    "verdict": "core",
+    "topics": ["ui", "ux"],
+    "level": "teen-friendly",
+    "best": [
+      {"from": "0:00:32", "to": "0:08:22", "what": "sleep-tracker app redesigned four times: personalization, visual hierarchy, emoji feedback, sliders -- a clean before/after case study"},
+      {"from": "0:09:30", "to": "0:14:32", "what": "banking transfer screen redesign: reducing steps, recognition over recall, showing new balance -- another strong before/after case study"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Repeated junior-vs-senior before/after redesigns make abstract principles (hierarchy, recognition over recall, progressive disclosure) concrete and are genuinely teen-followable; two ad breaks for the creator's own paid playbook/course should be skipped past.",
+    "sampled": false
+  },
+  {
+    "id": "HE4rLEQpiXY",
+    "title": "How to think like a GENIUS UI/UX designer",
+    "verdict": "core",
+    "topics": ["ui", "ux", "planning"],
+    "level": "teen-friendly",
+    "best": [
+      {"from": "0:00:00", "to": "0:04:52", "what": "whole video: design from user intent, respect layout conventions, structure content, animation with purpose, design systems as shared language"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Dense but clear conceptual video (intent-first design, progressive disclosure, why design systems matter) with a real Airbnb-style example carried through; one short sponsor read (Mobin) is easy to skip.",
+    "sampled": false
+  },
+  {
+    "id": "hJHvdBlSxug",
+    "title": "How The Web Works - The Big Picture",
+    "verdict": "core",
+    "topics": ["web", "api"],
+    "level": "teen-friendly",
+    "best": [
+      {"from": "0:00:00", "to": "0:12:26", "what": "whole video: domain -> DNS -> IP -> request/response -> HTML/CSS/JS -> HTTP/HTTPS -> server-side code -> apps and JSON -> websockets"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "The cleanest, most efficient explanation of client-server, DNS, HTTP/HTTPS and where JSON/APIs fit in the group -- exactly the mental model the course needs, in 12 minutes with no padding.",
+    "sampled": false
+  },
+  {
+    "id": "zjfViRCjT5U",
+    "title": "How a web application works",
+    "verdict": "useful",
+    "topics": ["web", "api"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "nocaps, judged from title only. On-topic and mid-length (35 min); likely overlaps heavily with hJHvdBlSxug so treat as a backup/alternate rather than adding both -- watch before deciding if it adds anything hJHvdBlSxug doesn't.",
+    "sampled": false
+  },
+  {
+    "id": "zN8YNNHcaZc",
+    "title": "How does the internet work? (Full Course)",
+    "verdict": "skip",
+    "topics": ["web"],
+    "level": "too advanced",
+    "best": [
+      {"from": "0:00:00", "to": "0:12:37", "what": "LAN/switch vs router basics, if a segment must be salvaged for a networking side-note"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Sampled (102 min). This is a network-hardware course (switches, routers, ISPs, submarine cables, VPN tunneling, peering), not web/app development -- off-topic for kids building Sheets-backed web apps, extremely repetitive/padded, and hJHvdBlSxug already covers the actually-needed 'how does my app talk to a server' concept in 12 focused minutes.",
+    "sampled": true
+  },
+  {
+    "id": "WXsD0ZgxjRw",
+    "title": "APIs for Beginners - How to use an API (Full Course / Tutorial)",
+    "verdict": "core",
+    "topics": ["api", "web", "debug"],
+    "level": "needs a guide",
+    "best": [
+      {"from": "0:00:00", "to": "0:17:43", "what": "what an API/interface is, local vs remote APIs, why REST won, told through everyday analogies (remote controls, buttons, streaming apps) -- excellent standalone watch"},
+      {"from": "3:02:16", "to": "3:05:22", "what": "closing 'RESTful scavenger hunt' review that recaps every REST constraint against the app they just built"}
+    ],
+    "tool_specific": "Twilio, Vue, Node/npm",
+    "needs_frames": false,
+    "why": "Sampled (3h07m). The conceptual first ~18 minutes is the best explanation of APIs in the whole group and is fully teen-friendly on its own; the long middle build (Twilio account, curl, npm, VS Code, Vue) is well taught but needs an adult to set up accounts/installs first, so treat as a guided build-along, not a solo watch.",
+    "sampled": true
+  },
+  {
+    "id": "oYxTTirKY8M",
+    "title": "System Design Explained: APIs, Databases, Caching, CDNs, Load Balancing & Production Infra",
+    "verdict": "useful",
+    "topics": ["api", "data", "web", "debug"],
+    "level": "too advanced",
+    "best": [
+      {"from": "0:00:00", "to": "0:06:01", "what": "single-server setup: domain -> DNS -> IP -> HTTP request/response, HTML for browsers vs JSON for apps"},
+      {"from": "0:06:01", "to": "0:12:37", "what": "SQL vs NoSQL databases: tables/rows/joins/ACID vs document/key-value/graph stores, and when to use which -- directly useful for thinking about Sheets-as-database"},
+      {"from": "1:12:42", "to": "1:15:27", "what": "HTTP status codes (200/201/400/401/404/500) and REST URL best practices (plural nouns, proper verbs)"}
+    ],
+    "tool_specific": "none",
+    "needs_frames": true,
+    "why": "Sampled (124 min). This is a senior-engineer / interview-prep system-design course -- load balancing, message queues, gRPC, OAuth2, CSRF/XSS defenses are well beyond a 14-15 y/o building an Apps Script game, but three early segments (client-server basics, SQL vs NoSQL, HTTP status codes) are clean, correct and directly relevant to the guide-writer, and could be clipped for kids with narration.",
+    "sampled": true
+  },
+  {
+    "id": "cpkd4EYYQ8o",
+    "title": "How the Web Works",
+    "verdict": "skip",
+    "topics": ["web"],
+    "level": "teen-friendly",
+    "best": [],
+    "tool_specific": "none",
+    "needs_frames": false,
+    "why": "41-second fragment (looks like it was clipped from a longer Udacity course) that only restates 'browser and server talk over HTTP, server returns HTML' in one breath -- too thin to stand alone and fully redundant with hJHvdBlSxug's much fuller 12-minute version.",
+    "sampled": false
+  }
+]

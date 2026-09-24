@@ -1,0 +1,210 @@
+[
+ {
+  "id": "kBXQZMmiA4s",
+  "title": "The Internet: HTTP & HTML",
+  "verdict": "core",
+  "topics": [
+   "backend",
+   "http",
+   "client-server",
+   "cookies",
+   "https"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:01:15",
+    "to": "0:04:54",
+    "what": "browser asks a server: GET /login returns HTML, a form sends a POST, the server replies + a cookie = its ID card for you"
+   },
+   {
+    "from": "0:04:54",
+    "to": "0:06:09",
+    "what": "HTTPS, the lock, certificates"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "The single best 'what is a backend' video for this course: GET and POST are literally doGet/doPost, and the cookie bit explains how a server remembers you. 7 min, teen level, made for classrooms.",
+  "sampled": false
+ },
+ {
+  "id": "5o8CwafCxnU",
+  "title": "The Internet: IP Addresses & DNS",
+  "verdict": "core",
+  "topics": [
+   "internet",
+   "dns",
+   "urls",
+   "protocols"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:01:24",
+    "to": "0:02:38",
+    "what": "every device has an address; visiting a site = your computer asking another computer"
+   },
+   {
+    "from": "0:03:58",
+    "to": "0:05:07",
+    "what": "DNS: names -> addresses, acted out as a phone-around skit"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "Explains what a URL actually points to (their /exec link is a real address on a real server). The DNS skit is short enough to play in class.",
+  "sampled": false
+ },
+ {
+  "id": "Dxcc6ycZ73M",
+  "title": "What is the Internet?",
+  "verdict": "useful",
+  "topics": [
+   "internet",
+   "history"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:00",
+    "to": "0:01:23",
+    "what": "kids guess what the internet is, then Vint Cerf: messages cut into blocks, sent every direction"
+   },
+   {
+    "from": "0:01:23",
+    "to": "0:02:34",
+    "what": "who is in charge? nobody / everybody: a network of independent networks"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "3.7-min hook for the series; the street interviews are funny for 14-year-olds. Opener, not content.",
+  "sampled": false
+ },
+ {
+  "id": "AYdF7b3nMto",
+  "title": "The Internet: Packets, Routing & Reliability",
+  "verdict": "useful",
+  "topics": [
+   "internet",
+   "packets",
+   "tcp",
+   "reliability"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:01:58",
+    "to": "0:03:07",
+    "what": "space shuttle on a fleet of trucks = a big file split into packets"
+   },
+   {
+    "from": "0:04:26",
+    "to": "0:05:01",
+    "what": "TCP as signed delivery: missing packets get resent"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "Good analogies, one level below what they need; library page 'how does data travel'.",
+  "sampled": false
+ },
+ {
+  "id": "ZhEf7e4kopM",
+  "title": "The Internet: Wires, Cables & Wifi",
+  "verdict": "useful",
+  "topics": [
+   "internet",
+   "bits",
+   "bandwidth",
+   "latency"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:02:58",
+    "to": "0:03:31",
+    "what": "bandwidth vs latency: how much per second vs how long one trip takes"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "Mostly physics of bits; the latency minute is the one useful link to 'why does my Apps Script call take a second'.",
+  "sampled": false
+ },
+ {
+  "id": "LVV_93mBfSU",
+  "title": "The Internet: How Search Works",
+  "verdict": "useful",
+  "topics": [
+   "search",
+   "index",
+   "database",
+   "ranking"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:01:16",
+    "to": "0:02:24",
+    "what": "spider crawls ahead of time into a search index so answers are instant"
+   },
+   {
+    "from": "0:02:24",
+    "to": "0:03:30",
+    "what": "ranking algorithms, PageRank"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": true,
+  "why": "The index-built-in-advance idea maps to 'precompute into a Sheet tab instead of scanning every row'; nice optional page.",
+  "sampled": false
+ },
+ {
+  "id": "ZghMPWGXexs",
+  "title": "The Internet: Encryption & Public Keys",
+  "verdict": "useful",
+  "topics": [
+   "security",
+   "encryption"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:00:46",
+    "to": "0:02:39",
+    "what": "Caesar cipher, keys, why brute force works on short keys"
+   },
+   {
+    "from": "0:04:32",
+    "to": "0:05:47",
+    "what": "public/private key as a mailbox with a deposit slot"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": false,
+  "why": "Well made and teen-friendly, but security is not the course (Ben: no cyber). Keep only as an optional curiosity page.",
+  "sampled": false
+ },
+ {
+  "id": "AuYNXgO_f3Y",
+  "title": "The Internet: Cybersecurity & Crime",
+  "verdict": "skip",
+  "topics": [
+   "security"
+  ],
+  "level": "teen-friendly",
+  "best": [
+   {
+    "from": "0:01:53",
+    "to": "0:04:18",
+    "what": "viruses, DDoS, phishing"
+   }
+  ],
+  "tool_specific": "none",
+  "needs_frames": false,
+  "why": "Digital-citizenship content; nothing they build in this course touches it and Ben ruled out cyber topics.",
+  "sampled": false
+ }
+]

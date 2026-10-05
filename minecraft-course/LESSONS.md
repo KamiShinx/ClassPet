@@ -102,21 +102,21 @@ My estimate, unverified: the first start downloads about 1-1.5 GB per laptop and
 **Goal:** by the end, every laptop has Minecraft running with the kid's (still empty) mod in it, every kid has
 opened the Gem, and every kid has a world card on paper.
 **Ships:** a screenshot of the title screen; a filled world card.
-**You bring:** the short link on the board; printed world cards; 6-8 black mob silhouettes (printed or on the
+**You bring:** the USB sticks; printed world cards; 6-8 black mob silhouettes (printed or on the
 projector); a working mod on your own laptop to show; the Gem already shared with the class.
 
 ### The plan (65 minutes)
 
 | Min | What happens | Notes |
 |---|---|---|
-| 0-10 | **Start the download.** Laptops numbered; Windows login; the steps from the board (below). Walk the room until all 8 black windows are running | The only part where every kid needs you. Everything after can be interrupted |
+| 0-10 | **Start the install from the sticks.** Laptops numbered; Windows login; the steps from the board (below). One stick installs one laptop at a time (about 5 minutes), so with 3 sticks the last laptop starts around minute 10. Start talking once the first round is running | The only part where kids need you one by one. Everything after can be interrupted. More sticks = a shorter start |
 | 10-15 | **"What you'll make."** Show your working mod on the projector: a weird item, a creature, a tooltip in Hebrew. Then the end: in lesson 20 families come and play your world, and you explain it | The hook. Keep it short |
 | 15-25 | **Vague vs specific, live.** In Gemini on the projector, first type "תבנה לי חרב". Show what comes back (generic, maybe old code that won't even work). Then paste a filled card. Kids vote which answer is better and say why | The core of the course, on day 1 |
-| 25-30 | **"Gemini lies."** One example of a confident wrong answer (I'll prepare one from 26.2). Introduce the class Gemini-Lied log: you get to write a lie in it only when you caught it **and** fixed it | Check the black windows on your way |
+| 25-30 | **"Gemini lies."** One example of a confident wrong answer (the old-Forge code from the demo, or the one in the teacher checklist). Introduce the class Gemini-Lied log: you get to write a lie in it only when you caught it **and** fixed it | Check the black windows on your way |
 | 30-45 | **The world card, on paper** (worksheet below). Alone for 10 minutes, then 5 in pairs: your partner reads your card and asks one question you can't answer yet | No laptops needed. If a kid finishes early: a second theme |
-| 45-50 | **Silhouette game.** Black shapes of vanilla mobs; kids guess. "How did you know it was a creeper?" That's tip card #1: a creature is recognised by its outline from far away | Fills time if the download is slow; cut it if it's fast |
+| 45-50 | **Silhouette game.** Black shapes of vanilla mobs; kids guess. "How did you know it was a creeper?" That's tip card #1: a creature is recognised by its outline from far away | Fills time if the install is slow; cut it if it's fast |
 | 50-58 | **First look.** Whoever has Minecraft open: create a Creative world, open Mods, find their mod, take a screenshot. Everyone: log in to Gemini with the school account, open the Gem, send "שלום". Whatever the Gem asks back, they answer one question | Checks the AI works for every kid in lesson 1, not lesson 2 |
-| 58-65 | **Close.** Cards into the folder. Laptops plugged in. If a download hasn't finished: leave the laptop open and running | Write down which laptop numbers didn't finish |
+| 58-65 | **Close.** Cards into the folder. Laptops plugged in. If an install hasn't finished: leave the laptop open and running | Write down which laptop numbers didn't finish |
 
 **If it all finishes in 20 minutes:** move the silhouette game earlier and add "the first look" sooner. Nothing
 else changes.
@@ -125,12 +125,12 @@ else changes.
 ### On the board (Hebrew, for the kids)
 
 > **מתקינים את מיינקראפט**
-> 1. פותחים את הדפדפן ונכנסים לקישור שעל הלוח.
-> 2. לוחצים על `install` והקובץ יורד.
-> 3. לוחצים פעמיים על הקובץ שירד.
->    אם קופץ חלון כחול "Windows protected your PC": לוחצים **More info** ואז **Run anyway**.
-> 4. כותבים את המספר של המחשב (1 עד 8) ולוחצים Enter.
-> 5. נפתח חלון שחור שכותב הרבה דברים. **לא סוגרים אותו!** הוא מוריד את המשחק.
+> 1. מכניסים את הדיסק און קי למחשב.
+> 2. פותחים את סייר הקבצים (Win + E) ולוחצים על הדיסק און קי, ברשימה בצד שמאל.
+> 3. לוחצים פעמיים על `install-from-usb`.
+>    אם קופץ חלון כחול ״Windows protected your PC״: לוחצים **More info** ואז **Run anyway**.
+> 4. נפתח חלון שחור. **לא סוגרים אותו!**
+> 5. כשכתוב You can take the stick out now, מעבירים את הדיסק למי שעוד לא התקין.
 > 6. כשמיינקראפט נפתח לבד, סיימתם. מרימים יד.
 
 ### World card worksheet (Hebrew, printed)
@@ -138,13 +138,13 @@ else changes.
 > **כרטיס העולם שלי** · מחשב מספר: ___
 >
 > **העולם שלי בשש מילים או פחות:** ______________________
-> (דוגמה: "ברברים על כלבי מלחמה, כולם לובשים פרווה")
+> (דוגמה: ״ברברים על כלבי מלחמה, כולם בפרוות״)
 >
 > **זה כמו ___ במיינקראפט הרגיל, חוץ מזה ש ___**
 >
 > **שלושה צבעים של העולם שלי:** ⬜ ______ ⬜ ______ ⬜ ______
 >
-> **דבר אחד בעולם שלי שאף אחד לא מסביר:** ______________________
+> **דבר אחד בעולם שלי שאף אחד לא יודע להסביר:** ______________________
 > (דלת נעולה, מגדל שאי אפשר להגיע אליו...)
 >
 > **שאלה שהשותף שלי שאל ואין לי עדיין תשובה:** ______________________

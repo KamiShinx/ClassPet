@@ -39,7 +39,6 @@ function renderHome(){
             : `<div class="lcard soon"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</div>`;
         }).join("")}</div></div></section>`).join("")}
     </div>
-    <div class="foot"><span>נבנה לקורס המודים של MAKE</span></div>
   </div>`;
   app.querySelector("#seat").addEventListener("change", e => LS.set("seat", e.target.value));
   app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); renderHome(); });
@@ -68,7 +67,7 @@ function renderPlayer(){
         ${s.why?`<div class="box why"><b>למה?</b>${s.why}</div>`:""}
         ${s.expect?`<div class="box expect"><b>מה אמור לקרות</b>${s.expect}</div>`:""}
         ${s.note?`<div class="box note"><b>שימו לב</b>${s.note}</div>`:""}
-        ${(s.hints||s.stuck)?`<div class="helprow">${s.hints?`<button class="btn ghost" id="hint">רמז</button>`:""}${s.stuck?`<button class="btn ghost" id="stuck">אני תקוע</button>`:""}</div><div class="reveal" id="reveal"></div>`:""}
+        ${(s.hints||s.stuck)?`<div class="helprow">${s.hints?`<button class="btn ghost" id="hint">רמז</button>`:""}${s.stuck?`<button class="btn ghost" id="stuck">נתקעתי</button>`:""}</div><div class="reveal" id="reveal"></div>`:""}
         <div class="chal"><h3>אתגרי השיעור</h3><small>מסמנים מה שסיימתם. זה נשמר על המחשב הזה.</small>
           ${L.challenges.map(c=>`<label for="ch-${c.id}"><input type="checkbox" id="ch-${c.id}" data-ch="${c.id}" ${ch[c.id]?"checked":""}><span><b>${c.t}</b> <small>(${c.lvl})</small><br>${c.d}</span></label>`).join("")}
         </div>

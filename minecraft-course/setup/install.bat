@@ -128,12 +128,6 @@ powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=N
 echo  Desktop: "Minecraft - Hub" for the kids, "Minecraft - Teacher" for you
 echo.
 :hub_skip
-> "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
-type "%ROOT%\hub\hub.html" >> "%ROOT%\hub\index.html"
-powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Hub.lnk\"); $l.TargetPath='%ROOT%\hub\index.html'; $l.Save()"
-echo  Course hub: "Minecraft - Hub" on the desktop
-echo.
-:hub_skip
 
 rem ---- tell Gradle exactly where Java 25 is, so it never searches or downloads one ----
 set "ROOTF=%ROOT:\=/%"

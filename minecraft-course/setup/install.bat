@@ -93,6 +93,25 @@ powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=N
 echo  Desktop buttons: "Minecraft - Play" and "Minecraft - Code"
 echo.
 
+rem ---- the course hub: lessons and projector mode, runs offline ----
+mkdir "%ROOT%\hub" 2>nul
+curl -L --fail -s -o "%ROOT%\hub\hub.html" "https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/hub/hub.html"
+if errorlevel 1 goto :hub_skip
+> "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
+type "%ROOT%\hub\hub.html" >> "%ROOT%\hub\index.html"
+powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Hub.lnk\"); $l.TargetPath='%ROOT%\hub\index.html'; $l.Save()"
+echo  Course hub: "Minecraft - Hub" on the desktop
+echo.
+:hub_skip
+
+rem ---- tell Gradle exactly where Java 25 is, so it never searches or downloads one ----
+set "ROOTF=%ROOT:\=/%"
+mkdir "%ROOT%\gradle-home" 2>nul
+> "%ROOT%\gradle-home\gradle.properties" (
+  echo org.gradle.java.installations.paths=%ROOTF%/jdk
+  echo org.gradle.java.installations.auto-download=false
+)
+
 rem ---- 4. first start: downloads Minecraft and builds. The long part. ----
 echo  [4/4] Downloading Minecraft and building the mod.
 echo        This is the long part. Minecraft opens by itself at the end.
@@ -101,7 +120,7 @@ set "JAVA_HOME=%ROOT%\jdk"
 set "PATH=%ROOT%\jdk\bin;%PATH%"
 set "GRADLE_USER_HOME=%ROOT%\gradle-home"
 cd /d "%ROOT%\mod"
-call gradlew.bat runClient
+call gradlew.bat runClient --no-configuration-cache
 if errorlevel 1 (echo  ERROR: the build or the game failed. Scroll up for the first red ERROR line. & goto :fail)
 
 echo.

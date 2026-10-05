@@ -23,6 +23,7 @@ echo.
 
 echo  [2/3] Desktop buttons ...
 powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Play.lnk\"); $l.TargetPath='%ROOT%\play.bat'; $l.WorkingDirectory='%ROOT%'; $l.Save(); $l=$s.CreateShortcut(\"$d\Minecraft - Code.lnk\"); $l.TargetPath='%ROOT%\code.bat'; $l.WorkingDirectory='%ROOT%'; $l.Save()"
+if exist "%ROOT%\hub\index.html" powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Hub.lnk\"); $l.TargetPath='%ROOT%\hub\index.html'; $l.Save()"
 echo  [2/3] "Minecraft - Play" and "Minecraft - Code" are on the desktop
 echo.
 

@@ -1,5 +1,9 @@
 # Lesson 1, from zero
 
+> **Update (5 Oct, later): no Gems.** Google replaces Gems with Skills on 17 Nov 2026, and Skills are 18+ only.
+> Instead, the hub's "להעתיק לג׳מיני" button copies the course rules plus the kid's code into any normal Gemini chat.
+> Sections 2-3 and 6 about making a Gem are obsolete.
+
 > For you, the teacher. No assumptions: every piece is explained once, in plain words. Write under any `💬` line
 > (or start a line with `BEN:`), then tell me "done". Nothing here is final, and nothing for lesson 2 happens until
 > this makes sense to you.

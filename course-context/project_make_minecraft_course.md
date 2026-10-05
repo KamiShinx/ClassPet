@@ -86,3 +86,10 @@ icon now also goes in the Start menu. Lesson 2 (built, in the hub) is paused. Wr
 for him. Rule for next sessions: explain every piece in plain words before building more; one thing at a time.
 Also built today: forgiving paste (fixes package/imports, merges lone Kit.item lines), copy-my-code button, 16x16
 pixel editor in the hub. Ben worries Gemini will hand kids a weak Flash model; design assumes it.
+
+**5 Oct, last: Gems dropped.** Ben found that Google replaces Gems with "Skills" on 17 Nov 2026; Skills are 18+ only and need
+Keep Activity, so the kids lose Gems as the course starts. Now: the hub button "להעתיק לג׳מיני" copies the course rules +
+the kid's current code + a "מה אני רוצה" heading; the kid pastes into any normal Gemini chat and types the request.
+Every message carries its own rules, so it works with any account and any (weak, forgetful) model. Lesson 1 steps:
+"מה זה ג׳מיני" (screen picture), "איך מדברים עם ג׳מיני בקורס", "מדברים עם ג׳מיני". Rules live once: GEM_TEXT in
+hub/content.js; make_starter_zip.py writes starter/mod/tools/rules.txt from it.

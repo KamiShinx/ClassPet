@@ -126,7 +126,7 @@ function Invoke-Action([string]$name, [string]$query) {
         }
         'copy-code' {
             Write-Clip (Get-KidCode $root)
-            return New-Result $true 'הקוד שלכם הועתק. עוברים לג׳מיני, כותבים מה רוצים, ואז Ctrl+V.'
+            return New-Result $true 'הועתקו החוקים והקוד שלכם. בג׳מיני לוחצים Ctrl + V, ומתחת כותבים מה אתם רוצים.'
         }
         'copy-error' {
             if ($state.error) { Write-Clip $state.error }

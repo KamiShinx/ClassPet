@@ -120,7 +120,7 @@ function dockHTML(){
   return `<div class="dock">
     <div class="dock-btns">
       <button class="dbtn go" data-act="paste" ${busy?"disabled":""}>${ICON.paste}<span>הדבקה מג׳מיני ושחק</span></button>
-      <button class="dbtn" data-act="copy-code" ${s.phase==="off"?"disabled":""}>${ICON.code}<span>להעתיק את הקוד שלי</span></button>
+      <button class="dbtn" data-act="copy-code" ${s.phase==="off"?"disabled":""}>${ICON.code}<span>להעתיק לג׳מיני</span></button>
       <button class="dbtn" data-act="play" ${busy?"disabled":""}>${ICON.play}<span>שחק</span></button>
       <button class="dbtn" data-act="undo" ${busy?"disabled":""}>${ICON.undo}<span>ביטול ההדבקה</span></button>
       <button class="dbtn" data-act="versions" aria-expanded="${DOCK.vopen}" ${s.phase==="off"?"disabled":""}>${ICON.vers}<span>גרסאות</span></button>
@@ -162,7 +162,7 @@ async function act(name){
   try {
     const r = await fetch("/api/" + name, { method:"POST", headers:{ "X-Make":"1" }, cache:"no-store" });
     const j = await r.json();
-    setDock({ phase:j.phase, message: j.ok ? j.message : j.result, error:j.error });
+    setDock({ phase:j.phase, message: (j.ok && (name === "paste" || name === "play")) ? j.message : j.result, error:j.error });
     if (DOCK.vopen) loadVersions();
   } catch(e){ poll(); }
 }

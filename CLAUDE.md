@@ -41,7 +41,7 @@ of where to paste, expected result). Build the COURSE before the hub.
 8 kids aged 11–13, 20 weeks, Minecraft 26.2 / NeoForge, Hebrew kid text. **TOP PRIORITY (5 Oct).** Kids use **school
 laptops that stay at school** (no home install; lesson 1 = install while Ben talks). Read `LESSONS.md` first (current plan
 + calls made 5 Oct, awaiting Ben's 💬), then `HANDOFF.md`, `04-creative-course-design.md`, `05-ministry-pedagogy-applied.md`.
-Antigravity (18+) replaced 5 Oct by the Gemini web app via one teacher-made Gem; kids copy whole files and press the desktop button Paste & Play (no editor)
+Antigravity (18+) replaced 5 Oct by the plain Gemini web app. **No Gems** (Google replaces them with 18+ "Skills" on 17 Nov 2026): the hub's "להעתיק לג׳מיני" button copies the course rules (GEM_TEXT in `hub/content.js`, also `starter/mod/tools/rules.txt`) plus the kid's code into any chat; kids paste Gemini's answer with the hub's paste button (no editor)
 (`LESSONS.md` §1). Cards on paper for now. Install works on Ben's laptop (`setup/install.bat`); starter project in
 `starter/` (ships as `setup/starter.zip`). **STATE (5 Oct, late): Ben said he's lost ("this course is for humans"). Lesson 2 is PAUSED.** First he reads
 `LESSON1_GUIDE.md` (plain-language: every piece explained, lesson 1 minute by minute, the Gem, what changes in the hub)

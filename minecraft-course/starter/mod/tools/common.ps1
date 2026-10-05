@@ -220,14 +220,17 @@ function Invoke-Restore([string]$root, [string]$id) {
 }
 
 # ---------- for Gemini and the picture editor ----------
-# All of the kid's code files in one block, to paste into Gemini so it always builds on the latest version.
+# The course rules plus all of the kid's code, to paste into any Gemini chat. Every message carries its own rules,
+# so nothing depends on Gems (replaced by 18+ Skills on 17 Nov 2026) or on Gemini remembering anything.
 function Get-KidCode([string]$root) {
     $java = Join-Path $root 'mod/src/main/java/make/myworld'
     $parts = foreach ($n in @('MyWorld', 'MyItems', 'MyEffects', 'MyMobs', 'MyRules')) {
         $p = Join-Path $java "$n.java"
         if (Test-Path $p) { "===== $n.java =====`r`n" + [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8).TrimEnd() }
     }
-    return "זה הקוד שלי עכשיו:`r`n`r`n" + ($parts -join "`r`n`r`n")
+    $rulesFile = Join-Path $root 'mod/tools/rules.txt'
+    $rules = $(if (Test-Path $rulesFile) { [IO.File]::ReadAllText($rulesFile, [Text.Encoding]::UTF8).Trim() + "`r`n`r`n" } else { '' })
+    return $rules + "===== הקוד שלי =====`r`n`r`n" + ($parts -join "`r`n`r`n") + "`r`n`r`n===== מה אני רוצה =====`r`n"
 }
 
 # The items in MyItems.java: code name and Hebrew name, for the picture editor's list.

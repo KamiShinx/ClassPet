@@ -130,7 +130,6 @@ copy /y "%HERE%..\hub\content.js" "%ROOT%\hub\content.js" >nul
 copy /y "%HERE%..\hub\index.html" "%ROOT%\hub\index.src" >nul
 copy /y "%HERE%..\hub\teacher.html" "%ROOT%\hub\teacher.src" >nul
 goto :hub_wrap
-if exist "%HERE%..\hub\print.html" (copy /y "%HERE%..\hub\print.html" "%ROOT%\hub\print.html" >nul) else (curl -L --fail -s -o "%ROOT%\hub\print.html" "%RAW%/print.html")
 :hub_download
 curl -L --fail -s -o "%ROOT%\hub\content.js" "%RAW%/content.js"
 if errorlevel 1 goto :hub_skip

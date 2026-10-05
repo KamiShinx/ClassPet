@@ -78,6 +78,11 @@ school's IT person.
 | 6 | **Gemini on a student account aged 11-13:** log in with one and open gemini.google.com | Whether the Ministry or school switched it on for this age | No AI tool for the kids. Course still runs, but it's a different course. We'd have to talk |
 | 7 | **Dry run:** you run the install on one school laptop, on the school wifi, and time it | Tells us whether the download fits in one lesson | See below |
 
+**Update (5 Oct): the school's filter will block most of the download sites, so the USB stick is the main plan.**
+You install once on your laptop with `setup/install.bat`, run `setup/make-usb.bat` from the stick, and in lesson 1 each
+kid double-clicks `install-from-usb.bat` on the stick (a copy, no internet; then Minecraft opens offline). Only Gemini
+needs the school internet. Still worth asking IT to open the sites in row 5, so later fixes don't need a stick.
+
 **The dry run decides lesson 1's shape:**
 - Under 45 minutes → lesson 1 as written below.
 - Over 45 minutes, or the wifi chokes with 8 at once → the download still starts in lesson 1, the laptops

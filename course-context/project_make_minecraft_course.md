@@ -69,3 +69,11 @@ item; `tools/prepare.ps1` writes lang + item model JSON before every Play. Kids 
 (clipboard → right file by its class name, backup, build; on failure the error is copied for Gemini), **Undo**,
 **Pictures**. Ben asked how 11-year-olds would cope with copy/paste/compile; this loop is the answer. Waiting for Ben's
 test of the starter before updating GEM_TEXT and building lesson 2 (his explicit order).
+
+**5 Oct, later still: the kids' hub is the control panel.** Ben rejected .bat buttons ("we need a better hub") and asked
+for HTML, "simplest UI/UX, works with every kid", plus backups/undo. Built: desktop icon "Minecraft" → hidden PowerShell
+`tools/server.ps1` (localhost:47811 only; buttons need header X-Make) → opens the kids' hub in the browser with a dock:
+הדבקה מג׳מיני ושחק / שחק / ביטול ההדבקה / גרסאות (list + restore + save now) / תמונות; status line; yellow error card
+(error auto-copied). Shared logic in `tools/common.ps1`. End-to-end tested in the cloud with a fake build (pwsh 7 +
+Playwright). He also floated an in-game paste button; I advised against for now (needs the desktop path anyway when
+the build breaks). In-game Hebrew reads correctly with the game in English (Ben checked).

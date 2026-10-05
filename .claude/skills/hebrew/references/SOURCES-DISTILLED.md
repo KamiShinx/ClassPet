@@ -781,7 +781,7 @@ https://arxiv.org/abs/2506.12311
 
 **N1. Fix only what is broken** [owner rule]
 False positives cost as much as misses; a "fixed" line is often flatter than the original. Register is the owner's call.
-(feedback memory `feedback_dont_over_edit_his_hebrew.md`)
+
 
 **N2. לא + present tense**: "אני לא יודע", "היא לא זוכרת" are natural; "איני יודע" is stiff in speech. Editors ask for
 אין/אינו only in writing and formal speech.

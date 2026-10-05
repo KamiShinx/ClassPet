@@ -91,7 +91,7 @@ echo  [3/4] Mod project OK
 echo.
 
 rem ---- 3b. our starter project on top of the template, and the desktop buttons ----
-set "STARTER_VER=2"
+set "STARTER_VER=3"
 if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
 echo  [3/4] Adding the course's starter project ...
 curl -L --fail --retry 3 -o starter.zip "https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/setup/starter.zip"

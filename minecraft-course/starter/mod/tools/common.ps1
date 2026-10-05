@@ -95,3 +95,47 @@ function Get-ErrorForGemini([string]$log) {
     if ($picked.Count -eq 0) { [void]$picked.AddRange(@($lines | Select-Object -Last 30)) }
     return "המוד שלי לא עובד. זאת השגיאה:`r`n" + ($picked -join "`r`n")
 }
+
+# ---------- versions ----------
+# saves/ holds two kinds: "<time>_MyItems.java" (made before every paste) and "<time>_all/" (a version the kid saved,
+# with every code file and picture). Restoring always backs up the current state first, so it can be undone too.
+function Invoke-SaveAll([string]$root, [string]$label = 'all') {
+    $dir = Join-Path $root ('saves/' + (Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + "_$label")
+    New-Item -ItemType Directory -Force (Join-Path $dir 'java'), (Join-Path $dir 'textures') | Out-Null
+    Copy-Item (Join-Path $root 'mod/src/main/java/make/myworld/*.java') (Join-Path $dir 'java')
+    $tex = Join-Path $root 'mod/src/main/resources/assets/myworld/textures'
+    if (Test-Path $tex) { Copy-Item (Join-Path $tex '*') (Join-Path $dir 'textures') -Recurse }
+    return New-Result $true 'הגרסה נשמרה.'
+}
+
+function Get-Versions([string]$root) {
+    $saves = Join-Path $root 'saves'
+    if (-not (Test-Path $saves)) { return @() }
+    $today = Get-Date -Format 'yyyy-MM-dd'
+    $list = foreach ($e in (Get-ChildItem $saves | Where-Object { $_.Name -match '^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_' } | Sort-Object Name -Descending | Select-Object -First 40)) {
+        $date = $e.Name.Substring(0, 10)
+        $time = $e.Name.Substring(11, 5).Replace('-', ':')
+        $rest = $e.Name.Substring(20)
+        $what = $(if ($e.PSIsContainer -and $rest -eq 'all') { 'גרסה ששמרתם' }
+                  elseif ($e.PSIsContainer) { 'לפני שהחזרתם גרסה' }
+                  else { 'לפני הדבקה ל־' + ($rest -replace '\.java$', '') })
+        [pscustomobject]@{ id = $e.Name; day = $(if ($date -eq $today) { 'היום' } else { $date }); time = $time; what = $what }
+    }
+    return @($list)
+}
+
+function Invoke-Restore([string]$root, [string]$id) {
+    if ($id -notmatch '^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_[A-Za-z]+(\.java)?$') { return New-Result $false 'הגרסה לא נמצאה.' }
+    $src = Join-Path $root "saves/$id"
+    if (-not (Test-Path $src)) { return New-Result $false 'הגרסה לא נמצאה.' }
+    [void](Invoke-SaveAll $root 'before')
+    $java = Join-Path $root 'mod/src/main/java/make/myworld'
+    if (Test-Path $src -PathType Container) {
+        Copy-Item (Join-Path $src 'java/*.java') $java -Force
+        $tex = Join-Path $root 'mod/src/main/resources/assets/myworld/textures'
+        if (Test-Path (Join-Path $src 'textures')) { Copy-Item (Join-Path $src 'textures/*') $tex -Recurse -Force }
+    } else {
+        Copy-Item $src (Join-Path $java (($id -split '_')[-1])) -Force
+    }
+    return New-Result $true 'הגרסה חזרה. לוחצים שחק כדי לבדוק.'
+}

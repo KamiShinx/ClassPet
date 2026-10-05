@@ -267,6 +267,36 @@ a.lcard.open:hover{transform:translateY(-1px)}
 body.aud .stage{min-height:100vh}
 .aud-hint{position:fixed;bottom:8px;left:12px;color:var(--muted);font-size:12px;margin:0}
 @media (max-width:860px){.con-main{grid-template-columns:1fr}}
+
+/* ---------- DOCK: Minecraft buttons at the top of the kids' hub ---------- */
+#dock:empty{display:none}
+.pbar:has(.dock){position:static}
+.wrap #dock{margin-top:20px}
+.dock{display:grid;gap:10px;background:var(--surface);border:2px solid var(--ink);border-radius:8px;padding:12px;box-shadow:0 4px 0 var(--ink)}
+.dock-btns{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px}
+.dbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:8px 12px;border:2px solid var(--ink);border-radius:6px;background:var(--surface);color:var(--ink);font-weight:800;font-size:1.05rem;box-shadow:0 3px 0 var(--ink)}
+.dbtn svg{width:26px;height:26px;flex:none}
+.dbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.dbtn.go{background:var(--grass);color:var(--grass-ink);border-color:var(--grass);box-shadow:0 3px 0 color-mix(in srgb,var(--grass) 55%,#000);font-size:1.2rem}
+.dbtn[disabled]{opacity:.4;cursor:default;box-shadow:none;transform:none}
+.dock-status{display:flex;align-items:center;gap:10px;font-size:1.05rem;padding:8px 12px;border-radius:6px;background:var(--sunk);min-height:2.6em}
+.dock-status.busy{background:var(--sky-soft)}
+.dock-status.live{background:var(--grass-soft)}
+.dock-status.bad{background:var(--xp-soft)}
+.spin{width:16px;height:16px;flex:none;border:3px solid var(--sky);border-left-color:transparent;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dock-err{background:var(--xp-soft);border-radius:6px;padding:12px 14px;display:grid;gap:6px;font-size:1.1rem}
+.dock-err ol{margin:0;padding-inline-start:1.3em;display:grid;gap:2px}
+.dbtn[aria-expanded="true"]{background:var(--sunk)}
+.dock-vers{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:8px}
+.dock-vers .vhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.vnote{color:var(--muted);font-size:.92em}
+.vlist{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:280px;overflow:auto}
+.vlist li{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+.vlist .vt{font-weight:800;font-variant-numeric:tabular-nums}
+.vlist .vd{color:var(--muted);font-size:.9em}
+.vlist .vw{min-width:0}
+@media (max-width:760px){.dock-btns{grid-template-columns:1fr 1fr}.dbtn.go{grid-column:1 / -1}.vlist li{grid-template-columns:auto 1fr auto}.vlist .vd{display:none}}
 `;
 function injectStyle(doc){ const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); }
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap";

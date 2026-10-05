@@ -45,27 +45,106 @@ function Invoke-Prepare([string]$mod) {
     return $items.Count
 }
 
+# Weak models often forget imports. For common names used in the kid's files, add the import if it's missing.
+function Add-MissingImports([string]$code) {
+    $known = [ordered]@{
+        'Item' = 'net.minecraft.world.item.Item'; 'ItemStack' = 'net.minecraft.world.item.ItemStack'; 'Items' = 'net.minecraft.world.item.Items'
+        'Rarity' = 'net.minecraft.world.item.Rarity'; 'DeferredItem' = 'net.neoforged.neoforge.registries.DeferredItem'
+        'MobEffect' = 'net.minecraft.world.effect.MobEffect'; 'MobEffectCategory' = 'net.minecraft.world.effect.MobEffectCategory'
+        'MobEffectInstance' = 'net.minecraft.world.effect.MobEffectInstance'; 'MobEffects' = 'net.minecraft.world.effect.MobEffects'
+        'Holder' = 'net.minecraft.core.Holder'; 'Component' = 'net.minecraft.network.chat.Component'
+        'Player' = 'net.minecraft.world.entity.player.Player'; 'LivingEntity' = 'net.minecraft.world.entity.LivingEntity'
+        'Level' = 'net.minecraft.world.level.Level'; 'InteractionHand' = 'net.minecraft.world.InteractionHand'
+        'InteractionResult' = 'net.minecraft.world.InteractionResult'
+        'EventBusSubscriber' = 'net.neoforged.fml.common.EventBusSubscriber'; 'SubscribeEvent' = 'net.neoforged.bus.api.SubscribeEvent'
+    }
+    $body = [regex]::Replace($code, '(?m)^\s*(package|import)\s.*$', '')
+    $add = foreach ($n in $known.Keys) {
+        if ($code -match ('(?m)^\s*import\s+[\w.]+\.' + $n + '\s*;')) { continue }
+        if ($body -match ('(?<![\w.])' + $n + '(?!\w)')) { 'import ' + $known[$n] + ';' }
+    }
+    if (-not $add) { return $code }
+    $m = [regex]::Match($code, '(?m)^\s*package\s+[\w.]+\s*;\s*$')
+    $at = $(if ($m.Success) { $m.Index + $m.Length } else { 0 })
+    return $code.Insert($at, "`n" + (@($add) -join "`n"))
+}
+
 # Puts code copied from Gemini into the kid's file it belongs to, after backing up the old version.
+# Forgiving on purpose, because Gemini (especially a weak model) is sloppy:
+#  - text or ``` fences around the code are ignored;
+#  - a missing or wrong "package" line is fixed;
+#  - if Gemini sent only item lines (Kit.item...), they are added into MyItems.java, replacing an item with the same code.
 function Invoke-Paste([string]$root, [string]$text) {
     $utf8 = New-Object System.Text.UTF8Encoding($false)
     $kidFiles = @('MyWorld', 'MyItems', 'MyEffects', 'MyMobs', 'MyRules')
-    if (-not $text) { return New-Result $false 'עוד לא העתקתם כלום. בג׳מיני לוחצים על כפתור ההעתקה שליד הקוד.' }
-    $start = $text.IndexOf('package make.myworld;')
-    $end = $text.LastIndexOf('}')
-    if ($start -lt 0 -or $end -lt $start) { return New-Result $false 'מה שהעתקתם זה לא קובץ שלם. בקשו מג׳מיני: ״שלח את הקובץ המלא״.' }
-    $code = $text.Substring($start, $end - $start + 1)
-    if ($code -notmatch 'public\s+(?:final\s+)?class\s+(\w+)') { return New-Result $false 'מה שהעתקתם זה לא קובץ שלם. בקשו מג׳מיני: ״שלח את הקובץ המלא״.' }
-    $name = $Matches[1]
-    if ($kidFiles -notcontains $name) {
-        return New-Result $false "ג׳מיני שלח קובץ בשם $name. הקבצים שלכם: MyItems, MyEffects, MyMobs, MyRules, MyWorld. בקשו ממנו לשים את הקוד באחד מהם."
+    $java = Join-Path $root 'mod/src/main/java/make/myworld'
+    if (-not $text -or -not $text.Trim()) { return New-Result $false 'עוד לא העתקתם כלום. בג׳מיני לוחצים על כפתור ההעתקה שליד הקוד.' }
+    $text = ($text -replace "`r`n", "`n") -replace '(?m)^\s*```[a-zA-Z]*\s*$', ''
+
+    $save = {
+        param($name, $code)
+        $target = Join-Path $java "$name.java"
+        $saves = Join-Path $root 'saves'
+        New-Item -ItemType Directory -Force $saves | Out-Null
+        if (Test-Path $target) { Copy-Item $target (Join-Path $saves ((Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + "_$name.java")) }
+        $code = Add-MissingImports ($code -replace "`r`n", "`n")
+        [IO.File]::WriteAllText($target, (($code.Trim()) -replace "`n", "`r`n") + "`r`n", $utf8)
     }
-    $target = Join-Path $root "mod/src/main/java/make/myworld/$name.java"
-    $saves = Join-Path $root 'saves'
-    New-Item -ItemType Directory -Force $saves | Out-Null
-    if (Test-Path $target) { Copy-Item $target (Join-Path $saves ((Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + "_$name.java")) }
-    $code = $code -replace "`r`n", "`n" -replace "`n", "`r`n"
-    [IO.File]::WriteAllText($target, $code + "`r`n", $utf8)
-    return New-Result $true "הקוד נכנס לקובץ $name.java"
+
+    # A whole file: it has a class.
+    $cls = [regex]::Match($text, '(?m)^\s*(?:public\s+)?(?:final\s+)?class\s+(\w+)')
+    if ($cls.Success) {
+        $name = $cls.Groups[1].Value
+        if ($kidFiles -notcontains $name) {
+            return New-Result $false "ג׳מיני שלח קובץ בשם $name. הקבצים שלכם: MyItems, MyEffects, MyMobs, MyRules, MyWorld. בקשו ממנו לשים את הקוד באחד מהם."
+        }
+        $starts = @([regex]::Match($text, '(?m)^\s*package\s'), [regex]::Match($text, '(?m)^\s*import\s'), [regex]::Match($text, '(?m)^\s*@')) | Where-Object { $_.Success } | ForEach-Object { $_.Index }
+        $start = (@($starts) + $cls.Index | Measure-Object -Minimum).Minimum
+        $end = $text.LastIndexOf('}')
+        if ($end -lt $cls.Index) { return New-Result $false 'הקוד נחתך באמצע. בקשו מג׳מיני: ״שלח שוב את כל הקובץ״.' }
+        $code = $text.Substring($start, $end - $start + 1).Trim()
+        $code = [regex]::Replace($code, '(?m)^\s*package\s+[\w.]+\s*;\s*\n?', '')
+        $code = "package make.myworld;`n`n" + $code.TrimStart()
+        & $save $name $code
+        return New-Result $true "הקוד נכנס לקובץ $name.java"
+    }
+
+    # Only item lines: add them into MyItems.java.
+    $items = New-Object System.Collections.ArrayList
+    $k = 0
+    while (($k = $text.IndexOf('Kit.item(', $k)) -ge 0) {
+        $depth = 0; $e = -1; $inStr = $false
+        for ($c = $k + 8; $c -lt $text.Length; $c++) {
+            $ch = $text[$c]
+            if ($ch -eq '"' -and $text[$c - 1] -ne '\') { $inStr = -not $inStr; continue }
+            if ($inStr) { continue }
+            if ($ch -eq '(' -or $ch -eq '{') { $depth++ } elseif ($ch -eq ')' -or $ch -eq '}') { $depth--; if ($depth -eq 0) { $e = $c; break } }
+        }
+        if ($e -lt 0) { return New-Result $false 'הקוד נחתך באמצע. בקשו מג׳מיני: ״שלח שוב את כל הקובץ״.' }
+        $call = $text.Substring($k, $e - $k + 1)
+        $id = [regex]::Match($call, 'Kit\.item\(\s*"([a-z0-9_]+)"').Groups[1].Value
+        if ($id) { [void]$items.Add(@{ id = $id; call = $call }) }
+        $k = $e
+    }
+    if ($items.Count -eq 0) { return New-Result $false 'מה שהעתקתם זה לא קוד של המוד. בקשו מג׳מיני: ״שלח את כל הקובץ״.' }
+    $file = Join-Path $java 'MyItems.java'
+    if (-not (Test-Path $file)) { return New-Result $false 'הקובץ MyItems.java חסר. קוראים למורה.' }
+    $src = [IO.File]::ReadAllText($file, [Text.Encoding]::UTF8) -replace "`r`n", "`n"
+    foreach ($it in $items) {
+        $field = '    public static final DeferredItem<Item> ' + $it.id.ToUpper() + ' = ' + $it.call + ';'
+        $same = [regex]::Match($src, '(?s)\n[ \t]*public static final DeferredItem<Item> \w+ = Kit\.item\(\s*"' + [regex]::Escape($it.id) + '".*?\);[^\n]*')
+        if ($same.Success) {
+            $src = $src.Remove($same.Index, $same.Length).Insert($same.Index, "`n" + $field)
+        } else {
+            $at = $src.LastIndexOf('static void load()')
+            if ($at -lt 0) { return New-Result $false 'לא מצאתי איפה להוסיף את החפץ. בקשו מג׳מיני את כל הקובץ MyItems.java.' }
+            $line = $src.LastIndexOf("`n", $at)
+            $src = $src.Insert($line + 1, $field + "`n`n")
+        }
+    }
+    & $save 'MyItems' $src
+    $names = ($items | ForEach-Object { $_.id }) -join ', '
+    return New-Result $true "ג׳מיני שלח רק חפץ, אז הוספתי אותו לקובץ MyItems.java: $names"
 }
 
 # Brings back the file as it was before the last paste. Each press goes one paste further back.
@@ -138,4 +217,46 @@ function Invoke-Restore([string]$root, [string]$id) {
         Copy-Item $src (Join-Path $java (($id -split '_')[-1])) -Force
     }
     return New-Result $true 'הגרסה חזרה. לוחצים שחק כדי לבדוק.'
+}
+
+# ---------- for Gemini and the picture editor ----------
+# All of the kid's code files in one block, to paste into Gemini so it always builds on the latest version.
+function Get-KidCode([string]$root) {
+    $java = Join-Path $root 'mod/src/main/java/make/myworld'
+    $parts = foreach ($n in @('MyWorld', 'MyItems', 'MyEffects', 'MyMobs', 'MyRules')) {
+        $p = Join-Path $java "$n.java"
+        if (Test-Path $p) { "===== $n.java =====`r`n" + [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8).TrimEnd() }
+    }
+    return "זה הקוד שלי עכשיו:`r`n`r`n" + ($parts -join "`r`n`r`n")
+}
+
+# The items in MyItems.java: code name and Hebrew name, for the picture editor's list.
+function Get-ItemList([string]$root) {
+    $p = Join-Path $root 'mod/src/main/java/make/myworld/MyItems.java'
+    if (-not (Test-Path $p)) { return @() }
+    $src = [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)
+    $gap = '(?:\s|//[^\r\n]*)*'
+    $tex = Join-Path $root 'mod/src/main/resources/assets/myworld/textures/item'
+    $list = foreach ($m in [regex]::Matches($src, 'Kit\.item\(' + $gap + '"([a-z0-9_]+)"' + $gap + ',' + $gap + '"((?:[^"\\]|\\.)*)"')) {
+        $id = $m.Groups[1].Value
+        [pscustomobject]@{ id = $id; name = $m.Groups[2].Value.Replace('\"', '"'); hasPicture = (Test-Path (Join-Path $tex "$id.png")) }
+    }
+    return @($list)
+}
+
+# Saves a 16x16 PNG drawn in the hub as the item's picture.
+function Save-ItemPicture([string]$root, [string]$id, [string]$base64) {
+    if ($id -notmatch '^[a-z0-9_]{1,40}$') { return New-Result $false 'הקוד של החפץ: רק אותיות קטנות באנגלית, מספרים וקו תחתון.' }
+    try { $bytes = [Convert]::FromBase64String($base64) } catch { return New-Result $false 'הציור לא נשמר. נסו שוב.' }
+    if ($bytes.Length -lt 8 -or $bytes[0] -ne 0x89 -or $bytes[1] -ne 0x50) { return New-Result $false 'הציור לא נשמר. נסו שוב.' }
+    $dir = Join-Path $root 'mod/src/main/resources/assets/myworld/textures/item'
+    New-Item -ItemType Directory -Force $dir | Out-Null
+    $file = Join-Path $dir "$id.png"
+    if (Test-Path $file) {
+        $saves = Join-Path $root 'saves'
+        New-Item -ItemType Directory -Force $saves | Out-Null
+        Copy-Item $file (Join-Path $saves ((Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + "_$id.png"))
+    }
+    [IO.File]::WriteAllBytes($file, $bytes)
+    return New-Result $true "הציור נשמר בשם $id.png. לוחצים שחק כדי לראות אותו במשחק."
 }

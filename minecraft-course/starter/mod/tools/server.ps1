@@ -124,6 +124,10 @@ function Invoke-Action([string]$name, [string]$query) {
             $state.phase = 'idle'; $state.error = ''; $state.message = $r.Message
             return $r
         }
+        'copy-code' {
+            Write-Clip (Get-KidCode $root)
+            return New-Result $true 'הקוד שלכם הועתק. עוברים לג׳מיני, כותבים מה רוצים, ואז Ctrl+V.'
+        }
         'copy-error' {
             if ($state.error) { Write-Clip $state.error }
             return New-Result $true 'השגיאה הועתקה שוב.'
@@ -160,12 +164,30 @@ function Invoke-Request($client) {
         $i = $line.IndexOf(':')
         if ($i -gt 0) { $headers[$line.Substring(0, $i).Trim().ToLower()] = $line.Substring($i + 1).Trim() }
     }
+    $body = ''
+    $len = 0
+    if ($headers.ContainsKey('content-length')) { [void][int]::TryParse($headers['content-length'], [ref]$len) }
+    if ($len -gt 0 -and $len -le 200000) {
+        $buf = New-Object char[] $len
+        $got = 0
+        while ($got -lt $len) { $n = $reader.Read($buf, $got, $len - $got); if ($n -le 0) { break }; $got += $n }
+        $body = New-Object string($buf, 0, $got)
+    }
     $parts = $first.Split(' ')
     $method = $parts[0]; $path = ($parts[1] -split '\?')[0]
     $query = $(if ($parts[1].Contains('?')) { $parts[1].Substring($parts[1].IndexOf('?') + 1) } else { '' })
 
     if ($path -eq '/api/status') {
         Send-Json $stream @{ phase = $state.phase; message = $state.message; error = $state.error }
+        return
+    }
+    if ($path -eq '/api/items') {
+        Send $stream 200 $types['.json'] ([Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -Compress -InputObject @(Get-ItemList $root))))
+        return
+    }
+    if ($path -match '^/picture/([a-z0-9_]{1,40})\.png$') {
+        $file = Join-Path $mod "src/main/resources/assets/myworld/textures/item/$($Matches[1]).png"
+        if (Test-Path $file) { Send $stream 200 $types['.png'] ([IO.File]::ReadAllBytes($file)) } else { Send $stream 404 'text/plain' ([byte[]]@()) }
         return
     }
     if ($path -eq '/api/versions') {
@@ -175,6 +197,12 @@ function Invoke-Request($client) {
     if ($path.StartsWith('/api/')) {
         # Buttons only from our own page: a custom header can't be sent cross-site without a CORS preflight we never allow.
         if ($method -ne 'POST' -or $headers['x-make'] -ne '1') { Send $stream 403 'text/plain' ([byte[]]@()); return }
+        if ($path -eq '/api/save-picture') {
+            $r = New-Result $false 'הציור לא נשמר. נסו שוב.'
+            try { $j = $body | ConvertFrom-Json; $r = Save-ItemPicture $root ([string]$j.id) ([string]$j.png) } catch {}
+            Send-Json $stream @{ ok = $r.Ok; result = $r.Message; phase = $state.phase; message = $r.Message; error = $state.error }
+            return
+        }
         $r = Invoke-Action $path.Substring(5) $query
         Send-Json $stream @{ ok = $r.Ok; result = $r.Message; phase = $state.phase; message = $state.message; error = $state.error }
         return

@@ -1,2 +1,5 @@
 .DS_Store
 Thumbs.db
+
+# real Minecraft textures, copied out of the local game by setup/update-hub.ps1. Never commit them.
+minecraft-course/hub/mc_*.png

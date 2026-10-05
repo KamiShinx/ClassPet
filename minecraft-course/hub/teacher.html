@@ -39,7 +39,7 @@ function renderTeacher(){
       <tr><td>0–15</td><td>מתקינים מהדיסק, סבב אחרי סבב. מתחילים לדבר כשהסבב הראשון רץ</td><td>1–2</td></tr>
       <tr><td>15–20</td><td>מה זה מוד, ומה נעשה בקורס</td><td>3–4</td></tr>
       <tr><td>20–55</td><td><b>שיחה: מה עולם צריך?</b> רעיון חזק, מזהים בשנייה, משהו שונה, חוקים משלו</td><td>5–14</td></tr>
-      <tr><td>55–70</td><td>כרטיס העולם, על הדף, עם טושים. ההתקנות עוד רצות? משחק הצלליות</td><td>15–17</td></tr>
+      <tr><td>55–70</td><td>כרטיס העולם, על הדף, עם טושים. ההתקנות עוד רצות? המשחק ״מי זה?״</td><td>15–17</td></tr>
       <tr><td>70–85</td><td>מיינקראפט נפתח: עולם במצב יצירה. מה זה ג׳מיני. כל ילד מדביק בג׳מיני את החוקים ואת העולם שלו</td><td>18–20</td></tr>
       <tr><td>85–90</td><td>דרייב. לרשום איזה מחשב לא סיים להתקין, ולבדוק אותו לפני שיעור 2</td><td>21</td></tr>
       </tbody></table></div>
@@ -128,7 +128,7 @@ function renderConsole(){
           <div class="map" style="padding:10px;grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">${SLIDES.map((x,i)=>`<button data-s="${i}" class="${i===sIx?"cur":""}"><small>${i+1}</small><b>${x.label}</b></button>`).join("")}</div></section>
       </div>
     </main>
-    <div class="prfoot"><button class="btn ghost" id="pp" ${sIx===0?"disabled":""}>→ הקודם</button><small>חצים או רווח להחלפת שקופית · בשקופית הצלליות לוחצים כאן על צללית כדי לחשוף אותה גם במקרן</small><button class="btn go" id="pn" ${sIx===N-1?"disabled":""}>הבא ←</button></div>
+    <div class="prfoot"><button class="btn ghost" id="pp" ${sIx===0?"disabled":""}>→ הקודם</button><small>חצים או רווח להחלפת שקופית · בשקופית ״מי זה?״ לוחצים כאן על ריבוע כדי לחשוף אותו גם במקרן</small><button class="btn go" id="pn" ${sIx===N-1?"disabled":""}>הבא ←</button></div>
   </div>`;
   const cur = app.querySelector("#cur");
   H.applyReveal(cur, revealed);

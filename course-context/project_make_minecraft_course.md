@@ -131,4 +131,14 @@ guess-the-place-from-three-colours, normal-vs-Nether table, rule cards with silh
 (pixel items, what-you-get/what-you-pay board, four jobs, four kinds of price, stack pictures 64/16/1, name-guessing,
 16x16 zoom). All art is our own pixel maps in `hub/content.js` (`SCENES`, `ITEMS`, `pxSVG`); no Mojang images, the repo
 is public. Ben's bar for slides: pictures and activities on every slide, not text.
+**Then Ben: "use actual minecraft assets and english, hebrew + your stuff is cringe"; "even for your hidden mobs we need
+minecraft assets and not rebuilds".** Rules from now on: (1) pictures in slides and pages are REAL Minecraft textures,
+never our own drawings (ours stay only as the fallback when a texture is missing); (2) Minecraft names are written in
+English as in the game (Nether, End, Deep Dark, Warden, Ender Pearl, Totem of Undying...), inside Hebrew sentences.
+How, with a public repo: `setup/update-hub.ps1` copies 34 textures out of the Minecraft jar already installed under
+C:\MAKE into `C:\MAKE\hub\mc_<name>.png` (flat names: the hub's local server refuses paths with a folder). They are
+gitignored and never committed. Items = item textures; places = grids of real block textures (`SCENES[*].tiles`); mobs =
+the real face cut from the skin texture with CSS (`FACES`, `mobFace`); the "who is it?" filler game zooms in on a few
+pixels of a face and zooms out on click. The game files hold no full-body mob pictures or screenshots of places; the
+wiki blocks scripted downloads. Trap: a CSS class named `slot` collides with the hub's hotbar style; ours is `mslot`.
 

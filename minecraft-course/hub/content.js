@@ -166,8 +166,9 @@ a.lcard.open:hover{transform:translateY(-1px)}
 /* silhouettes */
 .sil{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
 .sil button{background:var(--bg);border:2px solid var(--line);border-radius:6px;padding:12px;display:grid;gap:8px;justify-items:center}
-.sil svg{width:100%;max-width:100px;height:100px}
-.sil svg rect{fill:var(--ink)}
+.sil .face{width:100%;max-width:110px}
+.sil .face>i{transform:scale(4.5);transform-origin:var(--ox,30%) var(--oy,48%);transition:transform .6s}
+.sil button.shown .face>i{transform:none}
 .sil .nm{font-weight:700;min-height:1.5em}
 .sil button.shown{border-color:var(--grass)}
 .sil button.shown .nm{color:var(--grass)}
@@ -215,7 +216,9 @@ a.lcard.open:hover{transform:translateY(-1px)}
 .slide .vs h4{font-size:1.3em}
 .slide .eq{font-size:clamp(1.3rem,3cqw,2.4rem)}
 .slide .sil{width:100%;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.slide .sil svg{max-width:140px;height:140px}
+.slide .sil .face{max-width:clamp(70px,11cqw,150px)}
+.slide .sil button{padding:clamp(6px,1cqw,12px)}
+.slide .sil{grid-template-columns:repeat(4,minmax(0,1fr))}
 .slide .wcard{text-align:right;width:min(720px,100%);font-size:clamp(1rem,1.8cqw,1.35rem)}
 .slide .wcard .ln{border-bottom:2px dotted var(--line);padding-bottom:6px}
 .slide .wcard .ln span{color:var(--muted);font-size:.85em}
@@ -345,7 +348,7 @@ body.aud .stage{min-height:100vh}
 /* ---------- pictures for the design talks ---------- */
 .pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;width:100%}
 .pc figure{margin:0;display:grid;gap:8px;justify-items:center;align-content:start}
-.pc svg{width:100%;height:auto;border:3px solid var(--ink);border-radius:4px;display:block}
+.pc .mc{width:100%}
 .pc figcaption{font-family:var(--display);font-size:1.15em;line-height:1.2}
 .pc figcaption small{display:block;font-family:var(--body);color:var(--muted);font-size:.8em}
 .sws{display:flex;gap:6px;justify-content:center}
@@ -355,7 +358,23 @@ body.aud .stage{min-height:100vh}
 .pal figcaption{font-family:var(--display);font-size:1.6em;color:var(--grass)}
 .its{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;width:100%}
 .its figure{margin:0;display:grid;gap:6px;justify-items:center;width:clamp(76px,10cqw,128px);align-content:start}
-.its svg,.slotpx{width:100%;height:auto;background:var(--slot-in);border:3px solid;border-color:#555 #fff #fff #555;padding:9%;display:block}
+.mc{display:block;position:relative}
+.mc img{display:block;width:100%;height:auto;image-rendering:pixelated}
+.mc svg{display:none;width:100%;height:auto}
+.mc.nomc>img,.mc.nomc>i,.mc.nomc>.tiles{display:none}
+.mc.nomc>svg{display:block}
+.mc.mslot{width:100%;box-sizing:border-box;background:var(--slot-in);border:3px solid;border-color:#555 #fff #fff #555;padding:clamp(4px,.9cqw,12px);aspect-ratio:1}
+.mc.mslot>img,.mc.mslot>svg{width:100%;height:100%;object-fit:contain}
+.scn{border:3px solid var(--ink);border-radius:4px;overflow:hidden;background:var(--air)}
+.scn .tiles{display:grid;grid-template-columns:repeat(8,1fr);direction:ltr}
+.scn .tiles>*{display:block;width:100%;aspect-ratio:1;object-fit:cover;object-position:top}
+.scn .tiles .lf{filter:sepia(1) saturate(5) hue-rotate(55deg) brightness(.7)}
+.scn svg{border:0!important;border-radius:0!important}
+.face{overflow:hidden;border:3px solid var(--ink);border-radius:4px;background:var(--slot-in)}
+.face>i{display:block;width:100%;background-repeat:no-repeat;image-rendering:pixelated}
+.face>.probe{display:none!important}
+.face svg rect{fill:var(--ink)}
+.slotpx{display:block}
 .its figcaption{font-weight:700;font-size:.85em;text-align:center;line-height:1.2}
 .cmp{display:grid;grid-template-columns:auto 1fr 1fr;width:min(880px,100%);text-align:right;border:3px solid var(--ink);border-radius:8px;overflow:hidden;font-size:clamp(1rem,2.1cqw,1.55rem)}
 .cmp>div{padding:.45em .8em;border-bottom:1px solid var(--line);background:var(--surface)}
@@ -383,17 +402,17 @@ body.aud .stage{min-height:100vh}
 .stk figcaption small{display:block;font-family:var(--body);font-size:.55em;color:var(--muted)}
 .z16{display:flex;gap:clamp(16px,4cqw,44px);align-items:center;justify-content:center;flex-wrap:wrap;width:100%}
 .z16 .big{width:clamp(180px,30cqw,330px)}
-.z16 .big svg{width:100%;height:auto;background:var(--slot-in);border:3px solid var(--ink);display:block}
+.z16 .big .mc{background:var(--slot-in);border:3px solid var(--ink)}
+.z16 .big .mc::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.3) 1px,transparent 1px);background-size:6.25% 6.25%}
 .z16 .side{display:grid;gap:14px;text-align:right;font-size:clamp(1rem,2.1cqw,1.5rem)}
 .z16 .real{display:flex;gap:12px;align-items:center}
-.z16 .real svg{width:34px;height:34px;background:var(--slot-in);border:2px solid;border-color:#555 #fff #fff #555;padding:3px}
+.z16 .real .mc{width:40px;flex:none;border-width:2px;padding:4px}
 .z16 b{font-family:var(--display);font-weight:400;font-size:1.5em;color:var(--grass)}
 .hero1{display:flex;gap:clamp(16px,4cqw,40px);align-items:center;justify-content:center;flex-wrap:wrap}
 .hero1 .slotpx{width:clamp(110px,16cqw,190px)}
 .hero1 div{text-align:right;display:grid;gap:6px}
 .rules .who{display:flex;gap:10px;align-items:center}
-.rules .who svg{width:clamp(46px,7cqw,88px);height:clamp(54px,8.4cqw,104px);flex:none}
-.rules .who svg rect{fill:var(--ink)}
+.rules .who .face{width:clamp(46px,7cqw,88px);flex:none}
 .rules small{color:var(--muted);font-weight:700}
 .slide>*{animation:rise .38s both}
 .slide>*:nth-child(2){animation-delay:.07s}.slide>*:nth-child(3){animation-delay:.14s}.slide>*:nth-child(4){animation-delay:.21s}.slide>*:nth-child(5){animation-delay:.28s}
@@ -453,12 +472,14 @@ const UNITS = [
 
 /* ===== pixel silhouettes (side or front view, # = filled) ===== */
 const MOBS = [
-  { name:"קריפר", map:["..####..","..####..","..####..","..####..","...##...","...##...","...##...","...##...","...##...","...##...",".######.",".######.",".##..##."] },
-  { name:"אנדרמן", map:["..####..","..####..","..####..",".######.",".#.##.#.",".#.##.#.",".#.##.#.",".#.##.#.",".#....#.","..#..#..","..#..#..","..#..#..","..#..#..","..#..#..","..#..#.."] },
-  { name:"עכביש", map:["......####......",".##..######..##.","#..##########..#","...##########...","..#.########.#..",".#..#......#..#.","#..#........#..#"] },
-  { name:"תרנגולת", map:["..###...",".####...","..###...","..######","..######","...#####","....#.#.","...##.##"] },
-  { name:"גאסט", map:["########","########","########","########","########","########","#.#.#.#.","#.#.#...","..#.#...","..#....."] },
-  { name:"חזיר", map:["..######........","..##############","################","..##############","..##############","..##############","...##.......##..","...##.......##..","...##.......##.."] }
+  { name:"Creeper", map:["..####..","..####..","..####..","..####..","...##...","...##...","...##...","...##...","...##...","...##...",".######.",".######.",".##..##."] },
+  { name:"Enderman", map:["..####..","..####..","..####..",".######.",".#.##.#.",".#.##.#.",".#.##.#.",".#.##.#.",".#....#.","..#..#..","..#..#..","..#..#..","..#..#..","..#..#..","..#..#.."] },
+  { name:"Spider", map:["......####......",".##..######..##.","#..##########..#","...##########...","..#.########.#..",".#..#......#..#.","#..#........#..#"] },
+  { name:"Ghast", map:["########","########","########","########","########","########","#.#.#.#.","#.#.#...","..#.#...","..#....."] },
+  { name:"Pig", map:["..######........","..##############","################","..##############","..##############","..##############","...##.......##..","...##.......##..","...##.......##.."] },
+  { name:"Zombie", map:["####","####","####","####"] },
+  { name:"Skeleton", map:["####","####","####","####"] },
+  { name:"Blaze", map:["####","####","####","####"] }
 ];
 function silSVG(m){
   const h = m.map.length, w = m.map[0].length;
@@ -529,61 +550,89 @@ function pxSVG(rows, pal, grid){
   return `<svg viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;
 }
 const SCENES = {
-  plains:{ name:"שדה דשא", tag:"...?", sw:["#7EC0EE","#5DA130","#8A5A2B"],
+  plains:{ air:"#7EC0EE", tiles:["....FFF.","....FFF.",".....W..","gggggggg","dddddddd"], name:"Plains", tag:"...?", sw:["#7EC0EE","#5DA130","#8A5A2B"],
     pal:{S:"#7EC0EE",C:"#FFFFFF",G:"#5DA130",D:"#8A5A2B",T:"#6B4423",L:"#2F7D32",Y:"#FFD83D"},
     map:["SSSSSSSSSSSSYYSS","SSCCSSSSSSSSYYSS","SCCCCSSSSLLLSSSS","SSSSSSSSLLLLLSSS","SSSSSSSSLLLLLSSS","SSSSSSSSSSTSSSSS","GGGGGGGGGGTGGGGG","DDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDD"] },
-  nether:{ name:"הנדר", tag:"אש ולבה", sw:["#6B1F1F","#FF7A1A","#FFE08A"],
+  nether:{ air:"#2A0C0C", tiles:["NNNNNNNN","..NG....","........","N.....NN","NMLLLLMN"], name:"Nether", tag:"אש ולבה", sw:["#6B1F1F","#FF7A1A","#FFE08A"],
     pal:{N:"#6B1F1F",n:"#4A1414",L:"#FF7A1A",l:"#FFC53D",B:"#2A0C0C",g:"#FFE08A"},
     map:["NNnNNNNNnNNNNNnN","NnNNgNNNNNNnNNNN","BBNBBBBnBBBBBgBB","BBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBB","NBBBBBBBBBBBBBNN","NNLLlLLLLLlLLNNN","NnNLLLLlLLLLNNnN","NNNNnNNNNNNnNNNN"] },
-  end:{ name:"האנד", tag:"ריק, סגול, דרקון", sw:["#0B0914","#E3E6A8","#B455E0"],
+  end:{ air:"#0B0914", tiles:["........","...O....","...O....",".EEEEEE.","..EEEE.."], name:"End", tag:"ריק, סגול, דרקון", sw:["#0B0914","#E3E6A8","#B455E0"],
     pal:{K:"#0B0914",s:"#3B2A5C",E:"#E3E6A8",e:"#C9CC8A",O:"#2A1A47",P:"#B455E0",M:"#2B2B33"},
     map:["KKKsKKKKKKKKsKKK","KKKKKKKPKKKKKKKK","KsKKKKKOKKPKKKsK","KKKKKKKOKKMKKKKK","KKKKKKKOKKMKKKKK","KKKEEEEEEEEEEKKK","KKKKeEEEEEEeKKKK","KKKKKKeEEeKKKKKK","KKsKKKKKKKKKKsKK"] },
-  deep:{ name:"המקום של הוורדן", tag:"חושך ושקט", sw:["#05090B","#0C3B44","#29D3C4"],
+  deep:{ air:"#05090B", tiles:["DDDDDDDD","D......D","........","..H..X..","SSSCSSSS"], name:"Deep Dark", tag:"חושך ושקט", sw:["#05090B","#0C3B44","#29D3C4"],
     pal:{K:"#05090B",d:"#1E2529",c:"#0C3B44",t:"#29D3C4",h:"#D9E6C8"},
     map:["dddddddddddddddd","ddKKKKKKKKKKKKdd","dKKKKKKKKKKKKKKd","KKKKKKKKKKKKKKKK","KKKKKKKKKKKKKKKK","KKKKKhhKKKKKKKKK","cctccccccctccccc","ccccctcccccccctc","dddddddddddddddd"] }
 };
-const sceneSVG = k => pxSVG(SCENES[k].map, SCENES[k].pal);
+// A real texture, hub/mc_<name>.png (copied out of the installed game by setup/update-hub.ps1). If it's missing, our drawing shows.
+const NOMC = `onerror="this.closest('.mc').classList.add('nomc')"`;
+const mcPic = (file, fallback, cls) => `<span class="mc ${cls||""}"><img src="mc_${file}.png" alt="" ${NOMC}>${fallback||""}</span>`;
+const TILE = { N:"block_netherrack", G:"block_glowstone", L:"block_lava_still", M:"block_magma", E:"block_end_stone", O:"block_obsidian",
+  D:"block_deepslate", S:"block_sculk", C:"block_sculk_catalyst_side", H:"block_sculk_shrieker_side", X:"block_sculk_sensor_side",
+  g:"block_grass_block_side", d:"block_dirt", W:"block_oak_log", F:"block_oak_leaves" };
+const sceneSVG = k => { const sc = SCENES[k];
+  const tiles = sc.tiles.join("").split("").map(c => TILE[c] ? `<img src="mc_${TILE[c]}.png" alt="" ${c==="F"?'class="lf" ':""}${NOMC}>` : `<i></i>`).join("");
+  return `<span class="mc scn" style="--air:${sc.air}"><span class="tiles">${tiles}</span>${pxSVG(sc.map, sc.pal)}</span>`; };
+// A mob's real face, cut out of its skin texture.
+const FACES = {
+  creeper:{ name:"Creeper", tex:"entity_creeper_creeper", t:[64,32], f:[8,8,8,8] },
+  enderman:{ name:"Enderman", tex:"entity_enderman_enderman", over:"entity_enderman_enderman_eyes", t:[64,32], f:[8,8,8,8], o:[18,62] },
+  spider:{ name:"Spider", tex:"entity_spider_spider", t:[64,32], f:[40,12,8,8], o:[30,40] },
+  ghast:{ name:"Ghast", tex:"entity_ghast_ghast", t:[64,32], f:[16,16,16,16], o:[30,40] },
+  pig:{ name:"Pig", tex:"entity_pig_pig", t:[64,32], f:[8,8,8,8], o:[8,42] },
+  zombie:{ name:"Zombie", tex:"entity_zombie_zombie", t:[64,64], f:[8,8,8,8], o:[25,55] },
+  skeleton:{ name:"Skeleton", tex:"entity_skeleton_skeleton", t:[64,32], f:[8,8,8,8], o:[25,55] },
+  blaze:{ name:"Blaze", tex:"entity_blaze", t:[64,32], f:[8,8,8,8], o:[30,48] },
+  piglin:{ name:"Piglin", tex:"entity_piglin_piglin", t:[64,64], f:[8,8,10,8] },
+  warden:{ name:"Warden", tex:"entity_warden_warden", t:[128,128], f:[10,42,16,16] }
+};
+function mobFace(k, fallback){ const m = FACES[k], [tw,th] = m.t, [x,y,w,h] = m.f;
+  const bg = (m.over ? `url(mc_${m.over}.png),` : "") + `url(mc_${m.tex}.png)`;
+  const pos = `${(x/(tw-w)*100).toFixed(3)}% ${(y/(th-h)*100).toFixed(3)}%`, size = `${(tw/w*100).toFixed(2)}% ${(th/h*100).toFixed(2)}%`;
+  const o = m.o ? `--ox:${m.o[0]}%;--oy:${m.o[1]}%;` : "";
+  return `<span class="mc face"><i style="${o}padding-top:${(h/w*100).toFixed(2)}%;background-image:${bg};background-position:${pos}${m.over?","+pos:""};background-size:${size}${m.over?","+size:""}"></i><img class="probe" src="mc_${m.tex}.png" alt="" ${NOMC}>${fallback||""}</span>`; }
+const GUESS = ["creeper","enderman","spider","ghast","pig","zombie","skeleton","blaze"];
+const guessGrid = () => `<div class="sil">${GUESS.map((k,i)=>`<button data-sil="${i}" aria-label="מי זה? ${i+1}">${mobFace(k, MOBS[i] && MOBS[i].map ? silSVG(MOBS[i]) : "")}<span class="nm">?</span></button>`).join("")}</div>`;
 const swatches = k => `<div class="sws">${SCENES[k].sw.map(c=>`<i style="background:${c}"></i>`).join("")}</div>`;
 const postcards = (keys, mode) => `<div class="pc">${keys.map(k=>`<figure>${sceneSVG(k)}${mode==="sw"?swatches(k):""}${mode?`<figcaption>${SCENES[k].name}${mode==="tag"?`<small>${SCENES[k].tag}</small>`:""}</figcaption>`:""}</figure>`).join("")}</div>`;
 
 const ITEMS = {
-  pick:{ name:"מכוש", pal:{I:"#C8D0D4",W:"#8A5A2B"},
+  pick:{ tex:"item_iron_pickaxe", name:"Pickaxe", pal:{I:"#C8D0D4",W:"#8A5A2B"},
     map:[".IIIIIIII.","I...WW...I","....WW....","....WW....","....WW....","....WW....","....WW....","....WW....","....WW....",".........."] },
-  pearl:{ name:"פנינת אנדר", pal:{T:"#1FA89A",t:"#7FE9DA",d:"#0E5F58"},
+  pearl:{ tex:"item_ender_pearl", name:"Ender Pearl", pal:{T:"#1FA89A",t:"#7FE9DA",d:"#0E5F58"},
     map:["..........","...TTTT...","..TttTTT..",".TttTTTTT.",".TtTTTTTd.",".TTTTTTdd.",".TTTTTddd.","..TTTddd..","...dddd...",".........."] },
-  bow:{ name:"קשת", pal:{W:"#8A5A2B",s:"#F2F2F2"},
+  bow:{ tex:"item_bow", name:"Bow", pal:{W:"#8A5A2B",s:"#F2F2F2"},
     map:["...WW.s...","..W...s...",".W....s...",".W....s...",".W....s...",".W....s...",".W....s...","..W...s...","...WW.s...",".........."] },
-  apple:{ name:"תפוח זהב", pal:{Y:"#FFD83D",y:"#E0A800",g:"#4CAF50",b:"#6B4423"},
+  apple:{ tex:"item_golden_apple", name:"Golden Apple", pal:{Y:"#FFD83D",y:"#E0A800",g:"#4CAF50",b:"#6B4423"},
     map:[".....b....","....gb....","..YYYYYY..",".YYyYYYYY.",".YYYYYYYY.",".YYYYYYyY.",".YYYYYYyY.","..YYYYyY..","...YYYY...",".........."] },
-  totem:{ name:"טוטם האלמוות", pal:{Y:"#F2C94C",y:"#C99A1C",G:"#2ECC71"},
+  totem:{ tex:"item_totem_of_undying", name:"Totem of Undying", pal:{Y:"#F2C94C",y:"#C99A1C",G:"#2ECC71"},
     map:["...YYYY...","..YGYYGY..","..YYYYYY..","...YyyY...",".YYYYYYYY.",".Y.YYYY.Y.","...YYYY...","...YyyY...","...Y..Y...",".........."] },
-  wings:{ name:"אליטרה", pal:{V:"#8F8FB3",v:"#6A6A8C"},
+  wings:{ tex:"item_elytra", name:"Elytra", pal:{V:"#8F8FB3",v:"#6A6A8C"},
     map:[".VV....VV.","VVVV..VVVV","VVVV..VVVV","VVVVvvVVVV","VVVvvvvVVV",".VVv..vVV.",".VV....VV.","..V....V..","..V....V..",".........."] },
-  potato:{ name:"תפוח אדמה רעיל", pal:{P:"#C9B458",p:"#9FAE3A",d:"#8A7A2E"},
+  potato:{ tex:"item_poisonous_potato", name:"Poisonous Potato", pal:{P:"#C9B458",p:"#9FAE3A",d:"#8A7A2E"},
     map:["..........","...PPPP...","..PPpPPP..",".PPPPPPdP.",".PpPPPPPP.",".PPPPdPPP.","..PPPPPP..","...PPpP...","..........",".........."] },
-  dirt:{ name:"אדמה", pal:{D:"#8A5A2B",d:"#6E4520"},
+  dirt:{ tex:"block_dirt", name:"Dirt", pal:{D:"#8A5A2B",d:"#6E4520"},
     map:["DDDDDDDDDD","DdDDDDdDDD","DDDDdDDDDD","DDdDDDDDdD","DDDDDDDDDD","DdDDDdDDDD","DDDDDDDdDD","DDDdDDDDDD","DDDDDDdDDD","DDDDDDDDDD"] }
 };
-const itemSVG = k => pxSVG(ITEMS[k].map, ITEMS[k].pal);
+const itemSVG = k => mcPic(ITEMS[k].tex, pxSVG(ITEMS[k].map, ITEMS[k].pal), "mslot");
 const itemRow = keys => `<div class="its">${keys.map(k=>`<figure>${itemSVG(k)}<figcaption>${ITEMS[k].name}</figcaption></figure>`).join("")}</div>`;
 const SWORD16 = { pal:{C:"#5EEAD4",c:"#2BB3A3",k:"#3A2A1A",W:"#8A5A2B"},
   map:["..............CC",".............CcC","............CcC.","...........CcC..","..........CcC...",".........CcC....","........CcC.....",".......CcC......","..kk..CcC.......","..kkkCcC........","...kkkC.........","....kkk.........","...WWkkk........","..WW..kk........",".WW.............","WW.............."] };
-const WARDEN = { name:"וורדן", map:["#..####..#","#..####..#","##.####.##",".########.","##########","##########","##.####.##","##.####.##","...#..#...","...#..#...","..##..##.."] };
-const PIGLIN = { name:"פיגלין", map:["#.####.#","########","########",".######.","..####..",".######.","#.####.#","#.####.#","..#..#..","..#..#.."] };
+const WARDEN = { name:"Warden", map:["#..####..#","#..####..#","##.####.##",".########.","##########","##########","##.####.##","##.####.##","...#..#...","...#..#...","..##..##.."] };
+const PIGLIN = { name:"Piglin", map:["#.####.#","########","########",".######.","..####..",".######.","#.####.#","#.####.#","..#..#..","..#..#.."] };
 const stackPic = (n, cols, color) => `<div class="g" style="grid-template-columns:repeat(${cols},1fr)${n===1?";width:clamp(26px,4cqw,44px)":""}">${`<i style="background:${color}"></i>`.repeat(n)}</div>`;
 
 /* ===== the two design conversations ===== */
 const WORLD_NEEDS = `<div class="today">
-  <div><span class="num">1</span><b>רעיון אחד חזק</b><span>הנדר: אש ולבה. אפשר לתאר את העולם שלכם בכמה מילים?</span></div>
+  <div><span class="num">1</span><b>רעיון אחד חזק</b><span>ה־Nether: אש ולבה. אפשר לתאר את העולם שלכם בכמה מילים?</span></div>
   <div><span class="num">2</span><b>מזהים אותו בשנייה</b><span>צבעים, קוביות ויצורים שיש רק שם.</span></div>
-  <div><span class="num">3</span><b>משהו שונה</b><span>בנדר אין מים, ומיטה מתפוצצת. מה שונה אצלכם?</span></div>
-  <div><span class="num">4</span><b>חוקים משלו</b><span>ליד וורדן לא עושים רעש. איזה חוק יש רק בעולם שלכם?</span></div>
+  <div><span class="num">3</span><b>משהו שונה</b><span>ב־Nether אין מים, ומיטה מתפוצצת. מה שונה אצלכם?</span></div>
+  <div><span class="num">4</span><b>חוקים משלו</b><span>ליד Warden לא עושים רעש. איזה חוק יש רק בעולם שלכם?</span></div>
 </div>`;
 const ITEM_NEEDS = `<div class="today">
-  <div><span class="num">1</span><b>בשביל מה הוא?</b><span>מכוש חוצב. מה עושים עם החפץ שלכם?</span></div>
-  <div><span class="num">2</span><b>מה המחיר?</b><span>פנינת אנדר מעבירה אתכם רחוק, ופוצעת אתכם.</span></div>
-  <div><span class="num">3</span><b>כמה הוא נדיר?</b><span>אדמה: 64 בערימה. טוטם האלמוות: אחד.</span></div>
-  <div><span class="num">4</span><b>השם והצורה</b><span>״חרב יהלום״: יודעים מה היא עושה לפני שקוראים.</span></div>
+  <div><span class="num">1</span><b>בשביל מה הוא?</b><span>עם Pickaxe חוצבים. מה עושים עם החפץ שלכם?</span></div>
+  <div><span class="num">2</span><b>מה המחיר?</b><span>Ender Pearl מעבירה אתכם רחוק, ופוצעת אתכם.</span></div>
+  <div><span class="num">3</span><b>כמה הוא נדיר?</b><span>Dirt: 64 בערימה. Totem of Undying: אחד.</span></div>
+  <div><span class="num">4</span><b>השם והצורה</b><span>Diamond Sword: יודעים מה היא עושה לפני שקוראים.</span></div>
 </div>`;
 
 /* ===== lesson 1 steps ===== */
@@ -645,7 +694,7 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
     { type:"שיחה", title:"מה עולם צריך?",
       body:`<p>איזה מקום במיינקראפט אתם הכי זוכרים? למה דווקא אותו?</p>
         <p>לעולם שזוכרים יש ארבעה דברים. מדברים עליהם יחד, ואחר כך כל אחד ממציא את העולם שלו.</p>`,
-      why:"עולם שאין בו רעיון, צבעים וחוקים משלו נראה כמו עוד שדה דשא. אף אחד לא זוכר שדה דשא.",
+      why:"עולם שאין בו רעיון, צבעים וחוקים משלו נראה כמו עוד Plains. אף אחד לא זוכר Plains.",
       visual:()=>postcards(["nether","end","deep","plains"], "tag") + WORLD_NEEDS },
 
     { type:"פעילות", title:"כרטיס העולם שלי",
@@ -887,21 +936,21 @@ const SLIDES = [
   { label:"הדרך", html:`<h2>הדרך עד התערוכה</h2><ul class="big"><li>שיעורים 2–5: החפצים הראשונים</li><li>שיעורים 6–9: המקום שלכם והיצור הראשון</li><li><b>שיעור 10: תערוכה 1</b></li><li>שיעורים 11–15: יצור שרק אתם המצאתם</li><li><b>שיעור 20: תערוכה 2, המשפחות מגיעות</b></li></ul>`,
     notes:"מה בונים בכל חלק של הקורס. אפשר להאריך כאן אם ההתקנות עוד רצות." },
   { label:"מה עולם צריך?", html:`<h2>מה עולם צריך?</h2>${postcards(["nether","plains","end","deep"])}<p class="sub">איזה מהם זוכרים הכי טוב? ואיזה הכי פחות?</p>`,
-    notes:"20–55 דק׳, עשר שקופיות. שיחה, לא הרצאה. הצבעה בהרמת יד על כל תמונה: מי זוכר את המקום הזה הכי טוב? שדה הדשא יקבל הכי מעט. שואלים: למה? כותבים את התשובות שלהם על הלוח. השקופיות הבאות הן ארבע תשובות." },
+    notes:"20–55 דק׳, עשר שקופיות. שיחה, לא הרצאה. הצבעה בהרמת יד על כל תמונה: מי זוכר את המקום הזה הכי טוב? ה־Plains יקבל הכי מעט. שואלים: למה? כותבים את התשובות שלהם על הלוח. השקופיות הבאות הן ארבע תשובות." },
   { label:"1 · רעיון חזק", html:`<div class="eye">1 מתוך 4</div><h2>רעיון אחד חזק</h2>${postcards(["nether","end","deep","plains"], "tag")}<p class="sub">עולם שאפשר לתאר בכמה מילים הוא עולם שזוכרים.</p>`,
-    notes:"לפני שמראים: תתארו את הנדר בשלוש מילים. ואת האנד? ואת שדה הדשא? (קשה. אין לו רעיון, ולכן לא זוכרים אותו.) לכל עולם שהם אוהבים יש רעיון אחד שאפשר להגיד בנשימה אחת." },
+    notes:"לפני שמראים: תתארו את ה־Nether בשלוש מילים. ואת ה־End? ואת ה־Plains? (קשה. אין לו רעיון, ולכן לא זוכרים אותו.) לכל עולם שהם אוהבים יש רעיון אחד שאפשר להגיד בנשימה אחת." },
   { label:"1 · משפט אחד", html:`<div class="eye">1 מתוך 4</div><p class="quote">״ברברים על כלבי מלחמה, כולם בפרוות״</p><div class="rules"><div><b>מה לובשים שם?</b></div><div><b>איזה חיות יש?</b></div><div><b>חם שם, או קר?</b></div></div><p class="sub">אף אחד לא סיפר לכם, ובכל זאת אתם יודעים.</p>`,
     notes:"קוראים את המשפט ושואלים את שלוש השאלות. הם יענו בלי לחשוב. המסקנה: משפט אחד טוב עונה על עשרות שאלות, אז אחר כך לא צריך להמציא כל דבר מחדש. שואלים: מה אין בעולם הזה? (חלליות, רובוטים.) רעיון חזק גם אומר מה לא נכנס." },
   { label:"2 · מי אני?", html:`<div class="eye">2 מתוך 4</div><h2>שלושה צבעים. איזה מקום זה?</h2><div class="pal"><figure><figcaption>א</figcaption>${swatches("nether")}</figure><figure><figcaption>ב</figcaption>${swatches("end")}</figure><figure><figcaption>ג</figcaption>${swatches("deep")}</figure></div>`,
     notes:"משחק. נותנים להם לנחש רק מהצבעים. מי שצריך רמז: א׳, ״תקרה במקום שמיים, וחזירים שאוהבים זהב״. ב׳, ״שמיים שחורים, ויצורים גבוהים וסגולים״. ג׳, ״מישהו ששומע כל צעד״. התשובות בשקופית הבאה." },
   { label:"2 · מזהים בשנייה", html:`<div class="eye">2 מתוך 4</div><h2>מזהים אותו בשנייה</h2>${postcards(["nether","end","deep"], "sw")}<p class="sub">לכל עולם טוב יש צבעים, קוביות ויצורים משלו.</p>`,
     notes:"הם זיהו עולם שלם משלושה ריבועים של צבע. שואלים: איזה צבעים יהיו בעולם שלכם? ומה רואים רק שם: יצור, קובייה, צמח, בניין? בגלל זה בכרטיס בוחרים שלושה צבעים ודבר אחד שרואים רק שם." },
-  { label:"3 · משהו שונה", html:`<div class="eye">3 מתוך 4</div><h2>מה שונה אצלו?</h2><div class="cmp"><div class="h"></div><div class="h">מיינקראפט הרגיל</div><div class="h">הנדר</div><div><b>מים</b></div><div>זורמים</div><div class="x">מתאדים מיד</div><div><b>מיטה</b></div><div>ישנים בה</div><div class="x">מתפוצצת</div><div><b>למעלה</b></div><div>שמיים</div><div class="x">תקרה מאבן</div><div><b>יום ולילה</b></div><div>יש</div><div class="x">אין</div></div>`,
-    notes:"מכסים את העמודה של הנדר ושואלים שורה אחרי שורה: מה קורה למים בנדר? ולמי שהולך לישון שם? הצבעה: איזה הבדל הכי מפחיד? המסקנה: הנדר הוא לא עולם שהומצא מאפס. זה מיינקראפט, עם כמה דברים הפוכים." },
-  { label:"3 · הנוסחה", html:`<div class="eye">3 מתוך 4</div><h2>כמו ___ , חוץ מזה ש___</h2><div class="rules"><div><b>כמו איים בשמיים,</b>חוץ מזה שאין קרקע מתחת. <small>האנד</small></div><div><b>כמו אוקיינוס,</b>חוץ מזה שהמים הם לבה.</div><div><b>כמו כפר רגיל,</b>חוץ מזה שכולם שם ישנים ביום.</div></div><p class="sub">לוקחים מקום מוכר, ומשנים בו דבר אחד גדול.</p>`,
+  { label:"3 · משהו שונה", html:`<div class="eye">3 מתוך 4</div><h2>מה שונה אצלו?</h2><div class="cmp"><div class="h"></div><div class="h">מיינקראפט הרגיל</div><div class="h">ה־Nether</div><div><b>מים</b></div><div>זורמים</div><div class="x">מתאדים מיד</div><div><b>מיטה</b></div><div>ישנים בה</div><div class="x">מתפוצצת</div><div><b>למעלה</b></div><div>שמיים</div><div class="x">תקרה מאבן</div><div><b>יום ולילה</b></div><div>יש</div><div class="x">אין</div></div>`,
+    notes:"מכסים את העמודה של ה־Nether ושואלים שורה אחרי שורה: מה קורה למים ב־Nether? ולמי שהולך לישון שם? הצבעה: איזה הבדל הכי מפחיד? המסקנה: ה־Nether הוא לא עולם שהומצא מאפס. זה מיינקראפט, עם כמה דברים הפוכים." },
+  { label:"3 · הנוסחה", html:`<div class="eye">3 מתוך 4</div><h2>כמו ___ , חוץ מזה ש___</h2><div class="rules"><div><b>כמו איים בשמיים,</b>חוץ מזה שאין קרקע מתחת. <small>ה־End</small></div><div><b>כמו אוקיינוס,</b>חוץ מזה שהמים הם לבה.</div><div><b>כמו כפר רגיל,</b>חוץ מזה שכולם שם ישנים ביום.</div></div><p class="sub">לוקחים מקום מוכר, ומשנים בו דבר אחד גדול.</p>`,
     notes:"סבב מהיר: כל אחד משלים את המשפט לעולם שלו, בקול. לא חייב להיות מושלם. מי שתקוע: בוחרים יחד מקום במיינקראפט, ושואלים ״מה הדבר הכי מוזר שיכול להיות שם?״ זו השורה השלישית בכרטיס." },
-  { label:"4 · חוקים משלו", html:`<div class="eye">4 מתוך 4</div><h2>חוקים משלו</h2><div class="rules"><div><span class="who">${silSVG(MOBS[1])}<b>אנדרמן</b></span>לא מסתכלים לו בעיניים.<small>אז הולכים עם הראש למטה.</small></div><div><span class="who">${silSVG(WARDEN)}<b>וורדן</b></span>לא עושים רעש.<small>אז מתגנבים.</small></div><div><span class="who">${silSVG(PIGLIN)}<b>פיגלינים</b></span>לובשים זהב, והם לא תוקפים.<small>אז מחפשים זהב לפני שנכנסים.</small></div></div><p class="sub">חוק טוב משנה את מה שהשחקן עושה.</p>`,
-    notes:"שואלים על כל אחד: מה החוק שלו? ומה אתם עושים בגלל החוק? החוק שינה את איך שמשחקים, וככה מזהים חוק טוב. עוד שאלה: איך יודעים שהחוק קיים? (האנדרמן צועק ורועד, הוורדן שומעים אותו מגיע.) לחוק טוב יש סימן שרואים או שומעים." },
+  { label:"4 · חוקים משלו", html:`<div class="eye">4 מתוך 4</div><h2>חוקים משלו</h2><div class="rules"><div><span class="who">${mobFace("enderman", silSVG(MOBS[1]))}<b>Enderman</b></span>לא מסתכלים לו בעיניים.<small>אז הולכים עם הראש למטה.</small></div><div><span class="who">${mobFace("warden", silSVG(WARDEN))}<b>Warden</b></span>לא עושים רעש.<small>אז מתגנבים.</small></div><div><span class="who">${mobFace("piglin", silSVG(PIGLIN))}<b>Piglins</b></span>לובשים זהב, והם לא תוקפים.<small>אז מחפשים זהב לפני שנכנסים.</small></div></div><p class="sub">חוק טוב משנה את מה שהשחקן עושה.</p>`,
+    notes:"שואלים על כל אחד: מה החוק שלו? ומה אתם עושים בגלל החוק? החוק שינה את איך שמשחקים, וככה מזהים חוק טוב. עוד שאלה: איך יודעים שהחוק קיים? (ה־Enderman צועק ורועד, ה־Warden שומעים אותו מגיע.) לחוק טוב יש סימן שרואים או שומעים." },
   { label:"4 · הצבעה", html:`<div class="eye">4 מתוך 4</div><h2>איזה חוק יותר טוב?</h2><div class="ab"><div><span class="l">א</span>בעולם שלי יורד שלג.</div><div class="or">או</div><div><span class="l">ב</span>בעולם שלי, מי שעומד במקום קופא.</div></div>`,
     notes:"הצבעה בהרמת יד, ואז ״למה?״. א׳ הוא רק קישוט: השחקן עושה בדיוק מה שעשה קודם. ב׳ משנה את המשחק: אסור לעצור, אז איך בונים? איך נלחמים? אחר כך כל אחד אומר חוק אחד לעולם שלו, והכיתה אומרת מה היא הייתה עושה אחרת בגללו." },
   { label:"אז מה עולם צריך?", html:`<h2>אז מה עולם צריך?</h2><div class="rules"><div><span class="n">1</span><b>רעיון אחד חזק</b>כמה מילים.</div><div><span class="n">2</span><b>מזהים אותו בשנייה</b>צבעים, ודבר שרואים רק שם.</div><div><span class="n">3</span><b>משהו שונה</b>כמו... חוץ מזה ש...</div><div><span class="n">4</span><b>חוק משלו</b>שמשנה מה עושים שם.</div></div><p class="sub">ועוד דבר: עולם קטן ומלא עדיף על עולם ענק וריק.</p>`,
@@ -914,8 +963,8 @@ const SLIDES = [
     notes:"55–70 דק׳. מחלקים את הדפים המודפסים וטושים. מסתובבים, ושואלים כל ילד שאלה אחת על העולם שלו. מי שתקוע על החוק: ״מה אסור לעשות אצלך?״ מי שסיים: מצייר את העולם בריבוע הגדול שבדף." },
   { label:"דוגמאות", html:`<h2>עולם בשורה אחת</h2><ul class="big"><li>פיראטים בשמיים על איים מרחפים</li><li>יער שהלילה בו לא נגמר</li><li>דבורים ענקיות שבנו עיר מדבש</li></ul><p class="sub">קצר. מישהו אחר יכול לדמיין את זה מיד.</p>`,
     notes:"להשאיר על המסך בזמן שהם כותבים. מי שמעתיק דוגמה כמו שהיא, מחליף בה לפחות מילה אחת." },
-  { label:"צלליות", html:`<h2>מי זה?</h2><div class="sil">${MOBS.map((m,i)=>`<button data-sil="${i}" aria-label="צללית ${i+1}">${silSVG(m)}<span class="nm">?</span></button>`).join("")}</div>`,
-    notes:"ממלא זמן: רק אם ההתקנות עוד רצות. לוחצים על צללית כדי לחשוף. אחרי כל אחת: ״איך ידעתם?״" },
+  { label:"מי זה?", html:`<h2>מי זה?</h2>${guessGrid()}`,
+    notes:"ממלא זמן: רק אם ההתקנות עוד רצות. כל ריבוע מראה כמה פיקסלים מהפנים של יצור. מנחשים, ואז לוחצים כאן על הריבוע: התמונה מתרחקת ורואים את כל הפנים, גם במקרן. אחרי כל אחד: ״איך ידעתם?״ (לפי הצבעים.)" },
   { label:"מיינקראפט נפתח?", html:`<h2>מיינקראפט נפתח?</h2><ol class="big"><li>Singleplayer</li><li>Game Mode: <b>Creative</b> ← Create New World</li><li><kbd>F2</kbd> מצלם את המסך</li><li><kbd>Esc</kbd> ← Mods ← מוצאים את המוד</li></ol>`,
     notes:"70–75 דק׳. בפעם הראשונה קופץ מסך Welcome to Minecraft: לוחצים Continue. מי שמיינקראפט עוד לא נפתח אצלו ממשיך לג׳מיני, ובודקים אותו שוב בסוף." },
   { label:"ג׳מיני", html:`<h2>מה זה ג׳מיני</h2><ol class="big"><li><code>gemini.google.com</code>, עם החשבון של משרד החינוך</li><li>כותבים למטה, <kbd>Enter</kbd> שולח</li><li>תפריט בצד: צ׳אט חדש</li><li>כפתור העתקה בפינה של כל קוד</li><li>ג׳מיני לא זוכר צ׳אטים קודמים</li></ol>`,
@@ -1020,23 +1069,23 @@ const SLIDES2 = [
     notes:"0–5 דק׳. הילדים לוחצים פעמיים על הסמל Minecraft, והדף נפתח לבד. מי שלא שלח הודעה לג׳מיני בשיעור 1, עושה את זה עכשיו." },
   { label:"מה הופך חפץ למעולה?", html:`<h2>מה הופך חפץ למעולה?</h2>${itemRow(["pick","pearl","bow","apple","totem","wings","potato","dirt"])}<p class="sub">מה לוקחים תמיד? ומה אף פעם לא?</p>`,
     notes:"5–35 דק׳, אחת־עשרה שקופיות. שיחה, לא הרצאה. הצבעה בהרמת יד על כל חפץ: מי לוקח אותו תמיד? מי אף פעם לא? כותבים על הלוח שתי רשימות. שואלים: מה ההבדל בין הרשימות? השקופיות הבאות הן ארבע תשובות." },
-  { label:"1 · בשביל מה", html:`<div class="eye">1 מתוך 4</div><h2>בשביל מה הוא?</h2><div class="bal"><div class="r two">${itemSVG("pick")}<b>מכוש</b><div class="job">חוצבים איתו.</div></div><div class="r two">${itemSVG("pearl")}<b>פנינת אנדר</b><div class="job">מגיעים רחוק, ברגע.</div></div><div class="r two">${itemSVG("potato")}<b>תפוח אדמה רעיל</b><div class="job">...?</div></div></div><p class="sub">חפץ בלי תפקיד נשאר בתיבה.</p>`,
-    notes:"עוברים על החפצים שעל הלוח: מה עושים עם כל אחד? חפץ טוב עונה במשפט אחד. על תפוח האדמה הרעיל הם ייתקעו, וזו בדיוק הנקודה." },
-  { label:"1 · ארבעה תפקידים", html:`<div class="eye">1 מתוך 4</div><h2>ארבעה תפקידים לחפץ</h2><div class="rules"><div><b>כלי</b>עושים איתו משהו.<small>מכוש, חכה</small></div><div><b>נשק או מגן</b>נלחמים איתו.<small>חרב, מגן</small></div><div><b>אוצר</b>אוספים אותו וסוחרים בו.<small>אמרלד</small></div><div><b>מפתח</b>פותח או מפעיל משהו.<small>עין אנדר</small></div></div><p class="sub">איזה תפקיד יש לחפץ שלכם?</p>`,
+  { label:"1 · בשביל מה", html:`<div class="eye">1 מתוך 4</div><h2>בשביל מה הוא?</h2><div class="bal"><div class="r two">${itemSVG("pick")}<b>Pickaxe</b><div class="job">חוצבים איתו.</div></div><div class="r two">${itemSVG("pearl")}<b>Ender Pearl</b><div class="job">מגיעים רחוק, ברגע.</div></div><div class="r two">${itemSVG("potato")}<b>Poisonous Potato</b><div class="job">...?</div></div></div><p class="sub">חפץ בלי תפקיד נשאר בתיבה.</p>`,
+    notes:"עוברים על החפצים שעל הלוח: מה עושים עם כל אחד? חפץ טוב עונה במשפט אחד. על Poisonous Potato הם ייתקעו, וזו בדיוק הנקודה." },
+  { label:"1 · ארבעה תפקידים", html:`<div class="eye">1 מתוך 4</div><h2>ארבעה תפקידים לחפץ</h2><div class="rules"><div><b>כלי</b>עושים איתו משהו.<small>Pickaxe, Fishing Rod</small></div><div><b>נשק או מגן</b>נלחמים איתו.<small>Sword, Shield</small></div><div><b>אוצר</b>אוספים אותו וסוחרים בו.<small>Emerald</small></div><div><b>מפתח</b>פותח או מפעיל משהו.<small>Eye of Ender</small></div></div><p class="sub">איזה תפקיד יש לחפץ שלכם?</p>`,
     notes:"כל אחד אומר: מה החפץ שלו, ואיזה מהארבעה הוא. היום הכי קל לבנות אוצר או מפתח, כי הם לא צריכים כוחות: מספיק שם, משפט, ציור, וכמה בערימה. מי שרוצה נשק: בונה היום את החפץ, והכוח שלו נכנס בשיעור 4." },
-  { label:"2 · המחיר", html:`<div class="eye">2 מתוך 4</div><h2>מה מקבלים, ומה משלמים</h2><div class="bal"><div class="r">${itemSVG("pearl")}<b>פנינת אנדר</b><div class="get"><small>מקבלים</small>מגיעים רחוק, ברגע.</div><div class="pay"><small>משלמים</small>נפצעים בנחיתה.</div></div><div class="r">${itemSVG("wings")}<b>אליטרה</b><div class="get"><small>מקבלים</small>עפים.</div><div class="pay"><small>משלמים</small>אין שריון על החזה.</div></div><div class="r">${itemSVG("bow")}<b>קשת</b><div class="get"><small>מקבלים</small>פוגעים מרחוק.</div><div class="pay"><small>משלמים</small>כל ירייה עולה חץ.</div></div></div>`,
-    notes:"מכסים את העמודה האדומה ושואלים: מה המחיר של פנינת אנדר? של אליטרה? הם יודעים, רק אף פעם לא קראו לזה מחיר. המסקנה: לכל חפץ חזק במיינקראפט יש מחיר. זה לא במקרה, מישהו תכנן את זה." },
-  { label:"2 · ארבעה מחירים", html:`<div class="eye">2 מתוך 4</div><h2>ארבעה סוגים של מחיר</h2><div class="rules"><div><b>עולה משהו</b>חצים, אוכל, זהב.</div><div><b>פוגע בכם</b>כמו פנינת אנדר.</div><div><b>מוותרים על משהו</b>אליטרה, או שריון.</div><div><b>עובד רק לפעמים</b>רק בלילה. רק בגשם.</div></div><p class="sub">המחיר הוא החלק המעניין בחפץ.</p>`,
+  { label:"2 · המחיר", html:`<div class="eye">2 מתוך 4</div><h2>מה מקבלים, ומה משלמים</h2><div class="bal"><div class="r">${itemSVG("pearl")}<b>Ender Pearl</b><div class="get"><small>מקבלים</small>מגיעים רחוק, ברגע.</div><div class="pay"><small>משלמים</small>נפצעים בנחיתה.</div></div><div class="r">${itemSVG("wings")}<b>Elytra</b><div class="get"><small>מקבלים</small>עפים.</div><div class="pay"><small>משלמים</small>אין שריון על החזה.</div></div><div class="r">${itemSVG("bow")}<b>Bow</b><div class="get"><small>מקבלים</small>פוגעים מרחוק.</div><div class="pay"><small>משלמים</small>כל ירייה עולה חץ.</div></div></div>`,
+    notes:"מכסים את העמודה האדומה ושואלים: מה המחיר של Ender Pearl? של Elytra? הם יודעים, רק אף פעם לא קראו לזה מחיר. המסקנה: לכל חפץ חזק במיינקראפט יש מחיר. זה לא במקרה, מישהו תכנן את זה." },
+  { label:"2 · ארבעה מחירים", html:`<div class="eye">2 מתוך 4</div><h2>ארבעה סוגים של מחיר</h2><div class="rules"><div><b>עולה משהו</b>חצים, אוכל, זהב.</div><div><b>פוגע בכם</b>כמו Ender Pearl.</div><div><b>מוותרים על משהו</b>Elytra, או שריון.</div><div><b>עובד רק לפעמים</b>רק בלילה. רק בגשם.</div></div><p class="sub">המחיר הוא החלק המעניין בחפץ.</p>`,
     notes:"שואלים כל אחד: מה המחיר של החפץ שלך, ואיזה סוג הוא? מי שאומר ״אין לו מחיר״: איזה מהארבעה הכי מתאים לעולם שלך? להגיד בבירור: את המחיר כותבים היום בכרטיס, והוא נכנס למשחק בשיעור 4." },
   { label:"2 · הצבעה", html:`<div class="eye">2 מתוך 4</div><h2>עם איזו חרב יותר כיף אחרי שעה?</h2><div class="ab"><div><span class="l">א</span>הורגת כל דבר במכה אחת. תמיד.</div><div class="or">או</div><div><span class="l">ב</span>חזקה מאוד, ונשברת אחרי עשר מכות.</div></div>`,
     notes:"הצבעה. רובם יבחרו א׳. שואלים: ומה קורה אחרי חמש דקות עם א׳? אין יותר סכנה, אז אין משחק. עם ב׳ צריך להחליט על מי שווה לבזבז מכה. חפץ טוב גורם לשחקן להחליט משהו." },
-  { label:"3 · נדירות", html:`<div class="eye">3 מתוך 4</div><h2>כמה הוא נדיר?</h2><div class="stk"><figure>${stackPic(64,8,"#8A5A2B")}<figcaption>64<small>אדמה · בכל מקום</small></figcaption></figure><figure>${stackPic(16,4,"#1FA89A")}<figcaption>16<small>פנינת אנדר · צריך לחפש</small></figcaption></figure><figure>${stackPic(1,1,"#F2C94C")}<figcaption>1<small>טוטם האלמוות · רק מאויב אחד</small></figcaption></figure></div><p class="sub">כמה נכנסים בערימה אחת. ככל שהחפץ נדיר יותר, המספר קטן יותר.</p>`,
-    notes:"שואלים: למה מפנינת אנדר נכנסות רק 16 בערימה? (אחרת הייתם מתעופפים בכל המפה בלי לחשוב.) ולמה מטוטם רק אחד? המספר הזה הוא הדבר שג׳מיני מכניס למשחק כבר היום, אז כל אחד בוחר: 1, 16 או 64, ולמה." },
-  { label:"3 · רק למצוא", html:`<div class="eye">3 מתוך 4</div><div class="hero1"><div class="slotpx">${itemSVG("apple")}</div><div><h2>תפוח הזהב המכושף</h2><p class="quote">אי אפשר להכין אותו. רק למצוא.</p></div></div><p class="sub">ומה היה קורה אם יהלומים היו בכל מקום, כמו אדמה?</p>`,
+  { label:"3 · נדירות", html:`<div class="eye">3 מתוך 4</div><h2>כמה הוא נדיר?</h2><div class="stk"><figure>${stackPic(64,8,"#8A5A2B")}<figcaption>64<small>Dirt · בכל מקום</small></figcaption></figure><figure>${stackPic(16,4,"#1FA89A")}<figcaption>16<small>Ender Pearl · צריך לחפש</small></figcaption></figure><figure>${stackPic(1,1,"#F2C94C")}<figcaption>1<small>Totem of Undying · רק מאויב אחד</small></figcaption></figure></div><p class="sub">כמה נכנסים בערימה אחת. ככל שהחפץ נדיר יותר, המספר קטן יותר.</p>`,
+    notes:"שואלים: למה מ־Ender Pearl נכנסות רק 16 בערימה? (אחרת הייתם מתעופפים בכל המפה בלי לחשוב.) ולמה מ־Totem of Undying רק אחד? המספר הזה הוא הדבר שג׳מיני מכניס למשחק כבר היום, אז כל אחד בוחר: 1, 16 או 64, ולמה." },
+  { label:"3 · רק למצוא", html:`<div class="eye">3 מתוך 4</div><div class="hero1"><div class="slotpx">${itemSVG("apple")}</div><div><h2>Enchanted Golden Apple</h2><p class="quote">אי אפשר להכין אותו. רק למצוא.</p></div></div><p class="sub">ומה היה קורה אם יהלומים היו בכל מקום, כמו אדמה?</p>`,
     notes:"שואלים את השאלה שעל המסך. (אף אחד לא היה שמח למצוא יהלום.) מה שקשה להשיג, שומרים לרגע הנכון. שואלים כל אחד: איפה משיגים את החפץ שלך? רק במקום אחד? רק מיצור אחד? זו השורה ״איפה משיגים אותו״ בכרטיס." },
   { label:"4 · השם", html:`<div class="eye">4 מתוך 4</div><h2>מה החפץ הזה עושה?</h2><div class="rules"><div><b>פטיש הרעם</b><small>?</small></div><div><b>מגפי ענן</b><small>?</small></div><div><b>מטבע דבש</b><small>?</small></div></div><p class="sub">אם כולם מנחשים אותו דבר, השם טוב.</p>`,
     notes:"משחק. אף אחד מהחפצים האלה לא קיים, ובכל זאת כולם ינחשו כמעט אותו דבר. אחר כך כל אחד אומר רק את שם החפץ שלו, והכיתה מנחשת מה הוא עושה. מי שניחשו אצלו לא נכון, מחליף שם." },
-  { label:"4 · 16 על 16", html:`<div class="eye">4 מתוך 4</div><h2>וגם הצורה מספרת</h2><div class="z16"><div class="big">${pxSVG(SWORD16.map, SWORD16.pal, true)}</div><div class="side"><div><b>256 משבצות</b><br>זה כל הציור.</div><div class="real">${pxSVG(SWORD16.map, SWORD16.pal)}<span>וככה רואים אותו במשחק.</span></div></div></div><p class="sub">רק הצורה הכי חשובה נכנסת. קו מתאר כהה, ושניים עד ארבעה צבעים.</p>`,
+  { label:"4 · 16 על 16", html:`<div class="eye">4 מתוך 4</div><h2>וגם הצורה מספרת</h2><div class="z16"><div class="big">${mcPic("item_diamond_sword", pxSVG(SWORD16.map, SWORD16.pal, true))}</div><div class="side"><div><b>256 משבצות</b><br>זה כל הציור.</div><div class="real">${mcPic("item_diamond_sword", pxSVG(SWORD16.map, SWORD16.pal), "mslot")}<span>וככה רואים אותו במשחק.</span></div></div></div><p class="sub">רק הצורה הכי חשובה נכנסת. קו מתאר כהה, ושניים עד ארבעה צבעים.</p>`,
     notes:"שואלים: איך יודעים שזו חרב, גם כשהיא קטנטנה? (הצורה: להב ארוך, ידית, ומשהו לרוחב.) סופרים יחד את הצבעים בציור: ארבעה. בדף שלהם יש רשת כזאת בדיוק, של 16 על 16." },
   { label:"אז מה חפץ צריך?", html:`<h2>אז מה חפץ צריך?</h2><div class="rules"><div><span class="n">1</span><b>תפקיד</b>בשביל מה הוא?</div><div><span class="n">2</span><b>מחיר</b>מה משלמים עליו?</div><div><span class="n">3</span><b>נדירות</b>איפה משיגים, וכמה בערימה?</div><div><span class="n">4</span><b>שם וצורה</b>שמספרים מה הוא עושה.</div></div><p class="sub">אלה השורות בכרטיס החפץ.</p>`,
     notes:"חצי דקה, ועוברים לדף. להזכיר: היום נכנסים למשחק השם, המשפט, הציור, וכמה בערימה. התפקיד והמחיר נשארים בכרטיס עד שיעור 4." },

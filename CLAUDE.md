@@ -47,7 +47,9 @@ Antigravity (18+) replaced 5 Oct by the plain Gemini web app. **No Gems** (Googl
 `LESSON1_GUIDE.md` (plain-language: every piece explained, lesson 1 minute by minute, the Gem, what changes in the hub)
 and comments. Then rewrite lesson 1 in the hub in plain words (no paper folders, a real "how Gemini works" step, a
 "how a mod works" step, kids make the Gem themselves if he agrees), and only then lesson 2. Explain before building.
-The starter project, hub control panel and forgiving paste all work on his Windows laptop. Maven and Mojang are
+The starter project, hub control panel and forgiving paste all work on his Windows laptop; lesson 2 worked too.
+The hub's **דרייב** button (5 Oct) downloads one `myworld DD-MM HH-MM.zip` (5 code files, pictures, worlds, hub notes) for
+the kid's Google Drive and loads it back on a reset or different laptop; not yet tested on Windows or a student Drive. Maven and Mojang are
 blocked from the cloud box, so every Java change needs Ben's Windows test.
 
 **Lesson shape (Ben, 5 Oct, overrides `04`/`05` where they differ): "learn this, build this, bye", 90 minutes.** One idea,

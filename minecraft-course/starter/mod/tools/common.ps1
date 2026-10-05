@@ -219,6 +219,91 @@ function Invoke-Restore([string]$root, [string]$id) {
     return New-Result $true 'הגרסה חזרה. לוחצים שחק כדי לבדוק.'
 }
 
+# ---------- backup file, for the kid's Google Drive ----------
+# One zip with everything that is the kid's: the five code files, pictures and models, the Minecraft worlds and the
+# hub's own notes (world card, item card, progress). It goes to the kid's Drive, so it survives a laptop reset and
+# moves with the kid to any laptop.
+function Add-ZipFile($zip, [string]$path, [string]$name) {
+    try {
+        # Minecraft may hold a world file open while the game runs, so read it with sharing on.
+        $fs = [IO.File]::Open($path, 'Open', 'Read', 'ReadWrite, Delete')
+        try { $es = $zip.CreateEntry($name).Open(); $fs.CopyTo($es); $es.Close() } finally { $fs.Close() }
+    } catch {}
+}
+
+function Get-BackupZip([string]$root, [string]$hubJson) {
+    Add-Type -AssemblyName System.IO.Compression
+    $mem = New-Object IO.MemoryStream
+    $zip = New-Object IO.Compression.ZipArchive($mem, [IO.Compression.ZipArchiveMode]::Create, $true)
+    $e = $zip.CreateEntry('myworld-backup.txt').Open()
+    $b = [Text.Encoding]::UTF8.GetBytes("MAKE myworld backup 1`r`n" + (Get-Date -Format 'yyyy-MM-dd HH:mm')); $e.Write($b, 0, $b.Length); $e.Close()
+    $e = $zip.CreateEntry('hub.json').Open()
+    $b = [Text.Encoding]::UTF8.GetBytes($hubJson); $e.Write($b, 0, $b.Length); $e.Close()
+    $java = Join-Path $root 'mod/src/main/java/make/myworld'
+    foreach ($n in @('MyWorld', 'MyItems', 'MyEffects', 'MyMobs', 'MyRules')) {
+        $p = Join-Path $java "$n.java"
+        if (Test-Path $p) { Add-ZipFile $zip $p "code/$n.java" }
+    }
+    $assets = Join-Path $root 'mod/src/main/resources/assets/myworld'
+    foreach ($sub in @('textures', 'models')) {
+        $dir = Join-Path $assets $sub
+        if (-not (Test-Path $dir)) { continue }
+        $base = (Resolve-Path $assets).Path.Length
+        foreach ($f in Get-ChildItem $dir -Recurse -File) { Add-ZipFile $zip $f.FullName ('assets' + $f.FullName.Substring($base).Replace('\', '/')) }
+    }
+    # Worlds: all of them, or only the newest one if together they are too big for a school upload.
+    $saves = Join-Path $root 'mod/run/saves'
+    if (Test-Path $saves) {
+        $worlds = @(Get-ChildItem $saves -Directory | Sort-Object LastWriteTime -Descending)
+        $size = (Get-ChildItem $saves -Recurse -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum
+        if ($size -gt 150MB) { $worlds = @($worlds | Select-Object -First 1) }
+        $base = (Resolve-Path $saves).Path.Length
+        foreach ($w in $worlds) {
+            foreach ($f in Get-ChildItem $w.FullName -Recurse -File) {
+                if ($f.Name -eq 'session.lock') { continue }
+                Add-ZipFile $zip $f.FullName ('worlds' + $f.FullName.Substring($base).Replace('\', '/'))
+            }
+        }
+    }
+    $zip.Dispose()
+    return $mem.ToArray()
+}
+
+# Puts a backup file back. Saves a version of the current state first, so this can be undone from "גרסאות".
+function Invoke-LoadBackup([string]$root, [byte[]]$bytes) {
+    Add-Type -AssemblyName System.IO.Compression
+    $fail = New-Result $false 'זה לא קובץ גיבוי של הקורס. בוחרים את הקובץ שמתחיל ב־myworld.'
+    try { $zip = New-Object IO.Compression.ZipArchive((New-Object IO.MemoryStream(, $bytes)), [IO.Compression.ZipArchiveMode]::Read) } catch { return $fail }
+    try {
+        if (-not $zip.GetEntry('myworld-backup.txt')) { return $fail }
+        [void](Invoke-SaveAll $root 'before')
+        $targets = @{
+            'code/'   = Join-Path $root 'mod/src/main/java/make/myworld'
+            'assets/' = Join-Path $root 'mod/src/main/resources/assets/myworld'
+            'worlds/' = Join-Path $root 'mod/run/saves'
+        }
+        $kid = @('MyWorld.java', 'MyItems.java', 'MyEffects.java', 'MyMobs.java', 'MyRules.java')
+        $hubJson = ''
+        foreach ($en in $zip.Entries) {
+            $name = $en.FullName.Replace('\', '/')
+            if ($name -eq 'hub.json') { $r = New-Object IO.StreamReader($en.Open(), [Text.Encoding]::UTF8); $hubJson = $r.ReadToEnd(); $r.Close(); continue }
+            if ($name.EndsWith('/') -or $name.Contains('..') -or $name.Contains(':') -or $name.StartsWith('/')) { continue }
+            $top = ($name -split '/')[0] + '/'
+            if (-not $targets.ContainsKey($top)) { continue }
+            $rest = $name.Substring($top.Length)
+            if ($top -eq 'code/' -and $kid -notcontains $rest) { continue }
+            if ($top -eq 'assets/' -and $rest -notmatch '^(textures|models)/') { continue }
+            $dest = Join-Path $targets[$top] $rest
+            New-Item -ItemType Directory -Force (Split-Path $dest) | Out-Null
+            $in = $en.Open(); $out = [IO.File]::Create($dest)
+            try { $in.CopyTo($out) } finally { $out.Close(); $in.Close() }
+        }
+    } finally { $zip.Dispose() }
+    $r = New-Result $true 'העולם שלכם חזר: הקוד, הציורים והעולמות. לוחצים שחק.'
+    $r | Add-Member Hub $hubJson
+    return $r
+}
+
 # ---------- for Gemini and the picture editor ----------
 # The course rules plus all of the kid's code, to paste into any Gemini chat. Every message carries its own rules,
 # so nothing depends on Gems (replaced by 18+ Skills on 17 Nov 2026) or on Gemini remembering anything.

@@ -1,5 +1,6 @@
 # The "Minecraft" desktop icon runs this. It serves the kids' hub on http://localhost:47811 and does what the hub's
-# buttons ask: paste from Gemini and play, play, undo, open the pictures folder. Listens on this computer only.
+# buttons ask: paste from Gemini and play, play, undo, open the pictures folder, make a backup file for Google Drive
+# and load it back. Listens on this computer only.
 # Quits by itself after 20 minutes with no page open and no game running.
 param([string]$root)
 $root = $root.TrimEnd('\', '/')
@@ -164,18 +165,21 @@ function Invoke-Request($client) {
         $i = $line.IndexOf(':')
         if ($i -gt 0) { $headers[$line.Substring(0, $i).Trim().ToLower()] = $line.Substring($i + 1).Trim() }
     }
+    $parts = $first.Split(' ')
+    $method = $parts[0]; $path = ($parts[1] -split '\?')[0]
+    $query = $(if ($parts[1].Contains('?')) { $parts[1].Substring($parts[1].IndexOf('?') + 1) } else { '' })
     $body = ''
     $len = 0
+    # A backup file comes in as base64 text, so that one request may be big.
+    $max = $(if ($path -eq '/api/load-backup') { 300000000 } else { 200000 })
     if ($headers.ContainsKey('content-length')) { [void][int]::TryParse($headers['content-length'], [ref]$len) }
-    if ($len -gt 0 -and $len -le 200000) {
+    if ($len -gt 0 -and $len -le $max) {
+        $client.ReceiveTimeout = 20000
         $buf = New-Object char[] $len
         $got = 0
         while ($got -lt $len) { $n = $reader.Read($buf, $got, $len - $got); if ($n -le 0) { break }; $got += $n }
         $body = New-Object string($buf, 0, $got)
     }
-    $parts = $first.Split(' ')
-    $method = $parts[0]; $path = ($parts[1] -split '\?')[0]
-    $query = $(if ($parts[1].Contains('?')) { $parts[1].Substring($parts[1].IndexOf('?') + 1) } else { '' })
 
     if ($path -eq '/api/status') {
         Send-Json $stream @{ phase = $state.phase; message = $state.message; error = $state.error }
@@ -201,6 +205,27 @@ function Invoke-Request($client) {
             $r = New-Result $false 'הציור לא נשמר. נסו שוב.'
             try { $j = $body | ConvertFrom-Json; $r = Save-ItemPicture $root ([string]$j.id) ([string]$j.png) } catch {}
             Send-Json $stream @{ ok = $r.Ok; result = $r.Message; phase = $state.phase; message = $r.Message; error = $state.error }
+            return
+        }
+        if ($path -eq '/api/backup') {
+            $notes = '{}'
+            try { $notes = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($body)) } catch {}
+            $zip = Get-BackupZip $root $notes
+            $state.message = 'קובץ הגיבוי ירד לתיקיית ההורדות. עכשיו מעלים אותו לדרייב.'
+            Send $stream 200 'application/zip' $zip
+            return
+        }
+        if ($path -eq '/api/load-backup') {
+            $busy = $state.phase -eq 'building' -or $state.phase -eq 'running'
+            $r = New-Result $false 'קודם סוגרים את מיינקראפט.'
+            $hubJson = ''
+            if (-not $busy) {
+                $r = New-Result $false 'הקובץ לא נקרא. מורידים אותו שוב מהדרייב ומנסים שוב.'
+                try { $r = Invoke-LoadBackup $root ([Convert]::FromBase64String($body)); $hubJson = [string]$r.Hub } catch {}
+                if ($r.Ok) { $state.phase = 'idle'; $state.error = '' }
+                $state.message = $r.Message
+            }
+            Send-Json $stream @{ ok = $r.Ok; result = $r.Message; hub = $hubJson; phase = $state.phase; message = $state.message; error = $state.error }
             return
         }
         $r = Invoke-Action $path.Substring(5) $query

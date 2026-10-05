@@ -273,7 +273,7 @@ body.aud .stage{min-height:100vh}
 .pbar:has(.dock){position:static}
 .wrap #dock{margin-top:20px}
 .dock{display:grid;gap:10px;background:var(--surface);border:2px solid var(--ink);border-radius:8px;padding:12px;box-shadow:0 4px 0 var(--ink)}
-.dock-btns{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:10px}
+.dock-btns{display:grid;grid-template-columns:2fr repeat(6,1fr);gap:10px}
 .dbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:8px 12px;border:2px solid var(--ink);border-radius:6px;background:var(--surface);color:var(--ink);font-weight:800;font-size:1.05rem;box-shadow:0 3px 0 var(--ink)}
 .dbtn svg{width:26px;height:26px;flex:none}
 .dbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
@@ -291,6 +291,9 @@ body.aud .stage{min-height:100vh}
 .dock-vers{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:8px}
 .dock-vers .vhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .vnote{color:var(--muted);font-size:.92em}
+.drv{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px}
+.drv h4{margin:0 0 4px}
+.drv ol{margin:0;padding-inline-start:22px;display:grid;gap:6px}
 .vlist{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:280px;overflow:auto}
 .vlist li{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
 .vlist .vt{font-weight:800;font-variant-numeric:tabular-nums}
@@ -569,9 +572,10 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
       visual:()=>gemPromptBox("היום מתחילים מוד למיינקראפט. העולם שלי: ") + `<div><button class="btn ghost" data-copy="${esc(GEM_TEXT)}">להעתיק רק את החוקים</button></div><div class="chat"><div class="bub me"><b>אתם</b>(החוקים והקוד) היום מתחילים מוד למיינקראפט. העולם שלי: פיראטים בשמיים על איים מרחפים</div><div class="bub ai"><b>ג׳מיני</b>נשמע מסקרן! שאלה ראשונה: מה מחזיק את האיים באוויר?</div></div>` },
 
     { type:"סיום", title:"מסיימים",
-      body:`<ul><li>סוגרים את מיינקראפט.</li><li>כרטיס העולם כבר שמור במחשב. לא צריך לעשות שום דבר.</li></ul>`,
+      body:`<ul><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם לפי השלבים שם.</li></ul>`,
+      why:"המחשב של בית הספר יכול להתאפס, ואולי בשבוע הבא תשבו ליד מחשב אחר. מה שבדרייב שלכם נשאר שלכם.",
       expect:"בשיעור הבא: החפץ הראשון שלכם, בתוך המשחק.",
-      visual:()=>`<div class="checks"><div><span class="ok"></span>מיינקראפט נפתח</div><div><span class="ok"></span>כרטיס העולם מלא</div><div><span class="ok"></span>ג׳מיני ענה לי</div></div>` }
+      visual:()=>`<div class="checks"><div><span class="ok"></span>מיינקראפט נפתח</div><div><span class="ok"></span>כרטיס העולם מלא</div><div><span class="ok"></span>ג׳מיני ענה לי</div><div><span class="ok"></span>העולם שלי שמור בדרייב</div></div>` }
   ],
   challenges:[
     {id:"mc", lvl:"חובה", t:"מיינקראפט עובד", d:"נכנסתי לעולם Creative ומצאתי את המוד ברשימה."},
@@ -778,6 +782,7 @@ const L2 = {
     { type:"פתיחה", title:"מה עושים היום",
       body:`<p>היום החפץ הראשון שלכם נכנס למשחק, עם שם, משפט וציור שאתם בחרתם.</p>`,
       expect:"בסוף השיעור החפץ שלכם נמצא במשחק, בתפריט של מצב יצירה, עם הציור שציירתם.",
+      note:"כרטיס העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. לוחצים למעלה על <b>דרייב</b>, ומחזירים את העולם שלכם מהדרייב.",
       visual:()=>`<div class="today">
         <div><span class="num">1</span><b>שם לעולם</b><span>השם יופיע במשחק.</span></div>
         <div><span class="num">2</span><b>ממציאים חפץ</b><span>כרטיס וציור של 16 על 16.</span></div>
@@ -837,9 +842,9 @@ const L2 = {
       visual:()=>`<div class="vs"><div class="bad"><h4>״זה לא עובד״</h4><p>ג׳מיני לא יודע מה לא עובד, אז הוא מנחש.</p></div><div class="good"><h4>מה רציתם ומה קרה</h4><p>״רציתי שייכנסו 16 בערימה, ובמשחק נכנסים 64. הנה הקוד שלי:״</p></div></div>` },
 
     { type:"סיום", title:"מסיימים",
-      body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>לוחצים למעלה על <b>גרסאות</b>, ואז <b>לשמור גרסה עכשיו</b>.</li><li>סוגרים את מיינקראפט.</li></ul>`,
+      body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם.</li></ul>`,
       expect:"בשבוע הבא: החפץ שלכם בתלת־ממד.",
-      visual:()=>`<div class="checks"><div><span class="ok"></span>החפץ שלי במשחק</div><div><span class="ok"></span>מראים למי שיושב לידכם</div><div><span class="ok"></span>שומרים גרסה</div></div>` }
+      visual:()=>`<div class="checks"><div><span class="ok"></span>החפץ שלי במשחק</div><div><span class="ok"></span>מראים למי שיושב לידכם</div><div><span class="ok"></span>העולם שלי שמור בדרייב</div></div>` }
   ],
   challenges:[
     {id:"world", lvl:"חובה", t:"שם לעולם", d:"הלשונית במשחק נקראת בשם של העולם שלכם."},
@@ -907,6 +912,7 @@ HOW YOU WORK WITH THE KID
 3. Before the code: one short Hebrew sentence saying which file it is and what changed. After the code: "במשחק אמורים לראות:" followed by what the kid asked for.
 4. "לא עובד" is not a bug report. Ask: what did you do, what did you want to see, and what happened instead. Then fix it and send the whole file again.
 5. If you were wrong, say "טעיתי" plainly and fix it.
+6. Big ideas (a boss, a new world, a whole mini-game) are welcome, but never in one answer. Say in one sentence that you will build it in small steps. Build only the first step: the smallest piece that works in the game by itself. The next step comes only after the kid has tested it in the game. If something can't be done in these five files, say so plainly and offer the closest thing that can.
 
 LIMITS
 - Age-appropriate always. Never ask for their real name, school, address or photos, and tell them not to share these.
@@ -919,6 +925,7 @@ const TEACHER_CHECK = [
   ["school","הרצת school-check.bat על מחשב אחד של בית הספר","שולחים צילום של התוצאה ל־Claude."],
   ["laptops","המחשבים ממוספרים 1–8 וטעונים","כל ילד מקבל את אותו מחשב כל שבוע."],
   ["gemtest","בדקת את ג׳מיני עם חשבון תלמיד","נכנסים? עונה? מדביקים את החוקים ושואלים משהו, ורואים שהוא עונה בעברית."],
+  ["drive","בדקת את הדרייב עם חשבון תלמיד","בהאב: דרייב, להוריד את קובץ הגיבוי, ולהעלות אותו לדרייב. אחר כך להוריד אותו משם ולהחזיר."],
   ["proj","בדקת את ״הצגת שיעור 1״ על המקרן בכיתה",""]
 ];
 

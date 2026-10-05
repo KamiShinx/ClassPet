@@ -103,7 +103,7 @@ function renderPlayer(){
 }
 
 /* ===== DOCK: the buttons that run Minecraft. Shown when the page is opened from the "Minecraft" desktop icon ===== */
-const DOCK = { on: location.protocol.indexOf("http") === 0, s: null, key: "", vopen: false, versions: [] };
+const DOCK = { on: location.protocol.indexOf("http") === 0, s: null, key: "", vopen: false, dopen: false, versions: [] };
 const SVG = a => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${a}</svg>`;
 const ICON = {
   paste: SVG('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 11h6M9 15h4"/>'),
@@ -111,7 +111,8 @@ const ICON = {
   undo:  SVG('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
   pics:  SVG('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-6-6-8 8"/>'),
   vers:  SVG('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
-  code:  SVG('<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>')
+  code:  SVG('<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>'),
+  drive: SVG('<path d="M7 18a4 4 0 0 1-.6-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/><path d="M12 16v-5M9.5 13.5L12 11l2.5 2.5"/>')
 };
 function dockHTML(){
   if (!DOCK.on || !DOCK.s) return "";
@@ -125,7 +126,20 @@ function dockHTML(){
       <button class="dbtn" data-act="undo" ${busy?"disabled":""}>${ICON.undo}<span>ביטול ההדבקה</span></button>
       <button class="dbtn" data-act="versions" aria-expanded="${DOCK.vopen}" ${s.phase==="off"?"disabled":""}>${ICON.vers}<span>גרסאות</span></button>
       <button class="dbtn" data-act="pictures" ${s.phase==="off"?"disabled":""}>${ICON.pics}<span>תמונות</span></button>
+      <button class="dbtn" data-act="drive" aria-expanded="${DOCK.dopen}" ${s.phase==="off"?"disabled":""}>${ICON.drive}<span>דרייב</span></button>
     </div>
+    ${DOCK.dopen ? `<div class="dock-vers">
+      <div class="vhead"><b>העולם שלכם בדרייב</b></div>
+      <p class="vnote">המחשב של בית הספר יכול להתאפס, ובשבוע הבא אולי תקבלו מחשב אחר. לכן בסוף כל שיעור שומרים את העולם בדרייב שלכם.</p>
+      <div class="drv"><h4>בסוף השיעור: שומרים</h4><ol>
+        <li><button class="btn go" data-act="backup">להוריד את קובץ הגיבוי</button></li>
+        <li>פותחים את <a href="https://drive.google.com" target="_blank" rel="noopener">הדרייב</a>, עם החשבון של משרד החינוך.</li>
+        <li>לוחצים <b>+ חדש</b>, ואז <b>העלאת קובץ</b>, ובוחרים מתיקיית <b>הורדות</b> את הקובץ <b dir="ltr">myworld</b>.</li></ol></div>
+      <div class="drv"><h4>במחשב חדש: מחזירים</h4><ol>
+        <li>בדרייב לוחצים על קובץ <b dir="ltr">myworld</b> האחרון עם הכפתור הימני, ואז <b>הורדה</b>.</li>
+        <li><button class="btn go" data-act="load-backup" ${busy?"disabled":""}>לבחור את הקובץ ולהחזיר</button><input type="file" accept=".zip" id="bkfile" hidden></li></ol>
+        <p class="vnote">התחרטתם? ב״גרסאות״ לוחצים להחזיר ליד ״לפני שהחזרתם גרסה״.</p></div>
+    </div>` : ""}
     ${DOCK.vopen ? `<div class="dock-vers">
       <div class="vhead"><b>גרסאות שמורות</b><button class="btn go" data-act="save">לשמור גרסה עכשיו</button></div>
       <p class="vnote">לפני כל הדבקה המחשב שומר גרסה לבד. ״להחזיר״ מחזיר את הקוד והתמונות למה שהיה אז, ואפשר להתחרט גם על זה.</p>
@@ -142,6 +156,8 @@ function paintDock(){
   if (!d) return;
   d.innerHTML = dockHTML();
   d.querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", () => act(b.dataset.act)));
+  const f = d.querySelector("#bkfile");
+  if (f) f.addEventListener("change", () => { if (f.files && f.files[0]) loadBackup(f.files[0]); });
   d.querySelectorAll("[data-restore]").forEach(b => b.addEventListener("click", () => act("restore?id=" + encodeURIComponent(b.dataset.restore))));
 }
 async function loadVersions(){
@@ -157,8 +173,54 @@ async function poll(){
   try { setDock(await (await fetch("/api/status", { cache:"no-store" })).json()); }
   catch(e){ setDock({ phase:"off", message:"הכפתורים לא עובדים כרגע. לוחצים פעמיים על הסמל Minecraft בשולחן העבודה.", error:"" }); }
 }
+/* Backup file for the kid's Drive: code, pictures, worlds, and this page's own notes (all "mkmod." keys but the seat). */
+function hubNotes(){
+  const o = {};
+  for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (k.indexOf("mkmod.") === 0 && k !== "mkmod.seat") o[k] = localStorage.getItem(k); }
+  return o;
+}
+/* The server reads request bodies as plain ASCII, so Hebrew travels as base64. */
+function b64(text){ let bin = ""; new TextEncoder().encode(text).forEach(c => bin += String.fromCharCode(c)); return btoa(bin); }
+async function backup(){
+  setDock(Object.assign({}, DOCK.s, { message:"המחשב מכין את קובץ הגיבוי..." }));
+  try {
+    const r = await fetch("/api/backup", { method:"POST", headers:{ "X-Make":"1" }, body: b64(JSON.stringify(hubNotes())), cache:"no-store" });
+    if (!r.ok) throw new Error(r.status);
+    const blob = await r.blob(), d = new Date(), two = n => String(n).padStart(2, "0");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `myworld ${two(d.getDate())}-${two(d.getMonth()+1)} ${two(d.getHours())}-${two(d.getMinutes())}.zip`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+  } catch(e){}
+  poll();
+}
+function loadBackup(file){
+  const fr = new FileReader();
+  fr.onload = async () => {
+    setDock(Object.assign({}, DOCK.s, { message:"המחשב מחזיר את העולם שלכם..." }));
+    try {
+      const r = await fetch("/api/load-backup", { method:"POST", headers:{ "X-Make":"1" }, body: String(fr.result).split(",")[1] || "", cache:"no-store" });
+      const j = await r.json();
+      if (j.ok && j.hub){
+        try {
+          const h = JSON.parse(j.hub);
+          Object.keys(localStorage).filter(k => k.indexOf("mkmod.") === 0 && k !== "mkmod.seat").forEach(k => localStorage.removeItem(k));
+          Object.keys(h).forEach(k => { if (k.indexOf("mkmod.") === 0) localStorage.setItem(k, h[k]); });
+        } catch(e){}
+      }
+      if (j.ok) DOCK.dopen = false;
+      DOCK.key = ""; DOCK.s = { phase:j.phase, message:j.result, error:j.error };
+      route();
+    } catch(e){ poll(); }
+  };
+  fr.readAsDataURL(file);
+}
 async function act(name){
-  if (name === "versions"){ DOCK.vopen = !DOCK.vopen; if (DOCK.vopen) loadVersions(); else paintDock(); return; }
+  if (name === "versions"){ DOCK.vopen = !DOCK.vopen; DOCK.dopen = false; if (DOCK.vopen) loadVersions(); else paintDock(); return; }
+  if (name === "drive"){ DOCK.dopen = !DOCK.dopen; DOCK.vopen = false; paintDock(); return; }
+  if (name === "backup"){ backup(); return; }
+  if (name === "load-backup"){ const f = document.getElementById("bkfile"); if (f) f.click(); return; }
   try {
     const r = await fetch("/api/" + name, { method:"POST", headers:{ "X-Make":"1" }, cache:"no-store" });
     const j = await r.json();

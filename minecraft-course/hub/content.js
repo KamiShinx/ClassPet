@@ -325,6 +325,19 @@ body.aud .stage{min-height:100vh}
 .px-msg{min-height:1.4em;font-weight:700}
 .px-msg.ok{color:var(--grass)}
 .px-msg.bad{color:var(--red)}
+
+/* Gemini screen mock (lesson 1) */
+.gm{display:grid;grid-template-columns:150px 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg);min-height:260px}
+.gm-side{background:var(--sunk);padding:12px;display:grid;align-content:start;gap:8px;font-size:.92em}
+.gm-new{background:var(--surface);border-radius:16px;padding:6px 10px;font-weight:700}
+.gm-lbl{color:var(--muted);font-size:.85em;margin-top:6px}
+.gm-gem{background:var(--grass-soft);border-radius:6px;padding:6px 10px;font-weight:700}
+.gm-main{padding:12px;display:grid;align-content:end;gap:10px;min-width:0}
+.gm-code{position:relative;background:var(--console);color:var(--console-ink);border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:.8rem;text-align:left}
+.gm-code pre{margin:0;white-space:pre-wrap}
+.gm-copy{position:absolute;top:6px;right:8px;background:var(--xp);color:#111;border-radius:4px;padding:0 6px;font-family:var(--body);font-weight:800}
+.gm-input{border:2px solid var(--ink);border-radius:20px;padding:8px 14px;color:var(--muted)}
+.gm i{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--xp);color:#111;font-style:normal;font-weight:800;font-size:.8em;margin-inline-start:6px}
 `;
 function injectStyle(doc){ const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); }
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap";
@@ -424,6 +437,19 @@ function gemPromptBox(text){
   return `<div class="prompt"><div class="row"><b>מעתיקים ושולחים ב־Gem:</b><button class="btn ghost" data-copy="${esc(text)}">העתקה</button></div><pre>${esc(text)}</pre></div>`;
 }
 
+
+/* What Gemini's screen looks like, with the 4 things the kids need */
+const GEMINI_MOCK = `<div class="gm" dir="rtl">
+  <div class="gm-side"><div class="gm-new">+ צ׳אט חדש <i>3</i></div><div class="gm-lbl">Gems</div><div class="gm-gem">עוזר המודים</div></div>
+  <div class="gm-main">
+    <div class="bub ai"><b>ג׳מיני</b>זה הקובץ MyItems.java עם החפץ החדש:</div>
+    <div class="gm-code" dir="ltr"><span class="gm-copy">⧉ <i>4</i></span><pre>public class MyItems {
+  ...
+}</pre></div>
+    <div class="gm-input">כותבים כאן, ו־Enter שולח <i>2</i></div>
+  </div>
+</div>`;
+
 /* ===== lesson 1 steps ===== */
 const L1 = {
   n:1, unit:"יחידה 1 · מתחילים", title:"שיעור 1: התקנה והעולם שלי",
@@ -475,7 +501,8 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
 
     { type:"שיחה", title:"מה זה מוד, ומי כותב את הקוד?",
       body:`<p><b>מוד</b> זה תוספת שמשנה את מיינקראפט: חפצים חדשים, יצורים חדשים, חוקים חדשים.</p>
-        <p>את הקוד יכתוב <b>ג׳מיני</b>. אתם הבמאים: אתם מחליטים מה יהיה בעולם, ובודקים שהוא באמת עשה את זה.</p>`,
+        <p>את הקוד יכתוב <b>ג׳מיני</b>. אתם הבמאים: אתם מחליטים מה יהיה בעולם, ובודקים שהוא באמת עשה את זה.</p>
+        <p>המוד שלכם הוא כמה קבצים עם קוד. אתם לא צריכים לפתוח אותם: ג׳מיני כותב את הקוד, וכפתור אחד בדף הזה מכניס אותו למוד ופותח את מיינקראפט.</p>`,
       why:"מי שאומר לבינה מלאכותית ״תבנה לי את זה״ מקבל משהו שהוא לא בחר. מי שמסביר בדיוק מה הוא רוצה, יכול גם לבדוק שקיבל את זה.",
       visual:()=>EQ + ROLES },
 
@@ -485,7 +512,7 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
       visual:()=>VAGUE_SPECIFIC },
 
     { type:"פעילות", title:"כרטיס העולם שלי",
-      body:`<p>10 דקות. ממלאים על הנייר, או כאן.</p><p>אין תשובות נכונות. זה העולם שלכם.</p>`,
+      body:`<p>10 דקות. ממלאים כאן, וזה נשמר במחשב.</p><p>אין תשובות נכונות. זה העולם שלכם.</p>`,
       why:"משפט קצר על העולם עונה בשבילכם על המון שאלות אחר כך: איזה יצורים יש, איזה צבעים, מה מסוכן.",
       hints:[
         "חושבים על משהו שאתם אוהבים: חיה, מקום, תקופה, מאכל. מה קורה אם הוא ענק? מפחיד? חי בשמיים?",
@@ -500,33 +527,53 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
         <li>כשאתם בתוך העולם, לוחצים <kbd>F2</kbd>. זה מצלם את המסך.</li>
         <li>לוחצים <kbd>Esc</kbd>, ואז <b>Mods</b>, ומחפשים את המוד ברשימה.</li>
       </ol>`,
-      expect:"ברשימת המודים יש מוד בשם Example Mod. זה המוד שלכם. בשיעור הבא הוא יקבל את השם של העולם שלכם.",
+      expect:"ברשימת המודים יש מוד בשם My World. זה המוד שלכם.",
       note:"קפץ מסך Welcome to Minecraft? לוחצים Continue. מיינקראפט עוד לא נפתח? זה בסדר: ממשיכים לשלב הבא ובודקים שוב בסוף.",
       visual:()=>`<div class="mcmenu"><div class="logo">MINECRAFT</div>
         <div class="mcbtn hot">Singleplayer <small>← 1</small></div><div class="mcbtn">Multiplayer</div><div class="mcbtn hot">Mods <small>← 4</small></div><div class="mcbtn">Options...</div></div>` },
 
-    { type:"בדיקה", title:"פוגשים את ג׳מיני",
-      body:`<ol>
-        <li>פותחים את Chrome ונכנסים ל־<code>gemini.google.com</code>.</li>
-        <li>מתחברים עם חשבון משרד החינוך שלכם.</li>
-        <li>${GEM_LINK ? `פותחים את ה־Gem של הכיתה: <a href="${esc(GEM_LINK)}" target="_blank" rel="noopener">עוזר המודים</a>.` : `פותחים את ה־Gem של הכיתה, <b>עוזר המודים</b>. המורה ייתן את הקישור.`}</li>
-        <li>מעתיקים את ההודעה מהמסגרת, מוסיפים בסוף את העולם שלכם, ושולחים.</li>
-        <li>עונים על השאלה שג׳מיני שואל.</li>
-      </ol>`,
-      expect:"ג׳מיני עונה בעברית ושואל אתכם שאלה על העולם שלכם.",
+    { type:"שיחה", title:"מה זה ג׳מיני",
+      body:`<p><b>ג׳מיני</b> הוא הצ׳אט של גוגל עם בינה מלאכותית, כמו ChatGPT. כותבים לו הודעה, והוא עונה.</p>
+        <ol><li>נכנסים ל־<code>gemini.google.com</code> ומתחברים עם החשבון של משרד החינוך.</li>
+        <li>למטה יש תיבה. כותבים בה ולוחצים <kbd>Enter</kbd> כדי לשלוח.</li>
+        <li>בצד יש תפריט. שם פותחים צ׳אט חדש, ושם יופיע ה־Gem שלכם.</li>
+        <li>כשג׳מיני כותב קוד, הקוד מופיע בתיבה אפורה, ובפינה שלה יש כפתור העתקה. ככה מעתיקים קוד.</li></ol>`,
+      why:"ג׳מיני לא זוכר צ׳אטים קודמים. לכן בקורס הזה שולחים לו כל פעם את הקוד שלכם מחדש.",
       note:"לא כותבים לג׳מיני את השם האמיתי שלכם, את בית הספר או איפה אתם גרים.",
       stuck:[["לא מצליחים להתחבר","בודקים שזה החשבון של משרד החינוך. אם זה עדיין לא עובד, מרימים יד."],["כתוב שאין גישה ל־Gemini","מרימים יד."]],
+      visual:()=>GEMINI_MOCK },
+
+    { type:"פעילות", title:"בונים את ה־Gem שלכם",
+      body:`<p><b>Gem</b> הוא ג׳מיני עם חוקים קבועים. בונים אותו פעם אחת, והחוקים עובדים בכל שיחה איתו.</p>
+        <ol><li>בתפריט שבצד לוחצים <b>Gems</b> (או <b>Explore Gems</b>), ואז <b>New Gem</b>.</li>
+        <li>בשם כותבים: <b>עוזר המודים</b>.</li>
+        <li>לוחצים כאן על <b>העתקה</b> ליד החוקים, ומדביקים אותם בתיבה <b>Instructions</b> עם <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
+        <li>לוחצים <b>Save</b>.</li></ol>`,
+      expect:"בתפריט שבצד מופיע עוזר המודים.",
+      why:"בלי החוקים, ג׳מיני כותב קוד למיינקראפט ישן שלא עובד אצלנו, וממציא בשבילכם שמות ורעיונות. עם החוקים הוא כותב למיינקראפט שלנו, ואת הרעיונות משאיר לכם.",
+      note:"אם ג׳מיני אצלכם בעברית, גם הכפתורים בעברית.",
+      stuck:[["אין כפתור Gems","מרימים יד. ייתכן שבחשבון של בית הספר זה סגור, והמורה יבדוק."],["החוקים באנגלית. זה בסדר?","כן. ג׳מיני מבין אותם טוב יותר באנגלית, ועונה לכם בעברית."]],
+      visual:()=>`<div class="prompt"><div class="row"><b>החוקים של עוזר המודים:</b><button class="btn go" data-copy="${esc(GEM_TEXT)}">העתקה</button></div><div class="gem">${esc(GEM_TEXT)}</div></div>` },
+
+    { type:"בדיקה", title:"מדברים עם ה־Gem",
+      body:`<ol>
+        <li>בתפריט שבצד לוחצים על <b>עוזר המודים</b>.</li>
+        <li>מעתיקים את ההודעה מהמסגרת, מוסיפים בסוף את העולם שלכם מכרטיס העולם, ושולחים.</li>
+        <li>עונים על השאלה שהוא שואל.</li>
+      </ol>`,
+      expect:"עוזר המודים עונה בעברית ושואל שאלה על העולם שלכם.",
       visual:()=>gemPromptBox("שלום! היום מתחילים מוד למיינקראפט. העולם שלי: ") + `<div class="chat"><div class="bub me"><b>אתם</b>שלום! היום מתחילים מוד למיינקראפט. העולם שלי: פיראטים בשמיים על איים מרחפים</div><div class="bub ai"><b>עוזר המודים</b>נשמע מסקרן! שאלה ראשונה: מה מחזיק את האיים באוויר?</div></div>` },
 
     { type:"סיום", title:"מסיימים",
-      body:`<ul><li>שמים את כרטיס העולם בתיקייה, לפי מספר המחשב.</li><li>מחברים את המחשב לחשמל.</li><li>החלון השחור עוד עובד? משאירים את המחשב פתוח.</li></ul>`,
+      body:`<ul><li>סוגרים את מיינקראפט.</li><li>כרטיס העולם כבר שמור במחשב. לא צריך לעשות שום דבר.</li></ul>`,
       expect:"בשיעור הבא: החפץ הראשון שלכם, בתוך המשחק.",
-      visual:()=>`<div class="checks"><div><span class="ok"></span>מיינקראפט נפתח וצילמתי מסך</div><div><span class="ok"></span>כרטיס העולם מלא ובתיקייה</div><div><span class="ok"></span>ג׳מיני ענה לי</div></div>` }
+      visual:()=>`<div class="checks"><div><span class="ok"></span>מיינקראפט נפתח</div><div><span class="ok"></span>כרטיס העולם מלא</div><div><span class="ok"></span>בניתי את עוזר המודים, והוא ענה לי</div></div>` }
   ],
   challenges:[
     {id:"mc", lvl:"חובה", t:"מיינקראפט עובד", d:"נכנסתי לעולם Creative ומצאתי את המוד ברשימה."},
     {id:"card", lvl:"חובה", t:"כרטיס עולם", d:"העולם שלי בשורה אחת, ושלושה צבעים."},
-    {id:"gem", lvl:"חובה", t:"ג׳מיני ענה", d:"שלחתי הודעה ל־Gem ועניתי על שאלה אחת."}
+    {id:"gembuild", lvl:"חובה", t:"ה־Gem שלי", d:"בניתי את עוזר המודים, והוא מופיע בתפריט שבצד."},
+    {id:"gem", lvl:"חובה", t:"עוזר המודים ענה", d:"שלחתי לו הודעה ועניתי על שאלה אחת."}
   ]
 };
 
@@ -712,9 +759,11 @@ const SLIDES = [
     notes:"ממלא זמן: רק אם ההתקנות עוד רצות. לוחצים על צללית כדי לחשוף. אחרי כל אחת: ״איך ידעתם?״" },
   { label:"מיינקראפט נפתח?", html:`<h2>מיינקראפט נפתח?</h2><ol class="big"><li>Singleplayer</li><li>Game Mode: <b>Creative</b> ← Create New World</li><li><kbd>F2</kbd> מצלם את המסך</li><li><kbd>Esc</kbd> ← Mods ← מוצאים את המוד</li></ol>`,
     notes:"50–80 דק׳, יחד עם השקופית הבאה. בפעם הראשונה קופץ מסך Welcome to Minecraft: לוחצים Continue. מי שמיינקראפט עוד לא נפתח אצלו מתחיל מג׳מיני. מי שסיים הכול: בונה בעולם שלו." },
-  { label:"ג׳מיני", html:`<h2>פוגשים את ג׳מיני</h2><ol class="big"><li><code>gemini.google.com</code></li><li>חשבון משרד החינוך</li><li>פותחים את ה־Gem: <b>עוזר המודים</b></li><li>שולחים: ״שלום! העולם שלי: ...״</li><li>עונים על השאלה שהוא שואל</li></ol>`,
-    notes:"בודקים כבר היום שכל ילד מגיע לג׳מיני, ולא מגלים בשיעור 2 שזה חסום. ההתחברות לוקחת זמן: מי שמחכה למיינקראפט מתחיל מכאן. לרשום מספרי מחשבים שלא הצליחו." },
-  { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ הראשון שלכם, בתוך המשחק</p><ul class="big"><li>כרטיס העולם ← לתיקייה</li><li>מחשב ← לחשמל</li><li>החלון השחור עוד עובד? משאירים פתוח</li></ul>`,
+  { label:"ג׳מיני", html:`<h2>מה זה ג׳מיני</h2><ol class="big"><li><code>gemini.google.com</code>, עם החשבון של משרד החינוך</li><li>כותבים למטה, <kbd>Enter</kbd> שולח</li><li>תפריט בצד: צ׳אט חדש, ושם יופיע ה־Gem</li><li>כפתור העתקה בפינה של כל קוד</li><li>ג׳מיני לא זוכר צ׳אטים קודמים</li></ol>`,
+    notes:"50–60 דק׳. מראים את כל זה על המקרן, בחשבון שלך. בנקודה האחרונה מסבירים: בגלל זה בכל שיעור שולחים לו את הקוד מחדש." },
+  { label:"בונים Gem", html:`<h2>בונים את עוזר המודים</h2><p class="sub">Gem הוא ג׳מיני עם החוקים שלנו בפנים</p><ol class="big"><li>Gems ← New Gem</li><li>שם: עוזר המודים</li><li>מדביקים את החוקים מהדף</li><li>Save, ושולחים לו שלום</li></ol>`,
+    notes:"60–80 דק׳. קודם בונים Gem אחד על המקרן, צעד אחרי צעד, ורק אחר כך הם בונים. כדאי לנסות את זה לפני השיעור בחשבון שלך. מי שגמר: משחק במיינקראפט במצב יצירה." },
+  { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ הראשון שלכם, בתוך המשחק</p><ul class="big"><li>סוגרים את מיינקראפט</li></ul>`,
     notes:"80–90 דק׳. לרשום אילו מחשבים לא סיימו את ההתקנה, ולבדוק אותם אחרי השיעור." }
 ];
 
@@ -865,9 +914,8 @@ const TEACHER_CHECK = [
   ["usb","הכנת דיסקים עם make-usb.bat","כמה שיותר: דיסק אחד מתקין מחשב אחד בכל פעם. עם 3 דיסקים המחשב האחרון מתחיל אחרי 10 דקות. פורמט exFAT או NTFS, לא FAT32."],
   ["school","הרצת school-check.bat על מחשב אחד של בית הספר","שולחים צילום של התוצאה ל־Claude."],
   ["laptops","המחשבים ממוספרים 1–8 וטעונים","כל ילד מקבל את אותו מחשב כל שבוע."],
-  ["gem","יצרת את ה־Gem ״עוזר המודים״ ושיתפת עם הכיתה","ההוראות למטה. את קישור השיתוף שולחים ל־Claude, כדי שייכנס לדף של הילדים."],
-  ["gemtest","בדקת את ג׳מיני עם חשבון תלמיד","יש גישה? ה־Gem נפתח? כמה זמן לוקחת ההתחברות?"],
-  ["print","הדפסת 10 כרטיסי עולם","8 ועוד 2 לגיבוי. אפשר להדפיס מהשלב ״כרטיס העולם״."],
+  ["gem","בנית בעצמך Gem לפי השלבים של שיעור 1","כדי שתוכל להראות את זה לכיתה על המקרן. החוקים למטה."],
+  ["gemtest","בדקת את ג׳מיני עם חשבון תלמיד","יש גישה ל־Gemini? יש כפתור Gems? אפשר לשמור Gem?"],
   ["proj","בדקת את ״הצגת שיעור 1״ על המקרן בכיתה",""]
 ];
 

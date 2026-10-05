@@ -34,12 +34,12 @@ carries what Antigravity's rules file would have:
   never suggest answers."** So "תבנה לי חרב" gets questions back, not code. Your pedagogy ends up built into the
   tool itself.
 
-**2. No editor for the kids: two clicks (5 Oct, after Ben asked how 11-year-olds would manage).** The kid's loop:
-click the copy button on Gemini's code → double-click **Minecraft - Paste & Play** on the desktop. That button finds
-the file the code belongs in (from its `public class` line), backs up the old version, saves the new one, builds and
-opens Minecraft. If it fails, the error is already copied: back in Gemini, Ctrl+V, Enter. **Minecraft - Undo** brings
-back the version before the last paste. **Minecraft - Pictures** opens the folder where textures go. VS Code is still
-installed, for you.
+**2. No editor for the kids: one desktop icon, "Minecraft" (5 Oct).** It opens a small Hebrew window with big buttons:
+**הדבקה מג׳מיני ושחק** (paste from Gemini and play), **שחק**, **ביטול ההדבקה האחרונה** (undo), **תמונות** (the
+textures folder) and **השיעור** (opens the hub). The kid's loop: click the copy button on Gemini's code → click the paste
+button. It finds the file the code belongs in (from its `public class` line), backs up the old version, builds and
+opens Minecraft, with a status line instead of a black window. If it fails, a yellow box says the error is copied:
+back in Gemini, Ctrl+V, Enter. VS Code is still installed, for you.
 
 **3. The starter project is built so that one thing = one block of code + one picture.** A new item is one
 block in `MyItems.java` (name, Hebrew name, tooltip, numbers) plus a PNG dropped in a folder. The project creates

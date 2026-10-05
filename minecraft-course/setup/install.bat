@@ -91,7 +91,7 @@ echo  [3/4] Mod project OK
 echo.
 
 rem ---- 3b. our starter project on top of the template, and the desktop buttons ----
-set "STARTER_VER=1"
+set "STARTER_VER=2"
 if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
 echo  [3/4] Adding the course's starter project ...
 curl -L --fail --retry 3 -o starter.zip "https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/setup/starter.zip"
@@ -125,8 +125,8 @@ type "%ROOT%\hub\index.src" >> "%ROOT%\hub\index.html"
 > "%ROOT%\hub\teacher.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
 type "%ROOT%\hub\teacher.src" >> "%ROOT%\hub\teacher.html"
 del "%ROOT%\hub\index.src" "%ROOT%\hub\teacher.src"
-powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Hub.lnk\"); $l.TargetPath='%ROOT%\hub\index.html'; $l.Save(); $l=$s.CreateShortcut(\"$d\Minecraft - Teacher.lnk\"); $l.TargetPath='%ROOT%\hub\teacher.html'; $l.Save()"
-echo  Desktop: "Minecraft - Hub" for the kids, "Minecraft - Teacher" for you
+powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Teacher.lnk\"); $l.TargetPath='%ROOT%\hub\teacher.html'; $l.Save()"
+echo  Desktop: "Minecraft - Teacher" for you. The kids open the lesson from the Minecraft window.
 echo.
 :hub_skip
 
@@ -153,7 +153,7 @@ if errorlevel 1 (echo  ERROR: the build or the game failed. Scroll up for the fi
 echo.
 echo  ===============================================
 echo   DONE. Started %T0%, finished %TIME%
-echo   Next time: double-click "Minecraft - Play" on the desktop
+echo   Next time: double-click "Minecraft" on the desktop
 echo  ===============================================
 pause
 exit /b 0

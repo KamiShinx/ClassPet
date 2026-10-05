@@ -33,7 +33,7 @@ call "%ROOT%\play.bat"
 echo.
 echo  ===============================================
 echo   DONE. Started %T0%, finished %TIME%
-echo   Next time: double-click "Minecraft - Play"
+echo   Next time: double-click "Minecraft" on the desktop
 echo  ===============================================
 pause
 exit /b 0

@@ -409,7 +409,7 @@ Do NOT close this window and do NOT pull out the stick.
 
 [1/3] Copying from the stick ...
 [1/3] Copy OK
-[2/3] "Minecraft - Play" and "Minecraft - Code" are on the desktop
+  Desktop: Minecraft - Play, Paste &amp; Play, Undo, Pictures
 Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
 
 [3/3] Starting Minecraft to check it works. No internet needed.

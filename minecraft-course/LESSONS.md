@@ -34,8 +34,12 @@ carries what Antigravity's rules file would have:
   never suggest answers."** So "תבנה לי חרב" gets questions back, not code. Your pedagogy ends up built into the
   tool itself.
 
-**2. Editor: VS Code, installed by the same install script, with no extensions.** The kid's loop: copy the
-whole file from Gemini → open that file in VS Code → Ctrl+A, Ctrl+V, Ctrl+S → double-click `שחק` on the desktop.
+**2. No editor for the kids: two clicks (5 Oct, after Ben asked how 11-year-olds would manage).** The kid's loop:
+click the copy button on Gemini's code → double-click **Minecraft - Paste & Play** on the desktop. That button finds
+the file the code belongs in (from its `public class` line), backs up the old version, saves the new one, builds and
+opens Minecraft. If it fails, the error is already copied: back in Gemini, Ctrl+V, Enter. **Minecraft - Undo** brings
+back the version before the last paste. **Minecraft - Pictures** opens the folder where textures go. VS Code is still
+installed, for you.
 
 **3. The starter project is built so that one thing = one block of code + one picture.** A new item is one
 block in `MyItems.java` (name, Hebrew name, tooltip, numbers) plus a PNG dropped in a folder. The project creates
@@ -47,14 +51,15 @@ these four files, so the kid always knows which file to paste into.
 the laptops. The kid types the card into the Gem. A web platform can come later (maybe the web-app course's hub).
 Nothing in the lessons depends on it.
 
-**5. Saving and undo.** The desktop gets two more buttons: `שמור` (saves a version, takes a second) and, for
-you only, a way back to the last saved version when a kid's project is broken. Once a month you copy all 8
-projects to a USB stick, in case the school wipes or swaps a laptop.
+**5. Saving and undo.** Every paste backs up the file it replaces (`C:\MAKE\saves`), and Undo steps back one paste
+at a time. Once a month you copy the 8 laptops' `C:\MAKE\mod\src` folders to a USB stick, in case the school wipes
+or swaps a laptop.
 
 **6. Play works offline after the first time.** If the school internet dies mid-lesson, Minecraft still starts.
 
-**7. Mod names come from laptop numbers** (`world01` … `world08`), not kid names (Ministry rule). The world's
-real name, the one the kid picks, is shown in the game and can change any time.
+**7. Every kid's mod is called `myworld`** (package `make.myworld`), the same on all 8 laptops, so the Gem and the
+lessons are identical for everyone. The world's real name is one line in `MyWorld.java`. Showcases run on each kid's own
+laptop, so the mods never need to load together; if you ever want one shared world, I'll rename them then.
 
 **8. Every lesson is "learn this, build this, bye" (Ben, 5 Oct).** 90 minutes, one idea, one thing built. No
 rituals: no lies log, no stamps, no weekly silent playtest, no log lines, no tip-card series, no rule lists. The

@@ -22,9 +22,7 @@ echo  [1/3] Copy OK
 echo.
 
 echo  [2/3] Desktop buttons ...
-powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Play.lnk\"); $l.TargetPath='%ROOT%\play.bat'; $l.WorkingDirectory='%ROOT%'; $l.Save(); $l=$s.CreateShortcut(\"$d\Minecraft - Code.lnk\"); $l.TargetPath='%ROOT%\code.bat'; $l.WorkingDirectory='%ROOT%'; $l.Save()"
-if exist "%ROOT%\hub\index.html" powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Hub.lnk\"); $l.TargetPath='%ROOT%\hub\index.html'; $l.Save()"
-echo  [2/3] "Minecraft - Play" and "Minecraft - Code" are on the desktop
+powershell -NoProfile -Command "& ([ScriptBlock]::Create([IO.File]::ReadAllText('%ROOT%\mod\tools\shortcuts.ps1', [Text.Encoding]::UTF8))) '%ROOT%'"
 echo.
 
 echo  Copy finished at %TIME%. You can take the stick out now.

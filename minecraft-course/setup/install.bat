@@ -90,24 +90,25 @@ del mdk.zip
 echo  [3/4] Mod project OK
 echo.
 
-rem ---- the buttons: play.bat, code.bat, desktop shortcuts ----
-> "%ROOT%\play.bat" (
-  echo @echo off
-  echo title Minecraft - DO NOT CLOSE
-  echo set "JAVA_HOME=%%~dp0jdk"
-  echo set "PATH=%%~dp0jdk\bin;%%PATH%%"
-  echo set "GRADLE_USER_HOME=%%~dp0gradle-home"
-  echo cd /d "%%~dp0mod"
-  echo call gradlew.bat runClient --offline
-  echo if errorlevel 1 call gradlew.bat runClient
-  echo if errorlevel 1 pause
-)
+rem ---- 3b. our starter project on top of the template, and the desktop buttons ----
+set "STARTER_VER=1"
+if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
+echo  [3/4] Adding the course's starter project ...
+curl -L --fail --retry 3 -o starter.zip "https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/setup/starter.zip"
+if errorlevel 1 (echo  ERROR: starter project download failed. & goto :fail)
+if exist "%ROOT%\mod\src\main\java\com" rmdir /s /q "%ROOT%\mod\src\main\java\com"
+if exist "%ROOT%\mod\src\main\resources\assets\examplemod" rmdir /s /q "%ROOT%\mod\src\main\resources\assets\examplemod"
+tar -xf starter.zip -C "%ROOT%"
+if errorlevel 1 (echo  ERROR: could not unpack the starter project. & goto :fail)
+del starter.zip
+> "%ROOT%\mod\starter-v%STARTER_VER%.txt" echo starter v%STARTER_VER%
+:starter_ok
+echo  [3/4] Starter project OK
 > "%ROOT%\code.bat" (
   echo @echo off
   echo start "" "%%~dp0vscode\Code.exe" "%%~dp0mod"
 )
-powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Play.lnk\"); $l.TargetPath='%ROOT%\play.bat'; $l.WorkingDirectory='%ROOT%'; $l.Save(); $l=$s.CreateShortcut(\"$d\Minecraft - Code.lnk\"); $l.TargetPath='%ROOT%\code.bat'; $l.WorkingDirectory='%ROOT%'; $l.Save()"
-echo  Desktop buttons: "Minecraft - Play" and "Minecraft - Code"
+powershell -NoProfile -Command "& ([ScriptBlock]::Create([IO.File]::ReadAllText('%ROOT%\mod\tools\shortcuts.ps1', [Text.Encoding]::UTF8))) '%ROOT%'"
 echo.
 
 rem ---- the course hub (kids) + teacher page (this laptop only). Both run offline. ----
@@ -145,13 +146,14 @@ set "JAVA_HOME=%ROOT%\jdk"
 set "PATH=%ROOT%\jdk\bin;%PATH%"
 set "GRADLE_USER_HOME=%ROOT%\gradle-home"
 cd /d "%ROOT%\mod"
+powershell -NoProfile -Command "& ([ScriptBlock]::Create([IO.File]::ReadAllText('%ROOT%\mod\tools\prepare.ps1', [Text.Encoding]::UTF8))) '%ROOT%\mod'"
 call gradlew.bat runClient --no-configuration-cache
 if errorlevel 1 (echo  ERROR: the build or the game failed. Scroll up for the first red ERROR line. & goto :fail)
 
 echo.
 echo  ===============================================
 echo   DONE. Started %T0%, finished %TIME%
-echo   Next time: double-click "Minecraft - Play"
+echo   Next time: double-click "Minecraft - Play" on the desktop
 echo  ===============================================
 pause
 exit /b 0

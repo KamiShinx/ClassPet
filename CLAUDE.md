@@ -45,6 +45,11 @@ Antigravity (18+) replaced 5 Oct by the Gemini web app via one teacher-made Gem 
 (`LESSONS.md` §1). Cards on paper for now. Next: install script + starter project (needs Ben's Windows test; maven and
 Mojang are blocked from the cloud box), then the Gem instructions, then full lesson pages 2–20.
 
+**Lesson shape (Ben, 5 Oct, overrides `04`/`05` where they differ): "learn this, build this, bye", 90 minutes.** One idea,
+one thing built. No rituals: no "Gemini lies" log, no stamps, no weekly silent playtest, no log lines, no tip-card
+series, no rule lists, no partner-interview steps. He called these "BS". Lesson 1 is the exception: it is deliberately
+filler (course overview, silhouette game) because its real job is installing the laptops while he talks.
+
 ## Rules
 
 - Never use an API key or any paid service without asking Ben first, each time.

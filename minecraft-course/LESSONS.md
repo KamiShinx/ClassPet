@@ -56,8 +56,9 @@ projects to a USB stick, in case the school wipes or swaps a laptop.
 **7. Mod names come from laptop numbers** (`world01` … `world08`), not kid names (Ministry rule). The world's
 real name, the one the kid picks, is shown in the game and can change any time.
 
-**8. The open decisions in `REVIEW.md` §12** I took my picks: tooltips + an ≤80-word hidden note + one book;
-weekly cold playtest with a one-line logged change; bosses are a stretch goal only; world card in lesson 1.
+**8. Every lesson is "learn this, build this, bye" (Ben, 5 Oct).** 90 minutes, one idea, one thing built. No
+rituals: no lies log, no stamps, no weekly silent playtest, no log lines, no tip-card series, no rule lists. The
+story lives in names and tooltips. Bosses are a stretch goal only.
 
 💬 Comments:
 
@@ -99,28 +100,23 @@ My estimate, unverified: the first start downloads about 1-1.5 GB per laptop and
 
 ## 3. Lesson 1: install while you talk
 
-**Goal:** by the end, every laptop has Minecraft running with the kid's (still empty) mod in it, every kid has
-opened the Gem, and every kid has a world card on paper.
-**Ships:** a screenshot of the title screen; a filled world card.
-**You bring:** the USB sticks; printed world cards; 6-8 black mob silhouettes (printed or on the
-projector); a working mod on your own laptop to show; the Gem already shared with the class.
+**Learn:** what a mod is; Gemini writes the code, you decide what to build and check that it did it.
+**Build:** Minecraft running with the kid's (still empty) mod, a world card on paper, a first message to the Gem.
+**You bring:** the USB sticks; printed world cards; the Gem already shared with the class.
+**Lesson 1 is deliberately loose:** the real job is getting 8 laptops installed while you talk about the course.
 
-### The plan (65 minutes)
+### The plan (90 minutes)
 
-| Min | What happens | Notes |
-|---|---|---|
-| 0-10 | **Start the install from the sticks.** Laptops numbered; Windows login; the steps from the board (below). One stick installs one laptop at a time (about 5 minutes), so with 3 sticks the last laptop starts around minute 10. Start talking once the first round is running | The only part where kids need you one by one. Everything after can be interrupted. More sticks = a shorter start |
-| 10-15 | **"What you'll make."** Show your working mod on the projector: a weird item, a creature, a tooltip in Hebrew. Then the end: in lesson 20 families come and play your world, and you explain it | The hook. Keep it short |
-| 15-25 | **Vague vs specific, live.** In Gemini on the projector, first type "תבנה לי חרב". Show what comes back (generic, maybe old code that won't even work). Then paste a filled card. Kids vote which answer is better and say why | The core of the course, on day 1 |
-| 25-30 | **"Gemini lies."** One example of a confident wrong answer (the old-Forge code from the demo, or the one in the teacher checklist). Introduce the class Gemini-Lied log: you get to write a lie in it only when you caught it **and** fixed it | Check the black windows on your way |
-| 30-45 | **The world card, on paper** (worksheet below). Alone for 10 minutes, then 5 in pairs: your partner reads your card and asks one question you can't answer yet | No laptops needed. If a kid finishes early: a second theme |
-| 45-50 | **Silhouette game.** Black shapes of vanilla mobs; kids guess. "How did you know it was a creeper?" That's tip card #1: a creature is recognised by its outline from far away | Fills time if the install is slow; cut it if it's fast |
-| 50-58 | **First look.** Whoever has Minecraft open: create a Creative world, open Mods, find their mod, take a screenshot. Everyone: log in to Gemini with the school account, open the Gem, send "שלום". Whatever the Gem asks back, they answer one question | Checks the AI works for every kid in lesson 1, not lesson 2 |
-| 58-65 | **Close.** Cards into the folder. Laptops plugged in. If an install hasn't finished: leave the laptop open and running | Write down which laptop numbers didn't finish |
+| Min | What happens |
+|---|---|
+| 0-15 | **Install from the sticks.** One stick installs one laptop at a time (about 5 minutes), so with 3 sticks the last laptop starts around minute 10. Start talking once the first round is running |
+| 15-20 | **What the course is about:** what a mod is, what they build in each part, the showcase with families at the end. Stretch this while installs are still running |
+| 20-35 | **Learn.** Gemini writes the code; you decide and check. Live in plain Gemini: "תבנה לי חרב", then a filled card. Kids vote which answer is better |
+| 35-50 | **Build: the world card**, on paper (worksheet below). Installs still running after that: the silhouette game on the projector (guess the mob from its black shape) |
+| 50-80 | **Build: first look.** Minecraft is open: Creative world, screenshot, find the mod in Mods. Then Gemini: log in with the school account, open the Gem, send the world's line, answer its question. Done early: build in the Creative world |
+| 80-90 | Cards into the folder. Laptops plugged in. An install that hasn't finished stays open. Write down which laptops didn't finish |
 
-**If it all finishes in 20 minutes:** move the silhouette game earlier and add "the first look" sooner. Nothing
-else changes.
-**If one laptop fails:** that kid pairs with a neighbour for the rest of the lesson. You fix it after class.
+**If one laptop fails:** that kid pairs with a neighbour. You fix it after class.
 
 ### On the board (Hebrew, for the kids)
 
@@ -143,11 +139,6 @@ else changes.
 > **זה כמו ___ במיינקראפט הרגיל, חוץ מזה ש ___**
 >
 > **שלושה צבעים של העולם שלי:** ⬜ ______ ⬜ ______ ⬜ ______
->
-> **דבר אחד בעולם שלי שאף אחד לא יודע להסביר:** ______________________
-> (דלת נעולה, מגדל שאי אפשר להגיע אליו...)
->
-> **שאלה שהשותף שלי שאל ואין לי עדיין תשובה:** ______________________
 
 💬 Comments:
 
@@ -155,19 +146,18 @@ else changes.
 
 ## 4. How every lesson after that runs
 
-Same rhythm as `04` §4, adjusted for the paper cards and the Gem:
+Learn this, build this, bye. 90 minutes:
 
 | Min | What |
 |---|---|
-| 0-5 | Kids double-click `שחק` the moment they sit down (it takes a minute). One kid's thing from last week on the projector |
-| 5-15 | Your demo: one tip card, one vanilla example ("לשם מה?"), and you build the lesson's thing live, card → Gem → paste → play |
-| 15-22 | Fill the card on paper: the rule, 2-3 claims ("במשחק תראו ___"), a prediction ("הבודק שלי ___"). You stamp it on a walk-round. **No stamp, no Gem** |
-| 22-50 | Build: type the card into the Gem → paste the whole file → play → tick the claims. Help order: the card, your buddy, the Gemini-Lied log, then you |
-| 50-58 | Cold swap: your partner plays it and you say nothing. Watch |
-| 58-65 | One log line on the card: *חזיתי / ראיתי / שיניתי / כי*. Press `שמור` |
+| 0-10 | Kids double-click `שחק` the moment they sit down (it takes a minute). You show today's finished thing |
+| 10-25 | **Learn:** one idea, then you build today's thing live: card → Gem → paste → play |
+| 25-35 | They fill their card: name, what it does, 2-3 things they'll see in the game |
+| 35-80 | **Build:** type the card into the Gem → paste the whole file → play → check it against the card. Stuck: the kid next to you, then you |
+| 80-90 | Press `שמור`. One or two kids show theirs |
 
-**Homework** (optional, never needed for the next lesson): art and cards only. Textures in Piskel (free, in the
-browser) saved to their school Google Drive, card drafts on paper. Nothing that needs the laptop.
+**Homework** (optional, never needed for the next lesson): drawing textures in Piskel (free, in the browser), saved
+to their school Google Drive.
 
 💬 Comments:
 
@@ -175,104 +165,86 @@ browser) saved to their school Google Drive, card drafts on paper. Nothing that 
 
 ## 5. Lessons 2-20
 
-Order follows the rule from `04`: a feature is taught only once the starter project has a working 26.2 example
-of it, from easiest to hardest. Each line below becomes a full lesson page (like lesson 1) once you OK the
-sequence.
+A feature is taught only once the starter project has a working 26.2 example of it, easiest first.
 
 ### Block 1: the first things in the world (lessons 2-5)
 
-**Lesson 2: my first item.** Structured task: the template item gets a new name, a texture, one changed number
-and a 2-sentence Hebrew tooltip. Free task: their own first item from a card. First time through the whole loop
-(card → Gem → paste → play). Also: rename the mod to the world's name.
-Tip card: 2-4 colours, one pop colour. *Ships: one item of their own, with its texture, in the game.*
+**Lesson 2: my first item.** *Learn:* the loop: card → Gem → paste → play. *Build:* the template item with their
+own name and texture, then their own first item. The mod gets the world's name.
 💬
 
-**Lesson 3: a 3D item.** Blockbench (free, in the browser, nothing to install): model the lesson-2 item, export,
-drop into the folder. No code at all. Tip card: "rein it in with the cubes" (16×16).
-*Ships: the item in 3D in their hand.*
+**Lesson 3: a 3D item.** *Learn:* Blockbench (free, in the browser, nothing to install). *Build:* the lesson-2
+item as a 3D model in their hand. No code.
 💬
 
-**Lesson 4: an item with a cost.** "Why does a bow need arrows?" The four costs (cost / flaw / limitation /
-hindrance) and "what is it worse at than the vanilla one?". Each item gets a tell. Theory check: given a
-description, which cost is it?
-*Ships: 1-2 items, each with a named cost.*
+**Lesson 4: an item with a cost.** *Learn:* a strong item needs a price (why does a bow need arrows?).
+*Build:* an item with a power and a cost.
 💬
 
-**Lesson 5: a status effect that bends one system.** Hunger, mining speed, sleep, jumping: pick ONE. Delivered
-through food or a potion. Unplugged first: a paper playtest. Debugging trick: ask the Gem for a chat message when
-the effect kicks in, check it, then remove it.
-*Ships: one custom effect.*
+**Lesson 5: an effect.** *Learn:* status effects change one thing: hunger, mining speed or jumping.
+*Build:* a food or potion with their own effect.
 💬
 
 ### Block 2: the place and the first creature (lessons 6-9)
 
-**Lesson 6: the place.** Hand-built in their own saved world, in Creative: one small place, a loot chest with
-their items, one thing nobody explains. No code. Tip card: small and dense beats big. Then the card for a world
-rule, in כאשר / אם / אז form.
-*Ships: the place, and a world-rule card.*
+**Lesson 6: the place.** *Learn:* small and full beats big and empty. *Build:* by hand in Creative, a small place
+in their world with a chest holding their items. No code.
 💬
 
-**Lesson 7: the world rule.** Build the rule from lesson 6 (a storm puts out fire, at night something changes,
-standing in their place does something). Visible signal to check it fires.
-*Ships: one rule that works in their world.*
+**Lesson 7: a world rule.** *Learn:* a rule is "when... if... then...". *Build:* one rule that works in their
+world (rain puts out fire, something changes at night).
 💬
 
-**Lesson 8: the first creature.** Pick a vanilla mob **for how it behaves**, then reskin it: new name, texture,
-one tell before it acts. Unplugged: one kid acts out the mob, another beats it using only the tell. Tip card:
-Who / Want / Why.
-*Ships: a reskinned creature with a tell.*
+**Lesson 8: the first creature.** *Learn:* pick a vanilla mob for how it behaves, and give it a warning sign
+before it attacks. *Build:* that mob with their name, their texture and the warning.
 💬
 
-**Lesson 9: connect and catch up.** The creature spawns in a chosen vanilla biome and drops one of their items; a
-tooltip that points at their place. Links between cards: lives in / drops / guards. Anyone behind catches up.
-*Ships: three things in the world that point at each other.*
+**Lesson 9: connect.** *Learn:* where a creature lives and what it drops. *Build:* their creature lives in a
+biome they pick and drops their item. Anyone behind catches up.
 💬
 
 ### Lesson 10: showcase 1
-Seat rotation: everyone plays everyone's world on the owner's laptop, cold. Then 2 minutes per kid, no screen:
-"what does my creature do, how do you see it coming, one lie I caught from Gemini."
+Everyone plays everyone's world.
 💬
 
 ### Block 3: the signature creature (lessons 11-15)
 
-**Lesson 11: design it.** Silhouette first, one dominant trait, 2-4 colours, "what must the player do
-differently from my first creature?". The Gem interviews them (5 hard questions, no suggested answers). Paper.
+**Lesson 11: design it.** *Learn:* a clear outline, one main trait, 2-4 colours. *Build:* the creature on paper.
 💬
 
-**Lesson 12: model it.** Blockbench, from the template mob's shape. Fallback for anyone stuck: the template mob
-with three things changed on their card.
+**Lesson 12: model it.** *Learn:* Blockbench for creatures. *Build:* the model and its texture, starting from
+the template mob's shape.
 💬
 
-**Lesson 13: into the game.** Model + texture into the mod, with the Gem using the working example.
-*This is the riskiest lesson in the course (unverified on 26.2, test 3 in `REVIEW.md`).*
+**Lesson 13: into the game.** *Learn:* how a model gets into the mod. *Build:* their creature walking around in
+the world. *The riskiest lesson in the course (unverified on 26.2, test 3 in `REVIEW.md`).*
 💬
 
-**Lesson 14: how it fights.** Behaviour and its tell; a classmate should beat it on the second try, not the
-first, not never. Playtest twice in this lesson.
+**Lesson 14: how it fights.** *Learn:* a good fight is won on the second try. *Build:* its attack and its
+warning sign.
 💬
 
-**Lesson 15: the lore path.** Advancements (criteria + a prize) that lead a player through the world: find the
-place, beat the creature, get the item. The lore lives in their names and descriptions, 2 sentences each.
+**Lesson 15: achievements.** *Learn:* advancements. *Build:* three of them that lead a player through the
+world: find the place, beat the creature, get the item.
 💬
 
 ### Block 4: finish and show (lessons 16-20)
 
-**Lessons 16-17: their choice, by level.** A second creature by reusing and changing the first, a second world
-rule, or (only if I've built a working example boss first) a 2-phase boss.
+**Lessons 16-17: their choice.** *Build:* a second creature, a second world rule, or (only if I've built a
+working example first) a boss.
 💬
 
-**Lesson 18: freeze.** Nothing new, only fixes. The one book in the game. Tooltips tidied.
+**Lesson 18: finish.** Nothing new, only fixes.
 💬
 
-**Lesson 19: blunt questions.** A partner interrogates the world: "why does this exist?", "how was I supposed
-to know that?". Holes get fixed or cut. Rehearse the 2-minute explanation.
+**Lesson 19: dress rehearsal.** A partner plays their world; they fix what didn't work.
 💬
 
-**Lesson 20: showcase 2, families invited.** Same rotation, same "explain it". Families play the kids' worlds.
+**Lesson 20: showcase 2, families invited.** Families play the kids' worlds.
 💬
 
-**If holidays eat lessons** (Hanukkah, Passover, strikes: expect to lose about 2): cut lesson 17 first, then 9's
-catch-up half, then 14 merges into 13. Never cut 10, 18 or 20.
+**If holidays eat lessons** (expect to lose about 2): cut lesson 17 first, then 9, then 14 merges into 13.
+Never cut 10, 18 or 20.
 
 💬 Comments on the sequence as a whole:
 
@@ -285,7 +257,7 @@ In this order, once you've read this:
    the template item, the desktop buttons `שחק` / `שמור`). I can't download Minecraft's build files from this
    cloud machine (that site is blocked here), so **you'll run the first test on a Windows laptop**. That's also
    check 7 above.
-2. **The Gem's instructions**, ready to paste, and the example of Gemini lying for lesson 1.
+2. **The Gem's instructions**, ready to paste.
 3. **Full lesson pages for 2-20**, written like lesson 1, with the card sheets in Hebrew.
 
 💬 Comments:

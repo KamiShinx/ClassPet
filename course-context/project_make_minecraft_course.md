@@ -55,3 +55,8 @@ asks card questions without suggesting answers, outputs whole files); VS Code; s
 MyItems/MyEffects/MyMobs/MyRules.java + datagen; paper cards; save/undo buttons; play works `--offline`; mod ids
 world01-08 by laptop number. Pre-lesson school checks in §2 (same laptop weekly, wipe-on-restart, RAM ≥8 GB, run .bat
 without admin, sites open, Gemini on an 11-13 account, timed dry run). Awaiting Ben's 💬 on LESSONS.md.
+
+**5 Oct, Ben on the lesson pages:** "we need to clean all the BS, the lessons are 'learn this, build this, bye' we dont need
+all the fancy יומן השקרים and all this bs, we got 90 min with them barley". Then: "lesson 1 should be still filler because
+its the lesson we want to try to install stuff on the laptops while i teach what the course will be about". Applied to
+`LESSONS.md` §3-5 and the hub (commit after b4da902). Don't reintroduce ceremony from `04`/`05`.

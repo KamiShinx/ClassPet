@@ -46,6 +46,23 @@ if not exist "%ROOT%\jdk\bin\java.exe" (echo  ERROR: Java is not where it should
 echo  [1/4] Java 25 OK
 echo.
 
+rem ---- 1b. Java 21: one NeoForge build tool (downloadAssets) still runs on 21 ----
+if exist "%ROOT%\jdk21\bin\java.exe" goto :java21_ok
+echo  [1/4] Downloading Java 21 for the build tools ...
+curl -L --fail --retry 3 -o jdk21.zip "https://api.adoptium.net/v3/binary/latest/21/ga/windows/x64/jdk/hotspot/normal/eclipse?project=jdk"
+if errorlevel 1 (echo  ERROR: Java 21 download failed. Is api.adoptium.net blocked? & goto :fail)
+if exist jdk-tmp rmdir /s /q jdk-tmp
+mkdir jdk-tmp
+tar -xf jdk21.zip -C jdk-tmp
+if errorlevel 1 (echo  ERROR: could not unpack Java 21. & goto :fail)
+for /d %%D in ("jdk-tmp\*") do move "%%D" "%ROOT%\jdk21" >nul
+rmdir /s /q jdk-tmp
+del jdk21.zip
+:java21_ok
+if not exist "%ROOT%\jdk21\bin\java.exe" (echo  ERROR: Java 21 is not where it should be. & goto :fail)
+echo  [1/4] Java 21 OK
+echo.
+
 rem ---- 2. VS Code, portable, no admin ----
 if exist "%ROOT%\vscode\Code.exe" goto :code_ok
 echo  [2/4] Downloading VS Code ...
@@ -122,7 +139,7 @@ rem ---- tell Gradle exactly where Java 25 is, so it never searches or downloads
 set "ROOTF=%ROOT:\=/%"
 mkdir "%ROOT%\gradle-home" 2>nul
 > "%ROOT%\gradle-home\gradle.properties" (
-  echo org.gradle.java.installations.paths=%ROOTF%/jdk
+  echo org.gradle.java.installations.paths=%ROOTF%/jdk,%ROOTF%/jdk21
   echo org.gradle.java.installations.auto-download=false
 )
 

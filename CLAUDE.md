@@ -43,9 +43,12 @@ laptops that stay at school** (no home install; lesson 1 = install while Ben tal
 + calls made 5 Oct, awaiting Ben's 💬), then `HANDOFF.md`, `04-creative-course-design.md`, `05-ministry-pedagogy-applied.md`.
 Antigravity (18+) replaced 5 Oct by the Gemini web app via one teacher-made Gem; kids copy whole files and press the desktop button Paste & Play (no editor)
 (`LESSONS.md` §1). Cards on paper for now. Install works on Ben's laptop (`setup/install.bat`); starter project in
-`starter/` (ships as `setup/starter.zip`). Next, in order: Ben tests the starter → update GEM_TEXT in `hub/content.js` →
-lesson 2 in the hub → stop and show Ben before lessons 3–20. Maven and Mojang are blocked from the cloud box, so every
-Java change needs Ben's Windows test.
+`starter/` (ships as `setup/starter.zip`). **STATE (5 Oct, late): Ben said he's lost ("this course is for humans"). Lesson 2 is PAUSED.** First he reads
+`LESSON1_GUIDE.md` (plain-language: every piece explained, lesson 1 minute by minute, the Gem, what changes in the hub)
+and comments. Then rewrite lesson 1 in the hub in plain words (no paper folders, a real "how Gemini works" step, a
+"how a mod works" step, kids make the Gem themselves if he agrees), and only then lesson 2. Explain before building.
+The starter project, hub control panel and forgiving paste all work on his Windows laptop. Maven and Mojang are
+blocked from the cloud box, so every Java change needs Ben's Windows test.
 
 **Lesson shape (Ben, 5 Oct, overrides `04`/`05` where they differ): "learn this, build this, bye", 90 minutes.** One idea,
 one thing built. No rituals: no "Gemini lies" log, no stamps, no weekly silent playtest, no log lines, no tip-card

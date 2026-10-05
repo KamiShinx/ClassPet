@@ -96,7 +96,7 @@ echo  [3/4] Mod project OK
 echo.
 
 rem ---- 3b. our starter project on top of the template, and the desktop buttons ----
-set "STARTER_VER=5"
+set "STARTER_VER=6"
 if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
 echo  [3/4] Adding the course's starter project ...
 if exist "%HERE%starter.zip" goto :starter_local

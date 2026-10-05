@@ -77,3 +77,12 @@ for HTML, "simplest UI/UX, works with every kid", plus backups/undo. Built: desk
 (error auto-copied). Shared logic in `tools/common.ps1`. End-to-end tested in the cloud with a fake build (pwsh 7 +
 Playwright). He also floated an in-game paste button; I advised against for now (needs the desktop path anyway when
 the build breaks). In-game Hebrew reads correctly with the game in English (Ben checked).
+
+**5 Oct, end of day: Ben got lost.** Quote: "you forgot this course is for humans, i dont know what you even mean in 90%
+of the things" and "you speak with me about lesson 2 when i dont understand even how to run lesson 1". He flagged
+unexplained jargon (Gem, "the class Gem link", paper folders by laptop number, "black window", charging) and no
+explanation of Gemini's interface or how the mod works. Also: don't put things on the desktop (school wipes it): the
+icon now also goes in the Start menu. Lesson 2 (built, in the hub) is paused. Wrote `minecraft-course/LESSON1_GUIDE.md`
+for him. Rule for next sessions: explain every piece in plain words before building more; one thing at a time.
+Also built today: forgiving paste (fixes package/imports, merges lone Kit.item lines), copy-my-code button, 16x16
+pixel editor in the hub. Ben worries Gemini will hand kids a weak Flash model; design assumes it.

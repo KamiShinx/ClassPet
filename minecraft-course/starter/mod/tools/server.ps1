@@ -55,7 +55,7 @@ function Start-Game([bool]$online) {
     $psi.CreateNoWindow = $true
     $state.proc = [System.Diagnostics.Process]::Start($psi)
     $state.phase = 'building'; $state.online = $online; $state.error = ''
-    $state.message = 'בונה את המוד ופותח את מיינקראפט. זה לוקח בערך דקה...'
+    $state.message = 'המחשב בונה את המוד ופותח את מיינקראפט. זה לוקח דקה או שתיים...'
 }
 
 function Update-Game {
@@ -92,13 +92,13 @@ function Invoke-Action([string]$name, [string]$query) {
             $r = Invoke-Paste $root (Read-Clip)
             if (-not $r.Ok) { $state.phase = 'idle'; $state.message = $r.Message; return $r }
             Start-Game $false
-            $state.message = $r.Message + '. בונה ופותח את מיינקראפט...'
+            $state.message = $r.Message + '. המחשב בונה ופותח את מיינקראפט...'
             return $r
         }
         'play' {
-            if ($busy) { return New-Result $false 'מיינקראפט כבר נפתח.' }
+            if ($busy) { return New-Result $false 'מיינקראפט כבר פתוח.' }
             Start-Game $false
-            return New-Result $true 'בונה ופותח את מיינקראפט...'
+            return New-Result $true 'המחשב בונה ופותח את מיינקראפט...'
         }
         'undo' {
             if ($busy) { return New-Result $false 'קודם סוגרים את מיינקראפט.' }

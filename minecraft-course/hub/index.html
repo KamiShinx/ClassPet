@@ -124,7 +124,7 @@ function dockHTML(){
     </div>
     ${DOCK.vopen ? `<div class="dock-vers">
       <div class="vhead"><b>גרסאות שמורות</b><button class="btn go" data-act="save">לשמור גרסה עכשיו</button></div>
-      <p class="vnote">לפני כל הדבקה נשמרת גרסה לבד. ״להחזיר״ מחזיר את הקוד והתמונות למה שהיה אז, ואפשר להתחרט גם על זה.</p>
+      <p class="vnote">לפני כל הדבקה המחשב שומר גרסה לבד. ״להחזיר״ מחזיר את הקוד והתמונות למה שהיה אז, ואפשר להתחרט גם על זה.</p>
       ${DOCK.versions.length ? `<ul class="vlist">${DOCK.versions.map(v=>`<li><span class="vt">${esc(v.time)}</span><span class="vd">${esc(v.day)}</span><span class="vw">${esc(v.what)}</span><button class="btn ghost" data-restore="${esc(v.id)}" ${busy?"disabled":""}>להחזיר</button></li>`).join("")}</ul>` : `<p class="vnote">עדיין אין גרסאות שמורות.</p>`}
     </div>` : ""}
     <div class="dock-status ${tone}" role="status">${s.phase==="building"?'<i class="spin"></i>':""}<span>${esc(s.message)}</span></div>
@@ -151,7 +151,7 @@ function setDock(s){
 }
 async function poll(){
   try { setDock(await (await fetch("/api/status", { cache:"no-store" })).json()); }
-  catch(e){ setDock({ phase:"off", message:"הכפתורים כבויים. פותחים שוב את הסמל Minecraft בשולחן העבודה.", error:"" }); }
+  catch(e){ setDock({ phase:"off", message:"הכפתורים לא עובדים כרגע. לוחצים פעמיים על הסמל Minecraft בשולחן העבודה.", error:"" }); }
 }
 async function act(name){
   if (name === "versions"){ DOCK.vopen = !DOCK.vopen; if (DOCK.vopen) loadVersions(); else paintDock(); return; }

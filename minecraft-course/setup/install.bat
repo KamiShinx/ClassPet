@@ -10,6 +10,11 @@ echo.
 echo  Started at %TIME%
 set "T0=%TIME%"
 
+rem ---- run from a downloaded copy of the repo? Then starter.zip sits next to this file and the hub in ..\hub\ ----
+set "HERE=%~dp0"
+if exist "%HERE%starter.zip" (echo  Using the course files next to this script.) else (echo  Course files will be downloaded from GitHub.)
+echo.
+
 rem ---- this computer ----
 for /f %%R in ('powershell -NoProfile -Command "[math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory/1GB)"') do set "RAMGB=%%R"
 for /f %%F in ('powershell -NoProfile -Command "[math]::Round((Get-PSDrive C).Free/1GB)"') do set "FREEGB=%%F"
@@ -91,11 +96,17 @@ echo  [3/4] Mod project OK
 echo.
 
 rem ---- 3b. our starter project on top of the template, and the desktop buttons ----
-set "STARTER_VER=3"
+set "STARTER_VER=4"
 if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
 echo  [3/4] Adding the course's starter project ...
+if exist "%HERE%starter.zip" goto :starter_local
 curl -L --fail --retry 3 -o starter.zip "https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/setup/starter.zip"
 if errorlevel 1 (echo  ERROR: starter project download failed. & goto :fail)
+goto :starter_have
+:starter_local
+copy /y "%HERE%starter.zip" "%ROOT%\starter.zip" >nul
+if errorlevel 1 (echo  ERROR: could not copy starter.zip. & goto :fail)
+:starter_have
 if exist "%ROOT%\mod\src\main\java\com" rmdir /s /q "%ROOT%\mod\src\main\java\com"
 if exist "%ROOT%\mod\src\main\resources\assets\examplemod" rmdir /s /q "%ROOT%\mod\src\main\resources\assets\examplemod"
 tar -xf starter.zip -C "%ROOT%"
@@ -114,12 +125,19 @@ echo.
 rem ---- the course hub (kids) + teacher page (this laptop only). Both run offline. ----
 set "RAW=https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/hub"
 mkdir "%ROOT%\hub" 2>nul
+if not exist "%HERE%..\hub\content.js" goto :hub_download
+copy /y "%HERE%..\hub\content.js" "%ROOT%\hub\content.js" >nul
+copy /y "%HERE%..\hub\index.html" "%ROOT%\hub\index.src" >nul
+copy /y "%HERE%..\hub\teacher.html" "%ROOT%\hub\teacher.src" >nul
+goto :hub_wrap
+:hub_download
 curl -L --fail -s -o "%ROOT%\hub\content.js" "%RAW%/content.js"
 if errorlevel 1 goto :hub_skip
 curl -L --fail -s -o "%ROOT%\hub\index.src" "%RAW%/index.html"
 if errorlevel 1 goto :hub_skip
 curl -L --fail -s -o "%ROOT%\hub\teacher.src" "%RAW%/teacher.html"
 if errorlevel 1 goto :hub_skip
+:hub_wrap
 > "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
 type "%ROOT%\hub\index.src" >> "%ROOT%\hub\index.html"
 > "%ROOT%\hub\teacher.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>

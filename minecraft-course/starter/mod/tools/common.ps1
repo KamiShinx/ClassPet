@@ -49,12 +49,12 @@ function Invoke-Prepare([string]$mod) {
 function Invoke-Paste([string]$root, [string]$text) {
     $utf8 = New-Object System.Text.UTF8Encoding($false)
     $kidFiles = @('MyWorld', 'MyItems', 'MyEffects', 'MyMobs', 'MyRules')
-    if (-not $text) { return New-Result $false 'לא הועתק כלום. בג׳מיני, לוחצים על כפתור ההעתקה שליד הקוד.' }
+    if (-not $text) { return New-Result $false 'עוד לא העתקתם כלום. בג׳מיני לוחצים על כפתור ההעתקה שליד הקוד.' }
     $start = $text.IndexOf('package make.myworld;')
     $end = $text.LastIndexOf('}')
-    if ($start -lt 0 -or $end -lt $start) { return New-Result $false 'מה שהעתקתם הוא לא קובץ שלם. בקשו מג׳מיני: ״שלח את הקובץ המלא״.' }
+    if ($start -lt 0 -or $end -lt $start) { return New-Result $false 'מה שהעתקתם זה לא קובץ שלם. בקשו מג׳מיני: ״שלח את הקובץ המלא״.' }
     $code = $text.Substring($start, $end - $start + 1)
-    if ($code -notmatch 'public\s+(?:final\s+)?class\s+(\w+)') { return New-Result $false 'מה שהעתקתם הוא לא קובץ שלם. בקשו מג׳מיני: ״שלח את הקובץ המלא״.' }
+    if ($code -notmatch 'public\s+(?:final\s+)?class\s+(\w+)') { return New-Result $false 'מה שהעתקתם זה לא קובץ שלם. בקשו מג׳מיני: ״שלח את הקובץ המלא״.' }
     $name = $Matches[1]
     if ($kidFiles -notcontains $name) {
         return New-Result $false "ג׳מיני שלח קובץ בשם $name. הקבצים שלכם: MyItems, MyEffects, MyMobs, MyRules, MyWorld. בקשו ממנו לשים את הקוד באחד מהם."
@@ -65,7 +65,7 @@ function Invoke-Paste([string]$root, [string]$text) {
     if (Test-Path $target) { Copy-Item $target (Join-Path $saves ((Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + "_$name.java")) }
     $code = $code -replace "`r`n", "`n" -replace "`n", "`r`n"
     [IO.File]::WriteAllText($target, $code + "`r`n", $utf8)
-    return New-Result $true "הודבק לתוך $name.java"
+    return New-Result $true "הקוד נכנס לקובץ $name.java"
 }
 
 # Brings back the file as it was before the last paste. Each press goes one paste further back.
@@ -75,7 +75,7 @@ function Invoke-Undo([string]$root) {
     $name = ($last.Name -split '_')[-1]
     Copy-Item $last.FullName (Join-Path $root "mod/src/main/java/make/myworld/$name") -Force
     Remove-Item $last.FullName
-    return New-Result $true "$name חזר למה שהיה לפני ההדבקה האחרונה. לוחצים שחק כדי לבדוק."
+    return New-Result $true "הקובץ $name חזר למה שהיה לפני ההדבקה האחרונה. לוחצים שחק כדי לבדוק."
 }
 
 # The useful part of a failed build or crash, ready to paste into Gemini.

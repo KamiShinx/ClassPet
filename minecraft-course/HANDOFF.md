@@ -32,7 +32,7 @@ Nothing has been built yet. Four planning docs exist. The next concrete delivera
 
 | | |
 |---|---|
-| Teacher | Ben (benmaltabashi@gmail.com), works at **MAKE** |
+| Teacher | Ben, works at **MAKE** |
 | Students | **8 kids, ~11–13, zero coding experience** |
 | Schedule | 1×/week, **90 min scheduled — Ben says realistically ~65–70 min** ("usually less with all the bs") |
 | Homework | Yes, expected. ~30 min. |

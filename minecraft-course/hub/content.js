@@ -273,7 +273,7 @@ body.aud .stage{min-height:100vh}
 .pbar:has(.dock){position:static}
 .wrap #dock{margin-top:20px}
 .dock{display:grid;gap:10px;background:var(--surface);border:2px solid var(--ink);border-radius:8px;padding:12px;box-shadow:0 4px 0 var(--ink)}
-.dock-btns{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px}
+.dock-btns{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:10px}
 .dbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:8px 12px;border:2px solid var(--ink);border-radius:6px;background:var(--surface);color:var(--ink);font-weight:800;font-size:1.05rem;box-shadow:0 3px 0 var(--ink)}
 .dbtn svg{width:26px;height:26px;flex:none}
 .dbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
@@ -297,6 +297,34 @@ body.aud .stage{min-height:100vh}
 .vlist .vd{color:var(--muted);font-size:.9em}
 .vlist .vw{min-width:0}
 @media (max-width:760px){.dock-btns{grid-template-columns:1fr 1fr}.dbtn.go{grid-column:1 / -1}.vlist li{grid-template-columns:auto 1fr auto}.vlist .vd{display:none}}
+
+/* ---------- LESSON 2: the loop, the item card, the pixel editor ---------- */
+.flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
+.flow .st{border:2px solid var(--ink);border-radius:6px;background:var(--bg);box-shadow:0 3px 0 var(--ink);padding:10px 14px;display:grid;gap:2px;text-align:center;min-width:120px}
+.flow .st b{font-family:var(--display);font-weight:400;font-size:1.2em}
+.flow .st small{color:var(--muted)}
+.flow .st.go{background:var(--grass-soft);border-color:var(--grass);box-shadow:0 3px 0 var(--grass)}
+.flow .ar{font-size:1.4em;color:var(--muted)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;direction:ltr}
+.split div{border:2px dashed var(--line);border-radius:6px;padding:28px 10px;text-align:center;font-weight:700;background:var(--bg)}
+.px{display:grid;gap:12px}
+.px-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.px-top input{font:inherit;direction:ltr;border:1px solid var(--line);border-radius:4px;padding:.35em .6em;background:var(--surface);color:var(--ink);width:14em}
+.px-main{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+.px canvas.big{width:min(340px,100%);aspect-ratio:1;image-rendering:pixelated;border:2px solid var(--ink);border-radius:4px;touch-action:none;cursor:crosshair;background:#fff}
+.px-side{display:grid;gap:10px;min-width:0}
+.px-pal{display:grid;grid-template-columns:repeat(8,28px);gap:4px}
+.px-pal button{width:28px;height:28px;border:2px solid var(--line);border-radius:4px;padding:0}
+.px-pal button.on{outline:3px solid var(--ink);outline-offset:1px}
+.px-pal input[type=color]{width:28px;height:28px;padding:0;border:2px solid var(--line);border-radius:4px;background:none}
+.px-tools{display:flex;flex-wrap:wrap;gap:6px}
+.px-tools .btn{padding:.3em .7em}
+.px-tools .btn.on{background:var(--sunk)}
+.px-prev{display:flex;gap:12px;align-items:flex-end}
+.px-prev canvas{image-rendering:pixelated;border:1px solid var(--line);background:repeating-conic-gradient(var(--sunk) 0 25%, var(--surface) 0 50%) 0 0/8px 8px}
+.px-msg{min-height:1.4em;font-weight:700}
+.px-msg.ok{color:var(--grass)}
+.px-msg.bad{color:var(--red)}
 `;
 function injectStyle(doc){ const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); }
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap";
@@ -318,7 +346,7 @@ const UNITS = [
     lessons:[ {n:1, title:"התקנה והעולם שלי", build:"כרטיס העולם, ומיינקראפט שעובד על המחשב", open:true} ] },
   { n:2, name:"החפצים הראשונים", sub:"מהכרטיס אל תוך המשחק", color:"#2B6A99", icon:"2",
     lessons:[
-      {n:2, title:"החפץ הראשון שלי", build:"חפץ עם שם, ציור והסבר שלכם, בתוך המשחק"},
+      {n:2, title:"החפץ הראשון שלי", build:"חפץ עם שם, ציור והסבר שלכם, בתוך המשחק", open:true},
       {n:3, title:"חפץ בתלת־ממד", build:"מודל ב־Blockbench שמחזיקים ביד"},
       {n:4, title:"חפץ עם מחיר", build:"חפץ חזק שיש לו חיסרון"},
       {n:5, title:"אפקט שמשנה את המשחק", build:"אוכל או שיקוי עם אפקט חדש"} ] },
@@ -541,6 +569,124 @@ function bindSil(root){
   }));
 }
 
+
+/* ===== lesson 2: the loop, the item card, the pixel editor ===== */
+const FLOW = `<div class="flow" dir="rtl">
+  <div class="st"><b>כרטיס</b><small>מחליטים מה רוצים</small></div><span class="ar">←</span>
+  <div class="st"><b>ג׳מיני</b><small>הכרטיס + הקוד שלכם</small></div><span class="ar">←</span>
+  <div class="st go"><b>הדבקה</b><small>הדבקה מג׳מיני ושחק</small></div><span class="ar">←</span>
+  <div class="st"><b>בדיקה</b><small>זה מה שרציתם?</small></div>
+</div>`;
+
+const IC_FIELDS = [
+  {id:"name", label:"שם החפץ במשחק", ph:"מטבע דבש"},
+  {id:"code", label:"הקוד באנגלית (אותיות קטנות, בלי רווחים)", ph:"honey_coin", ltr:true},
+  {id:"line", label:"המשפט שמופיע מתחת לשם", ph:"הדבורים מקבלות רק אותו."},
+  {id:"stack", label:"כמה נכנסים בערימה אחת (1 עד 64)", ph:"16", ltr:true}
+];
+const codeName = t => t.toLowerCase().replace(/\s+/g, "_").replace(/[^a-z0-9_]/g, "");
+function itemCardForm(){
+  const v = LS.get("itemcard", {});
+  return `<div class="wcard"><div class="hd"><h3>כרטיס החפץ</h3><span class="chip">שיעור 2</span></div>
+    ${IC_FIELDS.map(f=>`<div class="fld"><label for="ic-${f.id}">${f.label}</label><input type="text" id="ic-${f.id}" data-ic="${f.id}" ${f.ltr?'dir="ltr"':""} placeholder="למשל: ${esc(f.ph)}" value="${esc(v[f.id]||"")}" maxlength="80"></div>`).join("")}
+    <div class="saved" id="ic-saved"></div></div>`;
+}
+function bindItemCard(root){
+  root.querySelectorAll("[data-ic]").forEach(i => i.addEventListener("input", () => {
+    const v = LS.get("itemcard", {});
+    v[i.dataset.ic] = i.dataset.ic === "code" ? codeName(i.value) : i.value;
+    if (i.dataset.ic === "code" && i.value !== v.code) i.value = v.code;
+    LS.set("itemcard", v);
+    const s = root.querySelector("#ic-saved"); if (s) s.textContent = "נשמר על המחשב הזה";
+  }));
+}
+function itemCardPrompt(){
+  const v = LS.get("itemcard", {});
+  return "חפץ חדש לעולם שלי.\nשם: " + (v.name||"") + "\nקוד: " + (v.code||"") + "\nמשפט מתחת לשם: " + (v.line||"") + "\nכמה בערימה: " + (v.stack||"");
+}
+
+/* The 16x16 pixel editor. Saves straight into the item's picture when the hub runs from the "Minecraft" icon. */
+const PX_COLORS = ["#1d1d21","#474f52","#9d9d97","#f9fffe","#b02e26","#f9801d","#fed83d","#80c71f","#5e7c16","#169c9c","#3ab3da","#3c44aa","#8932b8","#c74ebd","#f38baa","#835432"];
+function pixelEditorHTML(){
+  return `<div class="px" id="px">
+    <div class="px-top"><label for="px-id"><b>הקוד של החפץ:</b></label><input id="px-id" list="px-items" placeholder="honey_coin" autocomplete="off"><datalist id="px-items"></datalist></div>
+    <div class="px-main">
+      <canvas class="big" id="px-c" width="320" height="320" aria-label="לוח ציור 16 על 16"></canvas>
+      <div class="px-side">
+        <div class="px-pal" id="px-pal">${PX_COLORS.map((c,i)=>`<button data-c="${c}" style="background:${c}" class="${i===0?"on":""}" aria-label="צבע ${i+1}"></button>`).join("")}<input type="color" id="px-custom" value="#ff66aa" aria-label="צבע משלכם"></div>
+        <div class="px-tools">
+          <button class="btn ghost on" data-tool="pen">עיפרון</button>
+          <button class="btn ghost" data-tool="erase">מחק</button>
+          <button class="btn ghost" data-tool="fill">דלי</button>
+          <button class="btn ghost" id="px-undo">צעד אחורה</button>
+          <button class="btn ghost" id="px-clear">לנקות הכול</button>
+        </div>
+        <div class="px-prev"><canvas id="px-p1" width="16" height="16" style="width:32px;height:32px"></canvas><canvas id="px-p2" width="16" height="16" style="width:64px;height:64px"></canvas><small>ככה זה ייראה במשחק</small></div>
+        <div><button class="btn go" id="px-save">לשמור את הציור</button></div>
+        <div class="px-msg" id="px-msg"></div>
+      </div>
+    </div>
+  </div>`;
+}
+function mountPixelEditor(root, served){
+  const el = root.querySelector("#px"); if (!el) return;
+  const N = 16, C = el.querySelector("#px-c"), g = C.getContext("2d"), cell = C.width / N;
+  const P1 = el.querySelector("#px-p1").getContext("2d"), P2 = el.querySelector("#px-p2").getContext("2d");
+  const idIn = el.querySelector("#px-id"), msg = el.querySelector("#px-msg");
+  let px = new Array(N*N).fill(null), color = PX_COLORS[0], tool = "pen", down = false, hist = [];
+  const card = LS.get("itemcard", {}); if (card.code) idIn.value = card.code;
+  const say = (t, ok) => { msg.textContent = t; msg.className = "px-msg " + (ok === true ? "ok" : ok === false ? "bad" : ""); };
+  function draw(){
+    for (let y=0; y<N; y++) for (let x=0; x<N; x++){
+      const c = px[y*N+x];
+      g.fillStyle = c || (((x+y)%2) ? "#e9ece6" : "#ffffff");
+      g.fillRect(x*cell, y*cell, cell, cell);
+    }
+    g.strokeStyle = "rgba(0,0,0,.12)"; g.lineWidth = 1;
+    for (let i=1; i<N; i++){ g.beginPath(); g.moveTo(i*cell+.5,0); g.lineTo(i*cell+.5,C.height); g.stroke(); g.beginPath(); g.moveTo(0,i*cell+.5); g.lineTo(C.width,i*cell+.5); g.stroke(); }
+    [P1,P2].forEach(p => { p.clearRect(0,0,N,N); px.forEach((c,i)=>{ if (c){ p.fillStyle = c; p.fillRect(i%N, Math.floor(i/N), 1, 1); } }); });
+  }
+  const snap = () => { hist.push(px.slice()); if (hist.length > 40) hist.shift(); };
+  function at(e){ const r = C.getBoundingClientRect(); const x = Math.floor((e.clientX - r.left) / r.width * N), y = Math.floor((e.clientY - r.top) / r.height * N); return (x<0||y<0||x>=N||y>=N) ? -1 : y*N+x; }
+  function fill(i, to){ const from = px[i]; if (from === to) return; const st = [i]; while (st.length){ const k = st.pop(); if (px[k] !== from) continue; px[k] = to; const x = k%N, y = Math.floor(k/N); if (x>0) st.push(k-1); if (x<N-1) st.push(k+1); if (y>0) st.push(k-N); if (y<N-1) st.push(k+N); } }
+  function paint(e){ const i = at(e); if (i < 0) return; const erase = tool === "erase" || e.buttons === 2; if (tool === "fill" && !erase){ fill(i, color); } else { px[i] = erase ? null : color; } draw(); }
+  C.addEventListener("contextmenu", e => e.preventDefault());
+  C.addEventListener("pointerdown", e => { e.preventDefault(); snap(); down = true; C.setPointerCapture(e.pointerId); paint(e); });
+  C.addEventListener("pointermove", e => { if (down && tool !== "fill") paint(e); });
+  C.addEventListener("pointerup", () => { down = false; });
+  el.querySelectorAll("#px-pal [data-c]").forEach(b => b.addEventListener("click", () => { color = b.dataset.c; el.querySelectorAll("#px-pal [data-c]").forEach(x => x.classList.toggle("on", x === b)); if (tool === "erase") setTool("pen"); }));
+  el.querySelector("#px-custom").addEventListener("input", e => { color = e.target.value; el.querySelectorAll("#px-pal [data-c]").forEach(x => x.classList.remove("on")); });
+  function setTool(t){ tool = t; el.querySelectorAll("[data-tool]").forEach(b => b.classList.toggle("on", b.dataset.tool === t)); }
+  el.querySelectorAll("[data-tool]").forEach(b => b.addEventListener("click", () => setTool(b.dataset.tool)));
+  el.querySelector("#px-undo").addEventListener("click", () => { if (hist.length){ px = hist.pop(); draw(); } });
+  el.querySelector("#px-clear").addEventListener("click", () => { snap(); px.fill(null); draw(); });
+  function load(id){
+    if (!served || !/^[a-z0-9_]+$/.test(id)) return;
+    const img = new Image();
+    img.onload = () => { const t = document.createElement("canvas"); t.width = t.height = N; const tg = t.getContext("2d"); tg.drawImage(img, 0, 0, N, N); const d = tg.getImageData(0,0,N,N).data; snap(); px = px.map((_,i) => d[i*4+3] > 20 ? "#" + [0,1,2].map(k => d[i*4+k].toString(16).padStart(2,"0")).join("") : null); draw(); say("נטען הציור הקיים של " + id + "."); };
+    img.src = "/picture/" + id + ".png?" + Date.now();
+  }
+  idIn.addEventListener("input", () => { idIn.value = codeName(idIn.value); });
+  idIn.addEventListener("change", () => load(idIn.value));
+  el.querySelector("#px-save").addEventListener("click", async () => {
+    const id = idIn.value;
+    if (!/^[a-z0-9_]{1,40}$/.test(id)) { say("קודם כותבים את הקוד של החפץ, באנגלית.", false); idIn.focus(); return; }
+    if (!px.some(Boolean)) { say("הלוח ריק. קודם מציירים.", false); return; }
+    if (!served) { say("כדי לשמור, פותחים את הדף מהסמל Minecraft בשולחן העבודה.", false); return; }
+    const t = document.createElement("canvas"); t.width = t.height = N; const tg = t.getContext("2d");
+    px.forEach((c,i)=>{ if (c){ tg.fillStyle = c; tg.fillRect(i%N, Math.floor(i/N), 1, 1); } });
+    try {
+      const r = await fetch("/api/save-picture", { method:"POST", headers:{ "X-Make":"1", "Content-Type":"application/json" }, body: JSON.stringify({ id, png: t.toDataURL("image/png").split(",")[1] }) });
+      const j = await r.json(); say(j.result, j.ok);
+    } catch(e){ say("הציור לא נשמר. נסו שוב.", false); }
+  });
+  if (served) fetch("/api/items", { cache:"no-store" }).then(r => r.json()).then(list => {
+    el.querySelector("#px-items").innerHTML = list.map(it => `<option value="${esc(it.id)}">${esc(it.name)}</option>`).join("");
+    if (idIn.value && list.some(it => it.id === idIn.value && it.hasPicture)) load(idIn.value);
+  }).catch(()=>{});
+  draw();
+}
+
 /* ===== lesson 1 slides ===== */
 const SLIDES = [
   { label:"פתיחה", html:`<div class="eye">שיעור 1 · מודים למיינקראפט</div><h1>העולם שלכם מתחיל היום</h1><p class="sub">20 שיעורים. בסוף, המשפחות והחברים ישחקו בעולם שאתם המצאתם.</p>`,
@@ -572,28 +718,147 @@ const SLIDES = [
     notes:"80–90 דק׳. לרשום אילו מחשבים לא סיימו את ההתקנה, ולבדוק אותם אחרי השיעור." }
 ];
 
+
+/* ===== lesson 2: my first item ===== */
+const L2 = {
+  n:2, unit:"יחידה 2 · החפצים הראשונים", title:"שיעור 2: החפץ הראשון שלי",
+  steps:[
+    { type:"פתיחה", title:"מה עושים היום",
+      body:`<p>היום החפץ הראשון שלכם נכנס למשחק, עם שם, משפט וציור שאתם בחרתם.</p>`,
+      expect:"בסוף השיעור החפץ שלכם נמצא במשחק, בתפריט של מצב יצירה, עם הציור שציירתם.",
+      visual:()=>`<div class="today">
+        <div><span class="num">1</span><b>שם לעולם</b><span>השם יופיע במשחק.</span></div>
+        <div><span class="num">2</span><b>ממציאים חפץ</b><span>כרטיס וציור של 16 על 16.</span></div>
+        <div><span class="num">3</span><b>ג׳מיני כותב את הקוד</b><span>אתם מדביקים ובודקים.</span></div>
+      </div>` },
+
+    { type:"שיחה", title:"ככה בונים כל דבר בקורס",
+      body:`<ol><li><b>כרטיס:</b> מחליטים מה רוצים.</li><li><b>ג׳מיני:</b> שולחים לו את הכרטיס ואת הקוד שלכם.</li><li><b>הדבקה:</b> מעתיקים את הקוד ש־ג׳מיני כתב, ולוחצים למעלה <b>הדבקה מג׳מיני ושחק</b>.</li><li><b>בדיקה:</b> במשחק בודקים שזה מה שרציתם.</li></ol>`,
+      why:"ג׳מיני זוכר רק מה שכתוב בשיחה. לכן כל פעם שולחים לו את הקוד שלכם, וככה הוא לא מוחק את מה שכבר בניתם.",
+      visual:()=>FLOW },
+
+    { type:"הוראה", title:"פותחים את ג׳מיני",
+      body:`<ol><li>נכנסים ל־<code>gemini.google.com</code> עם החשבון של משרד החינוך.</li><li>פותחים את ה־Gem <b>עוזר המודים</b>.</li><li>שמים את ג׳מיני בצד אחד של המסך ואת הדף הזה בצד השני.</li></ol>`,
+      note:"כדי להצמיד חלון לצד: <kbd>Win</kbd> + חץ ימינה, או <kbd>Win</kbd> + חץ שמאלה.",
+      visual:()=>`<div class="split"><div>הדף הזה</div><div>ג׳מיני</div></div>` },
+
+    { type:"פעילות", title:"שם לעולם",
+      body:`<ol><li>לוחצים למעלה על <b>להעתיק את הקוד שלי</b>.</li><li>בג׳מיני כותבים את השורה מהמסגרת, ואת השם מכרטיס העולם.</li><li>יורדים שורה, לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd> ושולחים.</li><li>ג׳מיני שולח את הקובץ MyWorld.java. לוחצים על כפתור ההעתקה שליד הקוד.</li><li>לוחצים למעלה <b>הדבקה מג׳מיני ושחק</b>.</li></ol>`,
+      expect:"במשחק, במצב יצירה, יש לשונית עם השם של העולם שלכם.",
+      stuck:[
+        ["ג׳מיני שואל שאלות ולא כותב קוד","עונים לו. הוא שואל כדי להבין בדיוק מה אתם רוצים."],
+        ["כתוב: מה שהעתקתם זה לא קובץ שלם","בג׳מיני לוחצים על כפתור ההעתקה שליד הקוד, ולא מסמנים בעכבר."],
+        ["הופיעה מסגרת צהובה","השגיאה כבר הועתקה. בג׳מיני לוחצים Ctrl + V ואז Enter."]
+      ],
+      visual:()=>gemPromptBox("תשנה את השם של העולם שלי ל: ") },
+
+    { type:"פעילות", title:"כרטיס החפץ",
+      body:`<p>ממלאים על הנייר או כאן. זה החפץ הראשון, אז חפץ פשוט, בלי כוחות. כוחות מגיעים בשיעור 4.</p>`,
+      hints:[
+        "חפץ מהעולם שלכם: מה מוצאים שם? מה אוספים? במה סוחרים?",
+        "הקוד באנגלית הוא גם השם של הציור. למשל sky_shell או honey_coin: אותיות קטנות, בלי רווחים."
+      ],
+      visual:()=>itemCardForm(), mount:(root)=>bindItemCard(root) },
+
+    { type:"פעילות", title:"מציירים את החפץ",
+      body:`<ol><li>כותבים למעלה את הקוד של החפץ, כמו בכרטיס.</li><li>מציירים בריבוע של 16 על 16.</li><li>לוחצים <b>לשמור את הציור</b>.</li></ol>`,
+      why:"במיינקראפט כל חפץ הוא 16 על 16 משבצות. כשיש מעט משבצות, מחליטים מה הכי חשוב בצורה.",
+      hints:["מתחילים מקו מתאר כהה, ואז ממלאים.","שניים עד ארבעה צבעים מספיקים. צבע בהיר אחד נותן ברק.","לחיצה ימנית בעכבר מוחקת."],
+      visual:()=>pixelEditorHTML(), mount:(root, served)=>mountPixelEditor(root, served) },
+
+    { type:"פעילות", title:"שולחים לג׳מיני",
+      body:`<ol><li>לוחצים למעלה על <b>להעתיק את הקוד שלי</b>.</li><li>בג׳מיני מדביקים את הכרטיס מהמסגרת, יורדים שורה ולוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li><li>מעתיקים את הקובץ ש־ג׳מיני שולח, ולוחצים למעלה <b>הדבקה מג׳מיני ושחק</b>.</li></ol>`,
+      note:"ג׳מיני כותב את הקוד, אבל את הרעיונות אתם ממציאים. אם הוא מציע שם או משפט, אומרים לו שזה שלכם.",
+      visual:()=>gemPromptBox(itemCardPrompt()) },
+
+    { type:"בדיקה", title:"בודקים במשחק",
+      body:`<ol><li>נכנסים לעולם במצב יצירה.</li><li>לוחצים <kbd>E</kbd> ומוצאים את הלשונית של העולם שלכם.</li><li>בודקים מול הכרטיס: השם, המשפט, הציור, וכמה נכנסים בערימה.</li></ol>`,
+      expect:"הכול כמו בכרטיס. ואם משהו שונה, זה בדיוק מה שמתקנים עכשיו.",
+      stuck:[
+        ["יש ריבוע סגול ושחור במקום הציור","הקוד של הציור לא זהה לקוד בכרטיס. בודקים את שניהם, אות אחרי אות."],
+        ["המשחק לא נפתח והופיעה מסגרת צהובה","השגיאה כבר הועתקה. בג׳מיני לוחצים Ctrl + V ואז Enter."]
+      ],
+      visual:()=>`<div class="checks"><div><span class="ok"></span>השם של החפץ, כמו בכרטיס</div><div><span class="ok"></span>המשפט מתחת לשם</div><div><span class="ok"></span>הציור שלכם</div><div><span class="ok"></span>כמה נכנסים בערימה</div></div>` },
+
+    { type:"שיחה", title:"משהו לא כמו שרציתם?",
+      body:`<p>אומרים לג׳מיני בדיוק מה שונה: מה רציתם, ומה קרה במשחק. ומדביקים שוב את הקוד שלכם.</p>`,
+      visual:()=>`<div class="vs"><div class="bad"><h4>״זה לא עובד״</h4><p>ג׳מיני לא יודע מה לא עובד, אז הוא מנחש.</p></div><div class="good"><h4>מה רציתם ומה קרה</h4><p>״רציתי שייכנסו 16 בערימה, ובמשחק נכנסים 64. הנה הקוד שלי:״</p></div></div>` },
+
+    { type:"סיום", title:"מסיימים",
+      body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>לוחצים למעלה על <b>גרסאות</b>, ואז <b>לשמור גרסה עכשיו</b>.</li><li>סוגרים את מיינקראפט.</li></ul>`,
+      expect:"בשבוע הבא: החפץ שלכם בתלת־ממד.",
+      visual:()=>`<div class="checks"><div><span class="ok"></span>החפץ שלי במשחק</div><div><span class="ok"></span>מראים למי שיושב לידכם</div><div><span class="ok"></span>שומרים גרסה</div></div>` }
+  ],
+  challenges:[
+    {id:"world", lvl:"חובה", t:"שם לעולם", d:"הלשונית במשחק נקראת בשם של העולם שלכם."},
+    {id:"item", lvl:"חובה", t:"החפץ שלי", d:"החפץ במשחק, עם השם, המשפט והציור שלכם."},
+    {id:"second", lvl:"אתגר", t:"חפץ שני", d:"עוד חפץ מהעולם שלכם, עם ציור משלו."},
+    {id:"shade", lvl:"אתגר", t:"צל וברק", d:"בציור יש צבע כהה לצל וצבע בהיר לברק."}
+  ]
+};
+
+const SLIDES2 = [
+  { label:"פתיחה", html:`<div class="eye">שיעור 2 · מודים למיינקראפט</div><h1>החפץ הראשון שלכם</h1><p class="sub">היום יוצא מכאן חפץ שאתם ציירתם, בתוך המשחק.</p>`,
+    notes:"0–10 דק׳. הילדים לוחצים פעמיים על הסמל Minecraft, והדף נפתח לבד. בזמן שהמחשבים עולים, מראים חפץ מוכן שלך במשחק." },
+  { label:"ככה בונים", html:`<h2>ככה בונים כל דבר בקורס</h2>${FLOW}`,
+    notes:"10–25 דק׳. אותם ארבעה צעדים בכל השיעורים. להגיד את זה פעמיים." },
+  { label:"הדגמה", html:`<h2>הדגמה</h2><ol class="big"><li>כרטיס</li><li>להעתיק את הקוד שלי</li><li>בג׳מיני: הכרטיס, ואז <kbd>Ctrl</kbd> + <kbd>V</kbd></li><li>הדבקה מג׳מיני ושחק</li></ol>`,
+    notes:"בונים חפץ על המקרן, מהכרטיס ועד המשחק, כולל ציור בעורך. אם יוצאת שגיאה, מצוין: מראים את המסגרת הצהובה ואת Ctrl+V בג׳מיני." },
+  { label:"כרטיס החפץ", html:`<h2>כרטיס החפץ</h2><div class="wcard">
+      <div class="ln">שם החפץ במשחק</div>
+      <div class="ln">הקוד באנגלית<br><span>honey_coin: אותיות קטנות, בלי רווחים</span></div>
+      <div class="ln">המשפט שמופיע מתחת לשם</div>
+      <div class="ln">כמה נכנסים בערימה אחת</div></div><p class="sub">10 דקות</p>`,
+    notes:"25–35 דק׳. חפץ בלי כוחות. כוחות בשיעור 4." },
+  { label:"ציור 16 על 16", html:`<h2>ציור של 16 על 16</h2><ul class="big"><li>מתחילים מקו מתאר כהה</li><li>שניים עד ארבעה צבעים</li><li>צבע בהיר אחד לברק</li><li>מה שלא צובעים, נשאר שקוף</li></ul>`,
+    notes:"כדאי להראות חפץ של מיינקראפט מוגדל, למשל יהלום: כמה מעט צבעים יש בו." },
+  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><ol class="big"><li>שם לעולם</li><li>כרטיס החפץ</li><li>ציור</li><li>ג׳מיני</li><li>בודקים במשחק</li></ol>`,
+    notes:"35–80 דק׳. מסתובבים בכיתה. מי שמסיים: חפץ שני. מי שתקוע: קודם שואל את מי שיושב לידו." },
+  { label:"משהו לא עבד?", html:`<h2>משהו לא עבד?</h2><div class="rules">
+      <div><b>מסגרת צהובה</b>השגיאה כבר הועתקה. בג׳מיני: Ctrl + V.</div>
+      <div><b>לא מה שרציתם</b>אומרים לג׳מיני מה רציתם ומה קרה.</div>
+      <div><b>הכול השתבש</b>לוחצים ביטול ההדבקה.</div></div>`,
+    notes:"להשאיר על המסך בזמן העבודה." },
+  { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ שלכם בתלת־ממד</p><ul class="big"><li>מראים למי שיושב לידכם</li><li>גרסאות ← לשמור גרסה עכשיו</li><li>סוגרים את מיינקראפט</li></ul>`,
+    notes:"80–90 דק׳. שניים או שלושה ילדים מראים את החפץ שלהם על המקרן." }
+];
+
 /* ===== teacher ===== */
 const GEM_TEXT = `You are "עוזר המודים" (the Mod Helper), a helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Always answer in simple, short Hebrew. Code, file names and paths stay in English.
 
 THE SETUP (never change it)
 - Minecraft Java Edition 26.2, NeoForge 26.2.0.88, Java 25, ModDevGradle. Mojang's official names (the game is no longer obfuscated).
-- The project is the official NeoForge 26.2 MDK. Java code is in src/main/java/..., assets in src/main/resources/assets/<modid>/...
 - Never use net.minecraftforge, Forge, Fabric, or code written for Minecraft 1.21 or older. Most tutorials online are for old versions.
-- Known 26.x changes that old code gets wrong: ResourceLocation is now Identifier; entity save/load uses ValueInput/ValueOutput; every item needs a client item file in assets/<modid>/items/<name>.json; entity renderers use render states.
+- Known 26.x changes that old code gets wrong: ResourceLocation is now Identifier; entity save/load uses ValueInput/ValueOutput; entity renderers use render states.
 - If you're not sure something exists in 26.2, say so plainly and tell the kid how to check it in the game. Never invent a method or class.
 
+THE KID'S PROJECT
+- Every kid has the same project: mod id "myworld", Java package make.myworld. You only ever write these five files:
+  MyWorld.java (the world's name, in NAME), MyItems.java (items), MyEffects.java (effects), MyMobs.java (creatures), MyRules.java (world rules, as NeoForge game events).
+- Never write Kit.java or any other file. Never write JSON, language or model files: the project makes the names and the item models by itself.
+- An item is one field in MyItems.java:
+  public static final DeferredItem<Item> HONEY_COIN = Kit.item("honey_coin", "<name in Hebrew>", "<line under the name, in Hebrew>", p -> p.stacksTo(16));
+  The first three arguments are always plain string literals: the code name (lowercase English, digits and _), the name in the game, and the line under the name. A script reads them, so never build them from variables. The fourth argument sets numbers on Item.Properties (stacksTo, durability, rarity, food...). For an item with its own behaviour, add a fifth argument: p -> new Item(p) { @Override ... }.
+- An effect is one field in MyEffects.java: Kit.effect("code", "<name in Hebrew>", () -> new MobEffect(MobEffectCategory.BENEFICIAL, 0xRRGGBB) { ... }), which returns Holder<MobEffect>.
+- Every kid file keeps its line "static void load() {}".
+- Pictures: the kid draws each item's 16x16 picture in the course hub and saves it under the item's code name. Never send images. If an item has no picture yet, remind the kid to draw one.
+
+HOW YOUR CODE GETS INTO THE GAME
+- The kid copies your code with the copy button and presses one button in the hub. That button finds the file by its "public class" line, keeps a backup, and builds the game. So: one whole file per answer, starting with "package make.myworld;". Never snippets, never "add this line here".
+- Before you change a file you must have the kid's current code. If it isn't in this chat yet, ask the kid to press "להעתיק את הקוד שלי" in the hub and paste it here with Ctrl+V. Always build on the latest code the kid pasted, and keep everything the kid didn't ask to change. Names and lines in Hebrew stay exactly as the kid wrote them.
+- A failed build arrives as a message that starts with "המוד שלי לא עובד. זאת השגיאה:". Fix it and send the whole file again.
+
 HOW YOU WORK WITH THE KID
-1. Card first. Only write code when the kid gives you a filled card: a name, what it does in one sentence, its cost or weakness, and 2-3 things they will see in the game. If the request is vague ("תבנה לי חרב", "תעשה משהו מגניב"), don't write code. Ask the card's questions, ONE question per message.
-2. The ideas belong to the kid. Never suggest names, stories, tooltips, abilities, colours or textures, even if they ask. You may ask hard questions ("מה קורה אם...?", "למה שחקן ירצה את זה?") and point out problems, but the kid chooses the answers. If they ask you to invent it, say kindly that this part is theirs, and ask one question that helps them think.
-3. Whole files only. One complete file per answer, ready to paste, with the full file path on the first line. Never snippets, never "add this line here". If more files are needed, say how many, and send the next one when the kid writes "הבא".
-4. Before the code: one short Hebrew sentence saying what the file does. After the code: "במשחק אמורים לראות:" followed by the claims from the kid's card.
-5. "לא עובד" is not a bug report. Ask: what did you do, what did you expect, what happened instead, and what is the first red error line (a screenshot is fine). Then fix it and send the whole file again.
-6. If you were wrong, say "טעיתי" plainly and fix it.
+1. Card first. Only write code when the kid has told you what they want: for an item, its name, its code name, the line under the name and how many fit in a stack. If the request is vague ("תבנה לי חרב", "תעשה משהו מגניב"), don't write code. Ask the card's questions, ONE question per message.
+2. The ideas belong to the kid. Never suggest names, stories, lines, abilities, colours or pictures, even if they ask. You may ask hard questions ("מה קורה אם...?", "למה שחקן ירצה את זה?") and point out problems, but the kid chooses the answers. If they ask you to invent it, say kindly that this part is theirs, and ask one question that helps them think.
+3. Before the code: one short Hebrew sentence saying which file it is and what changed. After the code: "במשחק אמורים לראות:" followed by what the kid asked for.
+4. "לא עובד" is not a bug report. Ask: what did you do, what did you want to see, and what happened instead. Then fix it and send the whole file again.
+5. If you were wrong, say "טעיתי" plainly and fix it.
 
 LIMITS
 - Age-appropriate always. Never ask for their real name, school, address or photos, and tell them not to share these.
 - Stay on the mod. If they drift, bring them back in one sentence.
-- If the kid only says hello: greet them in one line, say in one line that you help turn their cards into a working mod, and ask one question about their world.`;
+- If the kid only says hello: greet them in one line, say in one line that you help turn their ideas into a working mod, and ask one question about their world.`;
 
 const TEACHER_CHECK = [
   ["install","הרצת install.bat על המחשב שלך, ומיינקראפט נפתח","מהמחשב הזה מכינים את הדיסקים."],
@@ -609,6 +874,9 @@ const TEACHER_CHECK = [
 function applyReveal(root, set){
   root.querySelectorAll("[data-sil]").forEach(b => { if (set.has(+b.dataset.sil)) { b.classList.add("shown"); b.querySelector(".nm").textContent = MOBS[+b.dataset.sil].name; } });
 }
+const LESSONS = { 1: L1, 2: L2 };
+const DECKS = { 1: SLIDES, 2: SLIDES2 };
 window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
-  gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK };
+  gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK,
+  LESSONS, DECKS };
 })();

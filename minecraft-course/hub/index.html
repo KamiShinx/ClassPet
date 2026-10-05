@@ -7,7 +7,7 @@
 <script>
 (function(){
 "use strict";
-const H = window.HUB, LS = H.LS, esc = H.esc, L1 = H.L1;
+const H = window.HUB, LS = H.LS, esc = H.esc;
 H.injectStyle(document);
 const app = document.getElementById("app");
 if (LS.get("big", false)) app.classList.add("big");
@@ -34,8 +34,8 @@ function renderHome(){
         <div><div class="head"><h2>${u.name}</h2><span>${u.sub}</span></div>
         <div class="cards">${u.lessons.map(l=>{
           const isDone = done.includes(l.n);
-          const meta = `<div class="meta">${l.open?`<span class="chip go">${L1.steps.length} שלבים</span>`:`<span class="chip">בקרוב</span>`}${isDone?`<span class="chip gold">הושלם</span>`:""}</div>`;
-          return l.open
+          const meta = `<div class="meta">${l.open && H.LESSONS[l.n]?`<span class="chip go">${H.LESSONS[l.n].steps.length} שלבים</span>`:`<span class="chip">בקרוב</span>`}${isDone?`<span class="chip gold">הושלם</span>`:""}</div>`;
+          return (l.open && H.LESSONS[l.n])
             ? `<a class="lcard open" href="#lesson${l.n}"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</a>`
             : `<div class="lcard soon"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</div>`;
         }).join("")}</div></div></section>`).join("")}
@@ -47,12 +47,13 @@ function renderHome(){
 }
 
 /* ===== LESSON PLAYER ===== */
-let stepIx = LS.get("l1step", 0);
+let lessonN = 1, stepIx = 0;
+function lessonFromHash(){ const m = location.hash.match(/^#lesson(\d+)$/); return m && H.LESSONS[+m[1]] ? +m[1] : 0; }
 function renderPlayer(){
-  const L = L1, N = L.steps.length;
+  const L = H.LESSONS[lessonN], N = L.steps.length;
   stepIx = Math.max(0, Math.min(N-1, stepIx));
   const s = L.steps[stepIx];
-  const ch = LS.get("l1chal", {});
+  const ch = LS.get("l" + lessonN + "chal", {});
   app.innerHTML = `<div class="pl">
     <header class="pbar">
       <div id="dock"></div>
@@ -83,20 +84,21 @@ function renderPlayer(){
       ${stepIx<N-1?`<button class="btn go" id="next">הבא ←</button>`:`<a class="btn go" href="#home" id="finish">סיימתי ←</a>`}
     </footer>
   </div>`;
-  const go = i => { stepIx = i; LS.set("l1step", i); renderPlayer(); window.scrollTo(0,0); };
+  const go = i => { stepIx = i; LS.set("l" + lessonN + "step", i); renderPlayer(); window.scrollTo(0,0); };
   app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(+b.dataset.go)));
   const p = app.querySelector("#prev"), n = app.querySelector("#next"), f = app.querySelector("#finish");
   if (p) p.addEventListener("click", () => go(stepIx-1));
   if (n) n.addEventListener("click", () => go(stepIx+1));
-  if (f) f.addEventListener("click", () => { const d = LS.get("lessonsDone", []); if (!d.includes(1)) { d.push(1); LS.set("lessonsDone", d); } });
+  if (f) f.addEventListener("click", () => { const d = LS.get("lessonsDone", []); if (!d.includes(lessonN)) { d.push(lessonN); LS.set("lessonsDone", d); } });
   app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); });
   const rv = app.querySelector("#reveal");
   let hi = 0, si = 0;
   const h = app.querySelector("#hint"), st = app.querySelector("#stuck");
   if (h) h.addEventListener("click", () => { if (hi < s.hints.length){ rv.insertAdjacentHTML("beforeend", `<div class="item"><b>רמז ${hi+1}</b>${s.hints[hi]}</div>`); hi++; } if (hi >= s.hints.length) h.disabled = true; });
   if (st) st.addEventListener("click", () => { if (si < s.stuck.length){ const [q,a] = s.stuck[si]; rv.insertAdjacentHTML("beforeend", `<div class="item"><b>${q}</b>${a}</div>`); si++; } if (si >= s.stuck.length) st.disabled = true; });
-  app.querySelectorAll("[data-ch]").forEach(c => c.addEventListener("change", () => { const v = LS.get("l1chal", {}); v[c.dataset.ch] = c.checked; LS.set("l1chal", v); }));
+  app.querySelectorAll("[data-ch]").forEach(c => c.addEventListener("change", () => { const v = LS.get("l" + lessonN + "chal", {}); v[c.dataset.ch] = c.checked; LS.set("l" + lessonN + "chal", v); }));
   H.bindCopy(app); H.bindSil(app); H.bindWorldCard(app);
+  if (s.mount) s.mount(app.querySelector(".work"), DOCK.on);
   paintDock();
 }
 
@@ -108,7 +110,8 @@ const ICON = {
   play:  SVG('<path d="M7 4l13 8-13 8z" fill="currentColor"/>'),
   undo:  SVG('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
   pics:  SVG('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-6-6-8 8"/>'),
-  vers:  SVG('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')
+  vers:  SVG('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  code:  SVG('<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>')
 };
 function dockHTML(){
   if (!DOCK.on || !DOCK.s) return "";
@@ -117,6 +120,7 @@ function dockHTML(){
   return `<div class="dock">
     <div class="dock-btns">
       <button class="dbtn go" data-act="paste" ${busy?"disabled":""}>${ICON.paste}<span>הדבקה מג׳מיני ושחק</span></button>
+      <button class="dbtn" data-act="copy-code" ${s.phase==="off"?"disabled":""}>${ICON.code}<span>להעתיק את הקוד שלי</span></button>
       <button class="dbtn" data-act="play" ${busy?"disabled":""}>${ICON.play}<span>שחק</span></button>
       <button class="dbtn" data-act="undo" ${busy?"disabled":""}>${ICON.undo}<span>ביטול ההדבקה</span></button>
       <button class="dbtn" data-act="versions" aria-expanded="${DOCK.vopen}" ${s.phase==="off"?"disabled":""}>${ICON.vers}<span>גרסאות</span></button>
@@ -165,12 +169,15 @@ async function act(name){
 if (DOCK.on){ poll(); setInterval(poll, 1500); }
 
 /* ===== router ===== */
-function route(){ (location.hash === "#lesson1") ? renderPlayer() : renderHome(); }
+function route(){
+  const n = lessonFromHash();
+  if (n){ lessonN = n; stepIx = LS.get("l" + n + "step", 0); renderPlayer(); } else renderHome();
+}
 window.addEventListener("hashchange", route);
 document.addEventListener("keydown", e => {
-  if (e.target.matches("input,textarea,select") || location.hash !== "#lesson1") return;
-  if (e.key === "ArrowLeft" && stepIx < L1.steps.length-1){ stepIx++; LS.set("l1step", stepIx); renderPlayer(); }
-  if (e.key === "ArrowRight" && stepIx > 0){ stepIx--; LS.set("l1step", stepIx); renderPlayer(); }
+  if (e.target.matches("input,textarea,select") || !lessonFromHash()) return;
+  if (e.key === "ArrowLeft" && stepIx < H.LESSONS[lessonN].steps.length-1){ stepIx++; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
+  if (e.key === "ArrowRight" && stepIx > 0){ stepIx--; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
 });
 route();
 })();

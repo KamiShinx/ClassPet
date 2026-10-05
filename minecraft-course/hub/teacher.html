@@ -7,7 +7,8 @@
 <script>
 (function(){
 "use strict";
-const H = window.HUB, LS = H.LS, esc = H.esc, SLIDES = H.SLIDES;
+const H = window.HUB, LS = H.LS, esc = H.esc;
+let deckN = 1, SLIDES = H.DECKS[1];
 H.injectStyle(document);
 const app = document.getElementById("app");
 
@@ -16,7 +17,7 @@ function renderTeacher(){
   const v = LS.get("tcheck", {});
   app.innerHTML = `<div class="wrap">
     <div class="top"><div class="brand"><h1>אזור מדריך</h1><p>מודים למיינקראפט · מה צריך להיות מוכן לפני שיעור 1</p></div>
-      <div class="tools"><a class="btn go" href="#present1">הצגת שיעור 1</a></div></div>
+      <div class="tools">${Object.keys(H.DECKS).map(n=>`<a class="btn go" href="#present${n}">הצגת שיעור ${n}</a>`).join("")}</div></div>
 
     <section class="tsec"><h2>איך מציגים עם שני מסכים</h2>
       <ol>
@@ -66,7 +67,7 @@ function renderTeacher(){
 }
 
 /* ===== PRESENTER CONSOLE ===== */
-let sIx = LS.get("slide", 0), aud = null, blocked = false, t0 = Date.now(), tick = null;
+let sIx = LS.get("slide1", 0), aud = null, blocked = false, t0 = Date.now(), tick = null;
 const revealed = new Set();
 
 function audOpen(){ return aud && !aud.closed; }
@@ -76,7 +77,7 @@ function openAudience(){
   blocked = false; aud = w;
   const d = w.document;
   d.open();
-  d.write('<!doctype html><html lang="he" dir="rtl" data-theme="light"><head><meta charset="utf-8"><title>שיעור 1</title></head><body class="aud"><div class="stage"><div class="slide" id="s"></div></div><p class="aud-hint">לחיצה כפולה: מסך מלא</p></body></html>');
+  d.write('<!doctype html><html lang="he" dir="rtl" data-theme="light"><head><meta charset="utf-8"><title>מודים למיינקראפט</title></head><body class="aud"><div class="stage"><div class="slide" id="s"></div></div><p class="aud-hint">לחיצה כפולה: מסך מלא</p></body></html>');
   d.close();
   const l = d.createElement("link"); l.rel = "stylesheet"; l.href = H.FONT_HREF; d.head.appendChild(l);
   H.injectStyle(d);
@@ -96,7 +97,7 @@ function renderConsole(){
   const N = SLIDES.length; sIx = Math.max(0, Math.min(N-1, sIx));
   const S = SLIDES[sIx], next = SLIDES[sIx+1];
   app.innerHTML = `<div class="con">
-    <div class="prbar"><div class="r"><a class="btn ghost" href="#teacher">→ אזור מדריך</a><b>שיעור 1: התקנה והעולם שלי</b></div>
+    <div class="prbar"><div class="r"><a class="btn ghost" href="#teacher">→ אזור מדריך</a><b>${esc(H.LESSONS[deckN].title)}</b></div>
       <div class="r">
         ${audOpen() ? `<span class="aud-on">המקרן מחובר</span>` : `<button class="btn go" id="openaud">פתיחת חלון למקרן</button>`}
         <span class="timer" id="timer" title="זמן מתחילת השיעור">${fmt(Date.now()-t0)}</span>
@@ -128,9 +129,10 @@ function renderConsole(){
   clearInterval(tick);
   tick = setInterval(() => { const el = document.getElementById("timer"); if (el) el.textContent = fmt(Date.now()-t0); if (aud && aud.closed){ aud = null; renderConsole(); } }, 1000);
 }
-function goSlide(i){ sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide", sIx); renderConsole(); syncAudience(); }
+function goSlide(i){ sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide" + deckN, sIx); renderConsole(); syncAudience(); }
+function deckFromHash(){ const m = location.hash.match(/^#present(\d+)$/); return m && H.DECKS[+m[1]] ? +m[1] : 0; }
 function onKey(e){
-  if (location.hash !== "#present1") return;
+  if (!deckFromHash()) return;
   if (e.target && e.target.matches && e.target.matches("input,textarea,select")) return;
   if (["ArrowLeft"," ","PageDown"].includes(e.key)){ e.preventDefault(); goSlide(sIx+1); }
   if (["ArrowRight","PageUp"].includes(e.key)){ e.preventDefault(); goSlide(sIx-1); }
@@ -138,7 +140,8 @@ function onKey(e){
 
 /* ===== router ===== */
 function route(){
-  if (location.hash === "#present1") renderConsole();
+  const dn = deckFromHash();
+  if (dn) { if (dn !== deckN) { deckN = dn; SLIDES = H.DECKS[dn]; sIx = LS.get("slide" + dn, 0); revealed.clear(); } renderConsole(); syncAudience(); }
   else { clearInterval(tick); renderTeacher(); }
 }
 window.addEventListener("hashchange", route);

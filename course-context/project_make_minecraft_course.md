@@ -93,3 +93,25 @@ the kid's current code + a "מה אני רוצה" heading; the kid pastes into a
 Every message carries its own rules, so it works with any account and any (weak, forgetful) model. Lesson 1 steps:
 "מה זה ג׳מיני" (screen picture), "איך מדברים עם ג׳מיני בקורס", "מדברים עם ג׳מיני". Rules live once: GEM_TEXT in
 hub/content.js; make_starter_zip.py writes starter/mod/tools/rules.txt from it.
+
+**5 Oct, night: the big redesign (Ben agreed; build AFTER the first lesson day, 6 Oct).**
+- Lesson 2 worked on Ben's laptop. Lessons 1 and 2 both run on day 1 (6 Oct). Hub got a **דרייב** button: one
+  `myworld DD-MM HH-MM.zip` (5 code files, pictures/models, worlds, hub notes) to upload to the kid's Drive and load back
+  on a reset or different laptop (loading saves a version first). Tested in the cloud only. Starter v8.
+- Ben's fears: laptops reset or change between lessons (→ Drive button); kids want complex mods (a dragon over months).
+- Ben's diagnosis, agreed: whole-file editing breaks as the mod grows. A weak Gemini gets lazy on long files ("// rest
+  unchanged", drops items) and paste then deletes work. And the kids end up in code and debugging, not design.
+- **Decision: designer mode, fixed templates.** I write and test one template per kind of thing: item, weapon,
+  food/potion, creature, boss, place, world rule (Ben may swap one). Each is a fixed file/class, so paste always knows
+  where it goes. A kid's copy is changed in 3 levels: (1) stats and looks in a hub form, no Gemini, can't break;
+  (2) behaviour picked from ready parts (fire breath, flying, minions, enrage at half HP, drops), Gemini edits only those
+  known lines; (3) one free "something special" box where Gemini may write any small code, auto-undo if it breaks.
+  Framing for kids: this is how studios work (programmers build systems, designers tune them); not "fake freedom".
+- **Course re-plan around "what does a world need?"** Each lesson opens with that question; the answer is the lesson's
+  template (identity → treasure/item → danger/creature → weapon → survival/food-potion → place → rules → climax/boss).
+  Design talk first, then tune the template.
+- **On hold (Ben's open question):** a catalog of famous Minecraft things (golden apple etc.) as cards with their real
+  numbers, dumped once from the game on Ben's laptop; "build one like this" fills our template, so nothing of Mojang's
+  is copied or injected. Open: also allow changing real Minecraft things' stats (e.g. zombies 30 HP), or only remixes?
+- **Lessons 1 and 2 need 30-40 minutes of game design / world design discussion each**, from the research (SYNTHESIS.md,
+  notes/_batch_*), before the kids plan on paper with markers. The hub had none of this. Handed to Ben's PC session.

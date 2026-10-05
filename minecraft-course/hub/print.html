@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>דפים להדפסה · מודים למיינקראפט</title>
+<style>
+  /* Two A4 pages for markers: the world card (lesson 1) and the item card with a 16x16 grid (lesson 2). */
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; }
+  html { background: #e9ece6; }
+  body { margin: 0; font-family: "Segoe UI", Arial, "Noto Sans Hebrew", sans-serif; color: #111; }
+  .bar { max-width: 190mm; margin: 12px auto; padding: 0 8px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .bar button { font: inherit; font-weight: 700; padding: 8px 18px; border: 2px solid #111; border-radius: 4px; background: #3b8735; color: #fff; cursor: pointer; }
+  .page { width: 190mm; height: 277mm; margin: 12px auto; background: #fff; padding: 6mm; display: flex; flex-direction: column; gap: 4mm; overflow: hidden; }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 8mm; border-bottom: 1.2mm solid #111; padding-bottom: 2mm; }
+  .head h1 { margin: 0; font-size: 11mm; line-height: 1; }
+  .head .no { font-size: 5mm; font-weight: 700; white-space: nowrap; }
+  .head .no i { display: inline-block; width: 16mm; border-bottom: .6mm solid #111; }
+  .box { border: .8mm solid #111; border-radius: 3mm; padding: 3mm 4mm; display: flex; flex-direction: column; }
+  .box b { font-size: 5.4mm; line-height: 1.2; }
+  .box small { font-size: 3.8mm; color: #444; }
+  .grow { flex: 1 1 0; min-height: 0; }
+  .row { display: flex; gap: 4mm; }
+  .row > * { flex: 1 1 0; min-width: 0; }
+  .line { border-bottom: .5mm dotted #666; height: 10.5mm; }
+  .sw { display: flex; gap: 4mm; margin-top: 2mm; }
+  .sw i { width: 20mm; height: 20mm; border: .8mm solid #111; border-radius: 2mm; }
+  .blank { display: inline-block; min-width: 34mm; border-bottom: .6mm solid #111; }
+  .stack { display: flex; gap: 4mm; margin-top: 3mm; font-size: 7mm; font-weight: 700; }
+  .stack div { display: grid; justify-items: center; gap: 1mm; }
+  .stack span { border: .8mm solid #111; border-radius: 50%; width: 15mm; height: 15mm; display: grid; place-items: center; }
+  .stack em { font-style: normal; font-size: 3.8mm; font-weight: 400; color: #444; }
+  .px { display: grid; grid-template-columns: repeat(16, 6.6mm); grid-template-rows: repeat(16, 6.6mm); border: .8mm solid #111; width: max-content; direction: ltr; }
+  .px i { border: .2mm solid #999; }
+  .ltr { direction: ltr; text-align: left; }
+  @media print {
+    html { background: #fff; }
+    .bar { display: none; }
+    .page { margin: 0; padding: 0; width: auto; height: 277mm; break-after: page; }
+    .page:last-child { break-after: auto; }
+  }
+</style>
+<div class="bar"><span>שני דפים: כרטיס העולם (שיעור 1) וכרטיס החפץ (שיעור 2). מדפיסים על A4, בלי הקטנה.</span><button onclick="print()">להדפיס</button></div>
+
+<section class="page">
+  <div class="head"><h1>כרטיס העולם שלי</h1><span class="no">מחשב מספר <i></i></span></div>
+  <div class="box"><b>העולם שלי בשש מילים או פחות</b><small>רעיון אחד חזק. למשל: פיראטים בשמיים על איים מרחפים</small><div class="line"></div></div>
+  <div class="row">
+    <div class="box"><b>שלושה צבעים של העולם שלי</b><small>צובעים בטושים</small><div class="sw"><i></i><i></i><i></i></div></div>
+    <div class="box"><b>דבר אחד שרואים רק בעולם שלי</b><small>יצור, קובייה, בניין, צמח...</small><div class="line"></div><div class="line"></div></div>
+  </div>
+  <div class="box"><b>זה כמו <span class="blank"></span> במיינקראפט הרגיל,</b><div class="line"></div><b>חוץ מזה ש</b><div class="line"></div></div>
+  <div class="box"><b>חוק אחד שיש רק בעולם שלי</b><small>מה אסור לעשות שם? מה קורה שם רק בלילה? מה שונה ממיינקראפט הרגיל?</small><div class="line"></div><div class="line"></div></div>
+  <div class="box grow"><b>ככה העולם שלי נראה</b><small>מציירים כאן</small></div>
+</section>
+
+<section class="page">
+  <div class="head"><h1>כרטיס החפץ</h1><span class="no">מחשב מספר <i></i></span></div>
+  <div class="row">
+    <div class="box"><b>שם החפץ</b><small>שם שמספר מה החפץ עושה</small><div class="line"></div></div>
+    <div class="box"><b>המשפט שמופיע מתחת לשם</b><small>משפט קצר, שרואים במשחק</small><div class="line"></div></div>
+  </div>
+  <div class="box"><b>בשביל מה הוא?</b><small>מה עושים איתו בעולם שלי</small><div class="line"></div><div class="line"></div></div>
+  <div class="row">
+    <div class="box"><b>המחיר שלו</b><small>מה מפסידים או משלמים כשמשתמשים בו</small><div class="line"></div><div class="line"></div></div>
+    <div class="box"><b>איפה משיגים אותו?</b><small>מה שקשה להשיג הוא נדיר</small><div class="line"></div><div class="line"></div></div>
+  </div>
+  <div class="row grow">
+    <div class="box" style="flex:0 0 auto;align-items:center"><b>הציור: 16 על 16 משבצות</b><small>קו מתאר כהה, ושניים עד ארבעה צבעים</small><div class="px" id="px" style="margin-top:2mm"></div></div>
+    <div class="box"><b>כמה נכנסים בערימה אחת?</b><small>מקיפים בעיגול, או כותבים מספר אחר</small>
+      <div class="stack"><div><span>1</span><em>נדיר</em></div><div><span>16</span><em>באמצע</em></div><div><span>64</span><em>נפוץ</em></div></div>
+      <div style="flex:1"></div>
+      <b>הקוד באנגלית</b><small>אותיות קטנות, בלי רווחים. למשל: honey_coin</small><div class="line ltr"></div></div>
+  </div>
+</section>
+<script>
+  document.getElementById("px").innerHTML = "<i></i>".repeat(256);
+</script>
+</html>

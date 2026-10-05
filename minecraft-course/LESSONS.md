@@ -112,18 +112,34 @@ My estimate, unverified: the first start downloads about 1-1.5 GB per laptop and
 **You bring:** the USB sticks; printed world cards; the Gem already shared with the class.
 **Lesson 1 is deliberately loose:** the real job is getting 8 laptops installed while you talk about the course.
 
-### The plan (90 minutes)
+### The plan (90 minutes), as taught on 6 Oct with lesson 2 right after it
 
 | Min | What happens |
 |---|---|
-| 0-15 | **Install from the sticks.** One stick installs one laptop at a time (about 5 minutes), so with 3 sticks the last laptop starts around minute 10. Start talking once the first round is running |
-| 15-20 | **What the course is about:** what a mod is, what they build in each part, the showcase with families at the end. Stretch this while installs are still running |
-| 20-35 | **Learn.** Gemini writes the code; you decide and check. Live in plain Gemini: "תבנה לי חרב", then a filled card. Kids vote which answer is better |
-| 35-50 | **Build: the world card**, on paper (worksheet below). Installs still running after that: the silhouette game on the projector (guess the mob from its black shape) |
-| 50-80 | **Build: first look.** Minecraft is open: Creative world, screenshot, find the mod in Mods. Then Gemini: log in with the school account, open the Gem, send the world's line, answer its question. Done early: build in the Creative world |
-| 80-90 | Cards into the folder. Laptops plugged in. An install that hasn't finished stays open. Write down which laptops didn't finish |
+| 0-15 | **Install from the sticks.** One stick installs one laptop at a time (about 5 minutes). Start talking once the first round is running |
+| 15-20 | What a mod is, what the course builds |
+| 20-55 | **Talk: "what does a world need?"** One strong idea (the Nether is "fire and lava"), you recognise it in a second (its colours, blocks, creatures), something different (no water in the Nether, beds explode), its own rules (don't look at an Enderman, don't make noise near the Warden). Questions and votes, not a lecture; the notes are on each slide |
+| 55-70 | **World card on paper, with markers** (`hub/print.html`, page 1): six words, three colours, one thing you only see there, "like ___ except ___", one rule |
+| 70-85 | Minecraft opened: Creative world. What Gemini is. Each kid pastes the rules and their world into Gemini |
+| 85-90 | Drive. Note which laptops didn't finish |
 
-**If one laptop fails:** that kid pairs with a neighbour. You fix it after class.
+**Cut to make room (5 Oct, told to Ben):** the live "תבנה לי חרב" vs card demo and the "who writes the code" slide.
+**If one laptop fails:** that kid pairs with a neighbour. You fix it in the break.
+
+### Lesson 2 on the same day (90 minutes)
+
+| Min | What happens |
+|---|---|
+| 0-5 | Open the hub from the Minecraft icon |
+| 5-35 | **Talk: "what makes a great item?"** What it's for, its price (an ender pearl takes you far and hurts you), how rare it is (dirt stacks to 64, a totem to 1), a name and shape that say what it does |
+| 35-50 | **Item card and a 16x16 sketch on paper, with markers** (`hub/print.html`, page 2) |
+| 50-57 | Demo on the projector: card to game |
+| 57-85 | Build: card into the hub, draw in the pixel editor, Gemini, check in the game |
+| 85-90 | Show a neighbour, close Minecraft, Drive |
+
+Only the name, the sentence, the picture and the stack size go into the game in lesson 2. The power and the price stay
+on the card until lesson 4. **Moved to "if there's time":** naming the world through Gemini. Build time is 28 minutes,
+down from 45, so some kids will finish at the start of lesson 3.
 
 ### On the board (Hebrew, for the kids)
 

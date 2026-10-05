@@ -130,6 +130,7 @@ copy /y "%HERE%..\hub\content.js" "%ROOT%\hub\content.js" >nul
 copy /y "%HERE%..\hub\index.html" "%ROOT%\hub\index.src" >nul
 copy /y "%HERE%..\hub\teacher.html" "%ROOT%\hub\teacher.src" >nul
 goto :hub_wrap
+if exist "%HERE%..\hub\print.html" (copy /y "%HERE%..\hub\print.html" "%ROOT%\hub\print.html" >nul) else (curl -L --fail -s -o "%ROOT%\hub\print.html" "%RAW%/print.html")
 :hub_download
 curl -L --fail -s -o "%ROOT%\hub\content.js" "%RAW%/content.js"
 if errorlevel 1 goto :hub_skip
@@ -138,6 +139,7 @@ if errorlevel 1 goto :hub_skip
 curl -L --fail -s -o "%ROOT%\hub\teacher.src" "%RAW%/teacher.html"
 if errorlevel 1 goto :hub_skip
 :hub_wrap
+if exist "%HERE%..\hub\print.html" (copy /y "%HERE%..\hub\print.html" "%ROOT%\hub\print.html" >nul) else (curl -L --fail -s -o "%ROOT%\hub\print.html" "%RAW%/print.html")
 > "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
 type "%ROOT%\hub\index.src" >> "%ROOT%\hub\index.html"
 > "%ROOT%\hub\teacher.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>

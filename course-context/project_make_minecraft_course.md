@@ -115,3 +115,13 @@ hub/content.js; make_starter_zip.py writes starter/mod/tools/rules.txt from it.
   is copied or injected. Open: also allow changing real Minecraft things' stats (e.g. zombies 30 HP), or only remixes?
 - **Lessons 1 and 2 need 30-40 minutes of game design / world design discussion each**, from the research (SYNTHESIS.md,
   notes/_batch_*), before the kids plan on paper with markers. The hub had none of this. Handed to Ben's PC session.
+
+**5 Oct, late night (Ben's PC session): design talks built for 6 Oct.** Lesson 1 has a 35-minute "what does a world
+need?" conversation (one strong idea / recognised in a second / something different / its own rules, all with Minecraft
+examples) before the world card; lesson 2 has a 30-minute "what makes a great item?" (what it's for / its price / how
+rare / name and shape) before the item card and 16x16 sketch. Both in the teacher decks (questions and votes in the
+notes) and as kids' steps (`WORLD_NEEDS`, `ITEM_NEEDS` in `hub/content.js`). Cards grew: world card +one thing you only
+see there +one rule; item card +what it's for +price +where you get it (these three are NOT sent to Gemini; powers come
+in lesson 4). `hub/print.html` = two A4 pages for markers. Cut/moved, Ben told: lesson 1's "תבנה לי חרב" demo and "who
+writes the code" slide; lesson 2's "name the world" step is now "if there's time"; lesson 2 build time 45 -> 28 minutes.
+`setup/update-hub.ps1` updates only the hub pages on Ben's laptop from a pinned commit. Timings: `LESSONS.md` section 3.

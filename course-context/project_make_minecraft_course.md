@@ -46,3 +46,12 @@ starter workspace.
 
 **How to apply:** read 04 before any course work. Ben's own game-design video picks were mostly weak (2/8 strong);
 say so plainly rather than inflating. See [[feedback-how-ben-wants-answers]].
+
+**5 Oct 2026 (cloud session): Minecraft is TOP PRIORITY.** New fact: kids use **school laptops that stay at school**.
+Lesson 1 = one-click install (`install.bat` into the user folder, no admin; downloads JDK 25, VS Code zip, starter
+project, runs first build) while Ben talks (vague-vs-specific demo, Gemini-lies log, world card on paper, silhouette
+game, Gem login check). Calls made in `minecraft-course/LESSONS.md` §1: Gemini web app via one Gem (refuses vague asks,
+asks card questions without suggesting answers, outputs whole files); VS Code; starter project = one thing per block in
+MyItems/MyEffects/MyMobs/MyRules.java + datagen; paper cards; save/undo buttons; play works `--offline`; mod ids
+world01-08 by laptop number. Pre-lesson school checks in §2 (same laptop weekly, wipe-on-restart, RAM ≥8 GB, run .bat
+without admin, sites open, Gemini on an 11-13 account, timed dry run). Awaiting Ben's 💬 on LESSONS.md.

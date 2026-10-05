@@ -38,10 +38,12 @@ of where to paste, expected result). Build the COURSE before the hub.
 
 ## Course B: Minecraft modding course (`minecraft-course/`)
 
-8 kids aged 11–13, 20 weeks, Minecraft 26.2 / NeoForge, Windows laptops, Hebrew kid text. Read `HANDOFF.md`, then
-`04-creative-course-design.md` and `05-ministry-pedagogy-applied.md`. Ben comments in `REVIEW.md`.
-**Open blocker (REVIEW §14):** Google Antigravity is 18+ and personal-accounts-only, so the kids can't use it; a
-replacement tool is undecided. The make-class platform idea is dropped.
+8 kids aged 11–13, 20 weeks, Minecraft 26.2 / NeoForge, Hebrew kid text. **TOP PRIORITY (5 Oct).** Kids use **school
+laptops that stay at school** (no home install; lesson 1 = install while Ben talks). Read `LESSONS.md` first (current plan
++ calls made 5 Oct, awaiting Ben's 💬), then `HANDOFF.md`, `04-creative-course-design.md`, `05-ministry-pedagogy-applied.md`.
+Antigravity (18+) replaced 5 Oct by the Gemini web app via one teacher-made Gem + VS Code, copy-paste of whole files
+(`LESSONS.md` §1). Cards on paper for now. Next: install script + starter project (needs Ben's Windows test; maven and
+Mojang are blocked from the cloud box), then the Gem instructions, then full lesson pages 2–20.
 
 ## Rules
 

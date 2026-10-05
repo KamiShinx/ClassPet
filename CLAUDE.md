@@ -41,9 +41,11 @@ of where to paste, expected result). Build the COURSE before the hub.
 8 kids aged 11–13, 20 weeks, Minecraft 26.2 / NeoForge, Hebrew kid text. **TOP PRIORITY (5 Oct).** Kids use **school
 laptops that stay at school** (no home install; lesson 1 = install while Ben talks). Read `LESSONS.md` first (current plan
 + calls made 5 Oct, awaiting Ben's 💬), then `HANDOFF.md`, `04-creative-course-design.md`, `05-ministry-pedagogy-applied.md`.
-Antigravity (18+) replaced 5 Oct by the Gemini web app via one teacher-made Gem + VS Code, copy-paste of whole files
-(`LESSONS.md` §1). Cards on paper for now. Next: install script + starter project (needs Ben's Windows test; maven and
-Mojang are blocked from the cloud box), then the Gem instructions, then full lesson pages 2–20.
+Antigravity (18+) replaced 5 Oct by the Gemini web app via one teacher-made Gem; kids copy whole files and press the desktop button Paste & Play (no editor)
+(`LESSONS.md` §1). Cards on paper for now. Install works on Ben's laptop (`setup/install.bat`); starter project in
+`starter/` (ships as `setup/starter.zip`). Next, in order: Ben tests the starter → update GEM_TEXT in `hub/content.js` →
+lesson 2 in the hub → stop and show Ben before lessons 3–20. Maven and Mojang are blocked from the cloud box, so every
+Java change needs Ben's Windows test.
 
 **Lesson shape (Ben, 5 Oct, overrides `04`/`05` where they differ): "learn this, build this, bye", 90 minutes.** One idea,
 one thing built. No rituals: no "Gemini lies" log, no stamps, no weekly silent playtest, no log lines, no tip-card

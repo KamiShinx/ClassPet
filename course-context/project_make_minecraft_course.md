@@ -60,3 +60,12 @@ without admin, sites open, Gemini on an 11-13 account, timed dry run). Awaiting 
 all the fancy יומן השקרים and all this bs, we got 90 min with them barley". Then: "lesson 1 should be still filler because
 its the lesson we want to try to install stuff on the laptops while i teach what the course will be about". Applied to
 `LESSONS.md` §3-5 and the hub (commit after b4da902). Don't reintroduce ceremony from `04`/`05`.
+
+**5 Oct, later: install works end to end on Ben's work laptop** (Windows 11, 6 GB RAM; decompile+recompile ≈ 7 min;
+needed Java 21 as well as 25 for NeoForge's downloadAssets). Starter project built (`minecraft-course/starter/`, shipped
+as `setup/starter.zip`, laid over the official MDK by install.bat): mod id `myworld` on every laptop, `Kit.java` +
+MyWorld/MyItems/MyEffects/MyMobs/MyRules.java; one `Kit.item(id, name, tooltip, numbers[, factory])` block + one PNG per
+item; `tools/prepare.ps1` writes lang + item model JSON before every Play. Kids never use an editor: **Paste & Play**
+(clipboard → right file by its class name, backup, build; on failure the error is copied for Gemini), **Undo**,
+**Pictures**. Ben asked how 11-year-olds would cope with copy/paste/compile; this loop is the answer. Waiting for Ben's
+test of the starter before updating GEM_TEXT and building lesson 2 (his explicit order).

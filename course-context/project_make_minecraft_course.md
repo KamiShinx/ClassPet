@@ -125,3 +125,10 @@ see there +one rule; item card +what it's for +price +where you get it (these th
 in lesson 4). `hub/print.html` = two A4 pages for markers. Cut/moved, Ben told: lesson 1's "תבנה לי חרב" demo and "who
 writes the code" slide; lesson 2's "name the world" step is now "if there's time"; lesson 2 build time 45 -> 28 minutes.
 `setup/update-hub.ps1` updates only the hub pages on Ben's laptop from a pinned commit. Timings: `LESSONS.md` section 3.
+Ben then asked whether the talks were "really comprehensive with graphics... a real experience, not lame": they were
+bullet slides. Rebuilt the same night as visual decks: lesson 1 = 10 talk slides (pixel-art postcards of four places,
+guess-the-place-from-three-colours, normal-vs-Nether table, rule cards with silhouettes, an A/B vote), lesson 2 = 11
+(pixel items, what-you-get/what-you-pay board, four jobs, four kinds of price, stack pictures 64/16/1, name-guessing,
+16x16 zoom). All art is our own pixel maps in `hub/content.js` (`SCENES`, `ITEMS`, `pxSVG`); no Mojang images, the repo
+is public. Ben's bar for slides: pictures and activities on every slide, not text.
+

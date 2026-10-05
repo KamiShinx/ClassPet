@@ -1,0 +1,150 @@
+<title>מודים למיינקראפט · מדריך</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap">
+<div id="app" dir="rtl" lang="he"></div>
+<script src="content.js"></script>
+<script>
+(function(){
+"use strict";
+const H = window.HUB, LS = H.LS, esc = H.esc, SLIDES = H.SLIDES;
+H.injectStyle(document);
+const app = document.getElementById("app");
+
+/* ===== TEACHER AREA ===== */
+function renderTeacher(){
+  const v = LS.get("tcheck", {});
+  app.innerHTML = `<div class="wrap">
+    <div class="top"><div class="brand"><h1>אזור מדריך</h1><p>מודים למיינקראפט · מה צריך להיות מוכן לפני שיעור 1</p></div>
+      <div class="tools"><a class="btn go" href="#present1">הצגת שיעור 1</a></div></div>
+
+    <section class="tsec"><h2>איך מציגים עם שני מסכים</h2>
+      <ol>
+        <li>מחברים את המקרן ולוחצים <kbd>Win</kbd> + <kbd>P</kbd> ← <b>Extend</b> (הרחבה).</li>
+        <li>לוחצים ״הצגת שיעור 1״ ואז ״פתיחת חלון למקרן״.</li>
+        <li>גוררים את החלון החדש למסך של המקרן, ולוחצים עליו פעמיים: מסך מלא.</li>
+        <li>על המחשב שלך נשארים ההערות, השקופית הבאה והשעון. מעבירים שקופיות מהמחשב שלך, עם החצים.</li>
+      </ol>
+      <p><b>אם כרגע המקרן מראה בדיוק את המסך שלך:</b> זה מצב Duplicate (שכפול). <kbd>Win</kbd> + <kbd>P</kbd> ← <b>Extend</b> הופך את המקרן למסך שני. כמעט כל מקרן עם HDMI תומך בזה. לבדוק פעם אחת בכיתה לפני השיעור.</p>
+      <p><b>אם Extend לא עובד שם:</b> על המחשב פותחים רק את חלון המקרן במסך מלא, ואת הדף הזה פותחים בטלפון (הקישור ששלח Claude). בטלפון רואים את ההערות ואת השקופית הבאה, ומעבירים בשני המקומות.</p>
+    </section>
+
+    <section class="tsec"><h2>לפני שיעור 1</h2><div class="tlist">
+      ${H.TEACHER_CHECK.map(([id,t,s])=>`<label for="tc-${id}"><input type="checkbox" id="tc-${id}" data-tc="${id}" ${v[id]?"checked":""}><span><b>${t}</b>${s?`<small>${s}</small>`:""}</span></label>`).join("")}
+    </div></section>
+
+    <section class="tsec"><h2>השיעור, דקה אחרי דקה</h2><div class="ttable"><table>
+      <thead><tr><th>דקות</th><th>מה קורה</th><th>שקופיות</th></tr></thead><tbody>
+      <tr><td>0–10</td><td>מתקינים מהדיסק. מסתובבים עד שכל החלונות השחורים רצים</td><td>1–2</td></tr>
+      <tr><td>10–15</td><td>מה נעשה בקורס. מראים מוד שעובד</td><td>3–4</td></tr>
+      <tr><td>15–25</td><td>מי כותב את הקוד, ״תבנה לי חרב״ מול כרטיס, בשידור חי</td><td>5–6</td></tr>
+      <tr><td>25–30</td><td>ג׳מיני טועה בביטחון, יומן השקרים, ארבעת החוקים</td><td>7–8</td></tr>
+      <tr><td>30–45</td><td>כרטיס העולם: 10 דק׳ לבד, 5 בזוגות</td><td>9–10</td></tr>
+      <tr><td>45–50</td><td>משחק הצלליות (אפשר לדלג אם ההתקנה הסתיימה)</td><td>11</td></tr>
+      <tr><td>50–58</td><td>מיינקראפט נפתח? עולם Creative, צילום מסך, Mods. כולם: ג׳מיני וה־Gem</td><td>12–13</td></tr>
+      <tr><td>58–65</td><td>כרטיסים לתיקייה, מחשבים לחשמל, לרשום מי לא סיים</td><td>14</td></tr>
+      </tbody></table></div>
+      <p><b>אם ההתקנה נגמרת אחרי 20 דקות:</b> מקדימים את הצלליות ואת ״מיינקראפט נפתח?״. <b>אם מחשב אחד נכשל:</b> הילד עובד עם שותף, ומתקנים אחרי השיעור.</p>
+    </section>
+
+    <section class="tsec"><h2>ה־Gem: ״עוזר המודים״</h2>
+      <p>ב־Gemini: Gems ← New Gem. שם: <b>עוזר המודים</b>. מדביקים את ההוראות כמו שהן (באנגלית, כי ג׳מיני מבין אותן מדויק יותר; הוא עונה לילדים בעברית). שומרים, משתפים עם הכיתה, ושולחים לClaude את הקישור.</p>
+      <div><button class="btn go" data-copy="${esc(H.GEM_TEXT)}">העתקת ההוראות</button></div>
+      <div class="gem">${esc(H.GEM_TEXT)}</div>
+      <p><small>גרסה 1. כשהפרויקט של הילדים יהיה מוכן, ההוראות יתעדכנו כך שג׳מיני ידע בדיוק לאיזה קובץ להדביק.</small></p>
+    </section>
+
+    <section class="tsec"><h2>קבצים</h2>
+      <ul>
+        <li><code>minecraft-course/setup/install.bat</code>: התקנה מהאינטרנט, על המחשב שלך</li>
+        <li><code>make-usb.bat</code>: מעתיק את <code>C:\\MAKE</code> לדיסק (בלי הדף הזה)</li>
+        <li><code>install-from-usb.bat</code>: הילדים מתקינים מהדיסק</li>
+        <li><code>school-check.bat</code>: בודק אם מחשב של בית הספר מסוגל</li>
+      </ul>
+    </section>
+  </div>`;
+  app.querySelectorAll("[data-tc]").forEach(c => c.addEventListener("change", () => { const x = LS.get("tcheck", {}); x[c.dataset.tc] = c.checked; LS.set("tcheck", x); }));
+  H.bindCopy(app);
+}
+
+/* ===== PRESENTER CONSOLE ===== */
+let sIx = LS.get("slide", 0), aud = null, blocked = false, t0 = Date.now(), tick = null;
+const revealed = new Set();
+
+function audOpen(){ return aud && !aud.closed; }
+function openAudience(){
+  const w = window.open("", "mkmod-audience", "popup,width=1280,height=720");
+  if (!w){ blocked = true; renderConsole(); return; }
+  blocked = false; aud = w;
+  const d = w.document;
+  d.open();
+  d.write('<!doctype html><html lang="he" dir="rtl" data-theme="light"><head><meta charset="utf-8"><title>שיעור 1</title></head><body class="aud"><div class="stage"><div class="slide" id="s"></div></div><p class="aud-hint">לחיצה כפולה: מסך מלא</p></body></html>');
+  d.close();
+  const l = d.createElement("link"); l.rel = "stylesheet"; l.href = H.FONT_HREF; d.head.appendChild(l);
+  H.injectStyle(d);
+  d.addEventListener("keydown", onKey);
+  d.addEventListener("dblclick", () => { try{ (d.fullscreenElement ? d.exitFullscreen() : d.documentElement.requestFullscreen()).catch(()=>{}); }catch(e){} });
+  syncAudience(); renderConsole();
+}
+function syncAudience(){
+  if (!audOpen()) return;
+  const s = aud.document.getElementById("s"); if (!s) return;
+  s.innerHTML = SLIDES[sIx].html;
+  H.applyReveal(s, revealed);
+}
+const fmt = ms => { const t = Math.floor(ms/1000); return String(Math.floor(t/60)).padStart(2,"0") + ":" + String(t%60).padStart(2,"0"); };
+
+function renderConsole(){
+  const N = SLIDES.length; sIx = Math.max(0, Math.min(N-1, sIx));
+  const S = SLIDES[sIx], next = SLIDES[sIx+1];
+  app.innerHTML = `<div class="con">
+    <div class="prbar"><div class="r"><a class="btn ghost" href="#teacher">→ אזור מדריך</a><b>שיעור 1: התקנה והעולם שלי</b></div>
+      <div class="r">
+        ${audOpen() ? `<span class="aud-on">המקרן מחובר</span>` : `<button class="btn go" id="openaud">פתיחת חלון למקרן</button>`}
+        <span class="timer" id="timer" title="זמן מתחילת השיעור">${fmt(Date.now()-t0)}</span>
+        <button class="btn ghost" id="treset">איפוס שעון</button>
+        <span class="chip gold">${sIx+1} / ${N}</span>
+      </div></div>
+    ${blocked ? `<div style="padding:16px 16px 0"><div class="con-warn">הדפדפן חסם את החלון. מאשרים חלונות קופצים לדף הזה (סמל בשורת הכתובת) ולוחצים שוב.</div></div>` : ""}
+    <main class="con-main">
+      <section class="con-box live"><div class="con-label"><span>על המקרן עכשיו</span><span>${S.label}</span></div>
+        <div class="stage"><div class="slide" id="cur">${S.html}</div></div></section>
+      <div class="con-side">
+        <section class="con-box"><div class="con-label"><span>הערות למדריך</span><span>רק אצלך</span></div><div class="con-notes">${S.notes}</div></section>
+        <section class="con-box"><div class="con-label"><span>השקופית הבאה</span></div>
+          <div class="con-next">${next ? `<b>${next.label}</b><small>${esc(next.notes.slice(0,90))}…</small>` : `<b>סוף השיעור</b>`}</div></section>
+        <section class="con-box"><div class="con-label"><span>כל השקופיות</span></div>
+          <div class="map" style="padding:10px;grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">${SLIDES.map((x,i)=>`<button data-s="${i}" class="${i===sIx?"cur":""}"><small>${i+1}</small><b>${x.label}</b></button>`).join("")}</div></section>
+      </div>
+    </main>
+    <div class="prfoot"><button class="btn ghost" id="pp" ${sIx===0?"disabled":""}>→ הקודם</button><small>חצים או רווח להחלפת שקופית · בשקופית הצלליות לוחצים כאן על צללית כדי לחשוף אותה גם במקרן</small><button class="btn go" id="pn" ${sIx===N-1?"disabled":""}>הבא ←</button></div>
+  </div>`;
+  const cur = app.querySelector("#cur");
+  H.applyReveal(cur, revealed);
+  cur.querySelectorAll("[data-sil]").forEach(b => b.addEventListener("click", () => { revealed.add(+b.dataset.sil); H.applyReveal(cur, revealed); syncAudience(); }));
+  const oa = app.querySelector("#openaud"); if (oa) oa.addEventListener("click", openAudience);
+  app.querySelector("#treset").addEventListener("click", () => { t0 = Date.now(); app.querySelector("#timer").textContent = "00:00"; });
+  app.querySelector("#pp").addEventListener("click", () => goSlide(sIx-1));
+  app.querySelector("#pn").addEventListener("click", () => goSlide(sIx+1));
+  app.querySelectorAll("[data-s]").forEach(b => b.addEventListener("click", () => goSlide(+b.dataset.s)));
+  clearInterval(tick);
+  tick = setInterval(() => { const el = document.getElementById("timer"); if (el) el.textContent = fmt(Date.now()-t0); if (aud && aud.closed){ aud = null; renderConsole(); } }, 1000);
+}
+function goSlide(i){ sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide", sIx); renderConsole(); syncAudience(); }
+function onKey(e){
+  if (location.hash !== "#present1") return;
+  if (e.target && e.target.matches && e.target.matches("input,textarea,select")) return;
+  if (["ArrowLeft"," ","PageDown"].includes(e.key)){ e.preventDefault(); goSlide(sIx+1); }
+  if (["ArrowRight","PageUp"].includes(e.key)){ e.preventDefault(); goSlide(sIx-1); }
+}
+
+/* ===== router ===== */
+function route(){
+  if (location.hash === "#present1") renderConsole();
+  else { clearInterval(tick); renderTeacher(); }
+}
+window.addEventListener("hashchange", route);
+document.addEventListener("keydown", onKey);
+route();
+})();
+</script>

@@ -93,10 +93,24 @@ powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=N
 echo  Desktop buttons: "Minecraft - Play" and "Minecraft - Code"
 echo.
 
-rem ---- the course hub: lessons and projector mode, runs offline ----
+rem ---- the course hub (kids) + teacher page (this laptop only). Both run offline. ----
+set "RAW=https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/hub"
 mkdir "%ROOT%\hub" 2>nul
-curl -L --fail -s -o "%ROOT%\hub\hub.html" "https://raw.githubusercontent.com/KamiShinx/ClassPet/claude/make-courses/minecraft-course/hub/hub.html"
+curl -L --fail -s -o "%ROOT%\hub\content.js" "%RAW%/content.js"
 if errorlevel 1 goto :hub_skip
+curl -L --fail -s -o "%ROOT%\hub\index.src" "%RAW%/index.html"
+if errorlevel 1 goto :hub_skip
+curl -L --fail -s -o "%ROOT%\hub\teacher.src" "%RAW%/teacher.html"
+if errorlevel 1 goto :hub_skip
+> "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
+type "%ROOT%\hub\index.src" >> "%ROOT%\hub\index.html"
+> "%ROOT%\hub\teacher.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
+type "%ROOT%\hub\teacher.src" >> "%ROOT%\hub\teacher.html"
+del "%ROOT%\hub\index.src" "%ROOT%\hub\teacher.src"
+powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Hub.lnk\"); $l.TargetPath='%ROOT%\hub\index.html'; $l.Save(); $l=$s.CreateShortcut(\"$d\Minecraft - Teacher.lnk\"); $l.TargetPath='%ROOT%\hub\teacher.html'; $l.Save()"
+echo  Desktop: "Minecraft - Hub" for the kids, "Minecraft - Teacher" for you
+echo.
+:hub_skip
 > "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
 type "%ROOT%\hub\hub.html" >> "%ROOT%\hub\index.html"
 powershell -NoProfile -Command "$d=[Environment]::GetFolderPath('Desktop'); $s=New-Object -ComObject WScript.Shell; $l=$s.CreateShortcut(\"$d\Minecraft - Hub.lnk\"); $l.TargetPath='%ROOT%\hub\index.html'; $l.Save()"

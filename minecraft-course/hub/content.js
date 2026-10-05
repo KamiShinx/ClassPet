@@ -1,9 +1,7 @@
-<title>מודים למיינקראפט</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap">
-<style>
-/* Layout: makers-lab model. Course map as a vertical unit timeline; lesson player = step panel (right, RTL) +
+/* Shared content and styles for the Minecraft course hub (kids: index.html) and the teacher page (teacher.html). */
+(function(){
+"use strict";
+const CSS = `/* Layout: makers-lab model. Course map as a vertical unit timeline; lesson player = step panel (right, RTL) +
    visual workspace (left), Minecraft hotbar as the step rail, XP bar as progress; presenter = one slide + notes strip. */
 :root{
   --bg:#F1F4EC; --surface:#FFFFFF; --sunk:#E6EBE0; --ink:#1D271F; --muted:#56645A; --line:#CFD8CA;
@@ -48,7 +46,7 @@ kbd{font-family:var(--mono);font-size:.82em;background:var(--sunk);border:1px so
 .btn[disabled]{opacity:.4;cursor:default}
 .chip{display:inline-block;font-size:.78em;font-weight:700;padding:.1em .6em;border-radius:3px;background:var(--sunk);color:var(--muted);letter-spacing:.02em}
 .chip.go{background:var(--grass-soft);color:var(--grass)}
-.chip.xp{background:var(--xp-soft);color:var(--xp)}
+.chip.gold{background:var(--xp-soft);color:var(--xp)}
 
 /* XP bar */
 .xp{height:12px;background:var(--console);border:2px solid var(--console);border-radius:2px;display:grid;grid-template-columns:repeat(var(--n),1fr);gap:2px;padding:1px}
@@ -206,24 +204,24 @@ a.lcard.open:hover{transform:translateY(-1px)}
 .pr{display:grid;grid-template-rows:auto 1fr auto auto;min-height:100vh;background:var(--bg)}
 .prbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-inline:16px;padding-block:10px;border-bottom:1px solid var(--line);background:var(--surface)}
 .prbar .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.stage{display:grid;place-items:center;padding:clamp(16px,4vw,56px);min-width:0}
-.slide{width:min(1100px,100%);display:grid;gap:clamp(14px,2.4vw,28px);text-align:center;justify-items:center}
-.slide .eye{color:var(--grass);font-weight:800;letter-spacing:.04em;font-size:clamp(.95rem,1.6vw,1.2rem)}
-.slide h1{font-size:clamp(2.2rem,6vw,4.6rem)}
-.slide h2{font-size:clamp(1.8rem,4.6vw,3.4rem)}
-.slide .sub{font-size:clamp(1.15rem,2.4vw,1.8rem);color:var(--muted);max-width:30em}
-.slide ul.big,.slide ol.big{text-align:right;font-size:clamp(1.15rem,2.5vw,1.9rem);display:grid;gap:.5em;margin:0;padding-inline-start:1.2em;justify-self:center}
-.slide .vs{width:100%;text-align:right;font-size:clamp(.95rem,1.6vw,1.25rem)}
+.stage{display:grid;place-items:center;padding:clamp(16px,4cqw,56px);min-width:0;container-type:inline-size}
+.slide{width:min(1100px,100%);display:grid;gap:clamp(14px,2.4cqw,28px);text-align:center;justify-items:center}
+.slide .eye{color:var(--grass);font-weight:800;letter-spacing:.04em;font-size:clamp(.95rem,1.6cqw,1.2rem)}
+.slide h1{font-size:clamp(2.2rem,6cqw,4.6rem)}
+.slide h2{font-size:clamp(1.8rem,4.6cqw,3.4rem)}
+.slide .sub{font-size:clamp(1.15rem,2.4cqw,1.8rem);color:var(--muted);max-width:30em}
+.slide ul.big,.slide ol.big{text-align:right;font-size:clamp(1.15rem,2.5cqw,1.9rem);display:grid;gap:.5em;margin:0;padding-inline-start:1.2em;justify-self:center}
+.slide .vs{width:100%;text-align:right;font-size:clamp(.95rem,1.6cqw,1.25rem)}
 .slide .vs h4{font-size:1.3em}
-.slide .eq{font-size:clamp(1.3rem,3vw,2.4rem)}
+.slide .eq{font-size:clamp(1.3rem,3cqw,2.4rem)}
 .slide .sil{width:100%;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 .slide .sil svg{max-width:140px;height:140px}
-.slide .wcard{text-align:right;width:min(720px,100%);font-size:clamp(1rem,1.8vw,1.35rem)}
+.slide .wcard{text-align:right;width:min(720px,100%);font-size:clamp(1rem,1.8cqw,1.35rem)}
 .slide .wcard .ln{border-bottom:2px dotted var(--line);padding-bottom:6px}
 .slide .wcard .ln span{color:var(--muted);font-size:.85em}
-.slide .quote{font-family:var(--display);font-size:clamp(1.6rem,4vw,3rem);color:var(--grass)}
+.slide .quote{font-family:var(--display);font-size:clamp(1.6rem,4cqw,3rem);color:var(--grass)}
 .slide .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;width:100%;text-align:right}
-.slide .rules div{background:var(--surface);border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink);border-radius:6px;padding:16px;display:grid;gap:6px;font-size:clamp(1rem,1.6vw,1.2rem)}
+.slide .rules div{background:var(--surface);border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink);border-radius:6px;padding:16px;display:grid;gap:6px;font-size:clamp(1rem,1.6cqw,1.2rem)}
 .slide .rules b{font-family:var(--display);font-weight:400;font-size:1.35em}
 .slide .rules .n{color:var(--grass);font-family:var(--display);font-size:1.8em;line-height:1}
 .notes{background:var(--sunk);border-top:1px solid var(--line);padding-inline:16px;padding-block:10px;font-size:1rem}
@@ -251,13 +249,27 @@ a.lcard.open:hover{transform:translateY(-1px)}
 .gem{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:14px;font-family:var(--mono);font-size:.8rem;white-space:pre-wrap;direction:ltr;text-align:left;max-height:420px;overflow:auto;line-height:1.55}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media print{.pbar,.pfoot,.tools,.helprow,.btn{display:none!important}}
-</style>
 
-<div id="app" dir="rtl" lang="he"></div>
-
-<script>
-(function(){
-"use strict";
+/* ---------- PRESENTER CONSOLE (teacher laptop) + AUDIENCE (projector) ---------- */
+.con{min-height:100vh;display:grid;grid-template-rows:auto 1fr auto;background:var(--bg)}
+.con-main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;padding:16px;align-items:start}
+.con-box{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.con-box.live{border:2px solid var(--grass)}
+.con-label{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--muted);font-weight:700;padding:6px 12px;background:var(--sunk)}
+.con-box .stage{padding:20px;background:var(--bg)}
+.con-side{display:grid;gap:16px}
+.con-notes{padding:16px;font-size:1.3rem;line-height:1.6}
+.con-next{padding:12px 16px;display:grid;gap:4px}
+.con-next b{font-family:var(--display);font-weight:400;font-size:1.3rem}
+.timer{font-family:var(--mono);font-size:1.25rem;font-variant-numeric:tabular-nums;direction:ltr}
+.con-warn{background:var(--red-soft);color:var(--ink);border-radius:6px;padding:10px 14px}
+.aud-on{color:var(--grass);font-weight:700}
+body.aud .stage{min-height:100vh}
+.aud-hint{position:fixed;bottom:8px;left:12px;color:var(--muted);font-size:12px;margin:0}
+@media (max-width:860px){.con-main{grid-template-columns:1fr}}
+`;
+function injectStyle(doc){ const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); }
+const FONT_HREF = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap";
 
 /* ===== settings ===== */
 // Ben: after you create the Gem, its share link goes here.
@@ -269,8 +281,6 @@ const LS = {
   set(k, v){ try{ localStorage.setItem("mkmod." + k, JSON.stringify(v)); }catch(e){} }
 };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const app = document.getElementById("app");
-if (LS.get("big", false)) app.classList.add("big");
 
 /* ===== course map ===== */
 const UNITS = [
@@ -313,7 +323,7 @@ const MOBS = [
   { name:"עכביש", map:["......####......",".##..######..##.","#..##########..#","...##########...","..#.########.#..",".#..#......#..#.","#..#........#..#"] },
   { name:"תרנגולת", map:["..###...",".####...","..###...","..######","..######","...#####","....#.#.","...##.##"] },
   { name:"גאסט", map:["########","########","########","########","########","########","#.#.#.#.","#.#.#...","..#.#...","..#....."] },
-  { name:"חזיר", map:["#####........","#############","#############","#############",".##.......##.",".##.......##."] }
+  { name:"חזיר", map:["..######........","..##############","################","..##############","..##############","..##############","...##.......##..","...##.......##..","...##.......##.."] }
 ];
 function silSVG(m){
   const h = m.map.length, w = m.map[0].length;
@@ -516,93 +526,7 @@ function bindSil(root){
   }));
 }
 
-/* ===== HOME ===== */
-function renderHome(){
-  const done = LS.get("lessonsDone", []);
-  const total = UNITS.reduce((a,u)=>a+u.lessons.length,0);
-  const seat = LS.get("seat","");
-  app.innerHTML = `<div class="wrap">
-    <div class="top">
-      <div class="brand"><h1>מודים למיינקראפט</h1><p>העולם שלכם, קובייה אחרי קובייה · 20 שיעורים · MAKE</p></div>
-      <div class="tools">
-        <label class="seat" for="seat">מחשב מספר
-          <select id="seat"><option value="">?</option>${[1,2,3,4,5,6,7,8].map(n=>`<option ${String(n)===String(seat)?"selected":""}>${n}</option>`).join("")}</select></label>
-        <button class="btn ghost" id="bigtxt" aria-pressed="${app.classList.contains("big")}">אותיות גדולות</button>
-        <a class="btn ghost" href="#teacher">אזור מדריך</a>
-      </div>
-    </div>
-    <div class="progress"><div class="row"><b>ההתקדמות שלכם</b><span>${done.length} מתוך ${total} שיעורים</span></div>
-      <div class="xp" style="--n:${total}">${Array.from({length:total},(_,i)=>`<i class="${i<done.length?"on":""}"></i>`).join("")}</div></div>
-    <div class="timeline">${UNITS.map(u=>`
-      <section class="unit"><div class="ico" style="background:${u.color}">${u.icon}</div>
-        <div><div class="head"><h2>${u.name}</h2><span>${u.sub}</span></div>
-        <div class="cards">${u.lessons.map(l=>{
-          const isDone = done.includes(l.n);
-          const meta = `<div class="meta">${l.open?`<span class="chip go">${L1.steps.length} שלבים</span>`:`<span class="chip">בקרוב</span>`}${isDone?`<span class="chip xp">הושלם</span>`:""}</div>`;
-          return l.open
-            ? `<a class="lcard open" href="#lesson${l.n}"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</a>`
-            : `<div class="lcard soon"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</div>`;
-        }).join("")}</div></div></section>`).join("")}
-    </div>
-    <div class="foot"><span>נבנה לקורס המודים של MAKE</span><a href="#present1">מצב מקרן: שיעור 1</a></div>
-  </div>`;
-  app.querySelector("#seat").addEventListener("change", e => LS.set("seat", e.target.value));
-  app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); renderHome(); });
-}
-
-/* ===== PLAYER ===== */
-let stepIx = LS.get("l1step", 0);
-function renderPlayer(){
-  const L = L1, N = L.steps.length;
-  stepIx = Math.max(0, Math.min(N-1, stepIx));
-  const s = L.steps[stepIx];
-  const ch = LS.get("l1chal", {});
-  app.innerHTML = `<div class="pl">
-    <header class="pbar">
-      <div class="r1">
-        <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><div class="t"><small>${L.unit}</small><b>${L.title}</b></div></div>
-        <div class="tools"><span class="chip xp">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button><a class="btn ghost" href="#present1">מצב מקרן</a></div>
-      </div>
-      <div class="hotbar" role="tablist" aria-label="שלבי השיעור">${L.steps.map((x,i)=>`<button class="slot ${i===stepIx?"cur":""} ${i<stepIx?"done":""}" data-go="${i}" role="tab" aria-selected="${i===stepIx}" title="${esc(x.title)}">${i+1}</button>`).join("")}</div>
-    </header>
-    <main class="pmain">
-      <section class="panel" aria-live="polite">
-        <div class="k"><span class="chip go">${s.type}</span><small>שלב ${stepIx+1} / ${N}</small></div>
-        <h2>${s.title}</h2>
-        <div class="body">${s.body}</div>
-        ${s.why?`<div class="box why"><b>למה?</b>${s.why}</div>`:""}
-        ${s.expect?`<div class="box expect"><b>מה אמור לקרות</b>${s.expect}</div>`:""}
-        ${s.note?`<div class="box note"><b>שימו לב</b>${s.note}</div>`:""}
-        ${(s.hints||s.stuck)?`<div class="helprow">${s.hints?`<button class="btn ghost" id="hint">רמז</button>`:""}${s.stuck?`<button class="btn ghost" id="stuck">אני תקוע</button>`:""}</div><div class="reveal" id="reveal"></div>`:""}
-        <div class="chal"><h3>אתגרי השיעור</h3><small>מסמנים מה שסיימתם. זה נשמר על המחשב הזה.</small>
-          ${L.challenges.map(c=>`<label for="ch-${c.id}"><input type="checkbox" id="ch-${c.id}" data-ch="${c.id}" ${ch[c.id]?"checked":""}><span><b>${c.t}</b> <small>(${c.lvl})</small><br>${c.d}</span></label>`).join("")}
-        </div>
-      </section>
-      <section class="work">${s.visual()}</section>
-    </main>
-    <footer class="pfoot">
-      <button class="btn ghost" id="prev" ${stepIx===0?"disabled":""}>→ חזרה</button>
-      <small>אפשר גם עם החצים במקלדת</small>
-      ${stepIx<N-1?`<button class="btn go" id="next">הבא ←</button>`:`<a class="btn go" href="#home" id="finish">סיימתי ←</a>`}
-    </footer>
-  </div>`;
-  const go = i => { stepIx = i; LS.set("l1step", i); renderPlayer(); window.scrollTo(0,0); };
-  app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(+b.dataset.go)));
-  const p = app.querySelector("#prev"), n = app.querySelector("#next"), f = app.querySelector("#finish");
-  if (p) p.addEventListener("click", () => go(stepIx-1));
-  if (n) n.addEventListener("click", () => go(stepIx+1));
-  if (f) f.addEventListener("click", () => { const d = LS.get("lessonsDone", []); if (!d.includes(1)) { d.push(1); LS.set("lessonsDone", d); } });
-  app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); });
-  const rv = app.querySelector("#reveal");
-  let hi = 0, si = 0;
-  const h = app.querySelector("#hint"), st = app.querySelector("#stuck");
-  if (h) h.addEventListener("click", () => { if (hi < s.hints.length){ rv.insertAdjacentHTML("beforeend", `<div class="item"><b>רמז ${hi+1}</b>${s.hints[hi]}</div>`); hi++; } if (hi >= s.hints.length) h.disabled = true; });
-  if (st) st.addEventListener("click", () => { if (si < s.stuck.length){ const [q,a] = s.stuck[si]; rv.insertAdjacentHTML("beforeend", `<div class="item"><b>${q}</b>${a}</div>`); si++; } if (si >= s.stuck.length) st.disabled = true; });
-  app.querySelectorAll("[data-ch]").forEach(c => c.addEventListener("change", () => { const v = LS.get("l1chal", {}); v[c.dataset.ch] = c.checked; LS.set("l1chal", v); }));
-  bindCopy(app); bindSil(app); bindWorldCard(app);
-}
-
-/* ===== PRESENTER ===== */
+/* ===== lesson 1 slides ===== */
 const SLIDES = [
   { label:"פתיחה", html:`<div class="eye">שיעור 1 · מודים למיינקראפט</div><h1>העולם שלכם מתחיל היום</h1><p class="sub">20 שיעורים. בסוף, משפחות וחברים ישחקו בעולם שאתם המצאתם.</p>`,
     notes:"0–10 דק׳. עוד לפני שמדברים: מחלקים מחשבים לפי מספר ומעבירים את הדיסק און קי. המסך הבא הוא הוראות ההתקנה." },
@@ -642,31 +566,8 @@ const SLIDES = [
   { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ הראשון שלכם, בתוך המשחק</p><ul class="big"><li>כרטיס העולם ← לתיקייה</li><li>מחשב ← לחשמל</li><li>החלון השחור עוד עובד? משאירים פתוח</li></ul>`,
     notes:"58–65 דק׳. לרשום אילו מחשבים לא סיימו את ההתקנה, ולבדוק אותם אחרי השיעור." }
 ];
-let sIx = LS.get("slide", 0), showNotes = LS.get("notes", true), showMap = false;
-function renderPresenter(){
-  const N = SLIDES.length; sIx = Math.max(0, Math.min(N-1, sIx));
-  const S = SLIDES[sIx];
-  app.innerHTML = `<div class="pr">
-    <div class="prbar"><div class="r"><a class="btn ghost" href="#home">→ יציאה</a><b>שיעור 1: התקנה והעולם שלי</b><span class="chip">${S.label}</span></div>
-      <div class="r"><span class="chip xp">${sIx+1} / ${N}</span><button class="btn ghost" id="map">מפת שקופיות (M)</button><button class="btn ghost" id="nt">${showNotes?"הסתרת הערות":"הערות"} (N)</button><button class="btn ghost" id="fs">מסך מלא (F)</button></div></div>
-    ${showMap
-      ? `<div class="map">${SLIDES.map((x,i)=>`<button data-s="${i}" class="${i===sIx?"cur":""}"><small>${i+1}</small><b>${x.label}</b></button>`).join("")}</div>`
-      : `<div class="stage"><div class="slide">${S.html}</div></div>`}
-    ${showNotes?`<div class="notes"><b>הערות למדריך (לא מוקרן לתלמידים כשמסתירים)</b>${S.notes}</div>`:""}
-    <div class="prfoot"><button class="btn ghost" id="pp" ${sIx===0?"disabled":""}>→ הקודם</button><small>חצים להחלפת שקופית · N הערות · M מפה · F מסך מלא</small><button class="btn go" id="pn" ${sIx===N-1?"disabled":""}>הבא ←</button></div>
-  </div>`;
-  const go = i => { sIx = i; showMap = false; LS.set("slide", i); renderPresenter(); };
-  app.querySelector("#pp").addEventListener("click", () => go(sIx-1));
-  app.querySelector("#pn").addEventListener("click", () => go(sIx+1));
-  app.querySelector("#nt").addEventListener("click", () => { showNotes = !showNotes; LS.set("notes", showNotes); renderPresenter(); });
-  app.querySelector("#map").addEventListener("click", () => { showMap = !showMap; renderPresenter(); });
-  app.querySelector("#fs").addEventListener("click", toggleFS);
-  app.querySelectorAll("[data-s]").forEach(b => b.addEventListener("click", () => go(+b.dataset.s)));
-  bindSil(app);
-}
-function toggleFS(){ try{ if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen(); }catch(e){} }
 
-/* ===== TEACHER ===== */
+/* ===== teacher ===== */
 const GEM_TEXT = `You are "עוזר המודים" (the Mod Helper), a helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Always answer in simple, short Hebrew. Code, file names and paths stay in English.
 
 THE SETUP (never change it)
@@ -700,77 +601,10 @@ const TEACHER_CHECK = [
   ["print","הדפסת 10 כרטיסי עולם","8 ועוד 2 לגיבוי. אפשר להדפיס מהשלב ״כרטיס העולם״."],
   ["proj","המקרן מוכן עם מצב המקרן של שיעור 1",""]
 ];
-function renderTeacher(){
-  const v = LS.get("tcheck", {});
-  const local = location.protocol === "file:";
-  app.innerHTML = `<div class="wrap">
-    <div class="top"><div class="brand"><h1>אזור מדריך</h1><p>מה צריך להיות מוכן לפני שיעור 1</p></div>
-      <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><a class="btn go" href="#present1">מצב מקרן: שיעור 1</a></div></div>
 
-    <section class="tsec"><h2>לפני שיעור 1</h2><div class="tlist">
-      ${TEACHER_CHECK.map(([id,t,s])=>`<label for="tc-${id}"><input type="checkbox" id="tc-${id}" data-tc="${id}" ${v[id]?"checked":""}><span><b>${t}</b>${s?`<small>${s}</small>`:""}</span></label>`).join("")}
-    </div></section>
-
-    <section class="tsec"><h2>השיעור, דקה אחרי דקה</h2><div class="ttable"><table>
-      <thead><tr><th>דקות</th><th>מה קורה</th><th>שקופיות</th></tr></thead><tbody>
-      <tr><td>0–10</td><td>מתקינים מהדיסק. מסתובבים עד שכל החלונות השחורים רצים</td><td>1–2</td></tr>
-      <tr><td>10–15</td><td>מה נעשה בקורס. מראים מוד שעובד</td><td>3–4</td></tr>
-      <tr><td>15–25</td><td>מי כותב את הקוד, ״תבנה לי חרב״ מול כרטיס, בשידור חי</td><td>5–6</td></tr>
-      <tr><td>25–30</td><td>ג׳מיני טועה בביטחון, יומן השקרים, ארבעת החוקים</td><td>7–8</td></tr>
-      <tr><td>30–45</td><td>כרטיס העולם: 10 דק׳ לבד, 5 בזוגות</td><td>9–10</td></tr>
-      <tr><td>45–50</td><td>משחק הצלליות (אפשר לדלג אם ההתקנה הסתיימה)</td><td>11</td></tr>
-      <tr><td>50–58</td><td>מיינקראפט נפתח? עולם Creative, צילום מסך, Mods. כולם: ג׳מיני וה־Gem</td><td>12–13</td></tr>
-      <tr><td>58–65</td><td>כרטיסים לתיקייה, מחשבים לחשמל, לרשום מי לא סיים</td><td>14</td></tr>
-      </tbody></table></div>
-      <p><b>אם ההתקנה נגמרת אחרי 20 דקות:</b> מקדימים את הצלליות ואת ״מיינקראפט נפתח?״. <b>אם מחשב אחד נכשל:</b> הילד עובד עם שותף, ומתקנים אחרי השיעור.</p>
-    </section>
-
-    <section class="tsec"><h2>ה־Gem: ״עוזר המודים״</h2>
-      <p>ב־Gemini: Gems ← New Gem. שם: <b>עוזר המודים</b>. מדביקים את ההוראות כמו שהן (באנגלית, כי ג׳מיני מבין אותן מדויק יותר; הוא עונה לילדים בעברית). שומרים, משתפים עם הכיתה, ושולחים לClaude את הקישור.</p>
-      <div><button class="btn go" data-copy="${esc(GEM_TEXT)}">העתקת ההוראות</button></div>
-      <div class="gem">${esc(GEM_TEXT)}</div>
-      <p><small>גרסה 1. כשהפרויקט של הילדים יהיה מוכן (MyItems, MyEffects וכו׳), ההוראות יתעדכנו כך שג׳מיני ידע בדיוק לאיזה קובץ להדביק.</small></p>
-    </section>
-
-    <section class="tsec"><h2>קבצים</h2>
-      <ul>
-        <li><code>minecraft-course/setup/install.bat</code>: התקנה מהאינטרנט (המחשב שלך)</li>
-        <li><code>make-usb.bat</code>: מעתיק את <code>C:\\MAKE</code> לדיסק</li>
-        <li><code>install-from-usb.bat</code>: הילדים מתקינים מהדיסק</li>
-        <li><code>school-check.bat</code>: בודק אם מחשב של בית הספר מסוגל</li>
-      </ul>
-      ${local?`<div><button class="btn ghost" id="printcard">הדפסת כרטיס עולם</button></div>`:""}
-    </section>
-  </div>`;
-  app.querySelectorAll("[data-tc]").forEach(c => c.addEventListener("change", () => { const x = LS.get("tcheck", {}); x[c.dataset.tc] = c.checked; LS.set("tcheck", x); }));
-  bindCopy(app);
-  const pc = app.querySelector("#printcard");
-  if (pc) pc.addEventListener("click", () => { stepIx = 5; LS.set("l1step", 5); location.hash = "#lesson1"; setTimeout(()=>window.print(), 300); });
+function applyReveal(root, set){
+  root.querySelectorAll("[data-sil]").forEach(b => { if (set.has(+b.dataset.sil)) { b.classList.add("shown"); b.querySelector(".nm").textContent = MOBS[+b.dataset.sil].name; } });
 }
-
-/* ===== router ===== */
-function route(){
-  const h = (location.hash || "#home").slice(1);
-  if (h === "lesson1") renderPlayer();
-  else if (h === "present1") renderPresenter();
-  else if (h === "teacher") renderTeacher();
-  else renderHome();
-}
-window.addEventListener("hashchange", route);
-document.addEventListener("keydown", e => {
-  if (e.target.matches("input,textarea,select")) return;
-  const h = (location.hash || "#home").slice(1);
-  if (h === "lesson1"){
-    if (e.key === "ArrowLeft" && stepIx < L1.steps.length-1){ stepIx++; LS.set("l1step", stepIx); renderPlayer(); }
-    if (e.key === "ArrowRight" && stepIx > 0){ stepIx--; LS.set("l1step", stepIx); renderPlayer(); }
-  } else if (h === "present1"){
-    if ((e.key === "ArrowLeft" || e.key === " " || e.key === "PageDown") && sIx < SLIDES.length-1){ e.preventDefault(); sIx++; LS.set("slide", sIx); renderPresenter(); }
-    if ((e.key === "ArrowRight" || e.key === "PageUp") && sIx > 0){ sIx--; LS.set("slide", sIx); renderPresenter(); }
-    if (e.key === "n" || e.key === "N"){ showNotes = !showNotes; LS.set("notes", showNotes); renderPresenter(); }
-    if (e.key === "m" || e.key === "M"){ showMap = !showMap; renderPresenter(); }
-    if (e.key === "f" || e.key === "F") toggleFS();
-  }
-});
-route();
+window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
+  gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK };
 })();
-</script>

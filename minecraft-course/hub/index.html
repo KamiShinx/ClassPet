@@ -1,0 +1,110 @@
+<title>מודים למיינקראפט</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap">
+<div id="app" dir="rtl" lang="he"></div>
+<script src="content.js"></script>
+<script>
+(function(){
+"use strict";
+const H = window.HUB, LS = H.LS, esc = H.esc, L1 = H.L1;
+H.injectStyle(document);
+const app = document.getElementById("app");
+if (LS.get("big", false)) app.classList.add("big");
+
+/* ===== HOME ===== */
+function renderHome(){
+  const done = LS.get("lessonsDone", []);
+  const total = H.UNITS.reduce((a,u)=>a+u.lessons.length,0);
+  const seat = LS.get("seat","");
+  app.innerHTML = `<div class="wrap">
+    <div class="top">
+      <div class="brand"><h1>מודים למיינקראפט</h1><p>העולם שלכם, קובייה אחרי קובייה · 20 שיעורים · MAKE</p></div>
+      <div class="tools">
+        <label class="seat" for="seat">מחשב מספר
+          <select id="seat"><option value="">?</option>${[1,2,3,4,5,6,7,8].map(n=>`<option ${String(n)===String(seat)?"selected":""}>${n}</option>`).join("")}</select></label>
+        <button class="btn ghost" id="bigtxt" aria-pressed="${app.classList.contains("big")}">אותיות גדולות</button>
+      </div>
+    </div>
+    <div class="progress"><div class="row"><b>ההתקדמות שלכם</b><span>${done.length} מתוך ${total} שיעורים</span></div>
+      <div class="xp" style="--n:${total}">${Array.from({length:total},(_,i)=>`<i class="${i<done.length?"on":""}"></i>`).join("")}</div></div>
+    <div class="timeline">${H.UNITS.map(u=>`
+      <section class="unit"><div class="ico" style="background:${u.color}">${u.icon}</div>
+        <div><div class="head"><h2>${u.name}</h2><span>${u.sub}</span></div>
+        <div class="cards">${u.lessons.map(l=>{
+          const isDone = done.includes(l.n);
+          const meta = `<div class="meta">${l.open?`<span class="chip go">${L1.steps.length} שלבים</span>`:`<span class="chip">בקרוב</span>`}${isDone?`<span class="chip gold">הושלם</span>`:""}</div>`;
+          return l.open
+            ? `<a class="lcard open" href="#lesson${l.n}"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</a>`
+            : `<div class="lcard soon"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</div>`;
+        }).join("")}</div></div></section>`).join("")}
+    </div>
+    <div class="foot"><span>נבנה לקורס המודים של MAKE</span></div>
+  </div>`;
+  app.querySelector("#seat").addEventListener("change", e => LS.set("seat", e.target.value));
+  app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); renderHome(); });
+}
+
+/* ===== LESSON PLAYER ===== */
+let stepIx = LS.get("l1step", 0);
+function renderPlayer(){
+  const L = L1, N = L.steps.length;
+  stepIx = Math.max(0, Math.min(N-1, stepIx));
+  const s = L.steps[stepIx];
+  const ch = LS.get("l1chal", {});
+  app.innerHTML = `<div class="pl">
+    <header class="pbar">
+      <div class="r1">
+        <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><div class="t"><small>${L.unit}</small><b>${L.title}</b></div></div>
+        <div class="tools"><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button></div>
+      </div>
+      <div class="hotbar" role="tablist" aria-label="שלבי השיעור">${L.steps.map((x,i)=>`<button class="slot ${i===stepIx?"cur":""} ${i<stepIx?"done":""}" data-go="${i}" role="tab" aria-selected="${i===stepIx}" title="${esc(x.title)}">${i+1}</button>`).join("")}</div>
+    </header>
+    <main class="pmain">
+      <section class="panel" aria-live="polite">
+        <div class="k"><span class="chip go">${s.type}</span><small>שלב ${stepIx+1} / ${N}</small></div>
+        <h2>${s.title}</h2>
+        <div class="body">${s.body}</div>
+        ${s.why?`<div class="box why"><b>למה?</b>${s.why}</div>`:""}
+        ${s.expect?`<div class="box expect"><b>מה אמור לקרות</b>${s.expect}</div>`:""}
+        ${s.note?`<div class="box note"><b>שימו לב</b>${s.note}</div>`:""}
+        ${(s.hints||s.stuck)?`<div class="helprow">${s.hints?`<button class="btn ghost" id="hint">רמז</button>`:""}${s.stuck?`<button class="btn ghost" id="stuck">אני תקוע</button>`:""}</div><div class="reveal" id="reveal"></div>`:""}
+        <div class="chal"><h3>אתגרי השיעור</h3><small>מסמנים מה שסיימתם. זה נשמר על המחשב הזה.</small>
+          ${L.challenges.map(c=>`<label for="ch-${c.id}"><input type="checkbox" id="ch-${c.id}" data-ch="${c.id}" ${ch[c.id]?"checked":""}><span><b>${c.t}</b> <small>(${c.lvl})</small><br>${c.d}</span></label>`).join("")}
+        </div>
+      </section>
+      <section class="work">${s.visual()}</section>
+    </main>
+    <footer class="pfoot">
+      <button class="btn ghost" id="prev" ${stepIx===0?"disabled":""}>→ חזרה</button>
+      <small>אפשר גם עם החצים במקלדת</small>
+      ${stepIx<N-1?`<button class="btn go" id="next">הבא ←</button>`:`<a class="btn go" href="#home" id="finish">סיימתי ←</a>`}
+    </footer>
+  </div>`;
+  const go = i => { stepIx = i; LS.set("l1step", i); renderPlayer(); window.scrollTo(0,0); };
+  app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(+b.dataset.go)));
+  const p = app.querySelector("#prev"), n = app.querySelector("#next"), f = app.querySelector("#finish");
+  if (p) p.addEventListener("click", () => go(stepIx-1));
+  if (n) n.addEventListener("click", () => go(stepIx+1));
+  if (f) f.addEventListener("click", () => { const d = LS.get("lessonsDone", []); if (!d.includes(1)) { d.push(1); LS.set("lessonsDone", d); } });
+  app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); });
+  const rv = app.querySelector("#reveal");
+  let hi = 0, si = 0;
+  const h = app.querySelector("#hint"), st = app.querySelector("#stuck");
+  if (h) h.addEventListener("click", () => { if (hi < s.hints.length){ rv.insertAdjacentHTML("beforeend", `<div class="item"><b>רמז ${hi+1}</b>${s.hints[hi]}</div>`); hi++; } if (hi >= s.hints.length) h.disabled = true; });
+  if (st) st.addEventListener("click", () => { if (si < s.stuck.length){ const [q,a] = s.stuck[si]; rv.insertAdjacentHTML("beforeend", `<div class="item"><b>${q}</b>${a}</div>`); si++; } if (si >= s.stuck.length) st.disabled = true; });
+  app.querySelectorAll("[data-ch]").forEach(c => c.addEventListener("change", () => { const v = LS.get("l1chal", {}); v[c.dataset.ch] = c.checked; LS.set("l1chal", v); }));
+  H.bindCopy(app); H.bindSil(app); H.bindWorldCard(app);
+}
+
+/* ===== router ===== */
+function route(){ (location.hash === "#lesson1") ? renderPlayer() : renderHome(); }
+window.addEventListener("hashchange", route);
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,textarea,select") || location.hash !== "#lesson1") return;
+  if (e.key === "ArrowLeft" && stepIx < L1.steps.length-1){ stepIx++; LS.set("l1step", stepIx); renderPlayer(); }
+  if (e.key === "ArrowRight" && stepIx > 0){ stepIx--; LS.set("l1step", stepIx); renderPlayer(); }
+});
+route();
+})();
+</script>

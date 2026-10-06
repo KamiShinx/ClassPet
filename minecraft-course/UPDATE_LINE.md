@@ -1,9 +1,9 @@
 # Update Ben's laptop (hub pages + Minecraft pictures)
 
-Last hub change: **71a264a** (6 Oct, kids' patch). Press Win+R, paste this whole line, press Enter:
+Last hub change: **4ec3ffb** (studio, step 1). Press Win+R, paste this whole line, press Enter:
 
 ```
-powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='71a264a5789602b15d498c136ca92074b29ad3a0';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
+powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='4ec3ffb3b606817cce4540518915d3ad0b5c455e';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
 ```
 
 It updates `C:\MAKE\hub` (the kids' page, the teacher page and its slides, the print page) and the course tools in

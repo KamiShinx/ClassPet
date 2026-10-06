@@ -171,3 +171,12 @@ improvised; kids did page 1 of the 2 print pages. Kids loved Minecraft. The clas
 1 shy girl, 3 enthusiastic boys, 1 half-interested kid. Laptops are shared at school: Ben removed the desktop icon and
 wants each kid's hub and project protected by a password. Next week: Ben installs one patch on every laptop before
 class, then the lesson goes straight into the course.
+**6 Oct, evening.** Built and pushed the interactive lesson 2 deck (`hub/slides.js`) and a new teacher area; UPDATE_LINE
+pinned to 536ade8 (66 textures). Ben repeated the course's centre: world building, game design, character design, rules,
+logic; Minecraft is only where the easy implementation happens. A kid's first wish: "a portal to another world where
+legendary pokemon go when they get hurt; the ones that die go to a hell world and come back stronger". Read as design:
+two places, original creatures (not Pokemon: their own characters), and two if-then rules (hurt -> moved to the rest
+world; dies -> reborn stronger in the hell world). Buildable with the planned templates (creature, place, world rule)
+plus a portal template. Same kid asked about multiplayer: Java mods are multiplayer by nature, but players need the
+same mod; realistic options are playing on the owner's laptop at exhibitions, LAN with matching mods, or a merged
+class mod near the end (untested on the school network).

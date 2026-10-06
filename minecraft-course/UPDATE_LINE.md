@@ -1,12 +1,13 @@
 # Update Ben's laptop (hub pages + Minecraft pictures)
 
-Last hub change: **536ade8** (6 Oct, after class 1). Press Win+R, paste this whole line, press Enter:
+Last hub change: **71a264a** (6 Oct, kids' patch). Press Win+R, paste this whole line, press Enter:
 
 ```
-powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='536ade88608688bcea967992c524bcb51728b240';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
+powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='71a264a5789602b15d498c136ca92074b29ad3a0';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
 ```
 
-It updates only `C:\MAKE\hub` (the kids' page, the teacher page and its slides, the print page) and copies 66 Minecraft pictures out of
+It updates `C:\MAKE\hub` (the kids' page, the teacher page and its slides, the print page) and the course tools in
+`C:\MAKE\mod\tools` (never the kid's own files), and copies 66 Minecraft pictures out of
 the game already installed there. It should end with "Minecraft pictures: 66 of 66". Then:
 
 1. Double-click the **Minecraft** icon (this starts the hub; the teacher page needs it running for the embedded video).

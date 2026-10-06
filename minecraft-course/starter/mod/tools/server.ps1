@@ -100,17 +100,23 @@ function Update-Game {
     $state.phase = 'error'; $state.message = 'המשחק לא נבנה.'
 }
 
-# Closes the game and the builder, even when the hub lost track of them (the game was closed but the hub still
-# thinks it's open, or an old builder hangs). Only Java from our own jdk folder: nothing else on the laptop.
+# "Close Minecraft": for when the hub thinks the game is still open (the builder hangs after the game closed).
+# It asks Gradle itself to stop its builder (gradlew --stop), started the same way as the game. The hub never kills
+# processes itself: Windows Defender flagged a hub that did ("threats found", 6 Oct).
 function Stop-Game {
-    if ($state.proc -and -not $state.proc.HasExited) {
-        if ($onWindows) { & taskkill.exe /f /t /pid $state.proc.Id 2>&1 | Out-Null } else { try { $state.proc.Kill() } catch {} }
+    if ($env:MAKE_FAKE_BUILD) {
+        if ($state.proc -and -not $state.proc.HasExited) { try { $state.proc.Kill() } catch {} }
+    } else {
+        $w = { param($p) $p -replace '/', '\' }
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = $env:ComSpec
+        $psi.Arguments = "/c set ""JAVA_HOME=$(& $w (Join-Path $root 'jdk'))"" && set ""GRADLE_USER_HOME=$(& $w (Join-Path $root 'gradle-home'))"" && gradlew.bat --stop"
+        $psi.WorkingDirectory = (& $w $mod)
+        $psi.UseShellExecute = $true
+        $psi.WindowStyle = 'Hidden'
+        try { [void]([System.Diagnostics.Process]::Start($psi)).WaitForExit(30000) } catch {}
     }
     $state.proc = $null
-    $jdk = [IO.Path]::GetFullPath((Join-Path $root 'jdk'))
-    foreach ($p in @(Get-Process -Name java, javaw -ErrorAction SilentlyContinue)) {
-        try { if ($p.Path -and [IO.Path]::GetFullPath($p.Path).StartsWith($jdk, [StringComparison]::OrdinalIgnoreCase)) { $p.Kill() } } catch {}
-    }
     $state.phase = 'idle'; $state.error = ''; $state.message = 'מיינקראפט נסגר. אפשר ללחוץ שוב על שחק.'
 }
 

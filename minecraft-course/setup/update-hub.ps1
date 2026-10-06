@@ -1,11 +1,17 @@
 # Updates the hub pages in C:\MAKE\hub and the course tools in C:\MAKE\mod\tools to one exact commit, and copies the
-# Minecraft pictures the slides use out of the game that is already installed in C:\MAKE. Run from Win+R:
-#   powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='<commit>';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
+# Minecraft pictures the slides use out of the game that is already installed in C:\MAKE.
+# Run: double-click C:\MAKE\update.bat (it runs the copy of this file in C:\MAKE\mod\tools, which downloads only data
+# and the course files, never a script to run on the spot). With no commit given, it takes the newest one on the branch.
+# The old Win+R line (irm ... | iex) is gone: Windows Defender flags that pattern as Trojan:Win32/Commando (6 Oct 2026).
 # Never touches the kid's own files (MyWorld/MyItems/MyEffects/MyMobs/MyRules.java, pictures, worlds). No reinstall.
 # The pictures never leave this computer and are not in the repo.
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-if (-not $s) { Write-Host 'No commit given.' -ForegroundColor Red; return }
+if (-not $s -and $args.Count) { $s = [string]$args[0] }
+if (-not $s) {
+  try { $s = (Invoke-RestMethod 'https://api.github.com/repos/KamiShinx/ClassPet/commits/claude/make-courses' -Headers @{ 'User-Agent' = 'make-course' }).sha }
+  catch { Write-Host "Can't reach GitHub ($($_.Exception.Message)). Check the internet and try again." -ForegroundColor Red; return }
+}
 if (-not $makeRoot) { $makeRoot = 'C:\MAKE' }          # tests set $makeRoot / $mcSearch first
 $hub = Join-Path $makeRoot 'hub'
 if (-not (Test-Path $hub)) { Write-Host "$hub not found. Run install.bat first." -ForegroundColor Red; return }
@@ -40,7 +46,11 @@ if (Test-Path $tools) {
   foreach ($n in 'common.ps1', 'server.ps1', 'shortcuts.ps1', 'prepare.ps1', 'play.ps1', 'paste.ps1', 'undo.ps1', 'rules.txt') { $get["tools\$n"] = $web.DownloadData("$st/tools/$n") }
   $get['src\main\java\make\myworld\Kit.java'] = $web.DownloadData("$st/src/main/java/make/myworld/Kit.java")
   $get['src\main\java\make\myworld\StudioPower.java'] = $web.DownloadData("$st/src/main/java/make/myworld/StudioPower.java")
+  # This updater itself, and the double-click file that runs it next time.
+  $get['tools\update-hub.ps1'] = $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1")
+  $bat = $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update.bat")
   foreach ($k in $get.Keys) { [IO.File]::WriteAllBytes((Join-Path (Join-Path $makeRoot 'mod') $k), $get[$k]) }
+  [IO.File]::WriteAllBytes((Join-Path $makeRoot 'update.bat'), $bat)
   Write-Host "Course tools updated (the kid's own files are untouched)." -ForegroundColor Green
 }
 
@@ -103,6 +113,7 @@ try {
 } catch { Write-Host "Minecraft pictures: failed ($($_.Exception.Message)). The slides will show drawings instead. Tell Claude." -ForegroundColor Yellow }
 
 Write-Host ''
-Write-Host 'Now: close the hub tab and double-click the Minecraft icon again.'
+Write-Host 'Now: close the hub tab and open Minecraft from Start again.'
+Write-Host "Next update: double-click $makeRoot\update.bat" -ForegroundColor Cyan
 Write-Host "Print page: http://localhost:47811/print.html  (or open $hub\print.html)"
 Write-Host 'Then run make-usb.bat again for every stick.'

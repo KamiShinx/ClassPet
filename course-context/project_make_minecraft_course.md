@@ -222,3 +222,8 @@ without a code now save. Lesson 2 steps, its English, and the deck's demo/"עכ�
 lesson 1's Gemini steps say "design partner", not "writes the code". Old item-card form, pixel editor and SLIDES2 deleted.
 Future idea from Ben: Gemini inside the hub as a side window (gemini.google.com refuses to be framed; an API needs a key,
 so ask Ben first; possible without a key: open the hub and Gemini side by side as two windows).
+**6 Oct, late.** Defender flagged the Win+R update line (`irm ... | iex`) as Trojan:Win32/Commando.A!ml (the command
+line, not our files). Replaced by `C:\MAKE\update.bat` (newest commit via the GitHub API, local updater
+`mod\tools\update-hub.ps1`, curl bootstrap on first run). No more hashes for Ben. Also fixed: the update never copied
+StudioPower.java; 26.2 keeps entity constants in `EntityTypes` (lightning didn't compile); "close Minecraft" now uses
+`gradlew --stop` (killing java from the hub got flagged too).

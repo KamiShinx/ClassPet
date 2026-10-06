@@ -188,3 +188,14 @@ let kids design purely in the hub, building their own rules slowly; Gemini only 
 the kid's design as data (cards, stats, picked parts, if-then rules), no compile errors possible; Gemini stays only as the
 optional "special" box. Cost: every part needs one Windows test; build it in course order. Open: does MAKE promise
 "coding with AI" in this course?
+**6 Oct, night: decision, we build our own modding software ("the studio").** Ben: not MCreator as a product; it must be
+ours, part of the lesson ecosystem, behind the kid's code, mostly Hebrew; open source is fine (publish when done; GPL
+OK). Kids must really MODEL their mobs (boxes, paint, animate), not pick premade ones. He'll reinstall all laptops next
+week (an hour early); no patching kids' laptops until it's all built. Course name stays "modding with Minecraft"; AI was
+mentioned, not promised. Gemini = design partner that talks to the studio in data (```studio blocks), never Java.
+Taken from MCreator's GPL source (sparse clone, plugins/): 523 Blockly block definitions, 65 triggers, NeoForge 26.1.2
+code templates (procedures, living entities, dimensions, custom portals) as reference for our engine. Plan: step 1
+items (built 4ec3ffb: `hub/studio.js`, design in C:\MAKE\design\world.json, Kit.java reads it with Gson; needs Ben's
+Windows test), step 2 item powers with logic blocks (Blockly + MCreator's blocks, a data interpreter in Java), step 3
+the mob modeller (boxes, paint, animation) + a generic data-driven mob, then rules, places, portals, bosses.
+Maven Central is reachable from the cloud (Gson jar for stub compiles); Mojang and NeoForge maven were not.

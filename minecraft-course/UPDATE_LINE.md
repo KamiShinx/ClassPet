@@ -1,9 +1,9 @@
 # Update Ben's laptop (hub pages + Minecraft pictures)
 
-Last hub change: **596e03b** (Gemini reviews the kid's logic). Press Win+R, paste this whole line, press Enter:
+Last hub change: **745fb90** (hub no longer hangs after Minecraft). Press Win+R, paste this whole line, press Enter:
 
 ```
-powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='596e03b745b8845d224f5bcdaca6d2a86832c163';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
+powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='745fb90204a5faa0d257f7b56f9a9c7b073ba33f';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
 ```
 
 It updates `C:\MAKE\hub` (the kids' page, the teacher page and its slides, the print page) and the course tools in

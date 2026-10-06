@@ -219,6 +219,44 @@ function Invoke-Restore([string]$root, [string]$id) {
     return New-Result $true 'הגרסה חזרה. לוחצים שחק כדי לבדוק.'
 }
 
+# ---------- an item straight from the card, without Gemini ----------
+# The fallback for a day Gemini doesn't work: the card's code, name, line and stack size become one Kit.item line,
+# added to MyItems.java the same way a pasted item line is (backup first, so "ביטול ההדבקה" undoes it).
+function Invoke-AddItem([string]$root, [string]$id, [string]$name, [string]$lore, [string]$stack) {
+    $id = $id.Trim().ToLower() -replace '\s+', '_'
+    if ($id -notmatch '^[a-z][a-z0-9_]{0,39}$') { return New-Result $false 'הקוד באנגלית: רק אותיות קטנות, מספרים וקו תחתון, ומתחיל באות. למשל honey_coin.' }
+    $name = ($name -replace '[\r\n]+', ' ').Trim()
+    $lore = ($lore -replace '[\r\n]+', ' ').Trim()
+    if (-not $name) { return New-Result $false 'חסר שם לחפץ. כותבים אותו בכרטיס.' }
+    $n = 0
+    if (-not [int]::TryParse(($stack -replace '\D', ''), [ref]$n) -or $n -lt 1) { $n = 64 }
+    if ($n -gt 64) { $n = 64 }
+    $q = { param($t) '"' + ($t.Replace('\', '\\').Replace('"', '\"')) + '"' }
+    $line = 'Kit.item(' + (& $q $id) + ', ' + (& $q $name) + ', ' + (& $q $lore) + ', p -> p.stacksTo(' + $n + '))'
+    $r = Invoke-Paste $root $line
+    if ($r.Ok) { $r.Message = "החפץ $name נכנס לקובץ MyItems.java, בלי ג׳מיני" }
+    return $r
+}
+
+# ---------- the kid's code lock ----------
+# pin.txt holds "salt:hash" of the kid's 4 digits; teacher.txt the same for the teacher's code (set once by
+# update-from-usb.bat, never in the repo). Not a safe: it keeps other kids from opening someone's hub by accident.
+function Get-CodeHash([string]$salt, [string]$code) {
+    $sha = [Security.Cryptography.SHA256]::Create()
+    $bytes = $sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($salt + ':' + $code))
+    return -join ($bytes | ForEach-Object { $_.ToString('x2') })
+}
+function Test-Code([string]$file, [string]$code) {
+    if (-not (Test-Path $file)) { return $false }
+    $parts = ([IO.File]::ReadAllText($file)).Trim().Split(':')
+    if ($parts.Count -ne 2) { return $false }
+    return (Get-CodeHash $parts[0] $code) -eq $parts[1]
+}
+function Set-Code([string]$file, [string]$code) {
+    $salt = [Guid]::NewGuid().ToString('N').Substring(0, 12)
+    [IO.File]::WriteAllText($file, $salt + ':' + (Get-CodeHash $salt $code))
+}
+
 # ---------- backup file, for the kid's Google Drive ----------
 # One zip with everything that is the kid's: the five code files, pictures and models, the Minecraft worlds and the
 # hub's own notes (world card, item card, progress). It goes to the kid's Drive, so it survives a laptop reset and

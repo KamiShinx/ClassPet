@@ -23,7 +23,10 @@ try {
 if ($onWindows -and -not $env:MAKE_NO_BROWSER) { Start-Process $url }
 
 # ---------- game state ----------
-$state = @{ phase = 'idle'; message = 'מוכן.'; error = ''; online = $false; proc = $null }
+$state = @{ phase = 'idle'; message = 'מוכן.'; error = ''; online = $false; proc = $null; tokens = @{}; fails = 0; waitUntil = [DateTime]::MinValue }
+$pinFile = Join-Path $root 'pin.txt'
+$teacherFile = Join-Path $root 'teacher.txt'
+function New-Token { $t = [Guid]::NewGuid().ToString('N'); $state.tokens[$t] = $true; return $t }
 
 function Read-Clip {
     if ($env:MAKE_CLIP_FILE) { return [IO.File]::ReadAllText($env:MAKE_CLIP_FILE, [Text.Encoding]::UTF8) }
@@ -142,7 +145,7 @@ $types = @{ '.html' = 'text/html; charset=utf-8'; '.js' = 'text/javascript; char
             '.png' = 'image/png'; '.ico' = 'image/x-icon'; '.json' = 'application/json; charset=utf-8' }
 
 function Send($stream, [int]$code, [string]$type, [byte[]]$body) {
-    $reason = @{ 200 = 'OK'; 403 = 'Forbidden'; 404 = 'Not Found'; 405 = 'Method Not Allowed' }[$code]
+    $reason = @{ 200 = 'OK'; 401 = 'Unauthorized'; 403 = 'Forbidden'; 404 = 'Not Found'; 405 = 'Method Not Allowed' }[$code]
     $head = "HTTP/1.1 $code $reason`r`nContent-Type: $type`r`nContent-Length: $($body.Length)`r`nCache-Control: no-store`r`nConnection: close`r`n`r`n"
     $h = [Text.Encoding]::ASCII.GetBytes($head)
     $stream.Write($h, 0, $h.Length)
@@ -181,6 +184,30 @@ function Invoke-Request($client) {
         $body = New-Object string($buf, 0, $got)
     }
 
+    # ---------- the code lock: everything below needs the token the page got by typing the kid's code ----------
+    if ($path -eq '/api/lock') {
+        Send-Json $stream @{ set = (Test-Path $pinFile); teacher = (Test-Path $teacherFile) }
+        return
+    }
+    if ($path -in '/api/unlock', '/api/pin-new', '/api/pin-reset') {
+        if ($method -ne 'POST' -or $headers['x-make'] -ne '1') { Send $stream 403 'text/plain' ([byte[]]@()); return }
+        $code = ''; try { $code = [string](($body | ConvertFrom-Json).code) } catch {}
+        $code = $code -replace '\D', ''
+        if ((Get-Date) -lt $state.waitUntil) { Send-Json $stream @{ ok = $false; wait = [int]($state.waitUntil - (Get-Date)).TotalSeconds + 1 }; return }
+        $ok = $false; $token = ''
+        if ($path -eq '/api/pin-new' -and -not (Test-Path $pinFile) -and $code.Length -eq 4) { Set-Code $pinFile $code; $ok = $true }
+        elseif ($path -eq '/api/unlock') { $ok = (Test-Code $pinFile $code) -or (Test-Code $teacherFile $code) }
+        elseif ($path -eq '/api/pin-reset' -and (Test-Code $teacherFile $code)) { Remove-Item $pinFile -Force -ErrorAction SilentlyContinue; $ok = $true }
+        if ($ok) { $state.fails = 0; if ($path -ne '/api/pin-reset') { $token = New-Token } }
+        else { $state.fails++; if ($state.fails -ge 5) { $state.fails = 0; $state.waitUntil = (Get-Date).AddSeconds(30) } }
+        Send-Json $stream @{ ok = $ok; token = $token }
+        return
+    }
+    if ($path.StartsWith('/api/') -and -not ($headers['x-token'] -and $state.tokens.ContainsKey($headers['x-token']))) {
+        Send $stream 401 $types['.json'] ([Text.Encoding]::UTF8.GetBytes('{"locked":true}'))
+        return
+    }
+    if ($path -eq '/api/lock-now') { $state.tokens.Remove($headers['x-token']); Send-Json $stream @{ ok = $true }; return }
     if ($path -eq '/api/status') {
         Send-Json $stream @{ phase = $state.phase; message = $state.message; error = $state.error }
         return
@@ -205,6 +232,21 @@ function Invoke-Request($client) {
             $r = New-Result $false 'הציור לא נשמר. נסו שוב.'
             try { $j = $body | ConvertFrom-Json; $r = Save-ItemPicture $root ([string]$j.id) ([string]$j.png) } catch {}
             Send-Json $stream @{ ok = $r.Ok; result = $r.Message; phase = $state.phase; message = $r.Message; error = $state.error }
+            return
+        }
+        if ($path -eq '/api/add-item') {
+            $busy = $state.phase -eq 'building' -or $state.phase -eq 'running'
+            $r = New-Result $false 'קודם סוגרים את מיינקראפט.'
+            if (-not $busy) {
+                $r = New-Result $false 'הכרטיס לא נקרא. נסו שוב.'
+                try {
+                    $j = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($body)) | ConvertFrom-Json
+                    $r = Invoke-AddItem $root ([string]$j.id) ([string]$j.name) ([string]$j.lore) ([string]$j.stack)
+                } catch {}
+                if ($r.Ok) { Start-Game $false; $state.message = $r.Message + '. המחשב בונה ופותח את מיינקראפט...' }
+                else { $state.phase = 'idle'; $state.message = $r.Message }
+            }
+            Send-Json $stream @{ ok = $r.Ok; result = $r.Message; phase = $state.phase; message = $state.message; error = $state.error }
             return
         }
         if ($path -eq '/api/backup') {

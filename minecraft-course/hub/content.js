@@ -88,6 +88,7 @@ a.lcard.open:hover{transform:translateY(-1px)}
 .pbar .t small{color:var(--muted);font-size:.8em}
 .pbar .t b{font-family:var(--display);font-weight:400;font-size:1.2rem}
 .hotbar{display:flex;gap:3px;background:var(--slot);padding:3px;border-radius:2px;width:max-content;max-width:100%;overflow-x:auto;direction:rtl}
+[dir="ltr"] .hotbar{direction:ltr}
 .slot{width:40px;height:40px;flex:0 0 40px;background:var(--slot-in);border:2px solid;border-color:#555 #fff #fff #555;display:grid;place-items:center;font-family:var(--display);font-size:1.05rem;color:#3a3a3a;position:relative}
 :root[data-theme="dark"] .slot{color:#ddd;border-color:#222 #666 #666 #222}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .slot{color:#ddd;border-color:#222 #666 #666 #222}}
@@ -276,7 +277,21 @@ body.aud .stage{min-height:100vh}
 .pbar:has(.dock){position:static}
 .wrap #dock{margin-top:20px}
 .dock{display:grid;gap:10px;background:var(--surface);border:2px solid var(--ink);border-radius:8px;padding:12px;box-shadow:0 4px 0 var(--ink)}
-.dock-btns{display:grid;grid-template-columns:2fr repeat(6,1fr);gap:10px}
+.dock-btns{display:grid;grid-template-columns:2fr repeat(7,1fr);gap:10px}
+/* code lock */
+.lockv{min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--bg)}
+.lockbox{background:var(--surface);border:3px solid var(--ink);border-radius:12px;box-shadow:0 6px 0 var(--ink);padding:28px 26px;display:grid;gap:12px;justify-items:center;text-align:center;width:min(420px,100%)}
+.lockbox .lk-ico svg{width:46px;height:46px;color:var(--grass)}
+.lockbox h1{font-size:1.9rem}
+.lockbox p{color:var(--muted);margin:0}
+.lk-dots{display:flex;gap:14px;margin:6px 0}
+.lk-dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--ink)}
+.lk-dots i.on{background:var(--grass);border-color:var(--grass)}
+.lk-msg{min-height:1.5em;color:var(--red);font-weight:700}
+.lk-pad{display:grid;grid-template-columns:repeat(3,72px);gap:10px}
+.lk-pad button{height:64px;font:inherit;font-size:1.7rem;font-weight:800;border:3px solid var(--ink);border-radius:8px;background:var(--surface);box-shadow:0 3px 0 var(--ink);cursor:pointer;color:var(--ink)}
+.lk-pad button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.lk-low{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .dbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:8px 12px;border:2px solid var(--ink);border-radius:6px;background:var(--surface);color:var(--ink);font-weight:800;font-size:1.05rem;box-shadow:0 3px 0 var(--ink)}
 .dbtn svg{width:26px;height:26px;flex:none}
 .dbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
@@ -294,6 +309,8 @@ body.aud .stage{min-height:100vh}
 .dock-vers{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:8px}
 .dock-vers .vhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .vnote{color:var(--muted);font-size:.92em}
+.nogem{display:grid;gap:4px;justify-items:start;margin-top:14px}
+.nogem small{color:var(--muted)}
 .drv{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px}
 .drv h4{margin:0 0 4px}
 .drv ol{margin:0;padding-inline-start:22px;display:grid;gap:6px}
@@ -439,6 +456,8 @@ const LS = {
   get(k, d){ try{ const v = localStorage.getItem("mkmod." + k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
   set(k, v){ try{ localStorage.setItem("mkmod." + k, JSON.stringify(v)); }catch(e){} }
 };
+// Every button call carries the token the kids' page got from the code lock (index.html sets it).
+const apiHeaders = () => ({ "X-Make":"1", "X-Token": (window.HUB && window.HUB.token) || "" });
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ===== course map ===== */
@@ -919,11 +938,11 @@ function mountPixelEditor(root, served){
     const t = document.createElement("canvas"); t.width = t.height = N; const tg = t.getContext("2d");
     px.forEach((c,i)=>{ if (c){ tg.fillStyle = c; tg.fillRect(i%N, Math.floor(i/N), 1, 1); } });
     try {
-      const r = await fetch("/api/save-picture", { method:"POST", headers:{ "X-Make":"1", "Content-Type":"application/json" }, body: JSON.stringify({ id, png: t.toDataURL("image/png").split(",")[1] }) });
+      const r = await fetch("/api/save-picture", { method:"POST", headers:Object.assign(apiHeaders(), { "Content-Type":"application/json" }), body: JSON.stringify({ id, png: t.toDataURL("image/png").split(",")[1] }) });
       const j = await r.json(); say(j.result, j.ok);
     } catch(e){ say("הציור לא נשמר. נסו שוב.", false); }
   });
-  if (served) fetch("/api/items", { cache:"no-store" }).then(r => r.json()).then(list => {
+  if (served) fetch("/api/items", { cache:"no-store", headers:apiHeaders() }).then(r => r.json()).then(list => {
     el.querySelector("#px-items").innerHTML = list.map(it => `<option value="${esc(it.id)}">${esc(it.name)}</option>`).join("");
     if (idIn.value && list.some(it => it.id === idIn.value && it.hasPicture)) load(idIn.value);
   }).catch(()=>{});
@@ -1042,7 +1061,9 @@ const L2 = {
     { type:"פעילות", title:"שולחים לג׳מיני",
       body:`<ol><li>לוחצים למעלה על <b>להעתיק לג׳מיני</b>, ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li><li>מתחת מדביקים את הכרטיס מהמסגרת, ושולחים.</li><li>מעתיקים את הקובץ ש־ג׳מיני שולח, ולוחצים למעלה <b>הדבקה מג׳מיני ושחק</b>.</li></ol>`,
       note:"ג׳מיני כותב את הקוד, אבל את הרעיונות אתם ממציאים. אם הוא מציע שם או משפט, אומרים לו שזה שלכם.",
-      visual:()=>gemPromptBox(itemCardPrompt()) },
+      visual:()=>gemPromptBox(itemCardPrompt()) + `<div class="nogem"><button class="btn ghost" data-nogem>ג׳מיני לא עובד? בונים בלי ג׳מיני</button><small>המחשב בונה את החפץ ישר מהכרטיס: השם, המשפט, הציור וכמה בערימה.</small></div>`,
+      mount:(root, served) => { const b = root.querySelector("[data-nogem]"); if (!b) return; if (!served || !window.HUB.addItem) { b.disabled = true; return; }
+        b.addEventListener("click", () => window.HUB.addItem(LS.get("itemcard", {}))); } },
 
     { type:"בדיקה", title:"בודקים במשחק",
       body:`<ol><li>נכנסים לעולם במצב יצירה.</li><li>לוחצים <kbd>E</kbd> ומוצאים את הלשונית של העולם שלכם.</li><li>בודקים מול הכרטיס: השם, המשפט, הציור, וכמה נכנסים בערימה.</li></ol>`,
@@ -1132,7 +1153,7 @@ const SLIDES2 = [
 
 /* ===== teacher ===== */
 const GEM_TEXT = `RULES FOR THIS CHAT. Follow them for every answer in this chat.
-You are the Mod Helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Always answer in simple, short Hebrew. Code, file names and paths stay in English.
+You are the Mod Helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Answer in simple, short Hebrew. If the kid writes to you in English, answer in simple English. Code, file names and paths stay in English.
 
 THE SETUP (never change it)
 - Minecraft Java Edition 26.2, NeoForge 26.2.0.88, Java 25, ModDevGradle. Mojang's official names (the game is no longer obfuscated).

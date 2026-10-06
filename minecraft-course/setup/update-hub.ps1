@@ -1,7 +1,8 @@
-# Updates the hub pages in C:\MAKE\hub to one exact commit, and copies the Minecraft pictures the slides use
-# out of the game that is already installed in C:\MAKE. Run from Win+R:
+# Updates the hub pages in C:\MAKE\hub and the course tools in C:\MAKE\mod\tools to one exact commit, and copies the
+# Minecraft pictures the slides use out of the game that is already installed in C:\MAKE. Run from Win+R:
 #   powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='<commit>';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
-# Touches only C:\MAKE\hub. No Java, no reinstall. The pictures never leave this computer and are not in the repo.
+# Never touches the kid's own files (MyWorld/MyItems/MyEffects/MyMobs/MyRules.java, pictures, worlds). No reinstall.
+# The pictures never leave this computer and are not in the repo.
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 if (-not $s) { Write-Host 'No commit given.' -ForegroundColor Red; return }
@@ -15,13 +16,25 @@ $utf8 = New-Object System.Text.UTF8Encoding($false)
 $head = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + "`r`n"
 $web = New-Object System.Net.WebClient
 $files = @{}
-foreach ($n in 'content.js', 'slides.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all five, or nothing
+foreach ($n in 'content.js', 'slides.js', 'en.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all, or nothing
 [IO.File]::WriteAllText("$hub\content.js", $files['content.js'], $utf8)
 [IO.File]::WriteAllText("$hub\slides.js", $files['slides.js'], $utf8)
+[IO.File]::WriteAllText("$hub\en.js", $files['en.js'], $utf8)
 [IO.File]::WriteAllText("$hub\index.html", $head + $files['index.html'], $utf8)
 [IO.File]::WriteAllText("$hub\teacher.html", $head + $files['teacher.html'], $utf8)
 [IO.File]::WriteAllText("$hub\print.html", $files['print.html'], $utf8)
 Write-Host "Hub pages updated to $s." -ForegroundColor Green
+
+# ---------- 1b. the course tools (the hub's buttons, the code lock, the rules for Gemini) ----------
+$tools = Join-Path $makeRoot 'mod\tools'
+if (Test-Path $tools) {
+  $st = "https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/starter/mod"
+  $get = @{}
+  foreach ($n in 'common.ps1', 'server.ps1', 'shortcuts.ps1', 'prepare.ps1', 'play.ps1', 'paste.ps1', 'undo.ps1', 'rules.txt') { $get["tools\$n"] = $web.DownloadData("$st/tools/$n") }
+  $get['src\main\java\make\myworld\Kit.java'] = $web.DownloadData("$st/src/main/java/make/myworld/Kit.java")
+  foreach ($k in $get.Keys) { [IO.File]::WriteAllBytes((Join-Path (Join-Path $makeRoot 'mod') $k), $get[$k]) }
+  Write-Host "Course tools updated (the kid's own files are untouched)." -ForegroundColor Green
+}
 
 # ---------- 2. Minecraft pictures for the slides, from the installed game ----------
 # hub\mc_<name>.png  =  where it is inside the game (first one that exists wins).

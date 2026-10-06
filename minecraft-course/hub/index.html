@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap">
 <div id="app" dir="rtl" lang="he"></div>
 <script src="content.js"></script>
+<script src="en.js"></script>
 <script>
 (function(){
 "use strict";
@@ -11,6 +12,12 @@ const H = window.HUB, LS = H.LS, esc = H.esc;
 H.injectStyle(document);
 const app = document.getElementById("app");
 if (LS.get("big", false)) app.classList.add("big");
+/* Language: Hebrew, or English for kids who find Hebrew hard (en.js holds the English). */
+const EN = window.HUB_EN;
+const isEn = () => !!EN && LS.get("lang", "he") === "en";
+function applyLang(){ app.dir = isEn() ? "ltr" : "rtl"; app.lang = isEn() ? "en" : "he"; document.documentElement.lang = app.lang; if (isEn()) EN.translate(app); }
+const langBtn = () => EN ? `<button class="btn ghost" id="lang">${isEn() ? "עברית" : "English"}</button>` : "";
+function bindLang(){ const b = app.querySelector("#lang"); if (b) b.addEventListener("click", () => { LS.set("lang", isEn() ? "he" : "en"); DOCK.key = ""; route(); }); }
 
 /* ===== HOME ===== */
 function renderHome(){
@@ -23,7 +30,7 @@ function renderHome(){
       <div class="tools">
         <label class="seat" for="seat">מחשב מספר
           <select id="seat"><option value="">?</option>${[1,2,3,4,5,6,7,8].map(n=>`<option ${String(n)===String(seat)?"selected":""}>${n}</option>`).join("")}</select></label>
-        <button class="btn ghost" id="bigtxt" aria-pressed="${app.classList.contains("big")}">אותיות גדולות</button>
+        <button class="btn ghost" id="bigtxt" aria-pressed="${app.classList.contains("big")}">אותיות גדולות</button>${langBtn()}
       </div>
     </div>
     <div id="dock"></div>
@@ -43,6 +50,7 @@ function renderHome(){
   </div>`;
   app.querySelector("#seat").addEventListener("change", e => LS.set("seat", e.target.value));
   app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); renderHome(); });
+  bindLang(); applyLang();
   paintDock();
 }
 
@@ -52,14 +60,15 @@ function lessonFromHash(){ const m = location.hash.match(/^#lesson(\d+)$/); retu
 function renderPlayer(){
   const L = H.LESSONS[lessonN], N = L.steps.length;
   stepIx = Math.max(0, Math.min(N-1, stepIx));
-  const s = L.steps[stepIx];
+  const s = isEn() ? EN.step(lessonN, stepIx, L.steps[stepIx]) : L.steps[stepIx];
   const ch = LS.get("l" + lessonN + "chal", {});
+  const LT = (isEn() && EN.lesson(lessonN)) || L;
   app.innerHTML = `<div class="pl">
     <header class="pbar">
       <div id="dock"></div>
       <div class="r1">
-        <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><div class="t"><small>${L.unit}</small><b>${L.title}</b></div></div>
-        <div class="tools"><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button></div>
+        <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><div class="t"><small>${LT.unit}</small><b>${LT.title}</b></div></div>
+        <div class="tools"><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button>${langBtn()}</div>
       </div>
       <div class="hotbar" role="tablist" aria-label="שלבי השיעור">${L.steps.map((x,i)=>`<button class="slot ${i===stepIx?"cur":""} ${i<stepIx?"done":""}" data-go="${i}" role="tab" aria-selected="${i===stepIx}" title="${esc(x.title)}">${i+1}</button>`).join("")}</div>
     </header>
@@ -73,7 +82,7 @@ function renderPlayer(){
         ${s.note?`<div class="box note"><b>שימו לב</b>${s.note}</div>`:""}
         ${(s.hints||s.stuck)?`<div class="helprow">${s.hints?`<button class="btn ghost" id="hint">רמז</button>`:""}${s.stuck?`<button class="btn ghost" id="stuck">נתקעתי</button>`:""}</div><div class="reveal" id="reveal"></div>`:""}
         <div class="chal"><h3>אתגרי השיעור</h3><small>מסמנים מה שסיימתם. זה נשמר על המחשב הזה.</small>
-          ${L.challenges.map(c=>`<label for="ch-${c.id}"><input type="checkbox" id="ch-${c.id}" data-ch="${c.id}" ${ch[c.id]?"checked":""}><span><b>${c.t}</b> <small>(${c.lvl})</small><br>${c.d}</span></label>`).join("")}
+          ${(isEn() ? EN.challenges(lessonN, L.challenges) : L.challenges).map(c=>`<label for="ch-${c.id}"><input type="checkbox" id="ch-${c.id}" data-ch="${c.id}" ${ch[c.id]?"checked":""}><span><b>${c.t}</b> <small>(${c.lvl})</small><br>${c.d}</span></label>`).join("")}
         </div>
       </section>
       <section class="work">${s.visual()}</section>
@@ -98,6 +107,7 @@ function renderPlayer(){
   if (st) st.addEventListener("click", () => { if (si < s.stuck.length){ const [q,a] = s.stuck[si]; rv.insertAdjacentHTML("beforeend", `<div class="item"><b>${q}</b>${a}</div>`); si++; } if (si >= s.stuck.length) st.disabled = true; });
   app.querySelectorAll("[data-ch]").forEach(c => c.addEventListener("change", () => { const v = LS.get("l" + lessonN + "chal", {}); v[c.dataset.ch] = c.checked; LS.set("l" + lessonN + "chal", v); }));
   H.bindCopy(app); H.bindSil(app); H.bindWorldCard(app);
+  bindLang(); applyLang();
   if (s.mount) s.mount(app.querySelector(".work"), DOCK.on);
   paintDock();
 }
@@ -112,7 +122,8 @@ const ICON = {
   pics:  SVG('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-6-6-8 8"/>'),
   vers:  SVG('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
   code:  SVG('<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>'),
-  drive: SVG('<path d="M7 18a4 4 0 0 1-.6-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/><path d="M12 16v-5M9.5 13.5L12 11l2.5 2.5"/>')
+  drive: SVG('<path d="M7 18a4 4 0 0 1-.6-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/><path d="M12 16v-5M9.5 13.5L12 11l2.5 2.5"/>'),
+  lock:  SVG('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>')
 };
 function dockHTML(){
   if (!DOCK.on || !DOCK.s) return "";
@@ -127,6 +138,7 @@ function dockHTML(){
       <button class="dbtn" data-act="versions" aria-expanded="${DOCK.vopen}" ${s.phase==="off"?"disabled":""}>${ICON.vers}<span>גרסאות</span></button>
       <button class="dbtn" data-act="pictures" ${s.phase==="off"?"disabled":""}>${ICON.pics}<span>תמונות</span></button>
       <button class="dbtn" data-act="drive" aria-expanded="${DOCK.dopen}" ${s.phase==="off"?"disabled":""}>${ICON.drive}<span>דרייב</span></button>
+      <button class="dbtn" data-act="lock" ${s.phase==="off"?"disabled":""}>${ICON.lock}<span>נעילה</span></button>
     </div>
     ${DOCK.dopen ? `<div class="dock-vers">
       <div class="vhead"><b>העולם שלכם בדרייב</b></div>
@@ -155,13 +167,14 @@ function paintDock(){
   const d = document.getElementById("dock");
   if (!d) return;
   d.innerHTML = dockHTML();
+  if (isEn()) EN.translate(d);
   d.querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", () => act(b.dataset.act)));
   const f = d.querySelector("#bkfile");
   if (f) f.addEventListener("change", () => { if (f.files && f.files[0]) loadBackup(f.files[0]); });
   d.querySelectorAll("[data-restore]").forEach(b => b.addEventListener("click", () => act("restore?id=" + encodeURIComponent(b.dataset.restore))));
 }
 async function loadVersions(){
-  try { DOCK.versions = await (await fetch("/api/versions", { cache:"no-store" })).json(); } catch(e){ DOCK.versions = []; }
+  try { DOCK.versions = await (await api("/api/versions")).json(); } catch(e){ DOCK.versions = []; }
   paintDock();
 }
 function setDock(s){
@@ -170,9 +183,13 @@ function setDock(s){
   DOCK.key = key; DOCK.s = s; paintDock();
 }
 async function poll(){
-  try { setDock(await (await fetch("/api/status", { cache:"no-store" })).json()); }
-  catch(e){ setDock({ phase:"off", message:"הכפתורים לא עובדים כרגע. לוחצים פעמיים על הסמל Minecraft בשולחן העבודה.", error:"" }); }
+  if (LOCK.shown) return;
+  try { const r = await api("/api/status"); if (r.status === 401) return showLock(); setDock(await r.json()); }
+  catch(e){ setDock({ phase:"off", message:"הכפתורים לא עובדים כרגע. לוחצים על Minecraft בתפריט Start.", error:"" }); }
 }
+/* Every call to the local server carries the token from the code lock. A 401 means the hub is locked. */
+const HDR = () => ({ "X-Make":"1", "X-Token": H.token || "" });
+function api(path, opts){ const o = Object.assign({ cache:"no-store" }, opts || {}); o.headers = Object.assign(HDR(), o.headers || {}); return fetch(path, o); }
 /* Backup file for the kid's Drive: code, pictures, worlds, and this page's own notes (all "mkmod." keys but the seat). */
 function hubNotes(){
   const o = {};
@@ -184,7 +201,7 @@ function b64(text){ let bin = ""; new TextEncoder().encode(text).forEach(c => bi
 async function backup(){
   setDock(Object.assign({}, DOCK.s, { message:"המחשב מכין את קובץ הגיבוי..." }));
   try {
-    const r = await fetch("/api/backup", { method:"POST", headers:{ "X-Make":"1" }, body: b64(JSON.stringify(hubNotes())), cache:"no-store" });
+    const r = await api("/api/backup", { method:"POST", body: b64(JSON.stringify(hubNotes())) });
     if (!r.ok) throw new Error(r.status);
     const blob = await r.blob(), d = new Date(), two = n => String(n).padStart(2, "0");
     const a = document.createElement("a");
@@ -200,7 +217,7 @@ function loadBackup(file){
   fr.onload = async () => {
     setDock(Object.assign({}, DOCK.s, { message:"המחשב מחזיר את העולם שלכם..." }));
     try {
-      const r = await fetch("/api/load-backup", { method:"POST", headers:{ "X-Make":"1" }, body: String(fr.result).split(",")[1] || "", cache:"no-store" });
+      const r = await api("/api/load-backup", { method:"POST", body: String(fr.result).split(",")[1] || "" });
       const j = await r.json();
       if (j.ok && j.hub){
         try {
@@ -221,26 +238,89 @@ async function act(name){
   if (name === "drive"){ DOCK.dopen = !DOCK.dopen; DOCK.vopen = false; paintDock(); return; }
   if (name === "backup"){ backup(); return; }
   if (name === "load-backup"){ const f = document.getElementById("bkfile"); if (f) f.click(); return; }
+  if (name === "lock"){ try { await api("/api/lock-now", { method:"POST" }); } catch(e){} H.token = ""; try { sessionStorage.removeItem("mkmod.tok"); } catch(e){} showLock(); return; }
   try {
-    const r = await fetch("/api/" + name, { method:"POST", headers:{ "X-Make":"1" }, cache:"no-store" });
+    const r = await api("/api/" + name, { method:"POST" });
+    if (r.status === 401) return showLock();
     const j = await r.json();
     setDock({ phase:j.phase, message: (j.ok && (name === "paste" || name === "play")) ? j.message : j.result, error:j.error });
     if (DOCK.vopen) loadVersions();
   } catch(e){ poll(); }
 }
+/* "Without Gemini": the item card becomes an item in MyItems.java on the computer itself. */
+H.addItem = async card => {
+  try {
+    const r = await api("/api/add-item", { method:"POST", body: b64(JSON.stringify({ id: card.code || "", name: card.name || "", lore: card.line || "", stack: card.stack || "" })) });
+    if (r.status === 401) return showLock();
+    const j = await r.json();
+    setDock({ phase:j.phase, message: j.ok ? j.message : j.result, error:j.error }); window.scrollTo(0, 0);
+  } catch(e){ poll(); }
+};
+
+/* ===== CODE LOCK: each kid's hub opens only with their own 4 digits (or the teacher's code) ===== */
+const LOCK = { shown: false, mode: "unlock", first: "", typed: "", msg: "" };
+try { H.token = sessionStorage.getItem("mkmod.tok") || ""; } catch(e){ H.token = ""; }
+async function showLock(){
+  LOCK.shown = true; LOCK.typed = ""; LOCK.first = ""; LOCK.msg = "";
+  try { const j = await (await fetch("/api/lock", { cache:"no-store" })).json(); LOCK.mode = j.set ? "unlock" : "new"; LOCK.teacher = j.teacher; } catch(e){ LOCK.mode = "unlock"; }
+  paintLock();
+}
+function lockText(){
+  return { new:["קוד לעולם שלכם","בוחרים 4 ספרות שרק אתם יודעים. בכל פעם שפותחים את הדף, מקלידים אותן."],
+    again:["שוב, לבדיקה","מקלידים את אותן 4 ספרות עוד פעם."],
+    unlock:["העולם שלכם נעול","מקלידים את הקוד שלכם."],
+    teacher:["קוד המורה","המורה מקליד את הקוד שלו, ואז בוחרים קוד חדש."] }[LOCK.mode];
+}
+function paintLock(){
+  const [h, p] = lockText();
+  app.dir = isEn() ? "ltr" : "rtl";
+  app.innerHTML = `<div class="lockv"><div class="lockbox">
+    <div class="lk-ico">${ICON.lock}</div><h1>${h}</h1><p>${p}</p>
+    <div class="lk-dots">${[0,1,2,3].map(i => `<i class="${i < LOCK.typed.length ? "on" : ""}"></i>`).join("")}</div>
+    <div class="lk-msg" role="status">${LOCK.msg}</div>
+    <div class="lk-pad" dir="ltr">${[1,2,3,4,5,6,7,8,9].map(n => `<button data-k="${n}">${n}</button>`).join("")}<button data-k="back" aria-label="מחיקה">⌫</button><button data-k="0">0</button><span></span></div>
+    <div class="lk-low">${LOCK.mode === "unlock" && LOCK.teacher ? `<button class="btn ghost" id="lk-forgot">שכחתי את הקוד</button>` : ""}${LOCK.mode === "teacher" ? `<button class="btn ghost" id="lk-cancel">ביטול</button>` : ""}${langBtn()}</div>
+  </div></div>`;
+  if (isEn()) EN.translate(app);
+  app.querySelectorAll("[data-k]").forEach(b => b.addEventListener("click", () => key(b.dataset.k)));
+  const f = app.querySelector("#lk-forgot"); if (f) f.addEventListener("click", () => { LOCK.mode = "teacher"; LOCK.typed = ""; LOCK.msg = ""; paintLock(); });
+  const c = app.querySelector("#lk-cancel"); if (c) c.addEventListener("click", () => { LOCK.mode = "unlock"; LOCK.typed = ""; LOCK.msg = ""; paintLock(); });
+  const l = app.querySelector("#lang"); if (l) l.addEventListener("click", () => { LS.set("lang", isEn() ? "he" : "en"); paintLock(); });
+}
+async function key(k){
+  if (k === "back"){ LOCK.typed = LOCK.typed.slice(0, -1); return paintLock(); }
+  if (LOCK.typed.length >= 4) return;
+  LOCK.typed += k; LOCK.msg = ""; paintLock();
+  if (LOCK.typed.length < 4) return;
+  const code = LOCK.typed;
+  if (LOCK.mode === "new"){ LOCK.first = code; LOCK.mode = "again"; LOCK.typed = ""; return setTimeout(paintLock, 200); }
+  if (LOCK.mode === "again" && code !== LOCK.first){ LOCK.mode = "new"; LOCK.typed = ""; LOCK.msg = "הקודים לא זהים. מתחילים מחדש."; return setTimeout(paintLock, 200); }
+  const path = { again:"/api/pin-new", unlock:"/api/unlock", teacher:"/api/pin-reset" }[LOCK.mode];
+  let j = {};
+  try { j = await (await fetch(path, { method:"POST", headers:{ "X-Make":"1", "Content-Type":"application/json" }, body: JSON.stringify({ code }), cache:"no-store" })).json(); } catch(e){}
+  LOCK.typed = "";
+  if (j.wait){ LOCK.msg = `יותר מדי ניסיונות. מחכים ${j.wait} שניות.`; return paintLock(); }
+  if (!j.ok){ LOCK.msg = LOCK.mode === "teacher" ? "זה לא קוד המורה." : "הקוד לא נכון. נסו שוב."; return setTimeout(paintLock, 150); }
+  if (LOCK.mode === "teacher"){ LOCK.mode = "new"; LOCK.msg = ""; return paintLock(); }
+  H.token = j.token; try { sessionStorage.setItem("mkmod.tok", j.token); } catch(e){}
+  LOCK.shown = false; DOCK.key = ""; route(); poll();
+}
+document.addEventListener("keydown", e => { if (!LOCK.shown) return; if (/^[0-9]$/.test(e.key)) key(e.key); else if (e.key === "Backspace") key("back"); });
+
 if (DOCK.on){ poll(); setInterval(poll, 1500); }
 
 /* ===== router ===== */
 function route(){
+  if (LOCK.shown) return paintLock();
   const n = lessonFromHash();
   if (n){ lessonN = n; stepIx = LS.get("l" + n + "step", 0); renderPlayer(); } else renderHome();
 }
 window.addEventListener("hashchange", route);
 document.addEventListener("keydown", e => {
-  if (e.target.matches("input,textarea,select") || !lessonFromHash()) return;
+  if (LOCK.shown || e.target.matches("input,textarea,select") || !lessonFromHash()) return;
   if (e.key === "ArrowLeft" && stepIx < H.LESSONS[lessonN].steps.length-1){ stepIx++; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
   if (e.key === "ArrowRight" && stepIx > 0){ stepIx--; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
 });
-route();
+if (DOCK.on && !H.token) showLock(); else route();
 })();
 </script>

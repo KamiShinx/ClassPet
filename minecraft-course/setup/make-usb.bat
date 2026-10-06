@@ -22,7 +22,7 @@ call gradlew.bat --stop >nul 2>nul
 cd /d "%~dp0"
 
 echo  Copying. This takes a while on a slow stick ...
-robocopy "%SRC%" "%DST%" /MIR /MT:16 /R:1 /W:1 /NFL /NDL /NP /XD "%SRC%\mod\run" "%SRC%\gradle-home\daemon" /XF teacher.html
+robocopy "%SRC%" "%DST%" /MIR /MT:16 /R:1 /W:1 /NFL /NDL /NP /XD "%SRC%\mod\run" "%SRC%\gradle-home\daemon" "%SRC%\saves" /XF teacher.html pin.txt
 if %ERRORLEVEL% GEQ 8 (echo  ERROR: the copy failed. Is the stick full, or formatted FAT32? Use exFAT or NTFS. & goto :fail)
 
 for /f %%S in ('powershell -NoProfile -Command "[math]::Round((Get-ChildItem -LiteralPath '%DST%' -Recurse -File | Measure-Object Length -Sum).Sum/1GB,1)"') do set "SIZEGB=%%S"

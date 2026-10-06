@@ -149,4 +149,7 @@ three minutes?" slide with the four questions. After the four Minecraft ideas co
 world tells its own story (signs, not text; Ruined Portal), every cool idea has a consequence, leave one mystery
 (Ancient City's frame), small and full beats huge and empty. Deck = 27 slides. To make room, lesson 1's Gemini intro
 is "if there's time", otherwise the first minutes of lesson 2. Needs YouTube open on the school network.
+**Slide rule (Ben, 6 Oct): no overt instructions on the slides** ("we are humans, we don't need these"), e.g. "while
+watching: what do you learn about this world?". A slide shows the thing (picture, statement, vote, clip). The questions
+Ben asks out loud live only in his notes. Removed five such lines from the two decks.
 

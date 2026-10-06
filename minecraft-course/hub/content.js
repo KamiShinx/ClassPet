@@ -1187,5 +1187,5 @@ const LESSONS = { 1: L1, 2: L2 };
 const DECKS = { 1: SLIDES, 2: SLIDES2 };
 window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
   gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK,
-  LESSONS, DECKS };
+  LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES };
 })();

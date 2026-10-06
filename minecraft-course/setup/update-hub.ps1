@@ -15,8 +15,9 @@ $utf8 = New-Object System.Text.UTF8Encoding($false)
 $head = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + "`r`n"
 $web = New-Object System.Net.WebClient
 $files = @{}
-foreach ($n in 'content.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all four, or nothing
+foreach ($n in 'content.js', 'slides.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all five, or nothing
 [IO.File]::WriteAllText("$hub\content.js", $files['content.js'], $utf8)
+[IO.File]::WriteAllText("$hub\slides.js", $files['slides.js'], $utf8)
 [IO.File]::WriteAllText("$hub\index.html", $head + $files['index.html'], $utf8)
 [IO.File]::WriteAllText("$hub\teacher.html", $head + $files['teacher.html'], $utf8)
 [IO.File]::WriteAllText("$hub\print.html", $files['print.html'], $utf8)
@@ -37,10 +38,22 @@ $want = [ordered]@{
   'block_oak_log' = 'block/oak_log'; 'block_oak_leaves' = 'block/oak_leaves'
   'entity_creeper_creeper' = 'entity/creeper/creeper'; 'entity_enderman_enderman' = 'entity/enderman/enderman'
   'entity_enderman_enderman_eyes' = 'entity/enderman/enderman_eyes'; 'entity_spider_spider' = 'entity/spider/spider'
-  'entity_ghast_ghast' = 'entity/ghast/ghast'; 'entity_pig_pig' = 'entity/pig/temperate_pig|entity/pig/pig'
+  'entity_ghast_ghast' = 'entity/ghast/ghast'; 'entity_pig_pig' = 'entity/pig/pig_temperate|entity/pig/temperate_pig|entity/pig/pig'
   'entity_zombie_zombie' = 'entity/zombie/zombie'; 'entity_skeleton_skeleton' = 'entity/skeleton/skeleton'
   'entity_blaze' = 'entity/blaze|entity/blaze/blaze'; 'entity_piglin_piglin' = 'entity/piglin/piglin'
   'entity_warden_warden' = 'entity/warden/warden'
+  # lesson 2 deck (slides.js): 3D blocks and mobs, day and night, the portal, the item slides
+  'block_grass_block_top' = 'block/grass_block_top'; 'block_stone' = 'block/stone'; 'block_cobblestone' = 'block/cobblestone'
+  'block_oak_log_top' = 'block/oak_log_top'; 'block_oak_planks' = 'block/oak_planks'; 'block_sand' = 'block/sand'
+  'block_diamond_ore' = 'block/diamond_ore'; 'block_tnt_side' = 'block/tnt_side'; 'block_tnt_top' = 'block/tnt_top'; 'block_tnt_bottom' = 'block/tnt_bottom'
+  'block_crafting_table_front' = 'block/crafting_table_front'; 'block_crafting_table_side' = 'block/crafting_table_side'; 'block_crafting_table_top' = 'block/crafting_table_top'
+  'block_mossy_cobblestone' = 'block/mossy_cobblestone'; 'block_stone_bricks' = 'block/stone_bricks'; 'block_cracked_stone_bricks' = 'block/cracked_stone_bricks'
+  'block_crying_obsidian' = 'block/crying_obsidian'; 'block_nether_portal' = 'block/nether_portal'; 'block_reinforced_deepslate_side' = 'block/reinforced_deepslate_side'
+  'entity_player_wide_steve' = 'entity/player/wide/steve|entity/steve'
+  'environment_celestial_sun' = 'environment/celestial/sun|environment/sun'; 'environment_celestial_moon_full_moon' = 'environment/celestial/moon/full_moon'
+  'item_bread' = 'item/bread'; 'item_compass_00' = 'item/compass_00'; 'item_cooked_beef' = 'item/cooked_beef'; 'item_diamond' = 'item/diamond'
+  'item_emerald' = 'item/emerald'; 'item_fishing_rod' = 'item/fishing_rod'; 'item_iron_sword' = 'item/iron_sword'; 'item_mace' = 'item/mace'
+  'item_netherite_sword' = 'item/netherite_sword'; 'item_trident' = 'item/trident'
 }
 try {
   Add-Type -AssemblyName System.IO.Compression.FileSystem

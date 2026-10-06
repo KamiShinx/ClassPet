@@ -139,6 +139,7 @@ curl -L --fail -s -o "%ROOT%\hub\teacher.src" "%RAW%/teacher.html"
 if errorlevel 1 goto :hub_skip
 :hub_wrap
 if exist "%HERE%..\hub\print.html" (copy /y "%HERE%..\hub\print.html" "%ROOT%\hub\print.html" >nul) else (curl -L --fail -s -o "%ROOT%\hub\print.html" "%RAW%/print.html")
+if exist "%HERE%..\hub\slides.js" (copy /y "%HERE%..\hub\slides.js" "%ROOT%\hub\slides.js" >nul) else (curl -L --fail -s -o "%ROOT%\hub\slides.js" "%RAW%/slides.js")
 > "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
 type "%ROOT%\hub\index.src" >> "%ROOT%\hub\index.html"
 > "%ROOT%\hub\teacher.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>

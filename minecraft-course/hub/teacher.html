@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap">
 <div id="app" dir="rtl" lang="he"></div>
 <script src="content.js"></script>
+<script src="slides.js"></script>
 <script>
 (function(){
 "use strict";
@@ -13,74 +14,93 @@ H.injectStyle(document);
 const app = document.getElementById("app");
 
 /* ===== TEACHER AREA ===== */
+// The next lesson to teach. Change NEXT when a lesson is done.
+const NEXT = 2;
+const PLAN = {
+  1: [["0–15","מתקינים מהדיסק",""],["15–20","מה נעשה בקורס",""],["20–32","Diagon Alley, ומה למדנו",""],["32–65","מה עולם צריך?",""],["65–80","דף 1",""],["80–90","מיינקראפט נפתח",""]],
+  2: [["0–5","מיינקראפט בתלת־ממד","קוביות שנשברות, יצורים, יום ולילה, השער"],["5–22","עולמות","בונים יחד את העולם של הכיתה"],["22–40","חפצים","Mojang, תפקיד, מחיר, נדירות, והחפץ של הכיתה"],
+      ["40–52","דף 2","כרטיס וציור 16 על 16, עם שעון"],["52–60","הדגמה","החפץ של הכיתה, מהדף למשחק"],["60–85","הם בונים","ג׳מיני, הדבקה, ובודקים במשחק"],["85–90","דרייב, ו״מה הוא עושה?״",""]]
+};
+const PART_COL = ["#3B8735","#2B6A99","#C98A0C","#8932B8","#B23A27","#169C9C","#56645A"];
+function deckPictures(n){ const set = new Set(); (H.DECKS[n] || []).forEach(s => (s.html.match(/mc_[a-z0-9_]+\.png/g) || []).forEach(x => set.add(x))); return [...set]; }
 function renderTeacher(){
-  const v = LS.get("tcheck", {});
-  app.innerHTML = `<div class="wrap">
-    <div class="top"><div class="brand"><h1>אזור מדריך</h1><p>מודים למיינקראפט · מה צריך להיות מוכן לפני שיעור 1</p></div>
-      <div class="tools"><a class="btn ghost" href="print.html" target="_blank">דפים להדפסה</a>${Object.keys(H.DECKS).map(n=>`<a class="btn go" href="#present${n}">הצגת שיעור ${n}</a>`).join("")}</div></div>
+  const L = H.LESSONS[NEXT], plan = PLAN[NEXT] || [];
+  const mins = r => { const m = r[0].split("–").map(Number); return m[1] - m[0]; };
+  app.innerHTML = `<div class="wrap tch">
+    <div class="top"><div class="brand"><h1>אזור מדריך</h1><p>מודים למיינקראפט</p></div>
+      <div class="tools"><a class="btn ghost" href="print.html" target="_blank">דפים להדפסה</a></div></div>
 
-    <section class="tsec"><h2>איך מציגים עם שני מסכים</h2>
-      <ol>
-        <li>מחברים את המקרן ולוחצים <kbd>Win</kbd> + <kbd>P</kbd> ← <b>Extend</b> (הרחבה).</li>
-        <li>לוחצים ״הצגת שיעור 1״ ואז ״פתיחת חלון למקרן״.</li>
-        <li>גוררים את החלון החדש למסך של המקרן, ולוחצים עליו פעמיים: מסך מלא.</li>
-        <li>על המחשב שלך נשארים ההערות, השקופית הבאה והשעון. מעבירים שקופיות מהמחשב שלך, עם החצים.</li>
-      </ol>
-      <p><b>אם כרגע המקרן מראה בדיוק את המסך שלך:</b> זה מצב Duplicate (שכפול). <kbd>Win</kbd> + <kbd>P</kbd> ← <b>Extend</b> הופך את המקרן למסך שני. כמעט כל מקרן עם HDMI תומך בזה. לבדוק פעם אחת בכיתה לפני השיעור.</p>
-      <p><b>אם Extend לא עובד שם:</b> על המחשב פותחים רק את חלון המקרן במסך מלא, ואת הדף הזה פותחים בטלפון (הקישור ש־Claude שלח). בטלפון רואים את ההערות ואת השקופית הבאה, ומעבירים בשני המקומות.</p>
+    <section class="next">
+      <div class="nh"><div><small>השיעור הבא</small><h2>${esc(L.title)}</h2></div><a class="btn go big" href="#present${NEXT}">להתחיל להציג ←</a></div>
+      <div class="tl">${plan.map((r, i) => `<div style="flex:${mins(r)};--c:${PART_COL[i % PART_COL.length]}"><b>${r[1]}</b><small>${r[0]} דק׳</small>${r[2] ? `<span>${r[2]}</span>` : ""}</div>`).join("")}</div>
     </section>
 
-    <section class="tsec"><h2>לפני שיעור 1</h2><div class="tlist">
-      ${H.TEACHER_CHECK.map(([id,t,s])=>`<label for="tc-${id}"><input type="checkbox" id="tc-${id}" data-tc="${id}" ${v[id]?"checked":""}><span><b>${t}</b>${s?`<small>${s}</small>`:""}</span></label>`).join("")}
+    <section class="tsec"><h2>לפני השיעור: דקה אחת</h2><div class="chk">
+      <div class="ck" id="ck-hub"><i></i><div><b>הדף פתוח מהסמל Minecraft</b><small>בלי זה הסרטונים לא מתנגנים בתוך השקופית.</small></div></div>
+      <div class="ck" id="ck-pics"><i></i><div><b>התמונות של מיינקראפט</b><small>בודק…</small></div></div>
+      <div class="ck" id="ck-yt"><i></i><div><b>יוטיוב פתוח ברשת של בית הספר</b><small>בודק…</small></div></div>
+      <div class="ck man"><i></i><div><b>המקרן</b><small><kbd>Win</kbd> + <kbd>P</kbd> ← <b>Extend</b>: ההערות אצלך, השקופית על המקרן (״פתיחת חלון למקרן״). אם המקרן רק משכפל את המסך: ״מסך מלא כאן״ (או <kbd>F</kbd>), ואז הכיתה רואה רק את השקופית, ואת ההערות לא.</small></div></div>
+      <div class="ck man"><i></i><div><b>דף 2 מודפס, אחד לכל ילד, וטושים</b><small><a href="print.html" target="_blank">דפים להדפסה</a></small></div></div>
+      <div class="ck man"><i></i><div><b>ג׳מיני פתוח אצלך, עם חשבון שעובד</b><small>להדגמה בדקה 52.</small></div></div>
     </div></section>
 
-    <section class="tsec"><h2>שיעור 1, דקה אחרי דקה</h2><div class="ttable"><table>
-      <thead><tr><th>דקות</th><th>מה קורה</th><th>שקופיות</th></tr></thead><tbody>
-      <tr><td>0–15</td><td>מתקינים מהדיסק, סבב אחרי סבב. מתחילים לדבר כשהסבב הראשון רץ</td><td>1–2</td></tr>
-      <tr><td>15–20</td><td>מה זה מוד, ומה נעשה בקורס</td><td>3–4</td></tr>
-      <tr><td>20–32</td><td><b>סרטון:</b> Harry Potter, Diagon Alley (3:43), ואז ״מה למדנו בשלוש דקות?״</td><td>5–6</td></tr>
-      <tr><td>32–65</td><td><b>שיחה: מה עולם צריך?</b> רעיון חזק, מזהים בשנייה, משהו שונה, חוקים משלו. ועוד ארבעה: העולם מספר לבד, לכל רעיון יש תוצאה, תעלומה אחת, קטן ומלא</td><td>7–20</td></tr>
-      <tr><td>65–80</td><td>כרטיס העולם, על הדף, עם טושים. ההתקנות עוד רצות? המשחק ״מי זה?״</td><td>21–23</td></tr>
-      <tr><td>80–88</td><td>מיינקראפט נפתח: עולם במצב יצירה</td><td>24</td></tr>
-      <tr><td>88–90</td><td>דרייב. לרשום איזה מחשב לא סיים להתקין, ולבדוק אותו לפני שיעור 2</td><td>27</td></tr>
-      </tbody></table></div>
-      <p><b>ג׳מיני (שקופיות 25–26):</b> רק אם נשאר זמן. אחרת בתחילת שיעור 2, לפני ההדגמה. <b>הסרטון (שקופית 5):</b> משובץ בשקופית, בתנאי שקודם לוחצים פעמיים על הסמל Minecraft ורק אחר כך פותחים את הדף הזה. אחרת הוא נפתח בחלון נפרד. צריך אינטרנט ויוטיוב פתוח: לבדוק בכיתה לפני השיעור. <b>אם מחשב אחד נכשל:</b> הילד עובד עם שותף, ומתקנים בהפסקה.</p>
+    <section class="tsec"><h2>כל השיעורים</h2><div class="lessons">
+      ${Object.keys(H.DECKS).map(n => `<div class="ls ${+n === NEXT ? "cur" : ""}"><small>שיעור ${n}</small><b>${esc(H.LESSONS[n] ? H.LESSONS[n].title.replace(/^שיעור \d+: /, "") : "")}</b><span>${H.DECKS[n].length} שקופיות${+n < NEXT ? " · הסתיים" : ""}</span><a class="btn ${+n === NEXT ? "go" : "ghost"}" href="#present${n}">הצגה</a></div>`).join("")}
+    </div></section>
+
+    <section class="tsec"><h2>לוח הכיתה</h2>
+      <p>מה שהכיתה כתבה בשקופיות: העולם של הכיתה והחפץ של הכיתה. נשמר במחשב הזה, ומופיע בכל שקופית שמשתמשת בו.</p>
+      <div class="bview">${[["idea","העולם"],["like","כמו"],["except","חוץ מזה ש"],["rule","החוק"],["conseq","ולכן"],["mystery","התעלומה"],["iname","החפץ"],["ilore","המשפט"],["iprice","המחיר"]].map(([k, t]) => `<div><small>${t}</small><span>${esc(board[k] || "—")}</span></div>`).join("")}</div>
+      <div><button class="btn ghost" id="bclear">לנקות את הלוח (לכיתה חדשה)</button></div>
     </section>
 
-    <section class="tsec"><h2>שיעור 2, דקה אחרי דקה</h2><div class="ttable"><table>
-      <thead><tr><th>דקות</th><th>מה קורה</th><th>שקופיות</th></tr></thead><tbody>
-      <tr><td>0–5</td><td>פותחים את הדף מהסמל Minecraft</td><td>1</td></tr>
-      <tr><td>5–35</td><td><b>שיחה: מה הופך חפץ למעולה?</b> בשביל מה, המחיר, נדירות, שם וצורה</td><td>2–12</td></tr>
-      <tr><td>35–50</td><td>כרטיס החפץ וציור של 16 על 16, על הדף, עם טושים</td><td>13–14</td></tr>
-      <tr><td>50–57</td><td>הדגמה על המקרן: מהכרטיס ועד המשחק</td><td>15–16</td></tr>
-      <tr><td>57–85</td><td>בונים: מעתיקים את הכרטיס למחשב, מציירים בעורך, ג׳מיני, בודקים במשחק</td><td>17–18</td></tr>
-      <tr><td>85–90</td><td>מראים למי שיושב ליד, סוגרים את מיינקראפט, דרייב</td><td>19</td></tr>
-      </tbody></table></div>
-      <p><b>היום נכנסים למשחק:</b> השם, המשפט, הציור, וכמה נכנסים בערימה. הכוח והמחיר נשארים בכרטיס עד שיעור 4. <b>מי שלא הספיק:</b> ממשיך בתחילת שיעור 3.</p>
-    </section>
+    <details class="tsec"><summary><h2>מקשים בהצגה</h2></summary>
+      <ul><li>חצים או רווח: שקופית הבאה או הקודמת.</li><li><kbd>F</kbd>: מסך מלא על המחשב שלך. <kbd>Esc</kbd>: חזרה להערות.</li>
+      <li>קוביות ויצורים: גוררים כדי לסובב. לחיצה על קובייה שוברת אותה.</li><li>כרטיסים: לחיצה הופכת. הצבעה: לחיצה לכל יד, לחיצה ימנית מורידה.</li>
+      <li>שורה ירוקה: לוחצים ומקלידים. <kbd>Enter</kbd> מסיים.</li><li>שעון: לחיצה מפעילה ועוצרת. ״איפוס שקופית״ מחזיר הכול בשקופית להתחלה.</li></ul></details>
 
-    <section class="tsec"><h2>החוקים לג׳מיני</h2>
+    <details class="tsec"><summary><h2>החוקים לג׳מיני</h2></summary>
       <p>הכפתור <b>להעתיק לג׳מיני</b> בדף של הילדים מעתיק את החוקים האלה ואת הקוד של הילד, והילד מדביק בצ׳אט רגיל של ג׳מיני. ככה כל הודעה מגיעה עם החוקים, בכל חשבון ועם כל גרסה של ג׳מיני.</p>
       <p>למה לא Gem: גוגל מחליפה את ה־Gems ב־Skills ב־17 בנובמבר 2026, ו־Skills מיועדים רק לבני 18 ומעלה.</p>
       <div><button class="btn go" data-copy="${esc(H.GEM_TEXT)}">העתקת החוקים</button></div>
-      <div class="gem">${esc(H.GEM_TEXT)}</div>
-    </section>
+      <div class="gem">${esc(H.GEM_TEXT)}</div></details>
 
-    <section class="tsec"><h2>קבצים</h2>
+    <details class="tsec"><summary><h2>קבצים</h2></summary>
       <ul>
         <li><code>minecraft-course/setup/install.bat</code>: התקנה מהאינטרנט, על המחשב שלך</li>
         <li><code>make-usb.bat</code>: מעתיק את <code>C:\\MAKE</code> לדיסק (בלי הדף הזה)</li>
         <li><code>install-from-usb.bat</code>: הילדים מתקינים מהדיסק</li>
-        <li><code>school-check.bat</code>: בודק אם מחשב של בית הספר מסוגל</li>
-      </ul>
-    </section>
+        <li><code>update-hub.ps1</code>: מעדכן את הדפים ואת התמונות במחשב שלך</li>
+      </ul></details>
   </div>`;
-  app.querySelectorAll("[data-tc]").forEach(c => c.addEventListener("change", () => { const x = LS.get("tcheck", {}); x[c.dataset.tc] = c.checked; LS.set("tcheck", x); }));
   H.bindCopy(app);
+  app.querySelector("#bclear").addEventListener("click", () => { if (!confirm("לנקות את כל מה שהכיתה כתבה?")) return; Object.keys(board).forEach(k => delete board[k]); LS.set("board", board); renderTeacher(); });
+  runChecks();
+}
+function mark(id, ok, text){ const el = document.getElementById(id); if (!el) return; el.classList.toggle("ok", ok === true); el.classList.toggle("bad", ok === false); if (text) el.querySelector("small").innerHTML = text; }
+function runChecks(){
+  fetch("/api/status", { cache:"no-store" }).then(r => r.json()).then(() => mark("ck-hub", true, "הכול טוב.")).catch(() => mark("ck-hub", false, "לוחצים פעמיים על הסמל Minecraft (בתפריט Start), ואז פותחים שוב את הדף הזה."));
+  const pics = deckPictures(NEXT); let ok = 0, done = 0, miss = [];
+  pics.forEach(f => { const im = new Image(); im.onload = () => { ok++; fin(); }; im.onerror = () => { miss.push(f.replace(/^mc_|\.png$/g, "")); fin(); }; im.src = f; });
+  function fin(){ if (++done < pics.length) return; mark("ck-pics", ok === pics.length, ok === pics.length ? `${ok} מתוך ${pics.length}.` : `${ok} מתוך ${pics.length}. חסרות: ${miss.slice(0, 6).join(", ")}${miss.length > 6 ? "…" : ""}. מריצים את שורת העדכון שוב, ואם עדיין חסר, שולחים ל־Claude את השמות.`); }
+  if (!pics.length) mark("ck-pics", true, "אין תמונות בשיעור הזה.");
+  const yt = new Image(); const t = setTimeout(() => mark("ck-yt", false, "לא נטען. אם יוטיוב חסום, מדלגים על הסרטון: השקופית שאחריו אומרת את אותו דבר."), 6000);
+  yt.onload = () => { clearTimeout(t); mark("ck-yt", true, "נטען."); }; yt.onerror = () => { clearTimeout(t); mark("ck-yt", false, "לא נטען. אם יוטיוב חסום, מדלגים על הסרטון: השקופית שאחריו אומרת את אותו דבר."); };
+  yt.src = "https://i.ytimg.com/vi/UlVZgIdoR_A/default.jpg?" + Date.now();
 }
 
 /* ===== PRESENTER CONSOLE ===== */
-let sIx = LS.get("slide1", 0), aud = null, blocked = false, t0 = Date.now(), tick = null, playing = false;
+let sIx = LS.get("slide1", 0), aud = null, blocked = false, t0 = Date.now(), tick = null, playing = false, fs = null;
+// Interactive slides (slides.js): the state of each deck, and the class board shared by all decks.
+const ST = window.STAGE;
+let ctx = LS.get("stage1", {});
+const board = LS.get("board", {});
+function roots(){ return [document.getElementById("cur"), audOpen() ? aud.document.getElementById("s") : null, fs ? fs.querySelector(".slide") : null].filter(Boolean); }
+function changed(kind){
+  LS.set("stage" + deckN, ctx); if (kind === "board") LS.set("board", board);
+  if (ST) roots().forEach(r => ST.apply(r, ctx, board));
+}
+function stage(root, interactive){ if (!ST || !root) return; ST.apply(root, ctx, board); if (interactive) ST.bind(root, ctx, board, changed); }
 const SERVED = location.protocol !== "file:";   // YouTube will not play embedded in a file:// page
 // Opened from the desktop icon (a file)? If the hub's local server is running, continue there, so the video can be embedded.
 if (!SERVED) fetch("http://localhost:47811/teacher.html", { mode:"no-cors" }).then(() => location.replace("http://localhost:47811/teacher.html" + location.hash)).catch(() => {});
@@ -93,7 +113,7 @@ function openAudience(){
   blocked = false; aud = w;
   const d = w.document;
   d.open();
-  d.write('<!doctype html><html lang="he" dir="rtl" data-theme="light"><head><meta charset="utf-8"><title>מודים למיינקראפט</title></head><body class="aud"><div class="stage"><div class="slide" id="s"></div></div><p class="aud-hint">לחיצה כפולה: מסך מלא</p></body></html>');
+  d.write('<!doctype html><html lang="he" dir="rtl" data-theme="light"><head><meta charset="utf-8"><base href="' + location.href.replace(/[#?].*$/, "") + '"><title>מודים למיינקראפט</title></head><body class="aud"><div class="stage"><div class="slide" id="s"></div></div><p class="aud-hint">לחיצה כפולה: מסך מלא</p></body></html>');
   d.close();
   const l = d.createElement("link"); l.rel = "stylesheet"; l.href = H.FONT_HREF; d.head.appendChild(l);
   H.injectStyle(d);
@@ -107,11 +127,11 @@ function syncAudience(){
   s.innerHTML = SLIDES[sIx].html;
   H.applyReveal(s, revealed);
   s.querySelectorAll("[data-yt]").forEach(v => {
-    v.innerHTML = SERVED
-      ? `<iframe src="https://www.youtube.com/embed/${v.dataset.yt}?rel=0&autoplay=${playing ? 1 : 0}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`
-      : `<span class="play">▶</span>`;
+    v.innerHTML = SERVED ? ytFrame(v) : `<span class="play">▶</span>`;
   });
+  stage(s, false);
 }
+const ytFrame = v => `<iframe src="https://www.youtube.com/embed/${v.dataset.yt}?rel=0&autoplay=${playing ? 1 : 0}${v.dataset.start ? "&start=" + v.dataset.start : ""}${v.dataset.end ? "&end=" + v.dataset.end : ""}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
 const fmt = ms => { const t = Math.floor(ms/1000); return String(Math.floor(t/60)).padStart(2,"0") + ":" + String(t%60).padStart(2,"0"); };
 
 function renderConsole(){
@@ -123,6 +143,8 @@ function renderConsole(){
         ${audOpen() ? `<span class="aud-on">המקרן מחובר</span>` : `<button class="btn go" id="openaud">פתיחת חלון למקרן</button>`}
         <span class="timer" id="timer" title="זמן מתחילת השיעור">${fmt(Date.now()-t0)}</span>
         <button class="btn ghost" id="treset">איפוס שעון</button>
+        <button class="btn ghost" id="sreset" title="מחזיר את השקופית הזאת להתחלה: הצבעות, כרטיסים הפוכים, סיבובים">איפוס שקופית</button>
+        <button class="btn go" id="fson" title="השקופית על כל המסך של המחשב שלך. Esc חוזר">מסך מלא כאן</button>
         <span class="chip gold">${sIx+1} / ${N}</span>
       </div></div>
     ${blocked ? `<div style="padding:16px 16px 0"><div class="con-warn">הדפדפן חסם את החלון. מאשרים חלונות קופצים לדף הזה (סמל בשורת הכתובת) ולוחצים שוב.</div></div>` : ""}
@@ -143,7 +165,7 @@ function renderConsole(){
   H.applyReveal(cur, revealed);
   cur.querySelectorAll("[data-sil]").forEach(b => b.addEventListener("click", () => { revealed.add(+b.dataset.sil); H.applyReveal(cur, revealed); syncAudience(); }));
   cur.querySelectorAll("[data-yt]").forEach(v => {
-    const url = "https://www.youtube.com/watch?v=" + v.dataset.yt;
+    const url = "https://www.youtube.com/watch?v=" + v.dataset.yt + (v.dataset.start ? "&t=" + v.dataset.start : "");
     v.innerHTML = SERVED
       ? `<button class="btn go" id="vplay">${playing ? "■ לעצור" : "▶ לנגן במקרן"}</button><small>הסרטון מתנגן בחלון של המקרן. אפשר גם ללחוץ עליו שם.</small>`
       : `<button class="btn go" id="vwin">▶ לפתוח את הסרטון בחלון</button><small>כדי שהסרטון יהיה בתוך השקופית: לוחצים פעמיים על הסמל Minecraft, ואז פותחים שוב את הדף הזה</small>`;
@@ -151,7 +173,10 @@ function renderConsole(){
     if (vp) vp.addEventListener("click", () => { playing = !playing; if (!audOpen()) openAudience(); else syncAudience(); renderConsole(); });
     if (vw) vw.addEventListener("click", () => window.open(url, "mkmod-video", "popup,width=1280,height=720"));
   });
+  stage(cur, true);
   const oa = app.querySelector("#openaud"); if (oa) oa.addEventListener("click", openAudience);
+  app.querySelector("#sreset").addEventListener("click", resetSlide);
+  app.querySelector("#fson").addEventListener("click", openFs);
   app.querySelector("#treset").addEventListener("click", () => { t0 = Date.now(); app.querySelector("#timer").textContent = "00:00"; });
   app.querySelector("#pp").addEventListener("click", () => goSlide(sIx-1));
   app.querySelector("#pn").addEventListener("click", () => goSlide(sIx+1));
@@ -159,11 +184,41 @@ function renderConsole(){
   clearInterval(tick);
   tick = setInterval(() => { const el = document.getElementById("timer"); if (el) el.textContent = fmt(Date.now()-t0); if (aud && aud.closed){ aud = null; renderConsole(); } }, 1000);
 }
-function goSlide(i){ playing = false; sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide" + deckN, sIx); renderConsole(); syncAudience(); }
+function goSlide(i){ playing = false; sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide" + deckN, sIx); renderConsole(); syncAudience(); if (fs) renderFs(); }
+// Clears what was clicked on this slide (the class board stays).
+function resetSlide(){
+  const tmp = document.createElement("div"); tmp.innerHTML = SLIDES[sIx].html;
+  tmp.querySelectorAll("[data-id]").forEach(el => { const id = el.dataset.id; ["rot","rv","vt","tm","dn","pt","hb","so","zm"].forEach(k => { if (ctx[k]) delete ctx[k][id]; }); });
+  tmp.querySelectorAll("[data-mine]").forEach(el => { if (ctx.mine) delete ctx.mine[el.dataset.mine]; });
+  changed("reset"); renderConsole(); syncAudience(); if (fs) renderFs();
+}
+/* Full screen on the laptop itself: when the projector only mirrors the laptop's screen, this is what the class sees.
+   Everything on the slide is clickable here. Arrows change slides, Esc goes back to the notes. */
+function openFs(){
+  fs = document.createElement("div"); fs.className = "fsv";
+  document.body.appendChild(fs); renderFs();
+  try { fs.requestFullscreen().catch(() => {}); } catch(e){}
+}
+function renderFs(){
+  if (!fs) return;
+  fs.innerHTML = `<div class="stage"><div class="slide">${SLIDES[sIx].html}</div></div><div class="fsbar"><span>${sIx+1} / ${SLIDES.length} · ${esc(SLIDES[sIx].label)}</span><span>חצים: שקופית · Esc: חזרה להערות</span><button class="btn ghost" id="fsoff">יציאה</button></div>`;
+  const sl = fs.querySelector(".slide");
+  H.applyReveal(sl, revealed);
+  sl.querySelectorAll("[data-sil]").forEach(b => b.addEventListener("click", () => { revealed.add(+b.dataset.sil); H.applyReveal(sl, revealed); syncAudience(); }));
+  sl.querySelectorAll("[data-yt]").forEach(v => { v.innerHTML = SERVED ? ytFrame(v) : `<button class="btn go">▶ לפתוח את הסרטון בחלון</button>`;
+    const b = v.querySelector("button"); if (b) b.addEventListener("click", () => window.open("https://www.youtube.com/watch?v=" + v.dataset.yt + (v.dataset.start ? "&t=" + v.dataset.start : ""), "mkmod-video", "popup,width=1280,height=720")); });
+  stage(sl, true);
+  fs.querySelector("#fsoff").addEventListener("click", closeFs);
+}
+function closeFs(){ if (!fs) return; fs.remove(); fs = null; try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){} renderConsole(); }
+document.addEventListener("fullscreenchange", () => { if (fs && !document.fullscreenElement) closeFs(); });
+setInterval(() => { if (ST) roots().forEach(r => ST.tick(r, ctx)); }, 250);
 function deckFromHash(){ const m = location.hash.match(/^#present(\d+)$/); return m && H.DECKS[+m[1]] ? +m[1] : 0; }
 function onKey(e){
   if (!deckFromHash()) return;
-  if (e.target && e.target.matches && e.target.matches("input,textarea,select")) return;
+  if (e.target && ((e.target.matches && e.target.matches("input,textarea,select")) || e.target.isContentEditable)) return;
+  if (e.key === "Escape" && fs){ closeFs(); return; }
+  if ((e.key === "f" || e.key === "F") && !fs){ openFs(); return; }
   if (["ArrowLeft"," ","PageDown"].includes(e.key)){ e.preventDefault(); goSlide(sIx+1); }
   if (["ArrowRight","PageUp"].includes(e.key)){ e.preventDefault(); goSlide(sIx-1); }
 }
@@ -171,7 +226,7 @@ function onKey(e){
 /* ===== router ===== */
 function route(){
   const dn = deckFromHash();
-  if (dn) { if (dn !== deckN) { deckN = dn; SLIDES = H.DECKS[dn]; sIx = LS.get("slide" + dn, 0); revealed.clear(); } renderConsole(); syncAudience(); }
+  if (dn) { if (dn !== deckN) { deckN = dn; SLIDES = H.DECKS[dn]; sIx = LS.get("slide" + dn, 0); ctx = LS.get("stage" + dn, {}); revealed.clear(); } renderConsole(); syncAudience(); }
   else { clearInterval(tick); renderTeacher(); }
 }
 window.addEventListener("hashchange", route);

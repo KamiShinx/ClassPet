@@ -38,12 +38,13 @@ function renderTeacher(){
       <thead><tr><th>דקות</th><th>מה קורה</th><th>שקופיות</th></tr></thead><tbody>
       <tr><td>0–15</td><td>מתקינים מהדיסק, סבב אחרי סבב. מתחילים לדבר כשהסבב הראשון רץ</td><td>1–2</td></tr>
       <tr><td>15–20</td><td>מה זה מוד, ומה נעשה בקורס</td><td>3–4</td></tr>
-      <tr><td>20–55</td><td><b>שיחה: מה עולם צריך?</b> רעיון חזק, מזהים בשנייה, משהו שונה, חוקים משלו</td><td>5–14</td></tr>
-      <tr><td>55–70</td><td>כרטיס העולם, על הדף, עם טושים. ההתקנות עוד רצות? המשחק ״מי זה?״</td><td>15–17</td></tr>
-      <tr><td>70–85</td><td>מיינקראפט נפתח: עולם במצב יצירה. מה זה ג׳מיני. כל ילד מדביק בג׳מיני את החוקים ואת העולם שלו</td><td>18–20</td></tr>
-      <tr><td>85–90</td><td>דרייב. לרשום איזה מחשב לא סיים להתקין, ולבדוק אותו לפני שיעור 2</td><td>21</td></tr>
+      <tr><td>20–32</td><td><b>סרטון:</b> Harry Potter, Diagon Alley (3:43), ואז ״מה למדנו בשלוש דקות?״</td><td>5–6</td></tr>
+      <tr><td>32–65</td><td><b>שיחה: מה עולם צריך?</b> רעיון חזק, מזהים בשנייה, משהו שונה, חוקים משלו. ועוד ארבעה: העולם מספר לבד, לכל רעיון יש תוצאה, תעלומה אחת, קטן ומלא</td><td>7–20</td></tr>
+      <tr><td>65–80</td><td>כרטיס העולם, על הדף, עם טושים. ההתקנות עוד רצות? המשחק ״מי זה?״</td><td>21–23</td></tr>
+      <tr><td>80–88</td><td>מיינקראפט נפתח: עולם במצב יצירה</td><td>24</td></tr>
+      <tr><td>88–90</td><td>דרייב. לרשום איזה מחשב לא סיים להתקין, ולבדוק אותו לפני שיעור 2</td><td>27</td></tr>
       </tbody></table></div>
-      <p><b>אם מחשב אחד נכשל:</b> הילד עובד עם שותף, ומתקנים בהפסקה. <b>מי שלא הספיק לשלוח הודעה לג׳מיני:</b> עושה את זה בתחילת שיעור 2.</p>
+      <p><b>ג׳מיני (שקופיות 25–26):</b> רק אם נשאר זמן. אחרת בתחילת שיעור 2, לפני ההדגמה. <b>הסרטון:</b> צריך אינטרנט ויוטיוב פתוח. לבדוק בכיתה לפני השיעור. <b>אם מחשב אחד נכשל:</b> הילד עובד עם שותף, ומתקנים בהפסקה.</p>
     </section>
 
     <section class="tsec"><h2>שיעור 2, דקה אחרי דקה</h2><div class="ttable"><table>
@@ -133,6 +134,7 @@ function renderConsole(){
   const cur = app.querySelector("#cur");
   H.applyReveal(cur, revealed);
   cur.querySelectorAll("[data-sil]").forEach(b => b.addEventListener("click", () => { revealed.add(+b.dataset.sil); H.applyReveal(cur, revealed); syncAudience(); }));
+  cur.querySelectorAll("[data-video]").forEach(b => b.addEventListener("click", () => window.open(b.dataset.video, "mkmod-video", "popup,width=1280,height=720")));
   const oa = app.querySelector("#openaud"); if (oa) oa.addEventListener("click", openAudience);
   app.querySelector("#treset").addEventListener("click", () => { t0 = Date.now(); app.querySelector("#timer").textContent = "00:00"; });
   app.querySelector("#pp").addEventListener("click", () => goSlide(sIx-1));

@@ -141,4 +141,12 @@ gitignored and never committed. Items = item textures; places = grids of real bl
 the real face cut from the skin texture with CSS (`FACES`, `mobFace`); the "who is it?" filler game zooms in on a few
 pixels of a face and zooms out on click. The game files hold no full-body mob pictures or screenshots of places; the
 wiki blocks scripted downloads. Trap: a CSS class named `slot` collides with the hub's hotbar style; ours is `mslot`.
+**6 Oct (lesson day), Ben: add a LOTR or Harry Potter video as the worldbuilding intro, with time to watch and talk; "even
+though I gave you like 3000 videos of world building I don't feel it enough in my slide".** Lesson 1's teacher deck now
+opens the talk with the official "Harry Visits Diagon Alley | Full Scene" (youtube 5W-a0tl9Fu0, 3:43; a button in the
+presenter console opens it in its own window, since YouTube embeds fail from a file:// page) and a "what did we learn in
+three minutes?" slide with the four questions. After the four Minecraft ideas come four more from the research: the
+world tells its own story (signs, not text; Ruined Portal), every cool idea has a consequence, leave one mystery
+(Ancient City's frame), small and full beats huge and empty. Deck = 27 slides. To make room, lesson 1's Gemini intro
+is "if there's time", otherwise the first minutes of lesson 2. Needs YouTube open on the school network.
 

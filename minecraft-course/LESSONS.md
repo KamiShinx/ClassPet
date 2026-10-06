@@ -118,12 +118,15 @@ My estimate, unverified: the first start downloads about 1-1.5 GB per laptop and
 |---|---|
 | 0-15 | **Install from the sticks.** One stick installs one laptop at a time (about 5 minutes). Start talking once the first round is running |
 | 15-20 | What a mod is, what the course builds |
-| 20-55 | **Talk: "what does a world need?"** One strong idea (the Nether is "fire and lava"), you recognise it in a second (its colours, blocks, creatures), something different (no water in the Nether, beds explode), its own rules (don't look at an Enderman, don't make noise near the Warden). Questions and votes, not a lecture; the notes are on each slide |
-| 55-70 | **World card on paper, with markers** (`hub/print.html`, page 1): six words, three colours, one thing you only see there, "like ___ except ___", one rule |
-| 70-85 | Minecraft opened: Creative world. What Gemini is. Each kid pastes the rules and their world into Gemini |
-| 85-90 | Drive. Note which laptops didn't finish |
+| 20-32 | **A scene everyone knows:** Harry Potter arriving in Diagon Alley (official clip, 3:43, opens from the slide). Then four questions on the board: what's the idea of this world, how do you know you're there, what's different from ours, what rules does it have. Nobody explained it; the world told itself |
+| 32-65 | **Talk: "what does a world need?"** The same four, in Minecraft: one strong idea, you recognise it in a second, something different, its own rules. Then four more from the research: the world tells its own story (signs, not text), every cool idea has a consequence, leave one mystery, small and full beats huge and empty |
+| 65-80 | **World card on paper, with markers** (`hub/print.html`, page 1) |
+| 80-88 | Minecraft opened: Creative world |
+| 88-90 | Drive. Note which laptops didn't finish |
 
 **Cut to make room (5 Oct, told to Ben):** the live "תבנה לי חרב" vs card demo and the "who writes the code" slide.
+**Moved to make room for the video (6 Oct, told to Ben):** the Gemini intro and "send your world to Gemini" are now
+"if there's time", otherwise the first minutes of lesson 2. The video needs YouTube to be open on the school network.
 **If one laptop fails:** that kid pairs with a neighbour. You fix it in the break.
 
 ### Lesson 2 on the same day (90 minutes)

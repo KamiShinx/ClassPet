@@ -30,6 +30,7 @@ if %ERRORLEVEL% GEQ 8 (echo  ERROR: could not copy the lessons. & goto :fail)
 robocopy "%SRC%\mod\tools" "%ROOT%\mod\tools" /E /R:1 /W:1 /NFL /NDL /NP /NJH /NJS >nul
 if %ERRORLEVEL% GEQ 8 (echo  ERROR: could not copy the course tools. & goto :fail)
 copy /y "%SRC%\mod\src\main\java\make\myworld\Kit.java" "%ROOT%\mod\src\main\java\make\myworld\Kit.java" >nul
+copy /y "%SRC%\mod\src\main\java\make\myworld\StudioPower.java" "%ROOT%\mod\src\main\java\make\myworld\StudioPower.java" >nul
 copy /y "%~dp0teacher.txt" "%ROOT%\teacher.txt" >nul
 
 echo.

@@ -15,6 +15,7 @@ $raw = "https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 $head = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + "`r`n"
 $web = New-Object System.Net.WebClient
+Write-Host "Downloading the hub ($s). This takes about a minute; don't click inside this window." -ForegroundColor Cyan
 $files = @{}
 foreach ($n in 'content.js', 'slides.js', 'en.js', 'studio.js', 'blocks.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all, or nothing
 [IO.File]::WriteAllText("$hub\content.js", $files['content.js'], $utf8)
@@ -38,6 +39,7 @@ if (Test-Path $tools) {
   $get = @{}
   foreach ($n in 'common.ps1', 'server.ps1', 'shortcuts.ps1', 'prepare.ps1', 'play.ps1', 'paste.ps1', 'undo.ps1', 'rules.txt') { $get["tools\$n"] = $web.DownloadData("$st/tools/$n") }
   $get['src\main\java\make\myworld\Kit.java'] = $web.DownloadData("$st/src/main/java/make/myworld/Kit.java")
+  $get['src\main\java\make\myworld\StudioPower.java'] = $web.DownloadData("$st/src/main/java/make/myworld/StudioPower.java")
   foreach ($k in $get.Keys) { [IO.File]::WriteAllBytes((Join-Path (Join-Path $makeRoot 'mod') $k), $get[$k]) }
   Write-Host "Course tools updated (the kid's own files are untouched)." -ForegroundColor Green
 }

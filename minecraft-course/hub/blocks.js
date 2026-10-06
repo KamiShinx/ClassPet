@@ -34,6 +34,7 @@ const DEFS = [
   // when (triggers): the hats everything hangs from
   ["tr_use","כשלוחצים לחיצה ימנית עם החפץ %1","When you right-click with the item %1",[{type:"input_statement",name:"DO"}],"when"],
   ["tr_hit","כשמכים יצור עם החפץ %1","When you hit a creature with the item %1",[{type:"input_statement",name:"DO"}],"when"],
+  ["tr_usemob","כשלוחצים לחיצה ימנית על יצור %1","When you right-click a creature %1",[{type:"input_statement",name:"DO"}],"when"],
   ["tr_hold","כל שנייה שהחפץ ביד %1","Every second the item is in your hand %1",[{type:"input_statement",name:"DO"}],"when"],
   // do (actions)
   ["a_effect","לתת %2 %1 למשך %3 שניות, בעוצמה %4","Give %1 %2 for %3 seconds, strength %4",
@@ -133,7 +134,7 @@ function stmts(b){
 function compile(ws){
   const on = {};
   ws.getTopBlocks(true).forEach(b => {
-    const k = { tr_use:"use", tr_hit:"hit", tr_hold:"hold" }[b.type];
+    const k = { tr_use:"use", tr_hit:"hit", tr_usemob:"use_mob", tr_hold:"hold" }[b.type];
     if (k && b.isEnabled()) on[k] = (on[k] || []).concat(stmts(b.getInputTargetBlock("DO")));
   });
   Object.keys(on).forEach(k => { if (!on[k].length) delete on[k]; });
@@ -231,7 +232,7 @@ function toBlocks(prog){
   try {
     if (!prog || typeof prog !== "object" || !prog.on || typeof prog.on !== "object") return { error:"shape" };
     const tops = []; let y = 20;
-    [["use","tr_use"],["hit","tr_hit"],["hold","tr_hold"]].forEach(([k, type]) => {
+    [["use","tr_use"],["hit","tr_hit"],["use_mob","tr_usemob"],["hold","tr_hold"]].forEach(([k, type]) => {
       if (!Array.isArray(prog.on[k]) || !prog.on[k].length) return;
       const b = { type, x:20, y }; const c = chain(prog.on[k], 0); if (c) b.inputs = { DO:{ block:c } };
       tops.push(b); y += 60 + 50 * JSON.stringify(c).split('"type"').length;
@@ -279,14 +280,14 @@ function lint(prog){
     if (!s) return;
     if (s.if){ if (!(s.then || []).length) add(E ? "An \"if\" has nothing inside it." : "יש ״אם״ בלי שום דבר בתוכו."); cond(s.if, trig); walk(s.then, trig); walk(s.else, trig); return; }
     if (s.repeat){ if (!(s.do || []).length) add(E ? "A \"repeat\" has nothing inside it." : "יש ״לחזור״ בלי שום דבר בתוכו."); walk(s.do, trig); return; }
-    if (s.who === "target" && trig !== "hit") add(E ? "A block points at \"the creature\", but only \"When you hit a creature\" has one. Elsewhere it does nothing." : "יש בלוק שמכוון אל ״היצור״, אבל יש יצור רק ב״כשמכים יצור״. בכל מקום אחר הבלוק לא עושה כלום.");
+    if (s.who === "target" && trig !== "hit" && trig !== "use_mob") add(E ? "A block points at \"the creature\", but only \"When you hit a creature\" and \"When you right-click a creature\" have one. Elsewhere it does nothing." : "יש בלוק שמכוון אל ״היצור״, אבל יש יצור רק ב״כשמכים יצור״ וב״כשלוחצים לחיצה ימנית על יצור״. בכל מקום אחר הבלוק לא עושה כלום.");
     if (["cooldown","consume","hunger"].includes(s.a)) anyPrice = true;
     if (strong.has(s.a) || (s.a === "damage" && s.who === "target") || (s.a === "effect" && s.l >= 3)) anyStrong = true;
     if (trig === "hold" && strong.has(s.a)) add(E ? "Under \"Every second\", this happens every second as long as you hold it." : "ב״כל שנייה״ זה יקרה כל שנייה, כל עוד מחזיקים את החפץ.");
     if (s.a === "explode" && s.who === "me") add(E ? "An explosion next to you hurts you too." : "פיצוץ לידכם פוגע גם בכם.");
   });
   const cond = (c, trig) => { if (!c) return add(E ? "An \"if\" has no question in it." : "יש ״אם״ בלי שאלה.");
-    if (c.c === "target" && trig !== "hit") add(E ? "\"The creature is...\" only works under \"When you hit a creature\"." : "״היצור הוא...״ עובד רק ב״כשמכים יצור״.");
+    if (c.c === "target" && trig !== "hit" && trig !== "use_mob") add(E ? "\"The creature is...\" only works when there's a creature: \"When you hit a creature\" or \"When you right-click a creature\"." : "״היצור הוא...״ עובד רק כשיש יצור: ב״כשמכים יצור״ או ב״כשלוחצים לחיצה ימנית על יצור״.");
     (c.and || c.or || []).forEach(x => cond(x, trig)); if (c.not) cond(c.not, trig); };
   Object.keys(prog.on).forEach(k => walk(prog.on[k], k));
   if (anyStrong && !anyPrice) add(E ? "A strong power with no price. What stops a player from using it all the time?" : "כוח חזק בלי מחיר. מה ימנע מהשחקן להשתמש בו כל הזמן?");

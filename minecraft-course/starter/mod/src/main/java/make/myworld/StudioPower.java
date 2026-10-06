@@ -29,10 +29,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * Runs the logic blocks a kid built in the hub's studio for an item. The blocks arrive as a small JSON program
- * ({"on":{"use":[...],"hit":[...],"hold":[...]}}); this class reads it step by step. Kids never edit this file.
+ * ({"on":{"use":[...],"hit":[...],"use_mob":[...],"hold":[...]}}); this class reads it step by step. Kids never edit this file.
  * Anything unknown or broken is skipped, so a kid's blocks can't crash the game. Limits keep a loop from lagging it.
  * The game calls follow MCreator's NeoForge 26.1.2 procedure templates (GPL-3.0), moved to 26.2 (EntityTypes holds the
  * entity constants in 26.2).
@@ -75,6 +76,22 @@ public final class StudioPower {
                 run(on.get("hold"), new Ctx(level, player, null, stack));
             }
         }
+    }
+
+    /**
+     * Right-click on a creature with a studio item: runs "use_mob", with that creature as "the creature".
+     * A game event (MCreator's player_right_click_entity trigger), registered in Kit.register.
+     */
+    public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        if (event.getHand() != InteractionHand.MAIN_HAND) return;
+        ItemStack stack = event.getItemStack();
+        if (!(stack.getItem() instanceof PowerItem item) || !item.on.has("use_mob")) return;
+        if (!(event.getTarget() instanceof LivingEntity target)) return;
+        Player player = event.getEntity();
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.SUCCESS);
+        if (player.getCooldowns().isOnCooldown(stack)) return;
+        if (event.getLevel() instanceof ServerLevel level) run(item.on.get("use_mob"), new Ctx(level, player, target, stack));
     }
 
     /** Who and where, for one run of a program. */

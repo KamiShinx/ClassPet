@@ -28,6 +28,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -123,6 +124,7 @@ public final class Kit {
 
     static void register(IEventBus modEventBus) {
         loadStudio();
+        NeoForge.EVENT_BUS.addListener(StudioPower::onEntityInteract);   // right-click on a creature with a studio item
         ITEMS.register(modEventBus);
         EFFECTS.register(modEventBus);
         TABS.register(modEventBus);

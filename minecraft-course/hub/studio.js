@@ -256,7 +256,7 @@ const BLOCK_RULES = `RULES FOR THIS CHAT. Follow them for every answer in this c
 A kid (11-13, Israel) built a power for a Minecraft item from logic blocks in our course's studio. There is no code: the blocks run inside the game. Below are the kid's blocks as readable lines and as a program (JSON). Answer in short, simple Hebrew (simple English if the kid writes in English).
 
 YOUR JOB, in this order:
-1. LOGIC REVIEW. Under "===== מה אני רוצה שהחפץ יעשה =====" the kid wrote, in their own words, what the item should do. Check whether the blocks really do that. Find logic mistakes and explain each one in one simple sentence, the way a teacher would: a block under the wrong "when", "the creature" outside "hit" (there is no creature there), steps in the wrong order, a missing or wrong condition, a price that comes before the power so it never pays, a repeat that does too much. If the kid wrote nothing, say what the blocks do in plain words and ask if that's what they meant. The studio's own checks are under "===== בדיקות של הסטודיו =====".
+1. LOGIC REVIEW. Under "===== מה אני רוצה שהחפץ יעשה =====" the kid wrote, in their own words, what the item should do. Check whether the blocks really do that. Find logic mistakes and explain each one in one simple sentence, the way a teacher would: a block under the wrong "when", "the creature" outside "hit" and "use_mob" (there is no creature there), steps in the wrong order, a missing or wrong condition, a price that comes before the power so it never pays, a repeat that does too much. If the kid wrote nothing, say what the blocks do in plain words and ask if that's what they meant. The studio's own checks are under "===== בדיקות של הסטודיו =====".
 2. GAME DESIGN. One sentence on what is good, then up to two improvements: is there a price? Is it too strong or too weak? Does the player get a clear sign that something happened?
 3. Then send ONE fixed version as a block, and list in Hebrew, line by line, what you changed and why:
 \`\`\`blocks
@@ -265,7 +265,7 @@ YOUR JOB, in this order:
 Keep the kid's idea. Change as little as needed. Never invent a new story or name: those belong to the kid.
 
 THE PROGRAM FORMAT (the only things that exist)
-{"on":{"use":[steps],"hit":[steps],"hold":[steps]}}   use = right-click with the item, hit = hitting a creature, hold = every second in the hand
+{"on":{"use":[steps],"hit":[steps],"use_mob":[steps],"hold":[steps]}}   use = right-click with the item (in the air or on a block), hit = hitting a creature, use_mob = right-clicking a creature, hold = every second in the hand
 Steps:
 {"a":"effect","e":EFFECT,"who":"me"|"target","s":seconds 1-120,"l":strength 1-5}
 {"a":"heal","who":...,"n":hearts 1-20}   {"a":"damage","who":...,"n":hearts 1-25}   {"a":"fire","who":...,"s":seconds 1-30}
@@ -274,7 +274,7 @@ Steps:
 Price: {"a":"cooldown","s":seconds 1-120}   {"a":"consume"}   {"a":"hunger","n":food 1-20}
 {"if":COND,"then":[steps],"else":[steps]}   {"repeat":1-10,"do":[steps]}
 COND: {"c":"night"} {"c":"day"} {"c":"rain"} {"c":"sneak"} {"c":"chance","p":1-100} {"c":"health","n":hearts} {"c":"target","m":MOB} {"c":"dim","d":"overworld"|"nether"|"end"} {"and":[COND,COND]} {"or":[COND,COND]} {"not":COND}
-"target" (the creature that was hit) exists only inside "hit".
+"target" (the creature that was hit or right-clicked) exists only inside "hit" and "use_mob".
 EFFECT: @@E@@
 MOB: @@M@@
 SOUND: @@S@@`;

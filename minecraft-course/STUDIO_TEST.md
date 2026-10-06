@@ -1,6 +1,9 @@
 # For the PC session: make the studio's code blocks work in the game
 
-Ben's laptop: the studio item shows up in the game (name, picture, stack) but its blocks do nothing. The cloud session
+Ben's laptop: the studio item shows up in the game (name, picture, stack) but its blocks did nothing. Likely cause found
+(6 Oct): his test was right-click + "set THE CREATURE on fire", and a right-click in the air has no creature. A new trigger
+"כשלוחצים לחיצה ימנית על יצור" (`use_mob`) now does that, through NeoForge's `PlayerInteractEvent.EntityInteract`
+(registered in `Kit.register`). Still to test: every block once, and `use_mob`. The cloud session
 can't run Minecraft, so please test and fix it locally. Branch `claude/make-courses`; Ben updates with `C:\MAKE\update.bat`.
 
 ## How it is meant to work

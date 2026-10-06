@@ -204,3 +204,11 @@ themselves and Gemini becomes optional advice. Built studio step 2 (38cd796): `h
 (bundled in `hub/blockly/`, Apache 2.0), Hebrew RTL + English, 30 blocks in 5 groups (מתי / עושים / מחיר / אם וחזרה /
 שאלות); compiled to JSON `power` per item; `StudioPower.java` interprets it in the game (right-click, hit, every
 second in hand). Stub-compiled only: Ben's Windows test is the gate (studio item + a block power).
+**6 Oct, latest.** Gemini's two jobs in the studio, both after the kid built it themselves: (1) design partner for an
+item's fields (```studio blocks), (2) reviewer of the kid's logic: the kid writes in their own words what the item
+should do, "copy the blocks to Gemini" sends intent + blocks + program + the studio's quick checks; Gemini reviews the
+logic first, then design, then sends a fixed version (```blocks); the studio validates it, shows now/after, and loads it
+as real blocks on accept (596e03b). Quick checks run live without Gemini. Next: the creature modeller (Ben: "a must"):
+our own three.js editor in the hub (boxes on body parts, per-face pixel painting, idle/walk/attack keyframes, templates),
+stored Java-native so one generic mob engine builds every kid's mob (Kaupenjoe's 26.x Dodo shows the 26.x entity,
+render state, layer and KeyframeAnimation API). Not ready for next week (items lesson).

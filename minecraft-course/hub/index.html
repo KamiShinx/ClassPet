@@ -69,12 +69,13 @@ function renderPlayer(){
   const s = isEn() ? EN.step(lessonN, stepIx, L.steps[stepIx]) : L.steps[stepIx];
   const ch = LS.get("l" + lessonN + "chal", {});
   const LT = (isEn() && EN.lesson(lessonN)) || L;
+  LS.set("lastLesson", lessonN);
   app.innerHTML = `<div class="pl">
     <header class="pbar">
       <div id="dock"></div>
       <div class="r1">
         <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><div class="t"><small>${LT.unit}</small><b>${LT.title}</b></div></div>
-        <div class="tools"><a class="btn ghost" href="#studio">הסטודיו</a><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button>${langBtn()}</div>
+        <div class="tools"><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button>${langBtn()}</div>
       </div>
       <div class="hotbar" role="tablist" aria-label="שלבי השיעור">${L.steps.map((x,i)=>`<button class="slot ${i===stepIx?"cur":""} ${i<stepIx?"done":""}" data-go="${i}" role="tab" aria-selected="${i===stepIx}" title="${esc(x.title)}">${i+1}</button>`).join("")}</div>
     </header>
@@ -129,6 +130,8 @@ const ICON = {
   vers:  SVG('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
   code:  SVG('<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>'),
   drive: SVG('<path d="M7 18a4 4 0 0 1-.6-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/><path d="M12 16v-5M9.5 13.5L12 11l2.5 2.5"/>'),
+  studio: SVG('<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>'),
+  stop:  SVG('<rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor"/>'),
   lock:  SVG('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>')
 };
 function dockHTML(){
@@ -137,12 +140,10 @@ function dockHTML(){
   const tone = { building:"busy", running:"live", error:"bad", off:"bad" }[s.phase] || "";
   return `<div class="dock">
     <div class="dock-btns">
-      <button class="dbtn go" data-act="paste" ${busy?"disabled":""}>${ICON.paste}<span>הדבקה מג׳מיני ושחק</span></button>
-      <button class="dbtn" data-act="copy-code" ${s.phase==="off"?"disabled":""}>${ICON.code}<span>להעתיק לג׳מיני</span></button>
-      <button class="dbtn" data-act="play" ${busy?"disabled":""}>${ICON.play}<span>שחק</span></button>
-      <button class="dbtn" data-act="undo" ${busy?"disabled":""}>${ICON.undo}<span>ביטול ההדבקה</span></button>
+      <button class="dbtn go" data-act="play" ${busy?"disabled":""}>${ICON.play}<span>שחק</span></button>
+      <a class="dbtn" href="#studio">${ICON.studio}<span>הסטודיו</span></a>
+      <button class="dbtn" data-act="stop" ${s.phase==="off"?"disabled":""}>${ICON.stop}<span>לסגור את מיינקראפט</span></button>
       <button class="dbtn" data-act="versions" aria-expanded="${DOCK.vopen}" ${s.phase==="off"?"disabled":""}>${ICON.vers}<span>גרסאות</span></button>
-      <button class="dbtn" data-act="pictures" ${s.phase==="off"?"disabled":""}>${ICON.pics}<span>תמונות</span></button>
       <button class="dbtn" data-act="drive" aria-expanded="${DOCK.dopen}" ${s.phase==="off"?"disabled":""}>${ICON.drive}<span>דרייב</span></button>
       <button class="dbtn" data-act="lock" ${s.phase==="off"?"disabled":""}>${ICON.lock}<span>נעילה</span></button>
     </div>
@@ -160,13 +161,13 @@ function dockHTML(){
     </div>` : ""}
     ${DOCK.vopen ? `<div class="dock-vers">
       <div class="vhead"><b>גרסאות שמורות</b><button class="btn go" data-act="save">לשמור גרסה עכשיו</button></div>
-      <p class="vnote">לפני כל הדבקה המחשב שומר גרסה לבד. ״להחזיר״ מחזיר את הקוד והתמונות למה שהיה אז, ואפשר להתחרט גם על זה.</p>
+      <p class="vnote">המחשב שומר גרסה לבד בזמן שעובדים. ״להחזיר״ מחזיר את העולם למה שהיה אז, ואפשר להתחרט גם על זה.</p>
       ${DOCK.versions.length ? `<ul class="vlist">${DOCK.versions.map(v=>`<li><span class="vt">${esc(v.time)}</span><span class="vd">${esc(v.day)}</span><span class="vw">${esc(v.what)}</span><button class="btn ghost" data-restore="${esc(v.id)}" ${busy?"disabled":""}>להחזיר</button></li>`).join("")}</ul>` : `<p class="vnote">עדיין אין גרסאות שמורות.</p>`}
     </div>` : ""}
     <div class="dock-status ${tone}" role="status">${s.phase==="building"?'<i class="spin"></i>':""}<span>${esc(s.message)}</span></div>
-    ${s.phase==="error" ? `<div class="dock-err"><b>השגיאה כבר הועתקה.</b>
-      <ol><li>עוברים לג׳מיני</li><li>לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd></li><li>לוחצים <kbd>Enter</kbd></li></ol>
-      <div><button class="btn ghost" data-act="copy-error">להעתיק שוב</button></div></div>` : ""}
+    ${s.phase==="error" ? `<div class="dock-err"><b>המשחק לא נבנה.</b>
+      <ol><li>מרימים יד וקוראים למורה.</li><li>או: ב״גרסאות״ מחזירים את הגרסה האחרונה שעבדה, ולוחצים שוב שחק.</li></ol>
+      <div><button class="btn ghost" data-act="copy-error">להעתיק את השגיאה</button></div></div>` : ""}
   </div>`;
 }
 function paintDock(){
@@ -249,7 +250,7 @@ async function act(name){
     const r = await api("/api/" + name, { method:"POST" });
     if (r.status === 401) return showLock();
     const j = await r.json();
-    setDock({ phase:j.phase, message: (j.ok && (name === "paste" || name === "play")) ? j.message : j.result, error:j.error });
+    setDock({ phase:j.phase, message: (j.ok && name === "play") ? j.message : j.result, error:j.error });
     if (DOCK.vopen) loadVersions();
   } catch(e){ poll(); }
 }

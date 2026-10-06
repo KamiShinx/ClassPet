@@ -256,8 +256,11 @@ function Test-Studio($w, [string]$root) {
     foreach ($it in @($w.items)) {
         if ($null -eq $it) { continue }
         $id = [string]$it.id
-        if ($id -notmatch '^[a-z][a-z0-9_]{0,39}$') { return "הקוד ""$id"" לא תקין: רק אותיות קטנות באנגלית, מספרים וקו תחתון, ומתחיל באות." }
-        if ($seen.ContainsKey($id)) { return "יש שני חפצים עם הקוד $id." }
+        # An item without a code yet is saved, and stays out of the game until it gets one.
+        if (-not $id) { continue }
+        $who = if ([string]$it.name) { [string]$it.name } else { 'בלי שם' }
+        if ($id -notmatch '^[a-z][a-z0-9_]{0,39}$') { return "בחפץ ״$who״ הקוד באנגלית לא תקין: רק אותיות קטנות, מספרים וקו תחתון, ומתחיל באות." }
+        if ($seen.ContainsKey($id)) { return "יש שני חפצים עם הקוד $id. בחפץ ״$who״ בוחרים קוד אחר." }
         if ($taken.ContainsKey($id)) { return "כבר יש חפץ עם הקוד $id, שג׳מיני כתב בקובץ MyItems.java. בוחרים קוד אחר." }
         $seen[$id] = $true
         if (([string]$it.name).Length -gt 40) { return 'השם ארוך מדי: עד 40 אותיות.' }

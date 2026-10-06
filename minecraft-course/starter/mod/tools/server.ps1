@@ -84,7 +84,7 @@ function Update-Game {
                 $sr = New-Object System.IO.StreamReader($fs); $text = $sr.ReadToEnd(); $sr.Close()
             } catch {}
             if ($text -match 'Backend library|Setting user|Created: \d+x\d+') {
-                $state.phase = 'running'; $state.message = 'מיינקראפט פתוח. כשסוגרים אותו, אפשר להדביק שוב.'
+                $state.phase = 'running'; $state.message = 'מיינקראפט פתוח. מה שמשנים עכשיו בסטודיו נכנס בפעם הבאה שפותחים את המשחק.'
             }
         }
         return
@@ -97,7 +97,21 @@ function Update-Game {
     if ($code -eq 0) { $state.phase = 'idle'; $state.message = 'מוכן. אפשר ללחוץ שוב על שחק.'; return }
     $state.error = Get-ErrorForGemini $log
     Write-Clip $state.error
-    $state.phase = 'error'; $state.message = 'משהו לא עבד. השגיאה הועתקה.'
+    $state.phase = 'error'; $state.message = 'המשחק לא נבנה.'
+}
+
+# Closes the game and the builder, even when the hub lost track of them (the game was closed but the hub still
+# thinks it's open, or an old builder hangs). Only Java from our own jdk folder: nothing else on the laptop.
+function Stop-Game {
+    if ($state.proc -and -not $state.proc.HasExited) {
+        if ($onWindows) { & taskkill.exe /f /t /pid $state.proc.Id 2>&1 | Out-Null } else { try { $state.proc.Kill() } catch {} }
+    }
+    $state.proc = $null
+    $jdk = [IO.Path]::GetFullPath((Join-Path $root 'jdk'))
+    foreach ($p in @(Get-Process -Name java, javaw -ErrorAction SilentlyContinue)) {
+        try { if ($p.Path -and [IO.Path]::GetFullPath($p.Path).StartsWith($jdk, [StringComparison]::OrdinalIgnoreCase)) { $p.Kill() } } catch {}
+    }
+    $state.phase = 'idle'; $state.error = ''; $state.message = 'מיינקראפט נסגר. אפשר ללחוץ שוב על שחק.'
 }
 
 function Invoke-Action([string]$name, [string]$query) {
@@ -112,7 +126,7 @@ function Invoke-Action([string]$name, [string]$query) {
             return $r
         }
         'play' {
-            if ($busy) { return New-Result $false 'מיינקראפט כבר פתוח.' }
+            if ($busy) { return New-Result $false 'מיינקראפט כבר פתוח. כדי לראות שינויים, לוחצים ״לסגור את מיינקראפט״ ואז שוב שחק.' }
             Start-Game $false
             return New-Result $true 'המחשב בונה ופותח את מיינקראפט...'
         }
@@ -143,6 +157,10 @@ function Invoke-Action([string]$name, [string]$query) {
         'copy-code' {
             Write-Clip (Get-KidCode $root)
             return New-Result $true 'הועתקו החוקים והקוד שלכם. בג׳מיני לוחצים Ctrl + V, ומתחת כותבים מה אתם רוצים.'
+        }
+        'stop' {
+            Stop-Game
+            return New-Result $true $state.message
         }
         'copy-error' {
             if ($state.error) { Write-Clip $state.error }

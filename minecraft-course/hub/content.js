@@ -277,7 +277,8 @@ body.aud .stage{min-height:100vh}
 .pbar:has(.dock){position:static}
 .wrap #dock{margin-top:20px}
 .dock{display:grid;gap:10px;background:var(--surface);border:2px solid var(--ink);border-radius:8px;padding:12px;box-shadow:0 4px 0 var(--ink)}
-.dock-btns{display:grid;grid-template-columns:2fr repeat(7,1fr);gap:10px}
+.dock-btns{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:10px}
+a.dbtn{text-decoration:none}
 /* code lock */
 .lockv{min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--bg)}
 .lockbox{background:var(--surface);border:3px solid var(--ink);border-radius:12px;box-shadow:0 6px 0 var(--ink);padding:28px 26px;display:grid;gap:12px;justify-items:center;text-align:center;width:min(420px,100%)}
@@ -449,6 +450,32 @@ body.aud .stage{min-height:100vh}
 .work .rules div{background:var(--bg);border:2px solid var(--line);border-radius:6px;padding:12px;display:grid;gap:4px}
 .work .rules b{font-size:1.1em}
 .work .rules .n{font-family:var(--display);font-size:1.6rem;color:var(--grass);line-height:1}
+
+/* the small studio drawing in lesson steps */
+.smock{border:2px solid var(--line);border-radius:10px;background:var(--bg);padding:10px;display:grid;gap:8px;font-size:.85rem;max-width:560px;margin-inline:auto}
+.smock .sm-top{display:flex;gap:12px;align-items:center}
+.smock .sm-top b{font-family:var(--display);font-weight:400;font-size:1.3rem}
+.smock .sm-w{color:var(--muted);border-bottom:1px solid var(--line);padding:2px 6px}
+.smock .sm-main{display:grid;grid-template-columns:120px 1fr;gap:8px}
+.smock .sm-list{display:grid;gap:6px;align-content:start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px}
+.smock .sm-card{display:flex;gap:6px;align-items:center;font-weight:700;border:2px solid var(--grass);border-radius:6px;padding:3px 5px;background:var(--grass-soft)}
+.smock .sm-card i{width:14px;height:14px;background:#fed83d;border:1px solid #7a5a10}
+.smock .sm-new{background:var(--grass);color:var(--grass-ink);font-weight:800;border-radius:6px;padding:4px 6px;text-align:center}
+.smock .sm-edit{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:grid}
+.smock .sm-tabs{display:flex;border-bottom:1px solid var(--line)}
+.smock .sm-tabs span{padding:5px 9px;font-weight:800;color:var(--muted)}
+.smock .sm-tabs span.on{color:var(--ink);border-bottom:3px solid var(--grass)}
+.smock .sm-body{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:8px}
+.smock .sm-grid{width:96px;height:96px;border:2px solid var(--ink);background:#eee}
+.smock .sm-grid svg{width:100%;height:100%;display:block}
+.smock .sm-fields{display:grid;gap:2px;align-content:start}
+.smock .sm-fields small{color:var(--muted);font-weight:700}
+.smock .sm-fields i{font-style:normal;border:1px solid var(--line);border-radius:4px;padding:1px 6px;background:var(--bg)}
+.smock .sm-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:6px 8px;color:var(--grass);font-weight:700}
+.smock .sm-play{background:var(--grass);color:var(--grass-ink);border-radius:6px;padding:3px 10px}
+.smock .hl{outline:3px solid #f5c400;outline-offset:2px;border-radius:6px;animation:smhl 1.4s ease-in-out infinite}
+@keyframes smhl{50%{outline-color:transparent}}
+@media (prefers-reduced-motion:reduce){.smock .hl{animation:none}}
 `;
 function injectStyle(doc){ const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); }
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap";
@@ -472,7 +499,7 @@ const UNITS = [
   { n:2, name:"החפצים הראשונים", sub:"מהכרטיס אל תוך המשחק", color:"#2B6A99", icon:"2",
     lessons:[
       {n:2, title:"החפץ הראשון שלי", build:"חפץ עם שם, ציור והסבר שלכם, בתוך המשחק", open:true},
-      {n:3, title:"חפץ בתלת־ממד", build:"מודל ב־Blockbench שמחזיקים ביד"},
+      {n:3, title:"מה החפץ עושה?", build:"כוח לחפץ, מבלוקים בסטודיו"},
       {n:4, title:"חפץ עם מחיר", build:"חפץ חזק שיש לו חיסרון"},
       {n:5, title:"אפקט שמשנה את המשחק", build:"אוכל או שיקוי עם אפקט חדש"} ] },
   { n:3, name:"המקום והיצור הראשון", sub:"עולם שיש בו חוקים", color:"#8A5A2B", icon:"3",
@@ -486,7 +513,7 @@ const UNITS = [
   { n:5, name:"יצור החתימה", sub:"היצור שרק אתם יכולתם להמציא", color:"#7A3E9D", icon:"5",
     lessons:[
       {n:11, title:"מעצבים יצור", build:"צללית, תכונה אחת, 2–4 צבעים"},
-      {n:12, title:"בונים לו מודל", build:"מודל וציור ב־Blockbench"},
+      {n:12, title:"בונים לו מודל", build:"מודל מקוביות, ציור ותנועה, בסטודיו"},
       {n:13, title:"מכניסים למשחק", build:"היצור שלכם זז בתוך העולם"},
       {n:14, title:"איך הוא נלחם", build:"אפשר לנצח אותו, אבל לא בניסיון הראשון"},
       {n:15, title:"שביל הסיפור", build:"הישגים שמובילים את השחקן בעולם"} ] },
@@ -543,8 +570,8 @@ const EQ = `<div class="eq">
 </div>`;
 
 const ROLES = `<div class="roles">
-  <div class="me"><b>אתם: הבמאים</b><ul><li>ממציאים את העולם, השמות והסיפור</li><li>מציירים ובונים מודלים בעצמכם</li><li>בודקים: זה מה שרציתי?</li></ul></div>
-  <div class="ai"><b>ג׳מיני: כותב הקוד</b><ul><li>הופך כרטיס לקוד</li><li>שואל שאלות כשמשהו לא ברור</li><li>לפעמים טועה, ובטוח שהוא צודק</li></ul></div>
+  <div class="me"><b>אתם: הבמאים</b><ul><li>ממציאים את העולם, השמות והסיפור</li><li>מציירים ובונים בסטודיו, בעצמכם</li><li>בודקים: זה מה שרציתי?</li></ul></div>
+  <div class="ai"><b>ג׳מיני: שותף לרעיונות</b><ul><li>שואל שאלות שעוזרות לחשוב</li><li>בודק אם הבלוקים עושים מה שרציתם</li><li>לפעמים טועה, ובטוח שהוא צודק</li></ul></div>
 </div>`;
 
 function gemPromptBox(text){
@@ -556,16 +583,13 @@ function gemPromptBox(text){
 const GEMINI_MOCK = `<div class="gm" dir="rtl">
   <div class="gm-side"><div class="gm-new">+ צ׳אט חדש <i>3</i></div><div class="gm-lbl">צ׳אטים קודמים</div></div>
   <div class="gm-main">
-    <div class="bub ai"><b>ג׳מיני</b>זה הקובץ MyItems.java עם החפץ החדש:</div>
-    <div class="gm-code" dir="ltr"><span class="gm-copy">⧉ <i>4</i></span><pre>public class MyItems {
-  ...
-}</pre></div>
+    <div class="bub ai"><b>ג׳מיני</b>רעיון מעניין! ומה המחיר של החפץ הזה?</div>
     <div class="gm-input">כותבים כאן, ו־Enter שולח <i>2</i></div>
   </div>
 </div>`;
 
 const COPY_FLOW = `<div class="flow" dir="rtl">
-  <div class="st go"><b>להעתיק לג׳מיני</b><small>בדף הזה, למעלה</small></div><span class="ar">←</span>
+  <div class="st go"><b>להעתיק לג׳מיני</b><small>בסטודיו, בלשונית ג׳מיני</small></div><span class="ar">←</span>
   <div class="st"><b>Ctrl + V</b><small>בצ׳אט של ג׳מיני</small></div><span class="ar">←</span>
   <div class="st"><b>מה אתם רוצים</b><small>כותבים מתחת, ושולחים</small></div>
 </div>`;
@@ -674,7 +698,7 @@ const L1 = {
       visual:()=>`<div class="today">
         <div><span class="num">1</span><b>מתקינים</b><span>מהדיסק און קי. המחשב עושה את העבודה.</span></div>
         <div><span class="num">2</span><b>ממציאים עולם</b><span>מדברים על מה עולם צריך, וממלאים כרטיס עולם על דף.</span></div>
-        <div><span class="num">3</span><b>פוגשים את ג׳מיני</b><span>העוזר שיכתוב בשבילכם את הקוד.</span></div>
+        <div><span class="num">3</span><b>פוגשים את ג׳מיני</b><span>שותף לרעיונות, שעוזר לכם לחשוב.</span></div>
       </div>` },
 
     { type:"הוראה", title:"מתקינים מהדיסק און קי",
@@ -713,11 +737,11 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
 [3/3] Starting Minecraft to check it works. No internet needed.
 &gt; Task :runClient</div>` },
 
-    { type:"שיחה", title:"מה זה מוד, ומי כותב את הקוד?",
+    { type:"שיחה", title:"מה זה מוד, ומי בונה אותו?",
       body:`<p><b>מוד</b> זה תוספת שמשנה את מיינקראפט: חפצים חדשים, יצורים חדשים, חוקים חדשים.</p>
-        <p>את הקוד יכתוב <b>ג׳מיני</b>. אתם הבמאים: אתם מחליטים מה יהיה בעולם, ובודקים שהוא באמת עשה את זה.</p>
-        <p>המוד שלכם הוא כמה קבצים עם קוד. אתם לא צריכים לפתוח אותם: ג׳מיני כותב את הקוד, וכפתור אחד בדף הזה מכניס אותו למוד ופותח את מיינקראפט.</p>`,
-      why:"מי שאומר לבינה מלאכותית ״תבנה לי את זה״ מקבל משהו שהוא לא בחר. מי שמסביר בדיוק מה הוא רוצה, יכול גם לבדוק שקיבל את זה.",
+        <p>אתם בונים אותו בעצמכם, ב<b>סטודיו</b> שבדף הזה: מציירים, נותנים שמות, ומחברים בלוקים שאומרים מה כל דבר עושה. בלי לכתוב קוד.</p>
+        <p><b>ג׳מיני</b> הוא שותף לרעיונות. הוא שואל שאלות ובודק את ההיגיון, אבל את העולם ממציאים אתם.</p>`,
+      why:"מי שאומר לבינה מלאכותית ״תמציא לי״ מקבל משהו שהוא לא בחר. בקורס הזה אתם ממציאים, ואתם בונים.",
       visual:()=>EQ + ROLES },
 
     { type:"שיחה", title:"מה עולם צריך?",
@@ -752,32 +776,32 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
       body:`<p><b>ג׳מיני</b> הוא הצ׳אט של גוגל עם בינה מלאכותית, כמו ChatGPT. כותבים לו הודעה, והוא עונה.</p>
         <ol><li>נכנסים ל־<code>gemini.google.com</code> ומתחברים עם החשבון של משרד החינוך.</li>
         <li>למטה יש תיבה. כותבים בה ולוחצים <kbd>Enter</kbd> כדי לשלוח.</li>
-        <li>בצד יש תפריט. שם פותחים צ׳אט חדש.</li>
-        <li>כשג׳מיני כותב קוד, הקוד מופיע בתיבה אפורה, ובפינה שלה יש כפתור העתקה. ככה מעתיקים קוד.</li></ol>`,
-      why:"ג׳מיני לא זוכר צ׳אטים קודמים. לכן בקורס הזה שולחים לו כל פעם את הקוד שלכם מחדש.",
+        <li>בצד יש תפריט. שם פותחים צ׳אט חדש.</li></ol>`,
+      why:"ג׳מיני לא זוכר צ׳אטים קודמים. לכן הסטודיו שולח לו כל פעם את העולם שלכם מחדש.",
       note:"לא כותבים לג׳מיני את השם האמיתי שלכם, את בית הספר או איפה אתם גרים.",
       stuck:[["לא מצליחים להתחבר","בודקים שזה החשבון של משרד החינוך. אם זה עדיין לא עובד, מרימים יד."],["כתוב שאין גישה ל־Gemini","מרימים יד."]],
       visual:()=>GEMINI_MOCK },
 
     { type:"שיחה", title:"איך מדברים עם ג׳מיני בקורס",
       body:`<p>בכל פעם שמבקשים משהו מג׳מיני, עושים אותו דבר:</p>
-        <ol><li>לוחצים בדף הזה, למעלה, על <b>להעתיק לג׳מיני</b>. זה מעתיק את החוקים של הקורס ואת הקוד שלכם.</li>
+        <ol><li>בסטודיו, בלשונית <b>ג׳מיני</b>, לוחצים <b>להעתיק לג׳מיני</b>. זה מעתיק את החוקים של הקורס ואת העולם שלכם.</li>
         <li>בג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
         <li>מתחת כותבים מה אתם רוצים, ושולחים.</li></ol>`,
-      why:"בלי החוקים, ג׳מיני כותב קוד למיינקראפט ישן שלא עובד אצלנו, וממציא בשבילכם שמות ורעיונות. והוא לא זוכר צ׳אטים קודמים, אז שולחים לו את החוקים ואת הקוד כל פעם מחדש.",
+      why:"בלי החוקים, ג׳מיני ממציא בשבילכם שמות ורעיונות, וכותב קוד שלא צריך. והוא לא זוכר צ׳אטים קודמים, אז הסטודיו שולח לו את החוקים ואת העולם שלכם כל פעם מחדש.",
       note:"החוקים באנגלית. ככה ג׳מיני מבין אותם הכי טוב, והוא עונה לכם בעברית.",
       visual:()=>COPY_FLOW },
 
     { type:"בדיקה", title:"מדברים עם ג׳מיני",
       body:`<ol>
+        <li>פותחים את הסטודיו, ולמעלה ליד ״העולם:״ כותבים את השם של העולם שלכם.</li>
         <li>בג׳מיני פותחים צ׳אט חדש.</li>
-        <li>לוחצים למעלה על <b>להעתיק לג׳מיני</b>, ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
+        <li>בסטודיו, בלשונית <b>ג׳מיני</b>, לוחצים <b>להעתיק לג׳מיני</b>, ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
         <li>מתחת כותבים את השורה מהמסגרת, עם העולם שלכם מכרטיס העולם, ושולחים.</li>
         <li>עונים על השאלה שג׳מיני שואל.</li>
       </ol>`,
       expect:"ג׳מיני עונה בעברית ושואל שאלה על העולם שלכם.",
-      stuck:[["אין למעלה כפתור להעתיק לג׳מיני","פותחים את הדף מהסמל Minecraft. או מעתיקים את החוקים מהכפתור כאן, ומדביקים אותם בג׳מיני."]],
-      visual:()=>gemPromptBox("היום מתחילים מוד למיינקראפט. העולם שלי: ") + `<div><button class="btn ghost" data-copy="${esc(GEM_TEXT)}">להעתיק רק את החוקים</button></div><div class="chat"><div class="bub me"><b>אתם</b>(החוקים והקוד) היום מתחילים מוד למיינקראפט. העולם שלי: פיראטים בשמיים על איים מרחפים</div><div class="bub ai"><b>ג׳מיני</b>נשמע מסקרן! שאלה ראשונה: מה מחזיק את האיים באוויר?</div></div>` },
+      note:"הלשונית ״ג׳מיני״ מופיעה כשיש בסטודיו חפץ. אין עדיין? לוחצים ״+ חפץ חדש״, גם אם הוא עוד ריק.",
+      visual:()=>toStudio("ליד ״העולם:״ כותבים את השם, ואז הלשונית ״ג׳מיני״", ["world","gem"]) + gemPromptBox("היום מתחילים עולם למיינקראפט. העולם שלי: ") + `<div class="chat"><div class="bub me"><b>אתם</b>(החוקים והעולם) היום מתחילים עולם למיינקראפט. העולם שלי: פיראטים בשמיים על איים מרחפים</div><div class="bub ai"><b>ג׳מיני</b>נשמע מסקרן! שאלה ראשונה: מה מחזיק את האיים באוויר?</div></div>` },
 
     { type:"סיום", title:"מסיימים",
       body:`<ul><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם לפי השלבים שם.</li></ul>`,
@@ -788,7 +812,7 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
   challenges:[
     {id:"mc", lvl:"חובה", t:"מיינקראפט עובד", d:"נכנסתי לעולם Creative ומצאתי את המוד ברשימה."},
     {id:"card", lvl:"חובה", t:"כרטיס עולם", d:"העולם שלי בשורה אחת, שלושה צבעים, וחוק אחד."},
-    {id:"gem", lvl:"חובה", t:"ג׳מיני ענה", d:"שלחתי לו את החוקים ואת העולם שלי, ועניתי על שאלה אחת."}
+    {id:"gem", lvl:"חובה", t:"ג׳מיני ענה", d:"שלחתי לו את העולם שלי מהסטודיו, ועניתי על שאלה אחת."}
   ]
 };
 
@@ -834,126 +858,6 @@ function bindSil(root){
 }
 
 
-/* ===== lesson 2: the loop, the item card, the pixel editor ===== */
-const FLOW = `<div class="flow" dir="rtl">
-  <div class="st"><b>כרטיס</b><small>מחליטים מה רוצים</small></div><span class="ar">←</span>
-  <div class="st"><b>ג׳מיני</b><small>החוקים, הקוד והכרטיס</small></div><span class="ar">←</span>
-  <div class="st go"><b>הדבקה</b><small>הדבקה מג׳מיני ושחק</small></div><span class="ar">←</span>
-  <div class="st"><b>בדיקה</b><small>זה מה שרציתם?</small></div>
-</div>`;
-
-const IC_FIELDS = [
-  {id:"name", label:"שם החפץ במשחק", ph:"מטבע דבש"},
-  {id:"use", label:"בשביל מה הוא?", ph:"משלמים בו לדבורים, והן פותחות את השער לעיר"},
-  {id:"cost", label:"המחיר שלו", ph:"מי שמחזיק מטבע, הדבורים רודפות אחריו"},
-  {id:"where", label:"איפה משיגים אותו?", ph:"רק בכוורות ישנות, אחד בכל כוורת"},
-  {id:"code", label:"הקוד באנגלית (אותיות קטנות, בלי רווחים)", ph:"honey_coin", ltr:true},
-  {id:"line", label:"המשפט שמופיע מתחת לשם", ph:"הדבורים מקבלות רק אותו."},
-  {id:"stack", label:"כמה נכנסים בערימה אחת (1 עד 64)", ph:"16", ltr:true}
-];
-const codeName = t => t.toLowerCase().replace(/\s+/g, "_").replace(/[^a-z0-9_]/g, "");
-function itemCardForm(){
-  const v = LS.get("itemcard", {});
-  return `<div class="wcard"><div class="hd"><h3>כרטיס החפץ</h3><span class="chip">שיעור 2</span></div>
-    ${IC_FIELDS.map(f=>`<div class="fld"><label for="ic-${f.id}">${f.label}</label><input type="text" id="ic-${f.id}" data-ic="${f.id}" ${f.ltr?'dir="ltr"':""} placeholder="למשל: ${esc(f.ph)}" value="${esc(v[f.id]||"")}" maxlength="80"></div>`).join("")}
-    <div class="saved" id="ic-saved"></div></div>`;
-}
-function bindItemCard(root){
-  root.querySelectorAll("[data-ic]").forEach(i => i.addEventListener("input", () => {
-    const v = LS.get("itemcard", {});
-    v[i.dataset.ic] = i.dataset.ic === "code" ? codeName(i.value) : i.value;
-    if (i.dataset.ic === "code" && i.value !== v.code) i.value = v.code;
-    LS.set("itemcard", v);
-    const s = root.querySelector("#ic-saved"); if (s) s.textContent = "נשמר על המחשב הזה";
-  }));
-}
-function itemCardPrompt(){
-  const v = LS.get("itemcard", {});
-  return "חפץ חדש לעולם שלי.\nשם: " + (v.name||"") + "\nקוד: " + (v.code||"") + "\nמשפט מתחת לשם: " + (v.line||"") + "\nכמה בערימה: " + (v.stack||"");
-}
-
-/* The 16x16 pixel editor. Saves straight into the item's picture when the hub runs from the "Minecraft" icon. */
-const PX_COLORS = ["#1d1d21","#474f52","#9d9d97","#f9fffe","#b02e26","#f9801d","#fed83d","#80c71f","#5e7c16","#169c9c","#3ab3da","#3c44aa","#8932b8","#c74ebd","#f38baa","#835432"];
-function pixelEditorHTML(){
-  return `<div class="px" id="px">
-    <div class="px-top"><label for="px-id"><b>הקוד של החפץ:</b></label><input id="px-id" list="px-items" placeholder="honey_coin" autocomplete="off"><datalist id="px-items"></datalist></div>
-    <div class="px-main">
-      <canvas class="big" id="px-c" width="320" height="320" aria-label="לוח ציור 16 על 16"></canvas>
-      <div class="px-side">
-        <div class="px-pal" id="px-pal">${PX_COLORS.map((c,i)=>`<button data-c="${c}" style="background:${c}" class="${i===0?"on":""}" aria-label="צבע ${i+1}"></button>`).join("")}<input type="color" id="px-custom" value="#ff66aa" aria-label="צבע משלכם"></div>
-        <div class="px-tools">
-          <button class="btn ghost on" data-tool="pen">עיפרון</button>
-          <button class="btn ghost" data-tool="erase">מחק</button>
-          <button class="btn ghost" data-tool="fill">דלי</button>
-          <button class="btn ghost" id="px-undo">צעד אחורה</button>
-          <button class="btn ghost" id="px-clear">לנקות הכול</button>
-        </div>
-        <div class="px-prev"><canvas id="px-p1" width="16" height="16" style="width:32px;height:32px"></canvas><canvas id="px-p2" width="16" height="16" style="width:64px;height:64px"></canvas><small>ככה זה ייראה במשחק</small></div>
-        <div><button class="btn go" id="px-save">לשמור את הציור</button></div>
-        <div class="px-msg" id="px-msg"></div>
-      </div>
-    </div>
-  </div>`;
-}
-function mountPixelEditor(root, served){
-  const el = root.querySelector("#px"); if (!el) return;
-  const N = 16, C = el.querySelector("#px-c"), g = C.getContext("2d"), cell = C.width / N;
-  const P1 = el.querySelector("#px-p1").getContext("2d"), P2 = el.querySelector("#px-p2").getContext("2d");
-  const idIn = el.querySelector("#px-id"), msg = el.querySelector("#px-msg");
-  let px = new Array(N*N).fill(null), color = PX_COLORS[0], tool = "pen", down = false, hist = [];
-  const card = LS.get("itemcard", {}); if (card.code) idIn.value = card.code;
-  const say = (t, ok) => { msg.textContent = t; msg.className = "px-msg " + (ok === true ? "ok" : ok === false ? "bad" : ""); };
-  function draw(){
-    for (let y=0; y<N; y++) for (let x=0; x<N; x++){
-      const c = px[y*N+x];
-      g.fillStyle = c || (((x+y)%2) ? "#e9ece6" : "#ffffff");
-      g.fillRect(x*cell, y*cell, cell, cell);
-    }
-    g.strokeStyle = "rgba(0,0,0,.12)"; g.lineWidth = 1;
-    for (let i=1; i<N; i++){ g.beginPath(); g.moveTo(i*cell+.5,0); g.lineTo(i*cell+.5,C.height); g.stroke(); g.beginPath(); g.moveTo(0,i*cell+.5); g.lineTo(C.width,i*cell+.5); g.stroke(); }
-    [P1,P2].forEach(p => { p.clearRect(0,0,N,N); px.forEach((c,i)=>{ if (c){ p.fillStyle = c; p.fillRect(i%N, Math.floor(i/N), 1, 1); } }); });
-  }
-  const snap = () => { hist.push(px.slice()); if (hist.length > 40) hist.shift(); };
-  function at(e){ const r = C.getBoundingClientRect(); const x = Math.floor((e.clientX - r.left) / r.width * N), y = Math.floor((e.clientY - r.top) / r.height * N); return (x<0||y<0||x>=N||y>=N) ? -1 : y*N+x; }
-  function fill(i, to){ const from = px[i]; if (from === to) return; const st = [i]; while (st.length){ const k = st.pop(); if (px[k] !== from) continue; px[k] = to; const x = k%N, y = Math.floor(k/N); if (x>0) st.push(k-1); if (x<N-1) st.push(k+1); if (y>0) st.push(k-N); if (y<N-1) st.push(k+N); } }
-  function paint(e){ const i = at(e); if (i < 0) return; const erase = tool === "erase" || e.buttons === 2; if (tool === "fill" && !erase){ fill(i, color); } else { px[i] = erase ? null : color; } draw(); }
-  C.addEventListener("contextmenu", e => e.preventDefault());
-  C.addEventListener("pointerdown", e => { e.preventDefault(); snap(); down = true; C.setPointerCapture(e.pointerId); paint(e); });
-  C.addEventListener("pointermove", e => { if (down && tool !== "fill") paint(e); });
-  C.addEventListener("pointerup", () => { down = false; });
-  el.querySelectorAll("#px-pal [data-c]").forEach(b => b.addEventListener("click", () => { color = b.dataset.c; el.querySelectorAll("#px-pal [data-c]").forEach(x => x.classList.toggle("on", x === b)); if (tool === "erase") setTool("pen"); }));
-  el.querySelector("#px-custom").addEventListener("input", e => { color = e.target.value; el.querySelectorAll("#px-pal [data-c]").forEach(x => x.classList.remove("on")); });
-  function setTool(t){ tool = t; el.querySelectorAll("[data-tool]").forEach(b => b.classList.toggle("on", b.dataset.tool === t)); }
-  el.querySelectorAll("[data-tool]").forEach(b => b.addEventListener("click", () => setTool(b.dataset.tool)));
-  el.querySelector("#px-undo").addEventListener("click", () => { if (hist.length){ px = hist.pop(); draw(); } });
-  el.querySelector("#px-clear").addEventListener("click", () => { snap(); px.fill(null); draw(); });
-  function load(id){
-    if (!served || !/^[a-z0-9_]+$/.test(id)) return;
-    const img = new Image();
-    img.onload = () => { const t = document.createElement("canvas"); t.width = t.height = N; const tg = t.getContext("2d"); tg.drawImage(img, 0, 0, N, N); const d = tg.getImageData(0,0,N,N).data; snap(); px = px.map((_,i) => d[i*4+3] > 20 ? "#" + [0,1,2].map(k => d[i*4+k].toString(16).padStart(2,"0")).join("") : null); draw(); say("נטען הציור הקיים של " + id + "."); };
-    img.src = "/picture/" + id + ".png?" + Date.now();
-  }
-  idIn.addEventListener("input", () => { idIn.value = codeName(idIn.value); });
-  idIn.addEventListener("change", () => load(idIn.value));
-  el.querySelector("#px-save").addEventListener("click", async () => {
-    const id = idIn.value;
-    if (!/^[a-z0-9_]{1,40}$/.test(id)) { say("קודם כותבים את הקוד של החפץ, באנגלית.", false); idIn.focus(); return; }
-    if (!px.some(Boolean)) { say("הלוח ריק. קודם מציירים.", false); return; }
-    if (!served) { say("כדי לשמור, פותחים את הדף מהסמל Minecraft בשולחן העבודה.", false); return; }
-    const t = document.createElement("canvas"); t.width = t.height = N; const tg = t.getContext("2d");
-    px.forEach((c,i)=>{ if (c){ tg.fillStyle = c; tg.fillRect(i%N, Math.floor(i/N), 1, 1); } });
-    try {
-      const r = await fetch("/api/save-picture", { method:"POST", headers:Object.assign(apiHeaders(), { "Content-Type":"application/json" }), body: JSON.stringify({ id, png: t.toDataURL("image/png").split(",")[1] }) });
-      const j = await r.json(); say(j.result, j.ok);
-    } catch(e){ say("הציור לא נשמר. נסו שוב.", false); }
-  });
-  if (served) fetch("/api/items", { cache:"no-store", headers:apiHeaders() }).then(r => r.json()).then(list => {
-    el.querySelector("#px-items").innerHTML = list.map(it => `<option value="${esc(it.id)}">${esc(it.name)}</option>`).join("");
-    if (idIn.value && list.some(it => it.id === idIn.value && it.hasPicture)) load(idIn.value);
-  }).catch(()=>{});
-  draw();
-}
-
 /* ===== lesson 1 slides ===== */
 const SLIDES = [
   { label:"פתיחה", html:`<div class="eye">שיעור 1 · מודים למיינקראפט</div><h1>העולם שלכם מתחיל היום</h1><p class="sub">20 שיעורים. בסוף, המשפחות והחברים ישחקו בעולם שאתם המצאתם.</p>`,
@@ -961,7 +865,7 @@ const SLIDES = [
   { label:"מתקינים", html:`<h2>מתחילים להתקין</h2><ol class="big"><li>דיסק און קי במחשב</li><li><kbd>Win</kbd> + <kbd>E</kbd> ← לוחצים על הדיסק</li><li>לחיצה כפולה על <code>install-from-usb</code></li><li>חלון שחור נפתח. <b>לא סוגרים!</b></li><li>כשכתוב שאפשר, מעבירים את הדיסק הלאה</li></ol>`,
     notes:"דיסק אחד מתקין מחשב אחד בכל פעם, בערך 5 דקות. עם 3 דיסקים, המחשב האחרון מתחיל רק אחרי 10 דקות, אז מתחילים לדבר כשהסבב הראשון רץ ולא מחכים לכולם. מי שקיבל ERROR: לא לסגור, לצלם, להמשיך עם שותף." },
   { label:"מה נעשה", html:`<h2>מה נעשה בקורס</h2>${EQ}<p class="sub">חפצים · יצורים · מקום · חוקים · סיפור. הכול שלכם.</p>`,
-    notes:"15–20 דק׳. מוד זה תוספת למיינקראפט. ג׳מיני כותב את הקוד, והם ממציאים ובודקים. אם יש לך מוד שעובד, מראים אותו עכשיו. קצר." },
+    notes:"15–20 דק׳. מוד זה תוספת למיינקראפט. הם ממציאים ובונים בעצמם בסטודיו, בלי קוד, וג׳מיני הוא שותף לרעיונות. אם יש לך מוד שעובד, מראים אותו עכשיו. קצר." },
   { label:"הדרך", html:`<h2>הדרך עד התערוכה</h2><ul class="big"><li>שיעורים 2–5: החפצים הראשונים</li><li>שיעורים 6–9: המקום שלכם והיצור הראשון</li><li><b>שיעור 10: תערוכה 1</b></li><li>שיעורים 11–15: יצור שרק אתם המצאתם</li><li><b>שיעור 20: תערוכה 2, המשפחות מגיעות</b></li></ul>`,
     notes:"מה בונים בכל חלק של הקורס. אפשר להאריך כאן אם ההתקנות עוד רצות." },
   { label:"סרטון: Diagon Alley", html:`<div class="vid" data-yt="5W-a0tl9Fu0"></div>`,
@@ -1008,27 +912,46 @@ const SLIDES = [
     notes:"ממלא זמן: רק אם ההתקנות עוד רצות. כל ריבוע מראה כמה פיקסלים מהפנים של יצור. מנחשים, ואז לוחצים כאן על הריבוע: התמונה מתרחקת ורואים את כל הפנים, גם במקרן. אחרי כל אחד: ״איך ידעתם?״ (לפי הצבעים.)" },
   { label:"מיינקראפט נפתח?", html:`<h2>מיינקראפט נפתח?</h2><ol class="big"><li>Singleplayer</li><li>Game Mode: <b>Creative</b> ← Create New World</li><li><kbd>F2</kbd> מצלם את המסך</li><li><kbd>Esc</kbd> ← Mods ← מוצאים את המוד</li></ol>`,
     notes:"80–88 דק׳. בפעם הראשונה קופץ מסך Welcome to Minecraft: לוחצים Continue. מי שמיינקראפט עוד לא נפתח אצלו: רושמים את מספר המחשב, ובודקים בהפסקה." },
-  { label:"ג׳מיני", html:`<h2>מה זה ג׳מיני</h2><ol class="big"><li><code>gemini.google.com</code>, עם החשבון של משרד החינוך</li><li>כותבים למטה, <kbd>Enter</kbd> שולח</li><li>תפריט בצד: צ׳אט חדש</li><li>כפתור העתקה בפינה של כל קוד</li><li>ג׳מיני לא זוכר צ׳אטים קודמים</li></ol>`,
-    notes:"רק אם נשאר זמן. אחרת עושים את זה בתחילת שיעור 2. מראים את כל זה על המקרן, בחשבון שלך. בנקודה האחרונה מסבירים: בגלל זה בכל שיעור שולחים לו את הקוד מחדש." },
-  { label:"מדברים עם ג׳מיני", html:`<h2>איך מדברים עם ג׳מיני בקורס</h2>${COPY_FLOW}<p class="sub">החוקים של הקורס והקוד שלכם, בכל הודעה מחדש</p>`,
-    notes:"רק אם נשאר זמן. אחרת בתחילת שיעור 2. מראים על המקרן: צ׳אט חדש, להעתיק לג׳מיני, Ctrl+V, ומתחת ״העולם שלי: ...״. אחר כך הם עושים את אותו דבר. מי שלא הספיק: עושה את זה בתחילת שיעור 2." },
+  { label:"ג׳מיני", html:`<h2>מה זה ג׳מיני</h2><ol class="big"><li><code>gemini.google.com</code>, עם החשבון של משרד החינוך</li><li>כותבים למטה, <kbd>Enter</kbd> שולח</li><li>תפריט בצד: צ׳אט חדש</li><li>ג׳מיני לא זוכר צ׳אטים קודמים</li></ol>`,
+    notes:"רק אם נשאר זמן. אחרת עושים את זה בתחילת שיעור 2. מראים את כל זה על המקרן, בחשבון שלך. בנקודה האחרונה מסבירים: בגלל זה הסטודיו שולח לו כל פעם את העולם שלהם מחדש." },
+  { label:"מדברים עם ג׳מיני", html:`<h2>איך מדברים עם ג׳מיני בקורס</h2>${COPY_FLOW}<p class="sub">החוקים של הקורס והעולם שלכם, בכל הודעה מחדש</p>`,
+    notes:"רק אם נשאר זמן. אחרת בתחילת שיעור 2. מראים על המקרן: צ׳אט חדש, בסטודיו בלשונית ג׳מיני להעתיק לג׳מיני, Ctrl+V, ומתחת ״העולם שלי: ...״. אחר כך הם עושים את אותו דבר. מי שלא הספיק: עושה את זה בתחילת שיעור 2." },
   { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ הראשון שלכם, בתוך המשחק</p><ul class="big"><li>סוגרים את מיינקראפט</li></ul>`,
     notes:"88–90 דק׳. שומרים בדרייב. לרשום אילו מחשבים לא סיימו את ההתקנה, ולבדוק אותם בהפסקה, לפני שיעור 2." }
 ];
 
 
 /* ===== lesson 2: my first item ===== */
+/* A big link from a lesson step into the studio (studio.js). The studio shows a way back to the lesson. */
+const toStudio = (what, hl) => studioMock(hl || []) + `<a class="st-entry" href="#studio"><b>פותחים את הסטודיו</b><span>${what}</span><i>←</i></a>`;
+/* A small drawing of the studio, with the place to press marked in yellow. */
+function studioMock(hl){
+  const h = k => hl.includes(k) ? " hl" : "";
+  const px = "..........,...####...,..#yyyy#..,.#yywyyy#.,.#ywyyyy#.,.#yyyyyy#.,.#yyyyyy#.,..#yyyy#..,...####...,..........".split(",");
+  return `<div class="smock" aria-hidden="true">
+    <div class="sm-top"><b>הסטודיו</b><span class="sm-w${h("world")}">העולם: עיר הדבורים</span></div>
+    <div class="sm-main">
+      <div class="sm-list"><div class="sm-card"><i></i>מטבע דבש</div><div class="sm-new${h("new")}">+ חפץ חדש</div></div>
+      <div class="sm-edit">
+        <div class="sm-tabs"><span class="on">הציור והשם</span><span>מה הוא עושה?</span><span class="${h("gem")}">ג׳מיני</span></div>
+        <div class="sm-body"><div class="sm-grid${h("paint")}">${pxSVG(px, { "#":"#7a5a10", y:"#fed83d", w:"#fff6b0" }, true)}</div>
+          <div class="sm-fields${h("fields")}"><small>השם במשחק</small><i>מטבע דבש</i><small>המשפט מתחת לשם</small><i>הדבורים מקבלות רק אותו.</i><small>הקוד באנגלית</small><i dir="ltr">honey_coin</i></div></div>
+        <div class="sm-foot"><span>מוכן למשחק.</span><span class="sm-play${h("play")}">לנסות במשחק</span></div>
+      </div>
+    </div></div>`;
+}
+const PAPER2 = `<div class="checks"><div><span class="ok"></span>שם החפץ, והמשפט שמתחתיו</div><div><span class="ok"></span>בשביל מה הוא?</div><div><span class="ok"></span>המחיר שלו</div><div><span class="ok"></span>איפה משיגים אותו, וכמה בערימה</div><div><span class="ok"></span>ציור של 16 על 16</div></div>`;
 const L2 = {
   n:2, unit:"יחידה 2 · החפצים הראשונים", title:"שיעור 2: החפץ הראשון שלי",
   steps:[
     { type:"פתיחה", title:"מה עושים היום",
-      body:`<p>היום החפץ הראשון שלכם נכנס למשחק, עם שם, משפט וציור שאתם בחרתם.</p>`,
-      expect:"בסוף השיעור החפץ שלכם נמצא במשחק, בתפריט של מצב יצירה, עם הציור שציירתם.",
-      note:"כרטיס העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. לוחצים למעלה על <b>דרייב</b>, ומחזירים את העולם שלכם מהדרייב.",
+      body:`<p>היום ממציאים חפץ לעולם שלכם ומכניסים אותו למשחק, עם שם, משפט וציור שלכם.</p>`,
+      expect:"בסוף השיעור החפץ שלכם נמצא במשחק, בלשונית של העולם שלכם.",
+      note:"העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. לוחצים למעלה על <b>דרייב</b>, ומחזירים את העולם שלכם מהדרייב.",
       visual:()=>`<div class="today">
         <div><span class="num">1</span><b>מה הופך חפץ למעולה?</b><span>מדברים על זה יחד.</span></div>
-        <div><span class="num">2</span><b>ממציאים חפץ</b><span>כרטיס וציור של 16 על 16, על דף.</span></div>
-        <div><span class="num">3</span><b>ג׳מיני כותב את הקוד</b><span>אתם מדביקים ובודקים.</span></div>
+        <div><span class="num">2</span><b>ממציאים על הדף</b><span>כרטיס, וציור של 16 על 16.</span></div>
+        <div><span class="num">3</span><b>בונים בסטודיו</b><span>מציירים, נותנים שם, ונכנסים למשחק. בלי קוד.</span></div>
       </div>` },
 
     { type:"שיחה", title:"מה הופך חפץ למעולה?",
@@ -1037,69 +960,57 @@ const L2 = {
       why:"חרב שהורגת כל דבר במכה אחת כיפית לחמש דקות. אחר כך כבר אין סכנה, ואין משחק. המחיר הוא החלק המעניין.",
       visual:()=>itemRow(["pick","pearl","bow","apple","totem","wings","potato","dirt"]) + ITEM_NEEDS },
 
-    { type:"פעילות", title:"כרטיס החפץ",
-      body:`<p>קודם על הדף, עם טושים: הכרטיס, וציור של החפץ ברשת של 16 על 16.</p><p>אחר כך מעתיקים את הכרטיס לכאן.</p>`,
-      note:"היום נכנסים למשחק השם, המשפט, הציור, וכמה נכנסים בערימה. הכוח והמחיר נכנסים למשחק בשיעור 4, ועד אז הם שמורים בכרטיס.",
+    { type:"פעילות", title:"ממציאים על הדף",
+      body:`<p>דף 2, עם טושים. קודם הכרטיס, אחר כך הציור ברשת של 16 על 16.</p><p>מי שסיים, עובר לסטודיו.</p>`,
+      note:"היום נכנסים למשחק השם, המשפט, הציור וכמה בערימה. ומה החפץ עושה? את זה בונים בשבוע הבא.",
       hints:[
         "חפץ מהעולם שלכם: מה מוצאים שם? מה אוספים? במה סוחרים?",
         "המשפט מתחת לשם יכול לרמוז בשביל מה החפץ, או מה המחיר שלו.",
-        "הקוד באנגלית הוא גם השם של הציור. למשל sky_shell או honey_coin: אותיות קטנות, בלי רווחים."
+        "תקועים על המחיר? חושבים מה החפץ לא יכול לעשות, או מה מפסידים כשמשתמשים בו."
       ],
-      visual:()=>itemCardForm(), mount:(root)=>bindItemCard(root) },
+      visual:()=>PAPER2 },
 
-    { type:"פעילות", title:"מציירים את החפץ",
-      body:`<ol><li>כותבים למעלה את הקוד של החפץ, כמו בכרטיס.</li><li>מציירים בריבוע של 16 על 16, לפי הציור שעל הדף.</li><li>לוחצים <b>לשמור את הציור</b>.</li></ol>`,
+    { type:"הוראה", title:"בסטודיו: חפץ חדש",
+      body:`<ol><li>פותחים את הסטודיו, ולוחצים <b>+ חפץ חדש</b>.</li><li>מעתיקים מהדף את השם ואת המשפט.</li><li>כותבים קוד באנגלית: אותיות קטנות, בלי רווחים. למשל <code>honey_coin</code>.</li><li>בוחרים כמה בערימה, וכמה החפץ נדיר.</li></ol>`,
+      why:"את השם בעברית רואים השחקנים. את הקוד באנגלית מכיר המשחק.",
+      note:"הסטודיו שומר לבד, כל הזמן. אין כפתור שמירה.",
+      visual:()=>toStudio("״+ חפץ חדש״, ואז השם, המשפט והקוד", ["new","fields"]) },
+
+    { type:"פעילות", title:"בסטודיו: מציירים",
+      body:`<ol><li>בוחרים צבע, ומציירים בלוח לפי הציור שעל הדף.</li><li>ליד הלוח רואים איך החפץ ייראה במשחק, עם השם בצבע של הנדירות.</li></ol>`,
       why:"במיינקראפט כל חפץ הוא 16 על 16 משבצות. כשיש מעט משבצות, מחליטים מה הכי חשוב בצורה.",
       hints:["מתחילים מקו מתאר כהה, ואז ממלאים.","שניים עד ארבעה צבעים מספיקים. צבע בהיר אחד נותן ברק.","לחיצה ימנית בעכבר מוחקת."],
-      visual:()=>pixelEditorHTML(), mount:(root, served)=>mountPixelEditor(root, served) },
-
-    { type:"שיחה", title:"ככה בונים כל דבר בקורס",
-      body:`<ol><li><b>כרטיס:</b> מחליטים מה רוצים.</li><li><b>ג׳מיני:</b> שולחים לו את החוקים, הקוד שלכם והכרטיס.</li><li><b>הדבקה:</b> מעתיקים את הקוד ש־ג׳מיני כתב, ולוחצים למעלה <b>הדבקה מג׳מיני ושחק</b>.</li><li><b>בדיקה:</b> במשחק בודקים שזה מה שרציתם.</li></ol>`,
-      why:"ג׳מיני זוכר רק מה שכתוב בצ׳אט. לכן כל פעם שולחים לו את הקוד שלכם, וככה הוא לא מוחק את מה שכבר בניתם.",
-      visual:()=>FLOW },
-
-    { type:"הוראה", title:"פותחים את ג׳מיני",
-      body:`<ol><li>נכנסים ל־<code>gemini.google.com</code> עם החשבון של משרד החינוך.</li><li>פותחים צ׳אט חדש.</li><li>שמים את ג׳מיני בצד אחד של המסך ואת הדף הזה בצד השני.</li></ol>`,
-      note:"כדי להצמיד חלון לצד: <kbd>Win</kbd> + חץ ימינה, או <kbd>Win</kbd> + חץ שמאלה.",
-      visual:()=>`<div class="split"><div>הדף הזה</div><div>ג׳מיני</div></div>` },
-
-    { type:"פעילות", title:"שולחים לג׳מיני",
-      body:`<ol><li>לוחצים למעלה על <b>להעתיק לג׳מיני</b>, ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li><li>מתחת מדביקים את הכרטיס מהמסגרת, ושולחים.</li><li>מעתיקים את הקובץ ש־ג׳מיני שולח, ולוחצים למעלה <b>הדבקה מג׳מיני ושחק</b>.</li></ol>`,
-      note:"ג׳מיני כותב את הקוד, אבל את הרעיונות אתם ממציאים. אם הוא מציע שם או משפט, אומרים לו שזה שלכם.",
-      visual:()=>gemPromptBox(itemCardPrompt()) + `<div class="nogem"><button class="btn ghost" data-nogem>ג׳מיני לא עובד? בונים בלי ג׳מיני</button><small>המחשב בונה את החפץ ישר מהכרטיס: השם, המשפט, הציור וכמה בערימה.</small></div>`,
-      mount:(root, served) => { const b = root.querySelector("[data-nogem]"); if (!b) return; if (!served || !window.HUB.addItem) { b.disabled = true; return; }
-        b.addEventListener("click", () => window.HUB.addItem(LS.get("itemcard", {}))); } },
+      visual:()=>toStudio("הלשונית ״הציור והשם״", ["paint"]) },
 
     { type:"בדיקה", title:"בודקים במשחק",
-      body:`<ol><li>נכנסים לעולם במצב יצירה.</li><li>לוחצים <kbd>E</kbd> ומוצאים את הלשונית של העולם שלכם.</li><li>בודקים מול הכרטיס: השם, המשפט, הציור, וכמה נכנסים בערימה.</li></ol>`,
-      expect:"הכול כמו בכרטיס. ואם משהו שונה, זה בדיוק מה שמתקנים עכשיו.",
+      body:`<ol><li>בסטודיו, מתחת לחפץ, כתוב אם הוא מוכן למשחק. אם חסר משהו, משלימים.</li><li>לוחצים <b>לנסות במשחק</b>. המחשב בונה את העולם שלכם ופותח את מיינקראפט. זה לוקח דקה או שתיים.</li><li>נכנסים לעולם במצב Creative, לוחצים <kbd>E</kbd>, ומוצאים את הלשונית של העולם שלכם.</li><li>בודקים מול הדף: השם, המשפט, הציור וכמה בערימה.</li></ol>`,
+      expect:"הכול כמו בדף. ואם משהו שונה, זה בדיוק מה שמתקנים עכשיו.",
       stuck:[
-        ["יש ריבוע סגול ושחור במקום הציור","הקוד של הציור לא זהה לקוד בכרטיס. בודקים את שניהם, אות אחרי אות."],
-        ["המשחק לא נפתח והופיעה מסגרת צהובה","השגיאה כבר הועתקה. בג׳מיני לוחצים Ctrl + V ואז Enter."]
+        ["החפץ לא במשחק","בסטודיו, מתחת לחפץ, כתוב מה חסר. בדרך כלל זה הקוד באנגלית."],
+        ["יש ריבוע סגול ושחור במקום הציור","לחפץ עוד אין ציור. מציירים בסטודיו, וסוגרים ופותחים את המשחק מחדש."],
+        ["שיניתי בסטודיו, ובמשחק לא רואים","שינוי נכנס רק כשהמשחק נפתח מחדש. סוגרים את מיינקראפט ולוחצים שוב לנסות במשחק."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
       ],
-      visual:()=>`<div class="checks"><div><span class="ok"></span>השם של החפץ, כמו בכרטיס</div><div><span class="ok"></span>המשפט מתחת לשם</div><div><span class="ok"></span>הציור שלכם</div><div><span class="ok"></span>כמה נכנסים בערימה</div></div>` },
+      visual:()=>studioMock(["play"]) + `<div class="checks"><div><span class="ok"></span>השם של החפץ, כמו בדף</div><div><span class="ok"></span>המשפט מתחת לשם</div><div><span class="ok"></span>הציור שלכם</div><div><span class="ok"></span>כמה נכנסים בערימה</div></div>` },
 
-    { type:"שיחה", title:"משהו לא כמו שרציתם?",
-      body:`<p>אומרים לג׳מיני בדיוק מה שונה: מה רציתם, ומה קרה במשחק. ומדביקים שוב את הקוד שלכם.</p>`,
-      visual:()=>`<div class="vs"><div class="bad"><h4>״זה לא עובד״</h4><p>ג׳מיני לא יודע מה לא עובד, אז הוא מנחש.</p></div><div class="good"><h4>מה רציתם ומה קרה</h4><p>״רציתי שייכנסו 16 בערימה, ובמשחק נכנסים 64. הנה הקוד שלי:״</p></div></div>` },
+    { type:"פעילות", title:"שם לעולם",
+      body:`<p>בסטודיו, למעלה ליד ״העולם:״, כותבים את השם מכרטיס העולם.</p><p>בפעם הבאה שהמשחק נפתח, זה השם של הלשונית שלכם.</p>`,
+      expect:"במשחק, במצב Creative, יש לשונית עם השם של העולם שלכם.",
+      visual:()=>toStudio("למעלה: ״העולם:״", ["world"]) },
 
-    { type:"פעילות", title:"נשאר זמן? שם לעולם",
-      body:`<p>רק אחרי שהחפץ שלכם במשחק.</p><ol><li>לוחצים למעלה על <b>להעתיק לג׳מיני</b>, ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li><li>מתחת כותבים את השורה מהמסגרת, עם השם מכרטיס העולם, ושולחים.</li><li>ג׳מיני שולח את הקובץ MyWorld.java. לוחצים על כפתור ההעתקה שליד הקוד.</li><li>לוחצים למעלה <b>הדבקה מג׳מיני ושחק</b>.</li></ol>`,
-      expect:"במשחק, במצב יצירה, יש לשונית עם השם של העולם שלכם.",
-      stuck:[
-        ["ג׳מיני שואל שאלות ולא כותב קוד","עונים לו. הוא שואל כדי להבין בדיוק מה אתם רוצים."],
-        ["כתוב: מה שהעתקתם זה לא קובץ שלם","בג׳מיני לוחצים על כפתור ההעתקה שליד הקוד, ולא מסמנים בעכבר."],
-        ["הופיעה מסגרת צהובה","השגיאה כבר הועתקה. בג׳מיני לוחצים Ctrl + V ואז Enter."]
-      ],
-      visual:()=>gemPromptBox("תשנה את השם של העולם שלי ל: ") },
+    { type:"פעילות", title:"נשאר זמן? חפץ שני",
+      body:`<p>עוד חפץ מהעולם שלכם, עם ציור משלו. אולי משהו שהולך עם החפץ הראשון: המטבע, והכוורת שבה מוצאים אותו.</p>`,
+      hints:["צבע כהה לצל וצבע בהיר לברק, וכבר הציור נראה תלת־ממדי.","חפץ נדיר מקבל שם בצבע אחר. איזה חפץ אצלכם הכי נדיר?"],
+      visual:()=>toStudio("״+ חפץ חדש״", ["new"]) },
 
     { type:"סיום", title:"מסיימים",
-      body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם.</li></ul>`,
-      expect:"בשבוע הבא: החפץ שלכם בתלת־ממד.",
+      body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם.</li></ul>
+        <p>ראיתם בסטודיו את הלשונית ״מה הוא עושה?״ אותה פותחים בשבוע הבא.</p>`,
+      expect:"בשבוע הבא: מה החפץ שלכם עושה.",
       visual:()=>`<div class="checks"><div><span class="ok"></span>החפץ שלי במשחק</div><div><span class="ok"></span>מראים למי שיושב לידכם</div><div><span class="ok"></span>העולם שלי שמור בדרייב</div></div>` }
   ],
   challenges:[
-    {id:"card", lvl:"חובה", t:"כרטיס החפץ", d:"בשביל מה הוא, מה המחיר, ואיפה משיגים אותו."},
+    {id:"card", lvl:"חובה", t:"דף 2", d:"בשביל מה החפץ, מה המחיר, ואיפה משיגים אותו."},
     {id:"item", lvl:"חובה", t:"החפץ שלי", d:"החפץ במשחק, עם השם, המשפט והציור שלכם."},
     {id:"world", lvl:"אתגר", t:"שם לעולם", d:"הלשונית במשחק נקראת בשם של העולם שלכם."},
     {id:"second", lvl:"אתגר", t:"חפץ שני", d:"עוד חפץ מהעולם שלכם, עם ציור משלו."},
@@ -1107,56 +1018,6 @@ const L2 = {
   ]
 };
 
-const SLIDES2 = [
-  { label:"פתיחה", html:`<div class="eye">שיעור 2 · מודים למיינקראפט</div><h1>החפץ הראשון שלכם</h1><p class="sub">היום יוצא מכאן חפץ שאתם ציירתם, בתוך המשחק.</p>`,
-    notes:"0–5 דק׳. הילדים לוחצים פעמיים על הסמל Minecraft, והדף נפתח לבד. מי שלא שלח הודעה לג׳מיני בשיעור 1, עושה את זה עכשיו." },
-  { label:"מה הופך חפץ למעולה?", html:`<h2>מה הופך חפץ למעולה?</h2>${itemRow(["pick","pearl","bow","apple","totem","wings","potato","dirt"])}`,
-    notes:"5–35 דק׳, אחת־עשרה שקופיות. שיחה, לא הרצאה. הצבעה בהרמת יד על כל חפץ: מי לוקח אותו תמיד? מי אף פעם לא? כותבים על הלוח שתי רשימות. שואלים: מה ההבדל בין הרשימות? השקופיות הבאות הן ארבע תשובות." },
-  { label:"1 · בשביל מה", html:`<div class="eye">1 מתוך 4</div><h2>בשביל מה הוא?</h2><div class="bal"><div class="r two">${itemSVG("pick")}<b>Pickaxe</b><div class="job">חוצבים איתו.</div></div><div class="r two">${itemSVG("pearl")}<b>Ender Pearl</b><div class="job">מגיעים רחוק, ברגע.</div></div><div class="r two">${itemSVG("potato")}<b>Poisonous Potato</b><div class="job">...?</div></div></div><p class="sub">חפץ בלי תפקיד נשאר בתיבה.</p>`,
-    notes:"עוברים על החפצים שעל הלוח: מה עושים עם כל אחד? חפץ טוב עונה במשפט אחד. על Poisonous Potato הם ייתקעו, וזו בדיוק הנקודה." },
-  { label:"1 · ארבעה תפקידים", html:`<div class="eye">1 מתוך 4</div><h2>ארבעה תפקידים לחפץ</h2><div class="rules"><div><b>כלי</b>עושים איתו משהו.<small>Pickaxe, Fishing Rod</small></div><div><b>נשק או מגן</b>נלחמים איתו.<small>Sword, Shield</small></div><div><b>אוצר</b>אוספים אותו וסוחרים בו.<small>Emerald</small></div><div><b>מפתח</b>פותח או מפעיל משהו.<small>Eye of Ender</small></div></div>`,
-    notes:"כל אחד אומר: מה החפץ שלו, ואיזה מהארבעה הוא. היום הכי קל לבנות אוצר או מפתח, כי הם לא צריכים כוחות: מספיק שם, משפט, ציור, וכמה בערימה. מי שרוצה נשק: בונה היום את החפץ, והכוח שלו נכנס בשיעור 4." },
-  { label:"2 · המחיר", html:`<div class="eye">2 מתוך 4</div><h2>מה מקבלים, ומה משלמים</h2><div class="bal"><div class="r">${itemSVG("pearl")}<b>Ender Pearl</b><div class="get"><small>מקבלים</small>מגיעים רחוק, ברגע.</div><div class="pay"><small>משלמים</small>נפצעים בנחיתה.</div></div><div class="r">${itemSVG("wings")}<b>Elytra</b><div class="get"><small>מקבלים</small>עפים.</div><div class="pay"><small>משלמים</small>אין שריון על החזה.</div></div><div class="r">${itemSVG("bow")}<b>Bow</b><div class="get"><small>מקבלים</small>פוגעים מרחוק.</div><div class="pay"><small>משלמים</small>כל ירייה עולה חץ.</div></div></div>`,
-    notes:"מכסים את העמודה האדומה ושואלים: מה המחיר של Ender Pearl? של Elytra? הם יודעים, רק אף פעם לא קראו לזה מחיר. המסקנה: לכל חפץ חזק במיינקראפט יש מחיר. זה לא במקרה, מישהו תכנן את זה." },
-  { label:"2 · ארבעה מחירים", html:`<div class="eye">2 מתוך 4</div><h2>ארבעה סוגים של מחיר</h2><div class="rules"><div><b>עולה משהו</b>חצים, אוכל, זהב.</div><div><b>פוגע בכם</b>כמו Ender Pearl.</div><div><b>מוותרים על משהו</b>Elytra, או שריון.</div><div><b>עובד רק לפעמים</b>רק בלילה. רק בגשם.</div></div><p class="sub">המחיר הוא החלק המעניין בחפץ.</p>`,
-    notes:"שואלים כל אחד: מה המחיר של החפץ שלך, ואיזה סוג הוא? מי שאומר ״אין לו מחיר״: איזה מהארבעה הכי מתאים לעולם שלך? להגיד בבירור: את המחיר כותבים היום בכרטיס, והוא נכנס למשחק בשיעור 4." },
-  { label:"2 · הצבעה", html:`<div class="eye">2 מתוך 4</div><h2>עם איזו חרב יותר כיף אחרי שעה?</h2><div class="ab"><div><span class="l">א</span>הורגת כל דבר במכה אחת. תמיד.</div><div class="or">או</div><div><span class="l">ב</span>חזקה מאוד, ונשברת אחרי עשר מכות.</div></div>`,
-    notes:"הצבעה. רובם יבחרו א׳. שואלים: ומה קורה אחרי חמש דקות עם א׳? אין יותר סכנה, אז אין משחק. עם ב׳ צריך להחליט על מי שווה לבזבז מכה. חפץ טוב גורם לשחקן להחליט משהו." },
-  { label:"3 · נדירות", html:`<div class="eye">3 מתוך 4</div><h2>כמה הוא נדיר?</h2><div class="stk"><figure>${stackPic(64,8,"#8A5A2B")}<figcaption>64<small>Dirt · בכל מקום</small></figcaption></figure><figure>${stackPic(16,4,"#1FA89A")}<figcaption>16<small>Ender Pearl · צריך לחפש</small></figcaption></figure><figure>${stackPic(1,1,"#F2C94C")}<figcaption>1<small>Totem of Undying · רק מאויב אחד</small></figcaption></figure></div><p class="sub">כמה נכנסים בערימה אחת. ככל שהחפץ נדיר יותר, המספר קטן יותר.</p>`,
-    notes:"שואלים: למה מ־Ender Pearl נכנסות רק 16 בערימה? (אחרת הייתם מתעופפים בכל המפה בלי לחשוב.) ולמה מ־Totem of Undying רק אחד? המספר הזה הוא הדבר שג׳מיני מכניס למשחק כבר היום, אז כל אחד בוחר: 1, 16 או 64, ולמה." },
-  { label:"3 · רק למצוא", html:`<div class="eye">3 מתוך 4</div><div class="hero1"><div class="slotpx">${itemSVG("apple")}</div><div><h2>Enchanted Golden Apple</h2><p class="quote">אי אפשר להכין אותו. רק למצוא.</p></div></div>`,
-    notes:"שואלים את השאלה שעל המסך. (אף אחד לא היה שמח למצוא יהלום.) מה שקשה להשיג, שומרים לרגע הנכון. שואלים כל אחד: איפה משיגים את החפץ שלך? רק במקום אחד? רק מיצור אחד? זו השורה ״איפה משיגים אותו״ בכרטיס." },
-  { label:"4 · השם", html:`<div class="eye">4 מתוך 4</div><h2>מה החפץ הזה עושה?</h2><div class="rules"><div><b>פטיש הרעם</b><small>?</small></div><div><b>מגפי ענן</b><small>?</small></div><div><b>מטבע דבש</b><small>?</small></div></div><p class="sub">אם כולם מנחשים אותו דבר, השם טוב.</p>`,
-    notes:"משחק. אף אחד מהחפצים האלה לא קיים, ובכל זאת כולם ינחשו כמעט אותו דבר. אחר כך כל אחד אומר רק את שם החפץ שלו, והכיתה מנחשת מה הוא עושה. מי שניחשו אצלו לא נכון, מחליף שם." },
-  { label:"4 · 16 על 16", html:`<div class="eye">4 מתוך 4</div><h2>וגם הצורה מספרת</h2><div class="z16"><div class="big">${mcPic("item_diamond_sword", pxSVG(SWORD16.map, SWORD16.pal, true))}</div><div class="side"><div><b>256 משבצות</b><br>זה כל הציור.</div><div class="real">${mcPic("item_diamond_sword", pxSVG(SWORD16.map, SWORD16.pal), "mslot")}<span>וככה רואים אותו במשחק.</span></div></div></div><p class="sub">רק הצורה הכי חשובה נכנסת. קו מתאר כהה, ושניים עד ארבעה צבעים.</p>`,
-    notes:"שואלים: איך יודעים שזו חרב, גם כשהיא קטנטנה? (הצורה: להב ארוך, ידית, ומשהו לרוחב.) סופרים יחד את הצבעים בציור: ארבעה. בדף שלהם יש רשת כזאת בדיוק, של 16 על 16." },
-  { label:"אז מה חפץ צריך?", html:`<h2>אז מה חפץ צריך?</h2><div class="rules"><div><span class="n">1</span><b>תפקיד</b>בשביל מה הוא?</div><div><span class="n">2</span><b>מחיר</b>מה משלמים עליו?</div><div><span class="n">3</span><b>נדירות</b>איפה משיגים, וכמה בערימה?</div><div><span class="n">4</span><b>שם וצורה</b>שמספרים מה הוא עושה.</div></div><p class="sub">אלה השורות בכרטיס החפץ.</p>`,
-    notes:"חצי דקה, ועוברים לדף. להזכיר: היום נכנסים למשחק השם, המשפט, הציור, וכמה בערימה. התפקיד והמחיר נשארים בכרטיס עד שיעור 4." },
-  { label:"כרטיס החפץ", html:`<h2>כרטיס החפץ</h2><div class="wcard">
-      <div class="ln">שם החפץ</div>
-      <div class="ln">בשביל מה הוא?</div>
-      <div class="ln">המחיר שלו</div>
-      <div class="ln">איפה משיגים אותו, וכמה נכנסים בערימה</div>
-      <div class="ln">המשפט שמופיע מתחת לשם</div></div><p class="sub">15 דקות, על הדף, עם טושים: כרטיס וציור</p>`,
-    notes:"35–50 דק׳. מחלקים דפים וטושים. קודם הכרטיס, אחר כך הציור ברשת של 16 על 16. מסתובבים, ולכל ילד שאלה אחת: ״ומה המחיר?״" },
-  { label:"ציור 16 על 16", html:`<h2>ציור של 16 על 16</h2><ul class="big"><li>מתחילים מקו מתאר כהה</li><li>שניים עד ארבעה צבעים</li><li>צבע בהיר אחד לברק</li><li>מה שלא צובעים, נשאר שקוף</li></ul>`,
-    notes:"להשאיר על המסך בזמן שהם מציירים על הדף. כדאי להראות חפץ של מיינקראפט מוגדל, למשל יהלום: כמה מעט צבעים יש בו." },
-  { label:"ככה בונים", html:`<h2>ככה בונים כל דבר בקורס</h2>${FLOW}`,
-    notes:"50–57 דק׳, יחד עם השקופית הבאה. אותם ארבעה צעדים בכל השיעורים." },
-  { label:"הדגמה", html:`<h2>הדגמה</h2><ol class="big"><li>כרטיס</li><li>להעתיק לג׳מיני, ובג׳מיני <kbd>Ctrl</kbd> + <kbd>V</kbd></li><li>מתחת: הכרטיס</li><li>הדבקה מג׳מיני ושחק</li></ol>`,
-    notes:"בונים חפץ אחד על המקרן, מהר, מהכרטיס ועד המשחק. אם יוצאת שגיאה, מצוין: מראים את המסגרת הצהובה ואת Ctrl+V בג׳מיני." },
-  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><ol class="big"><li>מעתיקים את הכרטיס מהדף למחשב</li><li>מציירים בעורך, לפי הדף</li><li>ג׳מיני</li><li>בודקים במשחק</li><li>נשאר זמן? שם לעולם</li></ol>`,
-    notes:"57–85 דק׳. מסתובבים בכיתה. מי שתקוע: קודם שואל את מי שיושב לידו. מי שלא מספיק היום, ממשיך בתחילת שיעור 3." },
-  { label:"משהו לא עבד?", html:`<h2>משהו לא עבד?</h2><div class="rules">
-      <div><b>מסגרת צהובה</b>השגיאה כבר הועתקה. בג׳מיני: Ctrl + V.</div>
-      <div><b>לא מה שרציתם</b>אומרים לג׳מיני מה רציתם ומה קרה.</div>
-      <div><b>הכול השתבש</b>לוחצים ביטול ההדבקה.</div></div>`,
-    notes:"להשאיר על המסך בזמן העבודה." },
-  { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ שלכם בתלת־ממד</p><ul class="big"><li>מראים למי שיושב לידכם</li><li>סוגרים את מיינקראפט</li><li>דרייב ← שומרים את העולם</li></ul>`,
-    notes:"85–90 דק׳. שניים או שלושה ילדים מראים את החפץ שלהם על המקרן." }
-];
-
-/* ===== teacher ===== */
 const GEM_TEXT = `RULES FOR THIS CHAT. Follow them for every answer in this chat.
 You are the Mod Helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Answer in simple, short Hebrew. If the kid writes to you in English, answer in simple English. Code, file names and paths stay in English.
 
@@ -1210,7 +1071,7 @@ function applyReveal(root, set){
   root.querySelectorAll("[data-sil]").forEach(b => { if (set.has(+b.dataset.sil)) { b.classList.add("shown"); b.querySelector(".nm").textContent = MOBS[+b.dataset.sil].name; } });
 }
 const LESSONS = { 1: L1, 2: L2 };
-const DECKS = { 1: SLIDES, 2: SLIDES2 };
+const DECKS = { 1: SLIDES };
 window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
   gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK,
   LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES };

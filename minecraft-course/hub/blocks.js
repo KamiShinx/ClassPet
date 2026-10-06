@@ -268,5 +268,29 @@ function describe(b, depth){
 }
 function readable(prog){ const r = toBlocks(prog); if (r.error) return []; return r.blocks.blocks.blocks.flatMap(b => describe(b, 0)); }
 function loadInto(item, prog){ const r = toBlocks(prog); if (r.error) return r; item.blocks = r.blocks; item.power = prog; return { ok:true }; }
-window.STUDIO_BLOCKS = { mount, unmount, compile, DEFS, toBlocks, readable, loadInto, LISTS };
+/* ---------- quick checks, without Gemini: the logic mistakes kids make most ---------- */
+function lint(prog){
+  const out = [], seen = new Set(), add = t => { if (!seen.has(t)){ seen.add(t); out.push(t); } };
+  if (!prog || !prog.on) return out;
+  const E = en();
+  const strong = new Set(["lightning","explode","spawn","tp","fire"]);
+  let anyPrice = false, anyStrong = false;
+  const walk = (list, trig) => (list || []).forEach(s => {
+    if (!s) return;
+    if (s.if){ if (!(s.then || []).length) add(E ? "An \"if\" has nothing inside it." : "יש ״אם״ בלי שום דבר בפנים."); cond(s.if, trig); walk(s.then, trig); walk(s.else, trig); return; }
+    if (s.repeat){ if (!(s.do || []).length) add(E ? "A \"repeat\" has nothing inside it." : "יש ״לחזור״ בלי שום דבר בפנים."); walk(s.do, trig); return; }
+    if (s.who === "target" && trig !== "hit") add(E ? "A block points at \"the creature\", but only \"When you hit a creature\" has one. Elsewhere it does nothing." : "קובייה מכוונת אל ״היצור״, אבל יש יצור רק ב״כשמכים יצור״. במקום אחר היא לא עושה כלום.");
+    if (["cooldown","consume","hunger"].includes(s.a)) anyPrice = true;
+    if (strong.has(s.a) || (s.a === "damage" && s.who === "target") || (s.a === "effect" && s.l >= 3)) anyStrong = true;
+    if (trig === "hold" && strong.has(s.a)) add(E ? "Under \"Every second\", this happens every second as long as you hold it." : "ב״כל שנייה״ זה יקרה כל שנייה, כל עוד מחזיקים את החפץ.");
+    if (s.a === "explode" && s.who === "me") add(E ? "An explosion next to you hurts you too." : "פיצוץ לידכם פוגע גם בכם.");
+  });
+  const cond = (c, trig) => { if (!c) return add(E ? "An \"if\" has no question in it." : "יש ״אם״ בלי שאלה.");
+    if (c.c === "target" && trig !== "hit") add(E ? "\"The creature is...\" only works under \"When you hit a creature\"." : "״היצור הוא...״ עובד רק ב״כשמכים יצור״.");
+    (c.and || c.or || []).forEach(x => cond(x, trig)); if (c.not) cond(c.not, trig); };
+  Object.keys(prog.on).forEach(k => walk(prog.on[k], k));
+  if (anyStrong && !anyPrice) add(E ? "A strong power with no price. What stops a player from using it all the time?" : "כוח חזק בלי מחיר. מה ימנע מהשחקן להשתמש בו כל הזמן?");
+  return out;
+}
+window.STUDIO_BLOCKS = { mount, unmount, compile, DEFS, toBlocks, readable, loadInto, LISTS, lint };
 })();

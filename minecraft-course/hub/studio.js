@@ -74,7 +74,7 @@ function render(app){
   </div>`;
   bind(app); paintThumbs(app); paintStatus();
   const blk = app.querySelector("#st-blk");
-  if (blk && it && window.STUDIO_BLOCKS) window.STUDIO_BLOCKS.mount(blk, it, save);
+  if (blk && it && window.STUDIO_BLOCKS){ window.STUDIO_BLOCKS.mount(blk, it, () => { paintLint(it); save(); }); paintLint(it); }
   if (H.afterRender) H.afterRender();
 }
 function editor(it){
@@ -101,11 +101,18 @@ function editor(it){
     </div>
   </div>
   <div class="st-blocks"><h3>מה החפץ עושה?</h3><p>גוררים קוביות מהתפריט: קודם ״מתי״, ובתוכה מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div>
-    <div class="st-acts"><button class="btn ghost" id="st-blk2g">להעתיק את הקוביות לג׳מיני</button><small>ג׳מיני יגיד מה טוב, מה אפשר לשפר, וישלח גרסה משופרת. אתם מחליטים אם לקחת אותה.</small></div></div>
+    <ul class="st-lint" id="st-lint"></ul>
+    <label class="st-intent">במילים שלכם: מה החפץ אמור לעשות?<textarea data-f="intent" maxlength="300" rows="2" placeholder="למשל: כשמכים יצור בלילה, נופל עליו ברק. אחרי זה המקל צריך לנוח.">${esc(it.intent || "")}</textarea></label>
+    <div class="st-acts"><button class="btn ghost" id="st-blk2g">להעתיק את הקוביות לג׳מיני</button><small>ג׳מיני יבדוק אם הקוביות עושות את מה שכתבתם, יסביר מה לא עובד, ויציע גרסה מתוקנת. אתם מחליטים אם לקחת אותה.</small></div></div>
   <div class="st-gem"><h3>ג׳מיני, שותף לעיצוב</h3>
     <ol><li><button class="btn ghost" id="st-tog">להעתיק לג׳מיני</button> ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>. מתחת כותבים מה אתם רוצים: רעיון, שאלה, או שינוי.</li>
     <li>ג׳מיני הציע שינוי? מעתיקים את כל התשובה שלו, ולוחצים <button class="btn ghost" id="st-fromg">הדבקה מג׳מיני</button></li></ol>
     <div id="st-sugg">${S.sugg ? suggestion() : ""}</div></div>`;
+}
+function paintLint(it){
+  const el = document.getElementById("st-lint"); if (!el || !window.STUDIO_BLOCKS) return;
+  const list = window.STUDIO_BLOCKS.lint(it.power);
+  el.innerHTML = list.map(t => `<li>${esc(t)}</li>`).join("");
 }
 function paintStatus(){ const el = document.getElementById("st-status"); if (!el) return; el.className = "st-status" + (S.err ? " bad" : ""); el.textContent = S.err || S.msg; }
 
@@ -207,10 +214,10 @@ It comes right after these rules, as JSON (under "===== העולם שלי ====="
 const BLOCK_RULES = `RULES FOR THIS CHAT. Follow them for every answer in this chat.
 A kid (11-13, Israel) built a power for a Minecraft item from logic blocks in our course's studio. There is no code: the blocks run inside the game. Below are the kid's blocks as readable lines and as a program (JSON). Answer in short, simple Hebrew (simple English if the kid writes in English).
 
-YOUR JOB: review it like a friendly game designer.
-1. One sentence on what is good about it.
-2. Up to two improvements, about game design: is there a price? Is it too strong or too weak? Does the player get a clear sign that something happened? Is there a surprise?
-3. Then send ONE improved version as a block, and list in Hebrew, line by line, what you changed and why:
+YOUR JOB, in this order:
+1. LOGIC REVIEW. Under "===== מה אני רוצה שהחפץ יעשה =====" the kid wrote, in their own words, what the item should do. Check whether the blocks really do that. Find logic mistakes and explain each one in one simple sentence, the way a teacher would: a block under the wrong "when", "the creature" outside "hit" (there is no creature there), steps in the wrong order, a missing or wrong condition, a price that comes before the power so it never pays, a repeat that does too much. If the kid wrote nothing, say what the blocks do in plain words and ask if that's what they meant. The studio's own checks are under "===== בדיקות של הסטודיו =====".
+2. GAME DESIGN. One sentence on what is good, then up to two improvements: is there a price? Is it too strong or too weak? Does the player get a clear sign that something happened?
+3. Then send ONE fixed version as a block, and list in Hebrew, line by line, what you changed and why:
 \`\`\`blocks
 {"on":{"use":[...]}}
 \`\`\`
@@ -234,8 +241,10 @@ function blocksText(it){
   const B = window.STUDIO_BLOCKS, L = B.LISTS;
   const rules = BLOCK_RULES.replace("@@E@@", L.E.map(x => x[2]).join(", ")).replace("@@M@@", L.M.map(x => x[2]).join(", ")).replace("@@S@@", L.SND.map(x => x[2]).join(", "));
   return rules + "\n\n===== החפץ =====\n" + (it.name || "") + (it.lore ? " (" + it.lore + ")" : "") + (it.job ? "\nבשביל מה: " + it.job : "") + (it.price ? "\nהמחיר שתכננתי: " + it.price : "")
+    + "\n\n===== מה אני רוצה שהחפץ יעשה =====\n" + (it.intent || "(לא כתבתי)")
     + "\n\n===== הקוביות שלי =====\n" + B.readable(it.power).join("\n") + "\n\n===== התוכנית (JSON) =====\n" + JSON.stringify(it.power)
-    + "\n\n===== מה אני רוצה =====\nאיך אפשר לשפר את הכוח הזה?\n";
+    + "\n\n===== בדיקות של הסטודיו =====\n" + (B.lint(it.power).join("\n") || "אין הערות")
+    + "\n\n===== מה אני רוצה =====\nתבדקו אם הקוביות שלי עושות את מה שכתבתי, ואיך אפשר לשפר.\n";
 }
 function blockList(){
   const B = window.STUDIO_BLOCKS; if (!B) return "";
@@ -362,6 +371,10 @@ const CSS = `
 .studio .sg-ba{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .studio .sg-ba pre{margin:4px 0 0;white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px;font-family:var(--body);font-size:.95rem;line-height:1.5}
 .studio .st-blocks .st-acts{align-items:center}
+.studio .st-lint{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.studio .st-lint li{background:var(--xp-soft);border-inline-start:4px solid var(--xp);border-radius:4px;padding:6px 10px;font-weight:700}
+.studio .st-intent{display:grid;gap:4px;font-weight:700}
+.studio .st-intent textarea{font:inherit;font-weight:400;padding:8px 10px;border:2px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);resize:vertical}
 .studio .st-blocks .st-acts small{color:var(--muted)}
 .studio .st-sg ul{margin:4px 0 0;padding-inline-start:20px}
 .studio .st-sg li span{color:var(--muted);margin-inline-end:8px}

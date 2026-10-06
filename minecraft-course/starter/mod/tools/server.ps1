@@ -38,6 +38,7 @@ function Write-Clip([string]$text) {
 }
 
 function Start-Game([bool]$online) {
+    try { Copy-StudioToMod $root } catch {}
     try { [void](Invoke-Prepare $mod) } catch {}
     New-Item -ItemType Directory -Force (Split-Path $log) | Out-Null
     if (Test-Path $log) { Remove-Item $log -Force -ErrorAction SilentlyContinue }
@@ -221,6 +222,14 @@ function Invoke-Request($client) {
         if (Test-Path $file) { Send $stream 200 $types['.png'] ([IO.File]::ReadAllBytes($file)) } else { Send $stream 404 'text/plain' ([byte[]]@()) }
         return
     }
+    if ($path -eq '/api/studio') {
+        Send $stream 200 $types['.json'] ([Text.Encoding]::UTF8.GetBytes((Get-Studio $root)))
+        return
+    }
+    if ($path -eq '/api/clip') {
+        Send-Json $stream @{ text = [string](Read-Clip) }
+        return
+    }
     if ($path -eq '/api/versions') {
         Send $stream 200 $types['.json'] ([Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -Compress -InputObject @(Get-Versions $root))))
         return
@@ -232,6 +241,18 @@ function Invoke-Request($client) {
             $r = New-Result $false 'הציור לא נשמר. נסו שוב.'
             try { $j = $body | ConvertFrom-Json; $r = Save-ItemPicture $root ([string]$j.id) ([string]$j.png) } catch {}
             Send-Json $stream @{ ok = $r.Ok; result = $r.Message; phase = $state.phase; message = $r.Message; error = $state.error }
+            return
+        }
+        if ($path -eq '/api/studio-save') {
+            $r = New-Result $false 'העיצוב לא נקרא. נסו שוב.'
+            try { $r = Save-Studio $root ([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($body))) } catch {}
+            Send-Json $stream @{ ok = $r.Ok; result = $r.Message }
+            return
+        }
+        if ($path -eq '/api/copy-text') {
+            $ok = $false
+            try { Write-Clip ([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($body))); $ok = $true } catch {}
+            Send-Json $stream @{ ok = $ok }
             return
         }
         if ($path -eq '/api/add-item') {

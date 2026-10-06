@@ -310,6 +310,11 @@ body.aud .stage{min-height:100vh}
 .dock-vers .vhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .vnote{color:var(--muted);font-size:.92em}
 .nogem{display:grid;gap:4px;justify-items:start;margin-top:14px}
+.st-entry{display:grid;grid-template-columns:1fr auto;gap:2px 14px;align-items:center;margin-top:16px;padding:14px 18px;border:3px solid var(--grass);border-radius:10px;background:var(--grass-soft);color:var(--ink);text-decoration:none;box-shadow:0 4px 0 var(--grass)}
+.st-entry b{font-family:var(--display);font-weight:400;font-size:1.6rem;color:var(--grass)}
+.st-entry span{grid-column:1;color:var(--ink)}
+.st-entry i{grid-row:1 / span 2;grid-column:2;font-style:normal;font-size:1.8rem;color:var(--grass)}
+[dir="ltr"] .st-entry i{transform:scaleX(-1)}
 .nogem small{color:var(--muted)}
 .drv{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px}
 .drv h4{margin:0 0 4px}

@@ -16,10 +16,11 @@ $utf8 = New-Object System.Text.UTF8Encoding($false)
 $head = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + "`r`n"
 $web = New-Object System.Net.WebClient
 $files = @{}
-foreach ($n in 'content.js', 'slides.js', 'en.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all, or nothing
+foreach ($n in 'content.js', 'slides.js', 'en.js', 'studio.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all, or nothing
 [IO.File]::WriteAllText("$hub\content.js", $files['content.js'], $utf8)
 [IO.File]::WriteAllText("$hub\slides.js", $files['slides.js'], $utf8)
 [IO.File]::WriteAllText("$hub\en.js", $files['en.js'], $utf8)
+[IO.File]::WriteAllText("$hub\studio.js", $files['studio.js'], $utf8)
 [IO.File]::WriteAllText("$hub\index.html", $head + $files['index.html'], $utf8)
 [IO.File]::WriteAllText("$hub\teacher.html", $head + $files['teacher.html'], $utf8)
 [IO.File]::WriteAllText("$hub\print.html", $files['print.html'], $utf8)

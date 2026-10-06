@@ -23,6 +23,17 @@ function Invoke-Prepare([string]$mod) {
             $lang["$($k[2]).myworld.$id"] = $m.Groups[2].Value.Replace('\"', '"')
         }
     }
+    # Items made in the studio (design/world.json, copied into the mod's resources).
+    $studio = Join-Path $assets 'studio/world.json'
+    if (Test-Path $studio) {
+        try { $w = [IO.File]::ReadAllText($studio, [Text.Encoding]::UTF8) | ConvertFrom-Json } catch { $w = $null }
+        foreach ($it in @($w.items)) {
+            $id = [string]$it.id
+            if ($id -notmatch '^[a-z][a-z0-9_]{0,39}$' -or $lang.Contains("item.myworld.$id")) { continue }
+            [void]$items.Add($id)
+            $lang["item.myworld.$id"] = [string]$it.name
+        }
+    }
     $langDir = Join-Path $assets 'lang'
     New-Item -ItemType Directory -Force $langDir | Out-Null
     $json = if ($lang.Count -gt 0) { $lang | ConvertTo-Json } else { '{}' }
@@ -184,6 +195,8 @@ function Invoke-SaveAll([string]$root, [string]$label = 'all') {
     Copy-Item (Join-Path $root 'mod/src/main/java/make/myworld/*.java') (Join-Path $dir 'java')
     $tex = Join-Path $root 'mod/src/main/resources/assets/myworld/textures'
     if (Test-Path $tex) { Copy-Item (Join-Path $tex '*') (Join-Path $dir 'textures') -Recurse }
+    $st = Get-StudioFile $root
+    if (Test-Path $st) { Copy-Item $st (Join-Path $dir 'world.json') }
     return New-Result $true 'הגרסה נשמרה.'
 }
 
@@ -191,12 +204,13 @@ function Get-Versions([string]$root) {
     $saves = Join-Path $root 'saves'
     if (-not (Test-Path $saves)) { return @() }
     $today = Get-Date -Format 'yyyy-MM-dd'
-    $list = foreach ($e in (Get-ChildItem $saves | Where-Object { $_.Name -match '^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_' } | Sort-Object Name -Descending | Select-Object -First 40)) {
+    $list = foreach ($e in (Get-ChildItem $saves | Where-Object { $_.Name -match '^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_' -and $_.Name -notlike '*.png' } | Sort-Object Name -Descending | Select-Object -First 40)) {
         $date = $e.Name.Substring(0, 10)
         $time = $e.Name.Substring(11, 5).Replace('-', ':')
         $rest = $e.Name.Substring(20)
         $what = $(if ($e.PSIsContainer -and $rest -eq 'all') { 'גרסה ששמרתם' }
                   elseif ($e.PSIsContainer) { 'לפני שהחזרתם גרסה' }
+                  elseif ($rest -eq 'studio.json') { 'הסטודיו, לפני שינוי' }
                   else { 'לפני הדבקה ל־' + ($rest -replace '\.java$', '') })
         [pscustomobject]@{ id = $e.Name; day = $(if ($date -eq $today) { 'היום' } else { $date }); time = $time; what = $what }
     }
@@ -204,7 +218,7 @@ function Get-Versions([string]$root) {
 }
 
 function Invoke-Restore([string]$root, [string]$id) {
-    if ($id -notmatch '^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_[A-Za-z]+(\.java)?$') { return New-Result $false 'הגרסה לא נמצאה.' }
+    if ($id -notmatch '^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_[A-Za-z]+(\.java|\.json)?$') { return New-Result $false 'הגרסה לא נמצאה.' }
     $src = Join-Path $root "saves/$id"
     if (-not (Test-Path $src)) { return New-Result $false 'הגרסה לא נמצאה.' }
     [void](Invoke-SaveAll $root 'before')
@@ -213,10 +227,72 @@ function Invoke-Restore([string]$root, [string]$id) {
         Copy-Item (Join-Path $src 'java/*.java') $java -Force
         $tex = Join-Path $root 'mod/src/main/resources/assets/myworld/textures'
         if (Test-Path (Join-Path $src 'textures')) { Copy-Item (Join-Path $src 'textures/*') $tex -Recurse -Force }
+        if (Test-Path (Join-Path $src 'world.json')) { New-Item -ItemType Directory -Force (Split-Path (Get-StudioFile $root)) | Out-Null; Copy-Item (Join-Path $src 'world.json') (Get-StudioFile $root) -Force; Copy-StudioToMod $root }
+    } elseif ($id.EndsWith('_studio.json')) {
+        New-Item -ItemType Directory -Force (Split-Path (Get-StudioFile $root)) | Out-Null
+        Copy-Item $src (Get-StudioFile $root) -Force; Copy-StudioToMod $root
     } else {
         Copy-Item $src (Join-Path $java (($id -split '_')[-1])) -Force
     }
     return New-Result $true 'הגרסה חזרה. לוחצים שחק כדי לבדוק.'
+}
+
+# ---------- the studio: the kid's world as data ----------
+# design/world.json is what the kid builds in the hub's studio (items now; creatures, rules and places later).
+# A copy goes into the mod's resources, where Kit.java reads it when the game starts. No code is written,
+# so nothing the kid does in the studio can break the build.
+function Get-StudioFile([string]$root) { Join-Path $root 'design/world.json' }
+function Get-Studio([string]$root) {
+    $f = Get-StudioFile $root
+    if (Test-Path $f) { return [IO.File]::ReadAllText($f, [Text.Encoding]::UTF8) }
+    return '{"version":1,"items":[]}'
+}
+# Checks a whole design; returns $null if it's fine, or a message for the kid.
+function Test-Studio($w, [string]$root) {
+    if ($null -eq $w) { return 'העיצוב לא נקרא.' }
+    $taken = @{}
+    foreach ($it in @(Get-ItemList $root | Where-Object { -not $_.studio })) { $taken[$it.id] = 'MyItems' }
+    $seen = @{}
+    foreach ($it in @($w.items)) {
+        if ($null -eq $it) { continue }
+        $id = [string]$it.id
+        if ($id -notmatch '^[a-z][a-z0-9_]{0,39}$') { return "הקוד ""$id"" לא תקין: רק אותיות קטנות באנגלית, מספרים וקו תחתון, ומתחיל באות." }
+        if ($seen.ContainsKey($id)) { return "יש שני חפצים עם הקוד $id." }
+        if ($taken.ContainsKey($id)) { return "כבר יש חפץ עם הקוד $id, שג׳מיני כתב בקובץ MyItems.java. בוחרים קוד אחר." }
+        $seen[$id] = $true
+        if (([string]$it.name).Length -gt 40) { return 'השם ארוך מדי: עד 40 אותיות.' }
+        if (([string]$it.lore).Length -gt 80) { return 'המשפט מתחת לשם ארוך מדי: עד 80 אותיות.' }
+    }
+    if (@($w.items).Count -gt 60) { return 'יותר מדי חפצים: עד 60.' }
+    return $null
+}
+function Save-Studio([string]$root, [string]$json) {
+    $utf8 = New-Object System.Text.UTF8Encoding($false)
+    try { $w = $json | ConvertFrom-Json } catch { return New-Result $false 'העיצוב לא נקרא. נסו שוב.' }
+    $bad = Test-Studio $w $root
+    if ($bad) { return New-Result $false $bad }
+    $f = Get-StudioFile $root
+    New-Item -ItemType Directory -Force (Split-Path $f) | Out-Null
+    if (Test-Path $f) {
+        $old = [IO.File]::ReadAllText($f, [Text.Encoding]::UTF8)
+        if ($old -eq $json) { return New-Result $true 'נשמר.' }
+        # One version per minute at most, so typing doesn't flood the versions list.
+        $saves = Join-Path $root 'saves'; New-Item -ItemType Directory -Force $saves | Out-Null
+        $stamp = Get-Date -Format 'yyyy-MM-dd_HH-mm'
+        if (-not (Get-ChildItem $saves -Filter "${stamp}-*_studio.json" -ErrorAction SilentlyContinue)) {
+            Copy-Item $f (Join-Path $saves ((Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + '_studio.json'))
+        }
+    }
+    [IO.File]::WriteAllText($f, $json, $utf8)
+    Copy-StudioToMod $root
+    return New-Result $true 'נשמר.'
+}
+function Copy-StudioToMod([string]$root) {
+    $f = Get-StudioFile $root
+    if (-not (Test-Path $f)) { return }
+    $dir = Join-Path $root 'mod/src/main/resources/assets/myworld/studio'
+    New-Item -ItemType Directory -Force $dir | Out-Null
+    Copy-Item $f (Join-Path $dir 'world.json') -Force
 }
 
 # ---------- an item straight from the card, without Gemini ----------
@@ -282,6 +358,8 @@ function Get-BackupZip([string]$root, [string]$hubJson) {
         $p = Join-Path $java "$n.java"
         if (Test-Path $p) { Add-ZipFile $zip $p "code/$n.java" }
     }
+    $st = Get-StudioFile $root
+    if (Test-Path $st) { Add-ZipFile $zip $st 'design/world.json' }
     $assets = Join-Path $root 'mod/src/main/resources/assets/myworld'
     foreach ($sub in @('textures', 'models')) {
         $dir = Join-Path $assets $sub
@@ -319,6 +397,7 @@ function Invoke-LoadBackup([string]$root, [byte[]]$bytes) {
             'code/'   = Join-Path $root 'mod/src/main/java/make/myworld'
             'assets/' = Join-Path $root 'mod/src/main/resources/assets/myworld'
             'worlds/' = Join-Path $root 'mod/run/saves'
+            'design/' = Join-Path $root 'design'
         }
         $kid = @('MyWorld.java', 'MyItems.java', 'MyEffects.java', 'MyMobs.java', 'MyRules.java')
         $hubJson = ''
@@ -331,12 +410,14 @@ function Invoke-LoadBackup([string]$root, [byte[]]$bytes) {
             $rest = $name.Substring($top.Length)
             if ($top -eq 'code/' -and $kid -notcontains $rest) { continue }
             if ($top -eq 'assets/' -and $rest -notmatch '^(textures|models)/') { continue }
+            if ($top -eq 'design/' -and $rest -ne 'world.json') { continue }
             $dest = Join-Path $targets[$top] $rest
             New-Item -ItemType Directory -Force (Split-Path $dest) | Out-Null
             $in = $en.Open(); $out = [IO.File]::Create($dest)
             try { $in.CopyTo($out) } finally { $out.Close(); $in.Close() }
         }
     } finally { $zip.Dispose() }
+    Copy-StudioToMod $root
     $r = New-Result $true 'העולם שלכם חזר: הקוד, הציורים והעולמות. לוחצים שחק.'
     $r | Add-Member Hub $hubJson
     return $r
@@ -365,7 +446,12 @@ function Get-ItemList([string]$root) {
     $tex = Join-Path $root 'mod/src/main/resources/assets/myworld/textures/item'
     $list = foreach ($m in [regex]::Matches($src, 'Kit\.item\(' + $gap + '"([a-z0-9_]+)"' + $gap + ',' + $gap + '"((?:[^"\\]|\\.)*)"')) {
         $id = $m.Groups[1].Value
-        [pscustomobject]@{ id = $id; name = $m.Groups[2].Value.Replace('\"', '"'); hasPicture = (Test-Path (Join-Path $tex "$id.png")) }
+        [pscustomobject]@{ id = $id; name = $m.Groups[2].Value.Replace('\"', '"'); hasPicture = (Test-Path (Join-Path $tex "$id.png")); studio = $false }
+    }
+    $st = Get-StudioFile $root
+    if (Test-Path $st) {
+        try { $w = [IO.File]::ReadAllText($st, [Text.Encoding]::UTF8) | ConvertFrom-Json } catch { $w = $null }
+        foreach ($it in @($w.items)) { if ($it.id) { $list = @($list) + [pscustomobject]@{ id = [string]$it.id; name = [string]$it.name; hasPicture = (Test-Path (Join-Path $tex "$($it.id).png")); studio = $true } } }
     }
     return @($list)
 }
@@ -381,7 +467,10 @@ function Save-ItemPicture([string]$root, [string]$id, [string]$base64) {
     if (Test-Path $file) {
         $saves = Join-Path $root 'saves'
         New-Item -ItemType Directory -Force $saves | Out-Null
-        Copy-Item $file (Join-Path $saves ((Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + "_$id.png"))
+        # One backup per picture per minute: the studio saves the picture after every stroke.
+        if (-not (Get-ChildItem $saves -Filter ((Get-Date -Format 'yyyy-MM-dd_HH-mm') + "-*_$id.png") -ErrorAction SilentlyContinue)) {
+            Copy-Item $file (Join-Path $saves ((Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + "_$id.png"))
+        }
     }
     [IO.File]::WriteAllBytes($file, $bytes)
     return New-Result $true "הציור נשמר בשם $id.png. לוחצים שחק כדי לראות אותו במשחק."

@@ -5,11 +5,13 @@
 <div id="app" dir="rtl" lang="he"></div>
 <script src="content.js"></script>
 <script src="en.js"></script>
+<script src="studio.js"></script>
 <script>
 (function(){
 "use strict";
 const H = window.HUB, LS = H.LS, esc = H.esc;
 H.injectStyle(document);
+if (window.STUDIO){ const st = document.createElement("style"); st.textContent = window.STUDIO.CSS; document.head.appendChild(st); }
 const app = document.getElementById("app");
 if (LS.get("big", false)) app.classList.add("big");
 /* Language: Hebrew, or English for kids who find Hebrew hard (en.js holds the English). */
@@ -34,6 +36,7 @@ function renderHome(){
       </div>
     </div>
     <div id="dock"></div>
+    <a class="st-entry" href="#studio"><b>הסטודיו</b><span>כאן בונים את העולם שלכם: חפצים, ובקרוב גם יצורים, חוקים ומקומות.</span><i>←</i></a>
     <div class="progress"><div class="row"><b>ההתקדמות שלכם</b><span>${done.length} מתוך ${total} שיעורים</span></div>
       <div class="xp" style="--n:${total}">${Array.from({length:total},(_,i)=>`<i class="${i<done.length?"on":""}"></i>`).join("")}</div></div>
     <div class="timeline">${H.UNITS.map(u=>`
@@ -68,7 +71,7 @@ function renderPlayer(){
       <div id="dock"></div>
       <div class="r1">
         <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><div class="t"><small>${LT.unit}</small><b>${LT.title}</b></div></div>
-        <div class="tools"><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button>${langBtn()}</div>
+        <div class="tools"><a class="btn ghost" href="#studio">הסטודיו</a><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button>${langBtn()}</div>
       </div>
       <div class="hotbar" role="tablist" aria-label="שלבי השיעור">${L.steps.map((x,i)=>`<button class="slot ${i===stepIx?"cur":""} ${i<stepIx?"done":""}" data-go="${i}" role="tab" aria-selected="${i===stepIx}" title="${esc(x.title)}">${i+1}</button>`).join("")}</div>
     </header>
@@ -226,7 +229,7 @@ function loadBackup(file){
           Object.keys(h).forEach(k => { if (k.indexOf("mkmod.") === 0) localStorage.setItem(k, h[k]); });
         } catch(e){}
       }
-      if (j.ok) DOCK.dopen = false;
+      if (j.ok){ DOCK.dopen = false; if (window.STUDIO) window.STUDIO.reset(); }
       DOCK.key = ""; DOCK.s = { phase:j.phase, message:j.result, error:j.error };
       route();
     } catch(e){ poll(); }
@@ -312,6 +315,7 @@ if (DOCK.on){ poll(); setInterval(poll, 1500); }
 /* ===== router ===== */
 function route(){
   if (LOCK.shown) return paintLock();
+  if (location.hash === "#studio" && window.STUDIO) return window.STUDIO.render(app);
   const n = lessonFromHash();
   if (n){ lessonN = n; stepIx = LS.get("l" + n + "step", 0); renderPlayer(); } else renderHome();
 }
@@ -321,6 +325,9 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowLeft" && stepIx < H.LESSONS[lessonN].steps.length-1){ stepIx++; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
   if (e.key === "ArrowRight" && stepIx > 0){ stepIx--; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
 });
+/* What the studio (studio.js) uses from this page. */
+H.api = api; H.lock = showLock; H.act = act; H.langBtn = langBtn;
+H.afterRender = () => { bindLang(); applyLang(); paintDock(); };
 if (DOCK.on && !H.token) showLock(); else route();
 })();
 </script>

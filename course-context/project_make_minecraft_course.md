@@ -158,3 +158,9 @@ shows a "play on the projector" button. YouTube refuses to play inside a file://
 desktop icon hops to `http://localhost:47811/teacher.html` when the hub server is running (double-click the Minecraft
 icon first); if it isn't, the video opens in its own window. Verified: the embed loads from a localhost page.
 
+**6 Oct morning: USB sticks made (2.8 GB, ~17 min per stick from Ben's laptop; teacher.html left off on purpose).** Kids
+install from the stick today as is. Agreed: course updates (hub lessons, templates, Kit, tools) ship later as a small
+`update-from-usb.bat` that copies only hub/ and our mod machinery and NEVER the kid's files (5 code files, textures,
+models, worlds, saves). Ben expects big changes within a few lessons (the template redesign); that update must carry
+each kid's lesson 1-2 work over (world card, item) or the kid rebuilds it from the paper card. Also pending: make
+install-from-usb.bat skip existing kid files, so running it again on a used laptop can't overwrite their work.

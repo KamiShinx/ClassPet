@@ -180,3 +180,11 @@ world; dies -> reborn stronger in the hell world). Buildable with the planned te
 plus a portal template. Same kid asked about multiplayer: Java mods are multiplayer by nature, but players need the
 same mod; realistic options are playing on the owner's laptop at exhibitions, LAN with matching mods, or a merged
 class mod near the end (untested on the school network).
+**6 Oct, late.** Kids' patch pushed (71a264a): code lock (teacher code chosen once per stick by update-from-usb.bat),
+"build without Gemini" button in lesson 2, English option (`hub/en.js`), update-from-usb.bat, install-from-usb no longer
+overwrites kid files. Ben then asked: why Gemini at all? Prebuild everything (bosses, mobs, items, blocks, places) and
+let kids design purely in the hub, building their own rules slowly; Gemini only for special cases. My recommendation
+(awaiting his answer): yes, as a data-driven "world studio": one Java engine written and tested once, the hub writes
+the kid's design as data (cards, stats, picked parts, if-then rules), no compile errors possible; Gemini stays only as the
+optional "special" box. Cost: every part needs one Windows test; build it in course order. Open: does MAKE promise
+"coding with AI" in this course?

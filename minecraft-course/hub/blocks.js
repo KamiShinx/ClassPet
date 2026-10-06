@@ -9,7 +9,9 @@ const H = window.HUB;
 const en = () => H.LS.get("lang", "he") === "en";
 
 /* ---------- lists for the dropdowns: [Hebrew, English, id in the game] ---------- */
-const WHO = [["אני","me","me"],["היצור שפגעתי בו","the creature I hit","target"]];
+const WHO = [["אני","me","me"],["היצור","the creature","target"]];
+// Who it happens to, with the Hebrew preposition each block needs: לי / ליצור, אותי / את היצור...
+const who = (he1, he2, en1, en2) => [[he1, en1, "me"], [he2, en2, "target"]];
 const EFFECTS = [["מהירות","Speed","speed"],["איטיות","Slowness","slowness"],["קפיצה גבוהה","Jump Boost","jump_boost"],["כוח","Strength","strength"],
   ["חולשה","Weakness","weakness"],["התחדשות","Regeneration","regeneration"],["עמידות","Resistance","resistance"],["עמידות לאש","Fire Resistance","fire_resistance"],
   ["נשימה במים","Water Breathing","water_breathing"],["היעלמות","Invisibility","invisibility"],["ראיית לילה","Night Vision","night_vision"],["זוהר","Glowing","glowing"],
@@ -34,31 +36,31 @@ const DEFS = [
   ["tr_hit","כשמכים יצור עם החפץ %1","When you hit a creature with the item %1",[{type:"input_statement",name:"DO"}],"when"],
   ["tr_hold","כל שנייה שהחפץ ביד %1","Every second the item is in your hand %1",[{type:"input_statement",name:"DO"}],"when"],
   // do (actions)
-  ["a_effect","תן %1 ל%2 למשך %3 שניות, בעוצמה %4","Give %1 to %2 for %3 seconds, strength %4",
-    [{type:"field_dropdown",name:"E",options:opts(EFFECTS)},{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("S",5,1,120),num("L",1,1,5)],"do"],
-  ["a_heal","רפא את %1 ב־%2 לבבות","Heal %1 by %2 hearts",[{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("N",2,1,20)],"do"],
-  ["a_damage","פגע ב%1 ב־%2 לבבות","Hurt %1 by %2 hearts",[{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("N",2,1,25)],"do"],
-  ["a_fire","הצת את %1 ל־%2 שניות","Set %1 on fire for %2 seconds",[{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("S",3,1,30)],"do"],
-  ["a_lightning","ברק על %1","Lightning on %1",[{type:"field_dropdown",name:"WHO",options:opts(WHO)}],"do"],
-  ["a_explode","פיצוץ ליד %1 בעוצמה %2, הורס קוביות %3","Explosion at %1, power %2, breaks blocks %3",
-    [{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("P",2,1,6),{type:"field_checkbox",name:"BREAK",checked:false}],"do"],
-  ["a_launch","הקפץ את %1 למעלה בעוצמה %2","Launch %1 up, power %2",[{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("P",1,1,5)],"do"],
-  ["a_push","הדוף את %1 קדימה בעוצמה %2","Push %1 forward, power %2",[{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("P",1,1,5)],"do"],
-  ["a_tp","קפוץ %1 קוביות קדימה","Jump %1 blocks forward",[num("N",8,1,30)],"do"],
-  ["a_spawn","זמן %1 ליד %2, %3 פעמים","Summon %1 next to %2, %3 times",[{type:"field_dropdown",name:"M",options:opts(MOBS)},{type:"field_dropdown",name:"WHO",options:opts(WHO)},num("N",1,1,5)],"do"],
-  ["a_sound","השמע צליל: %1","Play a sound: %1",[{type:"field_dropdown",name:"SND",options:opts(SOUNDS)}],"do"],
-  ["a_msg","כתוב על המסך %1","Show on screen %1",[{type:"field_input",name:"T",text:"!"}],"do"],
+  ["a_effect","לתת %1 %2 למשך %3 שניות, בעוצמה %4","Give %1 %2 for %3 seconds, strength %4",
+    [{type:"field_dropdown",name:"E",options:opts(EFFECTS)},{type:"field_dropdown",name:"WHO",options:opts(who("לי","ליצור","to me","to the creature"))},num("S",5,1,120),num("L",1,1,5)],"do"],
+  ["a_heal","לרפא %1 ב־%2 לבבות","Heal %1 by %2 hearts",[{type:"field_dropdown",name:"WHO",options:opts(who("אותי","את היצור","me","the creature"))},num("N",2,1,20)],"do"],
+  ["a_damage","להוריד %1 %2 לבבות","Take %2 hearts from %1",[{type:"field_dropdown",name:"WHO",options:opts(who("לי","ליצור","me","the creature"))},num("N",2,1,25)],"do"],
+  ["a_fire","להצית %1 ל־%2 שניות","Set %1 on fire for %2 seconds",[{type:"field_dropdown",name:"WHO",options:opts(who("אותי","את היצור","me","the creature"))},num("S",3,1,30)],"do"],
+  ["a_lightning","ברק %1","Lightning %1",[{type:"field_dropdown",name:"WHO",options:opts(who("עליי","על היצור","on me","on the creature"))}],"do"],
+  ["a_explode","פיצוץ %1 בעוצמה %2, הורס קוביות %3","Explosion %1, power %2, breaks blocks %3",
+    [{type:"field_dropdown",name:"WHO",options:opts(who("לידי","ליד היצור","next to me","next to the creature"))},num("P",2,1,6),{type:"field_checkbox",name:"BREAK",checked:false}],"do"],
+  ["a_launch","להקפיץ %1 למעלה בעוצמה %2","Launch %1 up, power %2",[{type:"field_dropdown",name:"WHO",options:opts(who("אותי","את היצור","me","the creature"))},num("P",1,1,5)],"do"],
+  ["a_push","להדוף %1 קדימה בעוצמה %2","Push %1 forward, power %2",[{type:"field_dropdown",name:"WHO",options:opts(who("אותי","את היצור","me","the creature"))},num("P",1,1,5)],"do"],
+  ["a_tp","לקפוץ %1 קוביות קדימה","Jump %1 blocks forward",[num("N",8,1,30)],"do"],
+  ["a_spawn","לזמן %1 %2, %3 פעמים","Summon %1 %2, %3 times",[{type:"field_dropdown",name:"M",options:opts(MOBS)},{type:"field_dropdown",name:"WHO",options:opts(who("לידי","ליד היצור","next to me","next to the creature"))},num("N",1,1,5)],"do"],
+  ["a_sound","להשמיע צליל: %1","Play a sound: %1",[{type:"field_dropdown",name:"SND",options:opts(SOUNDS)}],"do"],
+  ["a_msg","לכתוב על המסך %1","Show on screen %1",[{type:"field_input",name:"T",text:"!"}],"do"],
   // price
-  ["p_cooldown","החפץ צריך לנוח %1 שניות","The item needs to rest %1 seconds",[num("S",5,1,120)],"price"],
+  ["p_cooldown","החפץ נח %1 שניות","The item rests %1 seconds",[num("S",5,1,120)],"price"],
   ["p_consume","החפץ נגמר: אחד יורד מהערימה","The item is used up: one less in the stack",[],"price"],
-  ["p_hunger","אני מאבד %1 אוכל","I lose %1 food",[num("N",2,1,20)],"price"],
+  ["p_hunger","האוכל שלי יורד ב־%1","My food goes down by %1",[num("N",2,1,20)],"price"],
   // if, repeat
   ["c_if","אם %1 אז %2","If %1 then %2",[{type:"input_value",name:"C",check:"Boolean"},{type:"input_statement",name:"DO"}],"if"],
   ["c_ifelse","אם %1 אז %2 אחרת %3","If %1 then %2 otherwise %3",[{type:"input_value",name:"C",check:"Boolean"},{type:"input_statement",name:"DO"},{type:"input_statement",name:"ELSE"}],"if"],
-  ["c_repeat","חזור %1 פעמים %2","Repeat %1 times %2",[num("N",3,1,10),{type:"input_statement",name:"DO"}],"if"],
+  ["c_repeat","לחזור %1 פעמים %2","Repeat %1 times %2",[num("N",3,1,10),{type:"input_statement",name:"DO"}],"if"],
   // questions (conditions)
   ["q_night","לילה","it's night",[],"q"], ["q_day","יום","it's day",[],"q"], ["q_rain","יורד גשם","it's raining",[],"q"],
-  ["q_sneak","אני מתכופף (Shift)","I'm sneaking (Shift)",[],"q"],
+  ["q_sneak","Shift לחוץ","Shift is held",[],"q"],
   ["q_chance","בסיכוי של %1 אחוז","with a %1 percent chance",[num("P",50,1,100)],"q"],
   ["q_health","יש לי פחות מ־%1 לבבות","I have less than %1 hearts",[num("N",5,1,10)],"q"],
   ["q_target","היצור הוא %1","the creature is %1",[{type:"field_dropdown",name:"M",options:opts(MOBS)}],"q"],
@@ -157,6 +159,7 @@ function mount(div, item, onChange){
     ws = B.inject(div, { toolbox: toolbox(), rtl: !en(), media: "blockly/media/", sounds: false, trashcan: true,
       zoom: { controls: true, wheel: false, startScale: 0.85 }, move: { scrollbars: true, drag: true, wheel: true }, renderer: "zelos" });
     if (item.blocks){ try { B.serialization.workspaces.load(item.blocks, ws); } catch(e){} }
+    item.power = compile(ws);   // the program always comes from the blocks on screen
     let t = null;
     ws.addChangeListener(e => {
       if (e.isUiEvent) return;
@@ -166,5 +169,104 @@ function mount(div, item, onChange){
   });
 }
 function unmount(){ if (ws){ try { ws.dispose(); } catch(e){} ws = null; } }
-window.STUDIO_BLOCKS = { mount, unmount, compile, DEFS };
+/* ---------- a program back into blocks (for Gemini's improved version) ---------- */
+const ACT = { effect:"a_effect", heal:"a_heal", damage:"a_damage", fire:"a_fire", lightning:"a_lightning", explode:"a_explode", launch:"a_launch",
+  push:"a_push", tp:"a_tp", spawn:"a_spawn", sound:"a_sound", msg:"a_msg", cooldown:"p_cooldown", consume:"p_consume", hunger:"p_hunger" };
+const FIELDMAP = { a_effect:{E:"e",WHO:"who",S:"s",L:"l"}, a_heal:{WHO:"who",N:"n"}, a_damage:{WHO:"who",N:"n"}, a_fire:{WHO:"who",S:"s"}, a_lightning:{WHO:"who"},
+  a_explode:{WHO:"who",P:"p",BREAK:"brk"}, a_launch:{WHO:"who",P:"p"}, a_push:{WHO:"who",P:"p"}, a_tp:{N:"n"}, a_spawn:{M:"m",WHO:"who",N:"n"},
+  a_sound:{SND:"snd"}, a_msg:{T:"t"}, p_cooldown:{S:"s"}, p_consume:{}, p_hunger:{N:"n"} };
+const LISTS = { E:EFFECTS, WHO:WHO, M:MOBS, SND:SOUNDS, D:DIMS };
+const RANGE = { S:[1,120], L:[1,5], N:[1,30], P:[1,100] };
+function defOf(type){ return DEFS.find(d => d[0] === type); }
+function fieldVal(type, f, v){
+  const def = defOf(type), arg = def && def[3].find(a => a.name === f);
+  if (!arg) return null;
+  if (arg.type === "field_dropdown") return arg.options().some(x => x[1] === v) ? v : null;
+  if (arg.type === "field_number"){ const n = Math.round(Number(v)); if (!isFinite(n)) return null; return Math.max(arg.min, Math.min(arg.max, n)); }
+  if (arg.type === "field_checkbox") return v === true || v === "TRUE" ? "TRUE" : "FALSE";
+  if (arg.type === "field_input") return String(v == null ? "" : v).slice(0, 80);
+  return null;
+}
+// Checks a program from outside (Gemini) and turns it into blocks. Returns {blocks} or {error}.
+function condBlock(c, depth){
+  if (!c || typeof c !== "object" || depth > 8) throw "cond";
+  const two = (type, list) => { if (!Array.isArray(list) || list.length < 2) throw "cond";
+    let b = { type, inputs:{ A:{ block: condBlock(list[0], depth+1) }, B:{ block: condBlock(list[1], depth+1) } } };
+    for (let i = 2; i < list.length; i++) b = { type, inputs:{ A:{ block:b }, B:{ block: condBlock(list[i], depth+1) } } };
+    return b; };
+  if (c.and) return two("q_and", c.and);
+  if (c.or) return two("q_or", c.or);
+  if (c.not) return { type:"q_not", inputs:{ A:{ block: condBlock(c.not, depth+1) } } };
+  const simple = { night:"q_night", day:"q_day", rain:"q_rain", sneak:"q_sneak" }[c.c];
+  if (simple) return { type: simple };
+  if (c.c === "chance"){ const P = fieldVal("q_chance", "P", c.p); if (P == null) throw "cond"; return { type:"q_chance", fields:{ P } }; }
+  if (c.c === "health"){ const N = fieldVal("q_health", "N", c.n); if (N == null) throw "cond"; return { type:"q_health", fields:{ N } }; }
+  if (c.c === "target"){ const M = fieldVal("q_target", "M", c.m); if (M == null) throw "mob"; return { type:"q_target", fields:{ M } }; }
+  if (c.c === "dim"){ const D = fieldVal("q_dim", "D", c.d); if (D == null) throw "cond"; return { type:"q_dim", fields:{ D } }; }
+  throw "cond";
+}
+function chain(list, depth){
+  if (!Array.isArray(list)) return null;
+  if (depth > 6) throw "deep";
+  const blocks = list.map(s => {
+    if (!s || typeof s !== "object") throw "step";
+    if (s.if){ const b = { type: s.else && s.else.length ? "c_ifelse" : "c_if", inputs:{ C:{ block: condBlock(s.if, 0) } } };
+      const t = chain(s.then, depth+1); if (t) b.inputs.DO = { block:t };
+      if (b.type === "c_ifelse"){ const e = chain(s.else, depth+1); if (e) b.inputs.ELSE = { block:e }; }
+      return b; }
+    if (s.repeat !== undefined){ const b = { type:"c_repeat", fields:{ N: fieldVal("c_repeat", "N", s.repeat) || 1 } }; const d = chain(s.do, depth+1); if (d) b.inputs = { DO:{ block:d } }; return b; }
+    const type = ACT[s.a]; if (!type) throw "act:" + s.a;
+    const fields = {};
+    for (const [F, key] of Object.entries(FIELDMAP[type])){
+      const v = fieldVal(type, F, s[key] !== undefined ? s[key] : (F === "WHO" ? "me" : defOf(type)[3].find(a => a.name === F).value));
+      if (v == null) throw (F === "M" ? "mob" : F === "E" ? "effect" : F === "SND" ? "sound" : "field") + ":" + s[key];
+      fields[F] = v;
+    }
+    return { type, fields };
+  });
+  for (let i = blocks.length - 2; i >= 0; i--) blocks[i].next = { block: blocks[i+1] };
+  return blocks[0] || null;
+}
+function toBlocks(prog){
+  try {
+    if (!prog || typeof prog !== "object" || !prog.on || typeof prog.on !== "object") return { error:"shape" };
+    const tops = []; let y = 20;
+    [["use","tr_use"],["hit","tr_hit"],["hold","tr_hold"]].forEach(([k, type]) => {
+      if (!Array.isArray(prog.on[k]) || !prog.on[k].length) return;
+      const b = { type, x:20, y }; const c = chain(prog.on[k], 0); if (c) b.inputs = { DO:{ block:c } };
+      tops.push(b); y += 60 + 50 * JSON.stringify(c).split('"type"').length;
+    });
+    if (!tops.length) return { error:"empty" };
+    return { blocks:{ blocks:{ languageVersion:0, blocks: tops } } };
+  } catch(e){ return { error: String(e) }; }
+}
+/* ---------- blocks as readable lines (for the "before / after" view and for Gemini) ---------- */
+function label(type, f, v){
+  const arg = defOf(type)[3].find(a => a.name === f);
+  if (arg && arg.type === "field_dropdown"){ const x = arg.options().find(x => x[1] === v); return x ? x[0] : v; }
+  if (f === "BREAK") return v === "TRUE" ? (en() ? "yes" : "כן") : (en() ? "no" : "לא");
+  return String(v);
+}
+function describe(b, depth){
+  const out = [];
+  for (; b; b = b.next && b.next.block){
+    const def = defOf(b.type); if (!def) continue;
+    let text = en() ? def[2] : def[1]; const subs = [];
+    const firstStmt = def[3].findIndex(a => a.type === "input_statement");
+    if (firstStmt >= 0) text = text.slice(0, text.indexOf("%" + (firstStmt + 1)));
+    def[3].forEach((a, i) => {
+      let r = "";
+      if (a.type === "input_statement"){ if (b.inputs && b.inputs[a.name]) subs.push([a.name, b.inputs[a.name].block]); }
+      else if (a.type === "input_value") r = b.inputs && b.inputs[a.name] ? "(" + describe(b.inputs[a.name].block, 0).join(" ") + ")" : "( )";
+      else r = label(b.type, a.name, b.fields ? b.fields[a.name] : "");
+      text = text.replace("%" + (i + 1), r);
+    });
+    out.push("  ".repeat(depth) + text.replace(/\s+/g, " ").trim());
+    subs.forEach(([name, sb]) => { if (name === "ELSE") out.push("  ".repeat(depth) + (en() ? "otherwise:" : "אחרת:")); out.push(...describe(sb, depth + 1)); });
+  }
+  return out;
+}
+function readable(prog){ const r = toBlocks(prog); if (r.error) return []; return r.blocks.blocks.blocks.flatMap(b => describe(b, 0)); }
+function loadInto(item, prog){ const r = toBlocks(prog); if (r.error) return r; item.blocks = r.blocks; item.power = prog; return { ok:true }; }
+window.STUDIO_BLOCKS = { mount, unmount, compile, DEFS, toBlocks, readable, loadInto, LISTS };
 })();

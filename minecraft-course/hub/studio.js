@@ -100,7 +100,8 @@ function editor(it){
       <div class="st-acts"><button class="btn go" id="st-play">לשחק עם השינויים</button><button class="btn ghost" id="st-del">למחוק את החפץ</button></div>
     </div>
   </div>
-  <div class="st-blocks"><h3>מה החפץ עושה?</h3><p>גוררים קוביות מהתפריט: קודם ״מתי״, ובתוכה מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div></div>
+  <div class="st-blocks"><h3>מה החפץ עושה?</h3><p>גוררים קוביות מהתפריט: קודם ״מתי״, ובתוכה מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div>
+    <div class="st-acts"><button class="btn ghost" id="st-blk2g">להעתיק את הקוביות לג׳מיני</button><small>ג׳מיני יגיד מה טוב, מה אפשר לשפר, וישלח גרסה משופרת. אתם מחליטים אם לקחת אותה.</small></div></div>
   <div class="st-gem"><h3>ג׳מיני, שותף לעיצוב</h3>
     <ol><li><button class="btn ghost" id="st-tog">להעתיק לג׳מיני</button> ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>. מתחת כותבים מה אתם רוצים: רעיון, שאלה, או שינוי.</li>
     <li>ג׳מיני הציע שינוי? מעתיקים את כל התשובה שלו, ולוחצים <button class="btn ghost" id="st-fromg">הדבקה מג׳מיני</button></li></ol>
@@ -158,9 +159,15 @@ function bind(app){
     try { await H.api("/api/copy-text", { method:"POST", body: b64(geminiText(it)) }); S.msg = "הועתק. בג׳מיני לוחצים Ctrl + V, ומתחת כותבים מה אתם רוצים."; S.err = ""; } catch(e){ S.err = "לא הועתק. נסו שוב."; }
     paintStatus();
   });
+  const b2g = app.querySelector("#st-blk2g");
+  if (b2g) b2g.addEventListener("click", async () => {
+    if (!it.power){ S.err = "עוד אין קוביות. קודם בונים, אחר כך משפרים עם ג׳מיני."; paintStatus(); return; }
+    try { await H.api("/api/copy-text", { method:"POST", body: b64(blocksText(it)) }); S.msg = "הקוביות הועתקו. בג׳מיני לוחצים Ctrl + V ושולחים. אחר כך מעתיקים את כל התשובה ולוחצים ״הדבקה מג׳מיני״."; S.err = ""; } catch(e){ S.err = "לא הועתק. נסו שוב."; }
+    paintStatus();
+  });
   app.querySelector("#st-fromg").addEventListener("click", async () => {
     let text = ""; try { text = (await (await H.api("/api/clip")).json()).text || ""; } catch(e){}
-    const r = parseSuggestion(text);
+    const r = /```\s*blocks/i.test(text) ? parseBlocks(text, it) : parseSuggestion(text);
     if (r.error){ S.sugg = null; S.err = r.error; paintStatus(); app.querySelector("#st-sugg").innerHTML = ""; return; }
     S.sugg = r; S.err = ""; S.msg = ""; paintStatus();
     const box = app.querySelector("#st-sugg"); box.innerHTML = suggestion(); bindSuggestion(app);
@@ -197,6 +204,39 @@ THE LOGIC BLOCKS (the only ones that exist; names as the kid sees them)
 
 THE KID'S WORLD
 It comes right after these rules, as JSON (under "===== העולם שלי ====="), then what the kid wants (under "===== מה אני רוצה =====").`;
+const BLOCK_RULES = `RULES FOR THIS CHAT. Follow them for every answer in this chat.
+A kid (11-13, Israel) built a power for a Minecraft item from logic blocks in our course's studio. There is no code: the blocks run inside the game. Below are the kid's blocks as readable lines and as a program (JSON). Answer in short, simple Hebrew (simple English if the kid writes in English).
+
+YOUR JOB: review it like a friendly game designer.
+1. One sentence on what is good about it.
+2. Up to two improvements, about game design: is there a price? Is it too strong or too weak? Does the player get a clear sign that something happened? Is there a surprise?
+3. Then send ONE improved version as a block, and list in Hebrew, line by line, what you changed and why:
+\`\`\`blocks
+{"on":{"use":[...]}}
+\`\`\`
+Keep the kid's idea. Change as little as needed. Never invent a new story or name: those belong to the kid.
+
+THE PROGRAM FORMAT (the only things that exist)
+{"on":{"use":[steps],"hit":[steps],"hold":[steps]}}   use = right-click with the item, hit = hitting a creature, hold = every second in the hand
+Steps:
+{"a":"effect","e":EFFECT,"who":"me"|"target","s":seconds 1-120,"l":strength 1-5}
+{"a":"heal","who":...,"n":hearts 1-20}   {"a":"damage","who":...,"n":hearts 1-25}   {"a":"fire","who":...,"s":seconds 1-30}
+{"a":"lightning","who":...}   {"a":"explode","who":...,"p":power 1-6,"brk":true|false}   {"a":"launch","who":...,"p":1-5}   {"a":"push","who":...,"p":1-5}
+{"a":"tp","n":blocks forward 1-30}   {"a":"spawn","m":MOB,"who":...,"n":1-5}   {"a":"sound","snd":SOUND}   {"a":"msg","t":"text up to 80 characters"}
+Price: {"a":"cooldown","s":seconds 1-120}   {"a":"consume"}   {"a":"hunger","n":food 1-20}
+{"if":COND,"then":[steps],"else":[steps]}   {"repeat":1-10,"do":[steps]}
+COND: {"c":"night"} {"c":"day"} {"c":"rain"} {"c":"sneak"} {"c":"chance","p":1-100} {"c":"health","n":hearts} {"c":"target","m":MOB} {"c":"dim","d":"overworld"|"nether"|"end"} {"and":[COND,COND]} {"or":[COND,COND]} {"not":COND}
+"target" (the creature that was hit) exists only inside "hit".
+EFFECT: @@E@@
+MOB: @@M@@
+SOUND: @@S@@`;
+function blocksText(it){
+  const B = window.STUDIO_BLOCKS, L = B.LISTS;
+  const rules = BLOCK_RULES.replace("@@E@@", L.E.map(x => x[2]).join(", ")).replace("@@M@@", L.M.map(x => x[2]).join(", ")).replace("@@S@@", L.SND.map(x => x[2]).join(", "));
+  return rules + "\n\n===== החפץ =====\n" + (it.name || "") + (it.lore ? " (" + it.lore + ")" : "") + (it.job ? "\nבשביל מה: " + it.job : "") + (it.price ? "\nהמחיר שתכננתי: " + it.price : "")
+    + "\n\n===== הקוביות שלי =====\n" + B.readable(it.power).join("\n") + "\n\n===== התוכנית (JSON) =====\n" + JSON.stringify(it.power)
+    + "\n\n===== מה אני רוצה =====\nאיך אפשר לשפר את הכוח הזה?\n";
+}
 function blockList(){
   const B = window.STUDIO_BLOCKS; if (!B) return "";
   const cat = { when:"מתי", do:"עושים", price:"מחיר", if:"אם וחזרה", q:"שאלות" };
@@ -234,13 +274,26 @@ function parseSuggestion(text){
   return { changes: out };
 }
 const show = (k, v) => k === "rarity" ? (RARITY.find(r => r[0] === v) || [0, v])[1] : v;
+function parseBlocks(text, it){
+  const m = text.match(/```\s*blocks\s*([\s\S]*?)```/i);
+  let j; try { j = JSON.parse(m[1]); } catch(e){ return { error:"ג׳מיני שלח קוביות שבורות. כתבו לו: ״הבלוק שלך לא תקין, תשלח אותו שוב״." }; }
+  const B = window.STUDIO_BLOCKS, r = B.toBlocks(j);
+  if (r.error){ const what = String(r.error).split(":")[0];
+    return { error: { mob:"ג׳מיני השתמש ביצור שאין בסטודיו.", effect:"ג׳מיני השתמש באפקט שאין בסטודיו.", sound:"ג׳מיני השתמש בצליל שאין בסטודיו.", act:"ג׳מיני המציא קובייה שלא קיימת." }[what] || "ג׳מיני שלח קוביות שהסטודיו לא מכיר. כתבו לו: ״תשתמש רק בקוביות מהרשימה״." }; }
+  return { program: j, before: B.readable(it.power), after: B.readable(j) };
+}
 function suggestion(){
+  if (S.sugg.program) return `<div class="st-sg"><b>ג׳מיני מציע גרסה משופרת לקוביות:</b>
+    <div class="sg-ba"><div><small>עכשיו</small><pre>${esc(S.sugg.before.join("\n") || "—")}</pre></div><div><small>אחרי</small><pre>${esc(S.sugg.after.join("\n"))}</pre></div></div>
+    <div class="st-acts"><button class="btn go" id="sg-ok">לקבל</button><button class="btn ghost" id="sg-no">לא, תודה</button></div></div>`;
   return `<div class="st-sg"><b>ג׳מיני מציע:</b>${S.sugg.changes.map(c => `<div class="sg-it"><span class="sg-h">${c.isNew ? "חפץ חדש: " : ""}${esc((c.cur && c.cur.name) || c.ch.name || c.id)}</span><ul>${Object.keys(c.ch).map(k => `<li><span>${FIELDS[k] || k}</span>${c.cur && c.cur[k] !== undefined && c.cur[k] !== "" ? `<s>${esc(show(k, c.cur[k]))}</s> ← ` : ""}<b>${esc(show(k, c.ch[k]))}</b></li>`).join("")}</ul></div>`).join("")}
     <div class="st-acts"><button class="btn go" id="sg-ok">לקבל</button><button class="btn ghost" id="sg-no">לא, תודה</button></div></div>`;
 }
 function bindSuggestion(app){
   const ok = app.querySelector("#sg-ok"), no = app.querySelector("#sg-no"); if (!ok) return;
-  ok.addEventListener("click", () => { S.sugg.changes.forEach(c => { if (c.isNew) S.world.items.push(Object.assign({ id:c.id, name:"", lore:"", stack:64, rarity:"common", px:[] }, c.ch)); else Object.assign(c.cur, c.ch); });
+  ok.addEventListener("click", () => {
+    if (S.sugg.program){ const it = S.world.items[S.sel]; window.STUDIO_BLOCKS.loadInto(it, S.sugg.program); S.sugg = null; S.msg = "הקוביות של ג׳מיני נכנסו. אפשר לשנות אותן, ולהחזיר ב״גרסאות״."; save(); render(app); return; }
+    S.sugg.changes.forEach(c => { if (c.isNew) S.world.items.push(Object.assign({ id:c.id, name:"", lore:"", stack:64, rarity:"common", px:[] }, c.ch)); else Object.assign(c.cur, c.ch); });
     S.sugg = null; S.msg = "השינוי נכנס לעיצוב."; save(); render(app); });
   no.addEventListener("click", () => { S.sugg = null; app.querySelector("#st-sugg").innerHTML = ""; });
 }
@@ -306,6 +359,10 @@ const CSS = `
 .studio .st-gem ol{margin:0;display:grid;gap:10px;padding-inline-start:22px}
 .studio .st-sg{border:3px solid var(--sky);border-radius:8px;padding:12px;display:grid;gap:8px;background:var(--sky-soft)}
 .studio .sg-h{font-weight:800}
+.studio .sg-ba{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.studio .sg-ba pre{margin:4px 0 0;white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px;font-family:var(--body);font-size:.95rem;line-height:1.5}
+.studio .st-blocks .st-acts{align-items:center}
+.studio .st-blocks .st-acts small{color:var(--muted)}
 .studio .st-sg ul{margin:4px 0 0;padding-inline-start:20px}
 .studio .st-sg li span{color:var(--muted);margin-inline-end:8px}
 .studio .st-sg s{color:var(--muted)}

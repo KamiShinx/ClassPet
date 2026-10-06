@@ -3,7 +3,7 @@
 Last hub change: **1ef9514** (hub no longer hangs after Minecraft). Press Win+R, paste this whole line, press Enter:
 
 ```
-powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='11aeb48197f5cc1dd04eadcdf1fbcace9bca3119';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
+powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='c5ad5de2236d31bd68aecc5c258d786e13c589cb';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
 ```
 
 It updates `C:\MAKE\hub` (the kids' page, the teacher page and its slides, the print page) and the course tools in

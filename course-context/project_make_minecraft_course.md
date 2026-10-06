@@ -199,3 +199,8 @@ items (built 4ec3ffb: `hub/studio.js`, design in C:\MAKE\design\world.json, Kit.
 Windows test), step 2 item powers with logic blocks (Blockly + MCreator's blocks, a data interpreter in Java), step 3
 the mob modeller (boxes, paint, animation) + a generic data-driven mob, then rules, places, portals, bosses.
 Maven Central is reachable from the cloud (Gson jar for stub compiles); Mojang and NeoForge maven were not.
+**6 Oct, night, later.** Ben thought blocks were dropped: no, blocks are the core; with them kids build behaviour
+themselves and Gemini becomes optional advice. Built studio step 2 (38cd796): `hub/blocks.js` on Blockly 13.3.0
+(bundled in `hub/blockly/`, Apache 2.0), Hebrew RTL + English, 30 blocks in 5 groups (מתי / עושים / מחיר / אם וחזרה /
+שאלות); compiled to JSON `power` per item; `StudioPower.java` interprets it in the game (right-click, hit, every
+second in hand). Stub-compiled only: Ben's Windows test is the gate (studio item + a block power).

@@ -164,3 +164,10 @@ install from the stick today as is. Agreed: course updates (hub lessons, templat
 models, worlds, saves). Ben expects big changes within a few lessons (the template redesign); that update must carry
 each kid's lesson 1-2 work over (world card, item) or the kid rebuilds it from the paper card. Also pending: make
 install-from-usb.bat skip existing kid files, so running it again on a used laptop can't overwrite their work.
+**6 Oct, after class 1 (Ben's report).** Install from the sticks went smoothly on every laptop. School problems ate
+time: only half of lesson 1 happened, no lesson 2, no Gemini. The design talk failed: Ben showed the wrong slides (old
+mob silhouettes, no Harry Potter, no worldbuilding; probably the kids' lesson-1 page or a stale teacher page) and
+improvised; kids did page 1 of the 2 print pages. Kids loved Minecraft. The class: 3 new immigrants with little Hebrew,
+1 shy girl, 3 enthusiastic boys, 1 half-interested kid. Laptops are shared at school: Ben removed the desktop icon and
+wants each kid's hub and project protected by a password. Next week: Ben installs one patch on every laptop before
+class, then the lesson goes straight into the course.

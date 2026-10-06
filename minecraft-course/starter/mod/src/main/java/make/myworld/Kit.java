@@ -101,7 +101,12 @@ public final class Kit {
                             case "epic" -> Rarity.EPIC;
                             default -> Rarity.COMMON;
                         };
-                        item(id, text(o, "name"), text(o, "lore"), p -> p.stacksTo(stack).rarity(rarity));
+                        if (o.has("power") && o.get("power").isJsonObject()) {
+                            JsonObject power = o.getAsJsonObject("power");   // the kid's logic blocks, run by StudioPower
+                            item(id, text(o, "name"), text(o, "lore"), p -> p.stacksTo(stack).rarity(rarity), p -> new StudioPower.PowerItem(p, power));
+                        } else {
+                            item(id, text(o, "name"), text(o, "lore"), p -> p.stacksTo(stack).rarity(rarity));
+                        }
                     } catch (RuntimeException bad) {
                         System.err.println("[myworld] studio item skipped: " + bad);
                     }

@@ -143,7 +143,8 @@ function Invoke-Action([string]$name, [string]$query) {
 
 # ---------- tiny HTTP server ----------
 $types = @{ '.html' = 'text/html; charset=utf-8'; '.js' = 'text/javascript; charset=utf-8'; '.css' = 'text/css; charset=utf-8';
-            '.png' = 'image/png'; '.ico' = 'image/x-icon'; '.json' = 'application/json; charset=utf-8' }
+            '.png' = 'image/png'; '.ico' = 'image/x-icon'; '.json' = 'application/json; charset=utf-8'; '.svg' = 'image/svg+xml';
+            '.gif' = 'image/gif'; '.cur' = 'image/x-icon'; '.mp3' = 'audio/mpeg'; '.txt' = 'text/plain; charset=utf-8' }
 
 function Send($stream, [int]$code, [string]$type, [byte[]]$body) {
     $reason = @{ 200 = 'OK'; 401 = 'Unauthorized'; 403 = 'Forbidden'; 404 = 'Not Found'; 405 = 'Method Not Allowed' }[$code]
@@ -297,7 +298,8 @@ function Invoke-Request($client) {
     }
     if ($method -ne 'GET') { Send $stream 405 'text/plain' ([byte[]]@()); return }
     $name = $(if ($path -eq '/') { 'index.html' } else { $path.TrimStart('/') })
-    if ($name -notmatch '^[A-Za-z0-9._-]+$') { Send $stream 404 'text/plain' ([byte[]]@()); return }
+    # Files sit directly in hub\, except the block editor's library in hub\blockly\ and hub\blockly\media\.
+    if ($name -notmatch '^(blockly/(media/)?)?[A-Za-z0-9_-][A-Za-z0-9._-]*$') { Send $stream 404 'text/plain' ([byte[]]@()); return }
     $file = Join-Path $hub $name
     if (-not (Test-Path $file -PathType Leaf)) { Send $stream 404 'text/plain' ([byte[]]@()); return }
     $ext = [IO.Path]::GetExtension($file).ToLower()

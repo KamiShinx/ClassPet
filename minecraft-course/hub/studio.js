@@ -53,6 +53,7 @@ function paintThumbs(root){ root.querySelectorAll("canvas[data-px]").forEach(c =
 
 /* ---------- the page ---------- */
 function render(app){
+  if (window.STUDIO_BLOCKS) window.STUDIO_BLOCKS.unmount();
   if (!S.loaded){ app.innerHTML = `<div class="wrap"><p>טוען...</p></div>`; load().then(() => render(app)); return; }
   const items = S.world.items, it = items[S.sel];
   app.innerHTML = `<div class="wrap studio">
@@ -72,6 +73,8 @@ function render(app){
     <div class="st-status" id="st-status" role="status"></div>
   </div>`;
   bind(app); paintThumbs(app); paintStatus();
+  const blk = app.querySelector("#st-blk");
+  if (blk && it && window.STUDIO_BLOCKS) window.STUDIO_BLOCKS.mount(blk, it, save);
   if (H.afterRender) H.afterRender();
 }
 function editor(it){
@@ -94,10 +97,10 @@ function editor(it){
         <label>בשביל מה הוא?<input data-f="job" maxlength="120" value="${esc(it.job || "")}"></label>
         <label>המחיר שלו<input data-f="price" maxlength="120" value="${esc(it.price || "")}"></label>
         <label>איפה משיגים אותו?<input data-f="where" maxlength="120" value="${esc(it.where || "")}"></label></details>
-      <div class="st-power"><b>מה החפץ עושה?</b><span>בשבוע הבא: בונים לו כוח, עם קוביות של חוקים.</span></div>
       <div class="st-acts"><button class="btn go" id="st-play">לשחק עם השינויים</button><button class="btn ghost" id="st-del">למחוק את החפץ</button></div>
     </div>
   </div>
+  <div class="st-blocks"><h3>מה החפץ עושה?</h3><p>גוררים קוביות מהתפריט: קודם ״מתי״, ובתוכה מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div></div>
   <div class="st-gem"><h3>ג׳מיני, שותף לעיצוב</h3>
     <ol><li><button class="btn ghost" id="st-tog">להעתיק לג׳מיני</button> ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>. מתחת כותבים מה אתם רוצים: רעיון, שאלה, או שינוי.</li>
     <li>ג׳מיני הציע שינוי? מעתיקים את כל התשובה שלו, ולוחצים <button class="btn ghost" id="st-fromg">הדבקה מג׳מיני</button></li></ol>
@@ -186,14 +189,22 @@ Only when the kid clearly asked you to change something in their design, add ONE
 - "items" is a list. Each entry needs "id" (the item's code) and only the fields that change.
 - Fields: id (lowercase English letters, digits, _ ; starts with a letter), name (the name in the game, up to 40 characters), lore (the line under the name, up to 80 characters), stack (1-64), rarity ("common", "uncommon", "rare" or "epic"), job, price, where (the kid's design notes).
 - A new item needs id and name. Use the kid's own words for name and lore.
-- Items can't have powers yet: if the kid asks for one, write it into "job" and say the power comes in the next lesson.
+- Powers (what an item DOES) are not in the JSON: the kid builds them from logic blocks in the studio. If the kid asks for a power, never send it in the block. Explain in Hebrew which blocks to drag and in what order, using only the blocks listed under "THE LOGIC BLOCKS", and ask what the price of the power should be.
 - Never send pictures. The kid draws them in the studio.
+
+THE LOGIC BLOCKS (the only ones that exist; names as the kid sees them)
+@@BLOCKS@@
 
 THE KID'S WORLD
 It comes right after these rules, as JSON (under "===== העולם שלי ====="), then what the kid wants (under "===== מה אני רוצה =====").`;
+function blockList(){
+  const B = window.STUDIO_BLOCKS; if (!B) return "";
+  const cat = { when:"מתי", do:"עושים", price:"מחיר", if:"אם וחזרה", q:"שאלות" };
+  return B.DEFS.map(d => "- [" + cat[d[4]] + "] " + d[1].replace(/%\d/g, "___")).join("\n");
+}
 function geminiText(it){
-  const w = { world: S.world.world, items: S.world.items.map(x => ({ id:x.id, name:x.name, lore:x.lore, stack:x.stack, rarity:x.rarity, job:x.job, price:x.price, where:x.where, picture: (x.px || []).some(Boolean) ? "drawn" : "none yet" })) };
-  return RULES + "\n\n===== העולם שלי =====\n" + JSON.stringify(w, null, 1) + "\n\n===== החפץ שאני עובד עליו =====\n" + (it.id || it.name || "") + "\n\n===== מה אני רוצה =====\n";
+  const w = { world: S.world.world, items: S.world.items.map(x => ({ id:x.id, name:x.name, lore:x.lore, stack:x.stack, rarity:x.rarity, job:x.job, price:x.price, where:x.where, power: x.power ? x.power.on : "none yet", picture: (x.px || []).some(Boolean) ? "drawn" : "none yet" })) };
+  return RULES.replace("@@BLOCKS@@", blockList()) + "\n\n===== העולם שלי =====\n" + JSON.stringify(w, null, 1) + "\n\n===== החפץ שאני עובד עליו =====\n" + (it.id || it.name || "") + "\n\n===== מה אני רוצה =====\n";
 }
 const FIELDS = { id:"קוד", name:"שם", lore:"משפט", stack:"בערימה", rarity:"נדירות", job:"בשביל מה", price:"מחיר", where:"איפה משיגים" };
 function parseSuggestion(text){
@@ -287,6 +298,10 @@ const CSS = `
 .studio .st-power{display:grid;gap:2px;background:var(--xp-soft);border-radius:6px;padding:10px 12px}
 .studio .st-power span{color:var(--muted)}
 .studio .st-acts{display:flex;gap:10px;flex-wrap:wrap}
+.studio .st-blocks{margin-top:16px;display:grid;gap:6px}
+.studio .st-blocks p{margin:0;color:var(--muted)}
+.studio #st-blk{height:440px;border:2px solid var(--line);border-radius:8px;overflow:hidden;direction:ltr}
+.studio .st-noblk{padding:16px;color:var(--red)}
 .studio .st-gem{margin-top:16px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px}
 .studio .st-gem ol{margin:0;display:grid;gap:10px;padding-inline-start:22px}
 .studio .st-sg{border:3px solid var(--sky);border-radius:8px;padding:12px;display:grid;gap:8px;background:var(--sky-soft)}

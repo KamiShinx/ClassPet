@@ -142,6 +142,13 @@ if exist "%HERE%..\hub\print.html" (copy /y "%HERE%..\hub\print.html" "%ROOT%\hu
 if exist "%HERE%..\hub\slides.js" (copy /y "%HERE%..\hub\slides.js" "%ROOT%\hub\slides.js" >nul) else (curl -L --fail -s -o "%ROOT%\hub\slides.js" "%RAW%/slides.js")
 if exist "%HERE%..\hub\en.js" (copy /y "%HERE%..\hub\en.js" "%ROOT%\hub\en.js" >nul) else (curl -L --fail -s -o "%ROOT%\hub\en.js" "%RAW%/en.js")
 if exist "%HERE%..\hub\studio.js" (copy /y "%HERE%..\hub\studio.js" "%ROOT%\hub\studio.js" >nul) else (curl -L --fail -s -o "%ROOT%\hub\studio.js" "%RAW%/studio.js")
+if exist "%HERE%..\hub\blocks.js" (copy /y "%HERE%..\hub\blocks.js" "%ROOT%\hub\blocks.js" >nul) else (curl -L --fail -s -o "%ROOT%\hub\blocks.js" "%RAW%/blocks.js")
+rem The block editor (Blockly, Apache 2.0)
+mkdir "%ROOT%\hub\blockly\media" 2>nul
+if exist "%HERE%..\hub\blockly\blockly_compressed.js" (xcopy /e /i /y /q "%HERE%..\hub\blockly" "%ROOT%\hub\blockly" >nul) else (
+  for %%F in (blockly_compressed.js msg_he.js msg_en.js LICENSE.txt README.txt) do curl -L --fail -s -o "%ROOT%\hub\blockly\%%F" "%RAW%/blockly/%%F"
+  for %%F in (1x1.gif click.mp3 delete-icon.svg delete.mp3 disconnect.mp3 drop.mp3 dropdown-arrow.svg foldout-icon.svg handclosed.cur handdelete.cur handopen.cur pilcrow.png quote0.png quote1.png resize-handle.svg sprites.svg) do curl -L --fail -s -o "%ROOT%\hub\blockly\media\%%F" "%RAW%/blockly/media/%%F"
+)
 > "%ROOT%\hub\index.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>
 type "%ROOT%\hub\index.src" >> "%ROOT%\hub\index.html"
 > "%ROOT%\hub\teacher.html" echo ^<!doctype html^>^<meta charset="utf-8"^>^<meta name="viewport" content="width=device-width,initial-scale=1"^>

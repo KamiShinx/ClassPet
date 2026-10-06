@@ -20,6 +20,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,7 +34,8 @@ import net.minecraft.world.phys.Vec3;
  * Runs the logic blocks a kid built in the hub's studio for an item. The blocks arrive as a small JSON program
  * ({"on":{"use":[...],"hit":[...],"hold":[...]}}); this class reads it step by step. Kids never edit this file.
  * Anything unknown or broken is skipped, so a kid's blocks can't crash the game. Limits keep a loop from lagging it.
- * The game calls follow MCreator's NeoForge 26.1.2 procedure templates (GPL-3.0).
+ * The game calls follow MCreator's NeoForge 26.1.2 procedure templates (GPL-3.0), moved to 26.2 (EntityTypes holds the
+ * entity constants in 26.2).
  */
 public final class StudioPower {
     private StudioPower() {}
@@ -115,7 +117,7 @@ public final class StudioPower {
             case "fire" -> { if (who != null) who.igniteForSeconds(clamp(num(s, "s", 3), 1, 30)); }
             case "lightning" -> {
                 if (who == null) return;
-                LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(c.level, EntitySpawnReason.TRIGGERED);
+                LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(c.level, EntitySpawnReason.TRIGGERED);
                 if (bolt != null) { bolt.snapTo(Vec3.atBottomCenterOf(who.blockPosition())); c.level.addFreshEntity(bolt); }
             }
             case "explode" -> {

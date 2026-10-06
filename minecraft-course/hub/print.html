@@ -32,6 +32,8 @@
   .stack em { font-style: normal; font-size: 3.8mm; font-weight: 400; color: #444; }
   .px { display: grid; grid-template-columns: repeat(16, 6.6mm); grid-template-rows: repeat(16, 6.6mm); border: .8mm solid #111; width: max-content; direction: ltr; }
   .px i { border: .2mm solid #999; }
+  .wg { display: grid; grid-template-columns: repeat(26, 1fr); border: .7mm solid #111; margin-top: 2mm; direction: ltr; }
+  .wg i { aspect-ratio: 1; border: .2mm solid #aaa; }
   .ltr { direction: ltr; text-align: left; }
   @media print {
     html { background: #fff; }
@@ -51,7 +53,7 @@
   </div>
   <div class="box"><b>זה כמו <span class="blank"></span> במיינקראפט הרגיל,</b><div class="line"></div><b>חוץ מזה ש</b><div class="line"></div></div>
   <div class="box"><b>חוק אחד שיש רק בעולם שלי</b><small>מה אסור לעשות שם? מה קורה שם רק בלילה? מה שונה ממיינקראפט הרגיל?</small><div class="line"></div><div class="line"></div></div>
-  <div class="box grow"><b>ככה העולם שלי נראה</b><small>מציירים כאן</small></div>
+  <div class="box grow"><b>ככה העולם שלי נראה</b><small>צובעים קובייה אחרי קובייה, בצבעים של העולם</small><div class="wg" id="wg"></div></div>
 </section>
 
 <section class="page">
@@ -75,5 +77,6 @@
 </section>
 <script>
   document.getElementById("px").innerHTML = "<i></i>".repeat(256);
+  document.getElementById("wg").innerHTML = "<i></i>".repeat(26 * 10);
 </script>
 </html>

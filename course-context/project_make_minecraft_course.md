@@ -212,3 +212,13 @@ as real blocks on accept (596e03b). Quick checks run live without Gemini. Next: 
 our own three.js editor in the hub (boxes on body parts, per-face pixel painting, idle/walk/attack keyframes, templates),
 stored Java-native so one generic mob engine builds every kid's mob (Kaupenjoe's 26.x Dodo shows the 26.x entity,
 render state, layer and KeyframeAnimation API). Not ready for next week (items lesson).
+
+**6 Oct, evening (cleanup after Ben's first studio test).** Studio and blocks run on Ben's laptop. Ben: old Gemini-paste
+stuff everywhere, lesson 2 must live in the studio, studio too crowded, need launch/close buttons. Done: dock = שחק ·
+הסטודיו · לסגור את מיינקראפט (kills our jdk's java + the build) · גרסאות · דרייב · נעילה (paste, copy-code, undo, pictures
+removed from the kid UI; server endpoints kept). Studio = item list + three tabs (הציור והשם / מה הוא עושה? / ג׳מיני) +
+footer with a per-item ready check (no code = stays out of the game; no name/picture = warning) and "לנסות במשחק". Items
+without a code now save. Lesson 2 steps, its English, and the deck's demo/"עכשיו אתם"/"משהו לא עבד?" use the studio;
+lesson 1's Gemini steps say "design partner", not "writes the code". Old item-card form, pixel editor and SLIDES2 deleted.
+Future idea from Ben: Gemini inside the hub as a side window (gemini.google.com refuses to be framed; an API needs a key,
+so ask Ben first; possible without a key: open the hub and Gemini side by side as two windows).

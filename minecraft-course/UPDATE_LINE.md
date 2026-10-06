@@ -1,9 +1,9 @@
 # Update Ben's laptop (hub pages + Minecraft pictures)
 
-Last hub change: **38cd796** (studio, step 2: logic blocks). Press Win+R, paste this whole line, press Enter:
+Last hub change: **f08fc67** (studio blocks + Gemini improves them). Press Win+R, paste this whole line, press Enter:
 
 ```
-powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='38cd796562882132a9acfca147b95f47906e01f9';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
+powershell -NoExit -c "[Net.ServicePointManager]::SecurityProtocol='Tls12';$s='f08fc67a3ae7d8cf5a740477be7618d7d4d966c5';irm https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1|iex"
 ```
 
 It updates `C:\MAKE\hub` (the kids' page, the teacher page and its slides, the print page) and the course tools in

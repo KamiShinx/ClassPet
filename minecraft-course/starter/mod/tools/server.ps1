@@ -27,16 +27,6 @@ try {
     }
     exit 0
 }
-# Child processes (cmd, Gradle's Java daemon, Minecraft) must not inherit our sockets: Gradle's daemon outlives us, and an
-# inherited listening socket keeps this address taken by a process that never answers, so the hub hangs forever.
-$noInherit = { param($sock) }
-if ($onWindows) {
-    try {
-        Add-Type -Namespace MakeNative -Name Handle -MemberDefinition '[System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)] public static extern bool SetHandleInformation(System.IntPtr h, uint mask, uint flags);'
-        $noInherit = { param($sock) try { [void][MakeNative.Handle]::SetHandleInformation($sock.Handle, 1, 0) } catch {} }
-    } catch {}
-}
-& $noInherit $listener.Server
 if ($onWindows -and -not $env:MAKE_NO_BROWSER) { Start-Process $url }
 
 # ---------- game state ----------
@@ -65,16 +55,20 @@ function Start-Game([bool]$online) {
         # Tests only: a stand-in for Gradle.
         $psi.FileName = '/bin/sh'
         $psi.Arguments = "-c `"$($env:MAKE_FAKE_BUILD) > '$log' 2>&1`""
+        $psi.WorkingDirectory = $mod
+        $psi.UseShellExecute = $false
+        $psi.CreateNoWindow = $true
     } else {
+        # Started through the shell, so Gradle inherits nothing from us. (An inherited socket outlived the hub inside
+        # Gradle's daemon and kept this address taken by a process that never answers: the hub hung forever.)
+        # The shell can't pass environment variables, so cmd sets them itself.
+        $w = { param($p) $p -replace '/', '\' }
         $psi.FileName = $env:ComSpec
-        $psi.Arguments = "/c gradlew.bat runClient $flag > `"$($log -replace '/', '\')`" 2>&1"
-        $psi.EnvironmentVariables['JAVA_HOME'] = (Join-Path $root 'jdk')
-        $psi.EnvironmentVariables['GRADLE_USER_HOME'] = (Join-Path $root 'gradle-home')
-        $psi.EnvironmentVariables['PATH'] = ((Join-Path $root 'jdk/bin') -replace '/', '\') + ';' + $psi.EnvironmentVariables['PATH']
+        $psi.Arguments = "/c set ""JAVA_HOME=$(& $w (Join-Path $root 'jdk'))"" && set ""GRADLE_USER_HOME=$(& $w (Join-Path $root 'gradle-home'))"" && set ""PATH=$(& $w (Join-Path $root 'jdk/bin'));%PATH%"" && gradlew.bat runClient $flag > ""$(& $w $log)"" 2>&1"
+        $psi.WorkingDirectory = (& $w $mod)
+        $psi.UseShellExecute = $true
+        $psi.WindowStyle = 'Hidden'
     }
-    $psi.WorkingDirectory = $mod
-    $psi.UseShellExecute = $false
-    $psi.CreateNoWindow = $true
     $state.proc = [System.Diagnostics.Process]::Start($psi)
     $state.phase = 'building'; $state.online = $online; $state.error = ''
     $state.message = 'המחשב בונה את המוד ופותח את מיינקראפט. זה לוקח דקה או שתיים...'
@@ -328,7 +322,6 @@ $lastSeen = Get-Date
 while ($true) {
     if ($listener.Pending()) {
         $client = $listener.AcceptTcpClient()
-        & $noInherit $client.Client
         try { Invoke-Request $client; $lastSeen = Get-Date } catch {} finally { $client.Close() }
     } else {
         Start-Sleep -Milliseconds 60

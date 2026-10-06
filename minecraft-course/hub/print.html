@@ -13,9 +13,9 @@
   .bar button { font: inherit; font-weight: 700; padding: 8px 18px; border: 2px solid #111; border-radius: 4px; background: #3b8735; color: #fff; cursor: pointer; }
   .page { width: 190mm; height: 277mm; margin: 12px auto; background: #fff; padding: 6mm; display: flex; flex-direction: column; gap: 4mm; overflow: hidden; }
   .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 8mm; border-bottom: 1.2mm solid #111; padding-bottom: 2mm; }
-  .head h1 { margin: 0; font-size: 11mm; line-height: 1; }
+  .head h1 { margin: 0; font-size: 10mm; line-height: 1; white-space: nowrap; }
   .head .no { font-size: 5mm; font-weight: 700; white-space: nowrap; }
-  .head .no i { display: inline-block; width: 16mm; border-bottom: .6mm solid #111; }
+  .head .no i { display: inline-block; width: 50mm; border-bottom: .6mm solid #111; }
   .box { border: .8mm solid #111; border-radius: 3mm; padding: 3mm 4mm; display: flex; flex-direction: column; }
   .box b { font-size: 5.4mm; line-height: 1.2; }
   .box small { font-size: 3.8mm; color: #444; }
@@ -43,7 +43,7 @@
 <div class="bar"><span>שני דפים: כרטיס העולם (שיעור 1) וכרטיס החפץ (שיעור 2). מדפיסים על A4, בלי הקטנה.</span><button onclick="print()">להדפיס</button></div>
 
 <section class="page">
-  <div class="head"><h1>כרטיס העולם שלי</h1><span class="no">מחשב מספר <i></i></span></div>
+  <div class="head"><h1>כרטיס העולם שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
   <div class="box"><b>העולם שלי בשש מילים או פחות</b><small>רעיון אחד חזק. למשל: פיראטים בשמיים על איים מרחפים</small><div class="line"></div></div>
   <div class="row">
     <div class="box"><b>שלושה צבעים של העולם שלי</b><small>צובעים בטושים</small><div class="sw"><i></i><i></i><i></i></div></div>
@@ -55,7 +55,7 @@
 </section>
 
 <section class="page">
-  <div class="head"><h1>כרטיס החפץ</h1><span class="no">מחשב מספר <i></i></span></div>
+  <div class="head"><h1>כרטיס החפץ</h1><span class="no">שם ושם משפחה <i></i></span></div>
   <div class="row">
     <div class="box"><b>שם החפץ</b><small>שם שמספר מה החפץ עושה</small><div class="line"></div></div>
     <div class="box"><b>המשפט שמופיע מתחת לשם</b><small>משפט קצר, שרואים במשחק</small><div class="line"></div></div>

@@ -17,9 +17,26 @@ try {
     $listener = New-Object System.Net.Sockets.TcpListener([Net.IPAddress]::Loopback, $port)
     $listener.Start()
 } catch {
-    if ($onWindows) { Start-Process $url }
+    # Another copy is running: hand over to it. If it doesn't answer (an old process holding the address), say what to do.
+    $alive = $false
+    try { $r = [Net.WebRequest]::Create("${url}api/lock"); $r.Timeout = 3000; $r.GetResponse().Close(); $alive = $true } catch [Net.WebException] { if ($_.Exception.Response) { $alive = $true } } catch {}
+    if ($alive) { if ($onWindows) { Start-Process $url } }
+    elseif ($onWindows) {
+        Add-Type -AssemblyName PresentationFramework -ErrorAction SilentlyContinue
+        try { [void][System.Windows.MessageBox]::Show("The hub can't start: an old Minecraft builder is still running.`nRestart the computer, or run:  taskkill /f /im java.exe", 'Minecraft') } catch {}
+    }
     exit 0
 }
+# Child processes (cmd, Gradle's Java daemon, Minecraft) must not inherit our sockets: Gradle's daemon outlives us, and an
+# inherited listening socket keeps this address taken by a process that never answers, so the hub hangs forever.
+$noInherit = { param($sock) }
+if ($onWindows) {
+    try {
+        Add-Type -Namespace MakeNative -Name Handle -MemberDefinition '[System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)] public static extern bool SetHandleInformation(System.IntPtr h, uint mask, uint flags);'
+        $noInherit = { param($sock) try { [void][MakeNative.Handle]::SetHandleInformation($sock.Handle, 1, 0) } catch {} }
+    } catch {}
+}
+& $noInherit $listener.Server
 if ($onWindows -and -not $env:MAKE_NO_BROWSER) { Start-Process $url }
 
 # ---------- game state ----------
@@ -311,6 +328,7 @@ $lastSeen = Get-Date
 while ($true) {
     if ($listener.Pending()) {
         $client = $listener.AcceptTcpClient()
+        & $noInherit $client.Client
         try { Invoke-Request $client; $lastSeen = Get-Date } catch {} finally { $client.Close() }
     } else {
         Start-Sleep -Milliseconds 60

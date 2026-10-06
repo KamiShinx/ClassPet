@@ -22,9 +22,9 @@ const MOBS = [["Zombie","Zombie","zombie"],["Skeleton","Skeleton","skeleton"],["
   ["Cow","Cow","cow"],["Pig","Pig","pig"],["Chicken","Chicken","chicken"],["Sheep","Sheep","sheep"],["Horse","Horse","horse"],["Parrot","Parrot","parrot"],
   ["Axolotl","Axolotl","axolotl"],["Frog","Frog","frog"],["Allay","Allay","allay"],["Iron Golem","Iron Golem","iron_golem"],["Snow Golem","Snow Golem","snow_golem"],
   ["Villager","Villager","villager"],["Bat","Bat","bat"]];
-const SOUNDS = [["רמה חדשה","Level up","entity.player.levelup"],["אבן קסם","Magic orb","entity.experience_orb.pickup"],["רעם","Thunder","entity.lightning_bolt.thunder"],
-  ["פיצוץ","Explosion","entity.generic.explode"],["פעמון","Bell","block.note_block.bell"],["השתגרות","Teleport","entity.enderman.teleport"],["צרחה","Scream","entity.ghast.scream"],
-  ["זיקוק","Firework","entity.firework_rocket.launch"],["יללה","Howl","entity.wolf.howl"],["מיאו","Meow","entity.cat.ambient"],["סדן","Anvil","block.anvil.land"],["נשיפת דרקון","Dragon","entity.ender_dragon.growl"]];
+const SOUNDS = [["עלייה ברמה","Level up","entity.player.levelup"],["איסוף XP","XP orb","entity.experience_orb.pickup"],["רעם","Thunder","entity.lightning_bolt.thunder"],
+  ["פיצוץ","Explosion","entity.generic.explode"],["פעמון","Bell","block.note_block.bell"],["שיגור","Teleport","entity.enderman.teleport"],["צרחה","Scream","entity.ghast.scream"],
+  ["זיקוק","Firework","entity.firework_rocket.launch"],["יללה","Howl","entity.wolf.howl"],["מיאו","Meow","entity.cat.ambient"],["סדן","Anvil","block.anvil.land"],["נהמת דרקון","Dragon","entity.ender_dragon.growl"]];
 const DIMS = [["Overworld","Overworld","overworld"],["Nether","Nether","nether"],["End","End","end"]];
 const opts = list => () => list.map(x => [en() ? x[1] : x[0], x[2]]);
 const num = (name, value, min, max) => ({ type:"field_number", name, value, min, max, precision: 1 });
@@ -36,7 +36,7 @@ const DEFS = [
   ["tr_hit","כשמכים יצור עם החפץ %1","When you hit a creature with the item %1",[{type:"input_statement",name:"DO"}],"when"],
   ["tr_hold","כל שנייה שהחפץ ביד %1","Every second the item is in your hand %1",[{type:"input_statement",name:"DO"}],"when"],
   // do (actions)
-  ["a_effect","לתת %1 %2 למשך %3 שניות, בעוצמה %4","Give %1 %2 for %3 seconds, strength %4",
+  ["a_effect","לתת %2 %1 למשך %3 שניות, בעוצמה %4","Give %1 %2 for %3 seconds, strength %4",
     [{type:"field_dropdown",name:"E",options:opts(EFFECTS)},{type:"field_dropdown",name:"WHO",options:opts(who("לי","ליצור","to me","to the creature"))},num("S",5,1,120),num("L",1,1,5)],"do"],
   ["a_heal","לרפא %1 ב־%2 לבבות","Heal %1 by %2 hearts",[{type:"field_dropdown",name:"WHO",options:opts(who("אותי","את היצור","me","the creature"))},num("N",2,1,20)],"do"],
   ["a_damage","להוריד %1 %2 לבבות","Take %2 hearts from %1",[{type:"field_dropdown",name:"WHO",options:opts(who("לי","ליצור","me","the creature"))},num("N",2,1,25)],"do"],
@@ -47,7 +47,7 @@ const DEFS = [
   ["a_launch","להקפיץ %1 למעלה בעוצמה %2","Launch %1 up, power %2",[{type:"field_dropdown",name:"WHO",options:opts(who("אותי","את היצור","me","the creature"))},num("P",1,1,5)],"do"],
   ["a_push","להדוף %1 קדימה בעוצמה %2","Push %1 forward, power %2",[{type:"field_dropdown",name:"WHO",options:opts(who("אותי","את היצור","me","the creature"))},num("P",1,1,5)],"do"],
   ["a_tp","לקפוץ %1 קוביות קדימה","Jump %1 blocks forward",[num("N",8,1,30)],"do"],
-  ["a_spawn","לזמן %1 %2, %3 פעמים","Summon %1 %2, %3 times",[{type:"field_dropdown",name:"M",options:opts(MOBS)},{type:"field_dropdown",name:"WHO",options:opts(who("לידי","ליד היצור","next to me","next to the creature"))},num("N",1,1,5)],"do"],
+  ["a_spawn","לזמן %1 %2, כמות: %3","Summon %1 %2, how many: %3",[{type:"field_dropdown",name:"M",options:opts(MOBS)},{type:"field_dropdown",name:"WHO",options:opts(who("לידי","ליד היצור","next to me","next to the creature"))},num("N",1,1,5)],"do"],
   ["a_sound","להשמיע צליל: %1","Play a sound: %1",[{type:"field_dropdown",name:"SND",options:opts(SOUNDS)}],"do"],
   ["a_msg","לכתוב על המסך %1","Show on screen %1",[{type:"field_input",name:"T",text:"!"}],"do"],
   // price
@@ -152,7 +152,7 @@ function setLang(cb){
 }
 function mount(div, item, onChange){
   const B = window.Blockly;
-  if (!B){ div.innerHTML = `<p class="st-noblk">${en() ? "The block editor didn't load. Open the page from Minecraft in the Start menu." : "עורך הקוביות לא נטען. פותחים את הדף מ־Minecraft בתפריט Start."}</p>`; return; }
+  if (!B){ div.innerHTML = `<p class="st-noblk">${en() ? "The block editor didn't load. Open the page from Minecraft in the Start menu." : "עורך הבלוקים לא נטען. פותחים את הדף מ־Minecraft בתפריט Start."}</p>`; return; }
   setLang(() => {
     defineAll();
     if (ws){ try { ws.dispose(); } catch(e){} ws = null; }
@@ -277,9 +277,9 @@ function lint(prog){
   let anyPrice = false, anyStrong = false;
   const walk = (list, trig) => (list || []).forEach(s => {
     if (!s) return;
-    if (s.if){ if (!(s.then || []).length) add(E ? "An \"if\" has nothing inside it." : "יש ״אם״ בלי שום דבר בפנים."); cond(s.if, trig); walk(s.then, trig); walk(s.else, trig); return; }
-    if (s.repeat){ if (!(s.do || []).length) add(E ? "A \"repeat\" has nothing inside it." : "יש ״לחזור״ בלי שום דבר בפנים."); walk(s.do, trig); return; }
-    if (s.who === "target" && trig !== "hit") add(E ? "A block points at \"the creature\", but only \"When you hit a creature\" has one. Elsewhere it does nothing." : "קובייה מכוונת אל ״היצור״, אבל יש יצור רק ב״כשמכים יצור״. במקום אחר היא לא עושה כלום.");
+    if (s.if){ if (!(s.then || []).length) add(E ? "An \"if\" has nothing inside it." : "יש ״אם״ בלי שום דבר בתוכו."); cond(s.if, trig); walk(s.then, trig); walk(s.else, trig); return; }
+    if (s.repeat){ if (!(s.do || []).length) add(E ? "A \"repeat\" has nothing inside it." : "יש ״לחזור״ בלי שום דבר בתוכו."); walk(s.do, trig); return; }
+    if (s.who === "target" && trig !== "hit") add(E ? "A block points at \"the creature\", but only \"When you hit a creature\" has one. Elsewhere it does nothing." : "יש בלוק שמכוון אל ״היצור״, אבל יש יצור רק ב״כשמכים יצור״. בכל מקום אחר הבלוק לא עושה כלום.");
     if (["cooldown","consume","hunger"].includes(s.a)) anyPrice = true;
     if (strong.has(s.a) || (s.a === "damage" && s.who === "target") || (s.a === "effect" && s.l >= 3)) anyStrong = true;
     if (trig === "hold" && strong.has(s.a)) add(E ? "Under \"Every second\", this happens every second as long as you hold it." : "ב״כל שנייה״ זה יקרה כל שנייה, כל עוד מחזיקים את החפץ.");

@@ -100,10 +100,10 @@ function editor(it){
       <div class="st-acts"><button class="btn go" id="st-play">לשחק עם השינויים</button><button class="btn ghost" id="st-del">למחוק את החפץ</button></div>
     </div>
   </div>
-  <div class="st-blocks"><h3>מה החפץ עושה?</h3><p>גוררים קוביות מהתפריט: קודם ״מתי״, ובתוכה מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div>
+  <div class="st-blocks"><h3>מה החפץ עושה?</h3><p>גוררים בלוקים מהתפריט: קודם ״מתי״, ובתוכו מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div>
     <ul class="st-lint" id="st-lint"></ul>
     <label class="st-intent">במילים שלכם: מה החפץ אמור לעשות?<textarea data-f="intent" maxlength="300" rows="2" placeholder="למשל: כשמכים יצור בלילה, נופל עליו ברק. אחרי זה המקל צריך לנוח.">${esc(it.intent || "")}</textarea></label>
-    <div class="st-acts"><button class="btn ghost" id="st-blk2g">להעתיק את הקוביות לג׳מיני</button><small>ג׳מיני יבדוק אם הקוביות עושות את מה שכתבתם, יסביר מה לא עובד, ויציע גרסה מתוקנת. אתם מחליטים אם לקחת אותה.</small></div></div>
+    <div class="st-acts"><button class="btn ghost" id="st-blk2g">להעתיק את הבלוקים לג׳מיני</button><small>ג׳מיני יבדוק אם הבלוקים עושים את מה שכתבתם, יסביר מה לא עובד, ויציע גרסה מתוקנת. אתם מחליטים אם לקחת אותה.</small></div></div>
   <div class="st-gem"><h3>ג׳מיני, שותף לעיצוב</h3>
     <ol><li><button class="btn ghost" id="st-tog">להעתיק לג׳מיני</button> ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>. מתחת כותבים מה אתם רוצים: רעיון, שאלה, או שינוי.</li>
     <li>ג׳מיני הציע שינוי? מעתיקים את כל התשובה שלו, ולוחצים <button class="btn ghost" id="st-fromg">הדבקה מג׳מיני</button></li></ol>
@@ -168,8 +168,8 @@ function bind(app){
   });
   const b2g = app.querySelector("#st-blk2g");
   if (b2g) b2g.addEventListener("click", async () => {
-    if (!it.power){ S.err = "עוד אין קוביות. קודם בונים, אחר כך משפרים עם ג׳מיני."; paintStatus(); return; }
-    try { await H.api("/api/copy-text", { method:"POST", body: b64(blocksText(it)) }); S.msg = "הקוביות הועתקו. בג׳מיני לוחצים Ctrl + V ושולחים. אחר כך מעתיקים את כל התשובה ולוחצים ״הדבקה מג׳מיני״."; S.err = ""; } catch(e){ S.err = "לא הועתק. נסו שוב."; }
+    if (!it.power){ S.err = "עוד אין בלוקים. קודם בונים, אחר כך משפרים עם ג׳מיני."; paintStatus(); return; }
+    try { await H.api("/api/copy-text", { method:"POST", body: b64(blocksText(it)) }); S.msg = "הבלוקים הועתקו. בג׳מיני לוחצים Ctrl + V ושולחים. אחר כך מעתיקים את כל התשובה ולוחצים ״הדבקה מג׳מיני״."; S.err = ""; } catch(e){ S.err = "לא הועתק. נסו שוב."; }
     paintStatus();
   });
   app.querySelector("#st-fromg").addEventListener("click", async () => {
@@ -242,9 +242,9 @@ function blocksText(it){
   const rules = BLOCK_RULES.replace("@@E@@", L.E.map(x => x[2]).join(", ")).replace("@@M@@", L.M.map(x => x[2]).join(", ")).replace("@@S@@", L.SND.map(x => x[2]).join(", "));
   return rules + "\n\n===== החפץ =====\n" + (it.name || "") + (it.lore ? " (" + it.lore + ")" : "") + (it.job ? "\nבשביל מה: " + it.job : "") + (it.price ? "\nהמחיר שתכננתי: " + it.price : "")
     + "\n\n===== מה אני רוצה שהחפץ יעשה =====\n" + (it.intent || "(לא כתבתי)")
-    + "\n\n===== הקוביות שלי =====\n" + B.readable(it.power).join("\n") + "\n\n===== התוכנית (JSON) =====\n" + JSON.stringify(it.power)
+    + "\n\n===== הבלוקים שלי =====\n" + B.readable(it.power).join("\n") + "\n\n===== התוכנית (JSON) =====\n" + JSON.stringify(it.power)
     + "\n\n===== בדיקות של הסטודיו =====\n" + (B.lint(it.power).join("\n") || "אין הערות")
-    + "\n\n===== מה אני רוצה =====\nתבדקו אם הקוביות שלי עושות את מה שכתבתי, ואיך אפשר לשפר.\n";
+    + "\n\n===== מה אני רוצה =====\nתבדקו אם הבלוקים שלי עושים את מה שכתבתי, ואיך אפשר לשפר.\n";
 }
 function blockList(){
   const B = window.STUDIO_BLOCKS; if (!B) return "";
@@ -261,7 +261,7 @@ function parseSuggestion(text){
   let raw = null;
   const m = text.match(/```\s*studio\s*([\s\S]*?)```/i) || text.match(/```\s*(?:json)?\s*(\{[\s\S]*?"items"[\s\S]*?\})\s*```/i);
   if (m) raw = m[1]; else { const a = text.indexOf("{"), b = text.lastIndexOf("}"); if (a >= 0 && b > a && /"items"/.test(text.slice(a, b))) raw = text.slice(a, b + 1); }
-  if (!raw) return { error:"בתשובה של ג׳מיני אין שינוי לעיצוב. אם רציתם שינוי, כתבו לו: ״תשלח את השינוי בבלוק studio״." };
+  if (!raw) return { error:"בתשובה של ג׳מיני אין שינוי לעיצוב. אם רציתם שינוי, כתבו לו: ״תשלח את השינוי כבלוק studio״." };
   let j; try { j = JSON.parse(raw); } catch(e){ return { error:"ג׳מיני שלח שינוי שבור. כתבו לו: ״הבלוק שלך לא תקין, תשלח אותו שוב״." }; }
   const list = Array.isArray(j.items) ? j.items : [];
   const out = [];
@@ -285,14 +285,14 @@ function parseSuggestion(text){
 const show = (k, v) => k === "rarity" ? (RARITY.find(r => r[0] === v) || [0, v])[1] : v;
 function parseBlocks(text, it){
   const m = text.match(/```\s*blocks\s*([\s\S]*?)```/i);
-  let j; try { j = JSON.parse(m[1]); } catch(e){ return { error:"ג׳מיני שלח קוביות שבורות. כתבו לו: ״הבלוק שלך לא תקין, תשלח אותו שוב״." }; }
+  let j; try { j = JSON.parse(m[1]); } catch(e){ return { error:"ג׳מיני שלח בלוקים שבורים. כתבו לו: ״הבלוקים שלך לא תקינים, תשלח אותם שוב״." }; }
   const B = window.STUDIO_BLOCKS, r = B.toBlocks(j);
   if (r.error){ const what = String(r.error).split(":")[0];
-    return { error: { mob:"ג׳מיני השתמש ביצור שאין בסטודיו.", effect:"ג׳מיני השתמש באפקט שאין בסטודיו.", sound:"ג׳מיני השתמש בצליל שאין בסטודיו.", act:"ג׳מיני המציא קובייה שלא קיימת." }[what] || "ג׳מיני שלח קוביות שהסטודיו לא מכיר. כתבו לו: ״תשתמש רק בקוביות מהרשימה״." }; }
+    return { error: { mob:"ג׳מיני השתמש ביצור שאין בסטודיו.", effect:"ג׳מיני השתמש באפקט שאין בסטודיו.", sound:"ג׳מיני השתמש בצליל שאין בסטודיו.", act:"ג׳מיני המציא בלוק שלא קיים." }[what] || "ג׳מיני שלח בלוקים שהסטודיו לא מכיר. כתבו לו: ״תשתמש רק בבלוקים מהרשימה״." }; }
   return { program: j, before: B.readable(it.power), after: B.readable(j) };
 }
 function suggestion(){
-  if (S.sugg.program) return `<div class="st-sg"><b>ג׳מיני מציע גרסה משופרת לקוביות:</b>
+  if (S.sugg.program) return `<div class="st-sg"><b>ג׳מיני מציע גרסה משופרת לבלוקים:</b>
     <div class="sg-ba"><div><small>עכשיו</small><pre>${esc(S.sugg.before.join("\n") || "—")}</pre></div><div><small>אחרי</small><pre>${esc(S.sugg.after.join("\n"))}</pre></div></div>
     <div class="st-acts"><button class="btn go" id="sg-ok">לקבל</button><button class="btn ghost" id="sg-no">לא, תודה</button></div></div>`;
   return `<div class="st-sg"><b>ג׳מיני מציע:</b>${S.sugg.changes.map(c => `<div class="sg-it"><span class="sg-h">${c.isNew ? "חפץ חדש: " : ""}${esc((c.cur && c.cur.name) || c.ch.name || c.id)}</span><ul>${Object.keys(c.ch).map(k => `<li><span>${FIELDS[k] || k}</span>${c.cur && c.cur[k] !== undefined && c.cur[k] !== "" ? `<s>${esc(show(k, c.cur[k]))}</s> ← ` : ""}<b>${esc(show(k, c.ch[k]))}</b></li>`).join("")}</ul></div>`).join("")}
@@ -301,7 +301,7 @@ function suggestion(){
 function bindSuggestion(app){
   const ok = app.querySelector("#sg-ok"), no = app.querySelector("#sg-no"); if (!ok) return;
   ok.addEventListener("click", () => {
-    if (S.sugg.program){ const it = S.world.items[S.sel]; window.STUDIO_BLOCKS.loadInto(it, S.sugg.program); S.sugg = null; S.msg = "הקוביות של ג׳מיני נכנסו. אפשר לשנות אותן, ולהחזיר ב״גרסאות״."; save(); render(app); return; }
+    if (S.sugg.program){ const it = S.world.items[S.sel]; window.STUDIO_BLOCKS.loadInto(it, S.sugg.program); S.sugg = null; S.msg = "הבלוקים של ג׳מיני נכנסו. אפשר לשנות אותם, ולהחזיר את הקודמים ב״גרסאות״."; save(); render(app); return; }
     S.sugg.changes.forEach(c => { if (c.isNew) S.world.items.push(Object.assign({ id:c.id, name:"", lore:"", stack:64, rarity:"common", px:[] }, c.ch)); else Object.assign(c.cur, c.ch); });
     S.sugg = null; S.msg = "השינוי נכנס לעיצוב."; save(); render(app); });
   no.addEventListener("click", () => { S.sugg = null; app.querySelector("#st-sugg").innerHTML = ""; });

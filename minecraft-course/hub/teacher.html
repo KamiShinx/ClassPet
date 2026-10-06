@@ -44,7 +44,7 @@ function renderTeacher(){
       <tr><td>80–88</td><td>מיינקראפט נפתח: עולם במצב יצירה</td><td>24</td></tr>
       <tr><td>88–90</td><td>דרייב. לרשום איזה מחשב לא סיים להתקין, ולבדוק אותו לפני שיעור 2</td><td>27</td></tr>
       </tbody></table></div>
-      <p><b>ג׳מיני (שקופיות 25–26):</b> רק אם נשאר זמן. אחרת בתחילת שיעור 2, לפני ההדגמה. <b>הסרטון:</b> צריך אינטרנט ויוטיוב פתוח. לבדוק בכיתה לפני השיעור. <b>אם מחשב אחד נכשל:</b> הילד עובד עם שותף, ומתקנים בהפסקה.</p>
+      <p><b>ג׳מיני (שקופיות 25–26):</b> רק אם נשאר זמן. אחרת בתחילת שיעור 2, לפני ההדגמה. <b>הסרטון (שקופית 5):</b> משובץ בשקופית, בתנאי שקודם לוחצים פעמיים על הסמל Minecraft ורק אחר כך פותחים את הדף הזה. אחרת הוא נפתח בחלון נפרד. צריך אינטרנט ויוטיוב פתוח: לבדוק בכיתה לפני השיעור. <b>אם מחשב אחד נכשל:</b> הילד עובד עם שותף, ומתקנים בהפסקה.</p>
     </section>
 
     <section class="tsec"><h2>שיעור 2, דקה אחרי דקה</h2><div class="ttable"><table>
@@ -80,7 +80,10 @@ function renderTeacher(){
 }
 
 /* ===== PRESENTER CONSOLE ===== */
-let sIx = LS.get("slide1", 0), aud = null, blocked = false, t0 = Date.now(), tick = null;
+let sIx = LS.get("slide1", 0), aud = null, blocked = false, t0 = Date.now(), tick = null, playing = false;
+const SERVED = location.protocol !== "file:";   // YouTube will not play embedded in a file:// page
+// Opened from the desktop icon (a file)? If the hub's local server is running, continue there, so the video can be embedded.
+if (!SERVED) fetch("http://localhost:47811/teacher.html", { mode:"no-cors" }).then(() => location.replace("http://localhost:47811/teacher.html" + location.hash)).catch(() => {});
 const revealed = new Set();
 
 function audOpen(){ return aud && !aud.closed; }
@@ -103,6 +106,11 @@ function syncAudience(){
   const s = aud.document.getElementById("s"); if (!s) return;
   s.innerHTML = SLIDES[sIx].html;
   H.applyReveal(s, revealed);
+  s.querySelectorAll("[data-yt]").forEach(v => {
+    v.innerHTML = SERVED
+      ? `<iframe src="https://www.youtube.com/embed/${v.dataset.yt}?rel=0&autoplay=${playing ? 1 : 0}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`
+      : `<span class="play">▶</span>`;
+  });
 }
 const fmt = ms => { const t = Math.floor(ms/1000); return String(Math.floor(t/60)).padStart(2,"0") + ":" + String(t%60).padStart(2,"0"); };
 
@@ -134,7 +142,15 @@ function renderConsole(){
   const cur = app.querySelector("#cur");
   H.applyReveal(cur, revealed);
   cur.querySelectorAll("[data-sil]").forEach(b => b.addEventListener("click", () => { revealed.add(+b.dataset.sil); H.applyReveal(cur, revealed); syncAudience(); }));
-  cur.querySelectorAll("[data-video]").forEach(b => b.addEventListener("click", () => window.open(b.dataset.video, "mkmod-video", "popup,width=1280,height=720")));
+  cur.querySelectorAll("[data-yt]").forEach(v => {
+    const url = "https://www.youtube.com/watch?v=" + v.dataset.yt;
+    v.innerHTML = SERVED
+      ? `<button class="btn go" id="vplay">${playing ? "■ לעצור" : "▶ לנגן במקרן"}</button><small>הסרטון מתנגן בחלון של המקרן. אפשר גם ללחוץ עליו שם.</small>`
+      : `<button class="btn go" id="vwin">▶ לפתוח את הסרטון בחלון</button><small>כדי שהסרטון יהיה בתוך השקופית: לוחצים פעמיים על הסמל Minecraft, ואז פותחים שוב את הדף הזה</small>`;
+    const vp = v.querySelector("#vplay"), vw = v.querySelector("#vwin");
+    if (vp) vp.addEventListener("click", () => { playing = !playing; if (!audOpen()) openAudience(); else syncAudience(); renderConsole(); });
+    if (vw) vw.addEventListener("click", () => window.open(url, "mkmod-video", "popup,width=1280,height=720"));
+  });
   const oa = app.querySelector("#openaud"); if (oa) oa.addEventListener("click", openAudience);
   app.querySelector("#treset").addEventListener("click", () => { t0 = Date.now(); app.querySelector("#timer").textContent = "00:00"; });
   app.querySelector("#pp").addEventListener("click", () => goSlide(sIx-1));
@@ -143,7 +159,7 @@ function renderConsole(){
   clearInterval(tick);
   tick = setInterval(() => { const el = document.getElementById("timer"); if (el) el.textContent = fmt(Date.now()-t0); if (aud && aud.closed){ aud = null; renderConsole(); } }, 1000);
 }
-function goSlide(i){ sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide" + deckN, sIx); renderConsole(); syncAudience(); }
+function goSlide(i){ playing = false; sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide" + deckN, sIx); renderConsole(); syncAudience(); }
 function deckFromHash(){ const m = location.hash.match(/^#present(\d+)$/); return m && H.DECKS[+m[1]] ? +m[1] : 0; }
 function onKey(e){
   if (!deckFromHash()) return;

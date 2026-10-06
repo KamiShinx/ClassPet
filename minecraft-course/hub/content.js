@@ -414,6 +414,11 @@ body.aud .stage{min-height:100vh}
 .rules .who{display:flex;gap:10px;align-items:center}
 .rules .who .face{width:clamp(46px,7cqw,88px);flex:none}
 .rules small{color:var(--muted);font-weight:700}
+.vid{width:min(100%,calc((100vh - 60px)*16/9));aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden;display:grid;place-items:center;align-content:center;gap:12px;color:#fff;padding:0}
+.vid iframe{width:100%;height:100%;border:0;display:block}
+.vid .play{font-size:clamp(2rem,8cqw,5rem);line-height:1;opacity:.85}
+.vid small{color:#ddd;max-width:34em;padding:0 16px}
+.con-box .vid{width:100%}
 .slide>*{animation:rise .38s both}
 .slide>*:nth-child(2){animation-delay:.07s}.slide>*:nth-child(3){animation-delay:.14s}.slide>*:nth-child(4){animation-delay:.21s}.slide>*:nth-child(5){animation-delay:.28s}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -935,8 +940,8 @@ const SLIDES = [
     notes:"15–20 דק׳. מוד זה תוספת למיינקראפט. ג׳מיני כותב את הקוד, והם ממציאים ובודקים. אם יש לך מוד שעובד, מראים אותו עכשיו. קצר." },
   { label:"הדרך", html:`<h2>הדרך עד התערוכה</h2><ul class="big"><li>שיעורים 2–5: החפצים הראשונים</li><li>שיעורים 6–9: המקום שלכם והיצור הראשון</li><li><b>שיעור 10: תערוכה 1</b></li><li>שיעורים 11–15: יצור שרק אתם המצאתם</li><li><b>שיעור 20: תערוכה 2, המשפחות מגיעות</b></li></ul>`,
     notes:"מה בונים בכל חלק של הקורס. אפשר להאריך כאן אם ההתקנות עוד רצות." },
-  { label:"סרטון: Diagon Alley", html:`<div class="eye">לפני מיינקראפט</div><h2>רחוב אחד. שלוש דקות וחצי.</h2><p class="quote">Harry Potter · Diagon Alley</p><p><button class="btn go" data-video="https://www.youtube.com/watch?v=5W-a0tl9Fu0">▶ לפתוח את הסרטון</button></p>`,
-    notes:"20–26 דק׳. לוחצים כאן, בשקופית שמשמאל, על הכפתור הירוק: הסרטון נפתח בחלון חדש. גוררים אותו למקרן ומגדילים. 3:43 דקות, מהערוץ הרשמי של Harry Potter: הארי נכנס בפעם הראשונה ל־Diagon Alley. בסוף סוגרים את החלון, ושואלים מה למדו על העולם הזה בלי שאף אחד הסביר. אם יוטיוב חסום בבית הספר: מספרים את הסצנה בעל פה, כולם מכירים אותה." },
+  { label:"סרטון: Diagon Alley", html:`<div class="vid" data-yt="5W-a0tl9Fu0"></div>`,
+    notes:"20–26 דק׳. הסרטון משובץ בשקופית: Harry Potter, הכניסה הראשונה ל־Diagon Alley, 3:43 דקות, מהערוץ הרשמי. לוחצים כאן, בצד שמאל, על ״לנגן במקרן״. אחרי הסרטון שואלים מה למדו על העולם הזה, בלי שאף אחד הסביר. אם יוטיוב חסום בבית הספר: מספרים את הסצנה בעל פה, כולם מכירים אותה." },
   { label:"מה למדנו?", html:`<h2>מה למדנו בשלוש דקות?</h2><div class="rules"><div><span class="n">1</span><b>מה הרעיון של העולם הזה?</b>במשפט אחד.</div><div><span class="n">2</span><b>איך יודעים שאנחנו שם?</b>מה רואים רק שם?</div><div><span class="n">3</span><b>מה שונה מהעולם שלנו?</b></div><div><span class="n">4</span><b>איזה חוקים יש שם?</b></div></div><p class="sub">אף אחד לא עמד והסביר. העולם סיפר את עצמו.</p>`,
     notes:"26–32 דק׳. ארבע שאלות, כמה תשובות לכל אחת, וכותבים אותן על הלוח. מה שסביר שיעלה: קוסמים שחיים בסתר, ממש ליד העולם שלנו. ינשופים, מטאטאים, קדרות, גלימות. קיר לבנים שנפתח, בנק של גובלינים, כסף אחר. המסקנה: אף דמות לא עמדה והסבירה את העולם. ראינו חנויות וחפצים, והבנו לבד. ככה גם העולם שלכם יספר את עצמו: דרך החפצים, היצורים והמקומות שתבנו. את הלוח לא מוחקים: ארבע השאלות חוזרות עכשיו במיינקראפט." },
   { label:"מה עולם צריך?", html:`<h2>מה עולם צריך?</h2>${postcards(["nether","plains","end","deep"])}`,

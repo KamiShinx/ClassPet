@@ -152,4 +152,9 @@ is "if there's time", otherwise the first minutes of lesson 2. Needs YouTube ope
 **Slide rule (Ben, 6 Oct): no overt instructions on the slides** ("we are humans, we don't need these"), e.g. "while
 watching: what do you learn about this world?". A slide shows the thing (picture, statement, vote, clip). The questions
 Ben asks out loud live only in his notes. Removed five such lines from the two decks.
+**Video slide = only the video, embedded, no titles (Ben, 6 Oct: "just put the video embedded in the slide man why do
+I need all these titles?").** A slide with `data-yt="<id>"` gets a YouTube iframe in the projector window; the console
+shows a "play on the projector" button. YouTube refuses to play inside a file:// page, so `teacher.html` opened from the
+desktop icon hops to `http://localhost:47811/teacher.html` when the hub server is running (double-click the Minecraft
+icon first); if it isn't, the video opens in its own window. Verified: the embed loads from a localhost page.
 

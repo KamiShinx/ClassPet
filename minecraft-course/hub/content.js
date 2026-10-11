@@ -484,6 +484,106 @@ a.dbtn{text-decoration:none}
 .ready .rb-h{background:hsl(35,45%,45%);border-radius:14px 14px 6px 6px}
 .ready .rb-d{background:hsl(205,45%,45%);margin-inline-start:22px}
 .ready .rb-p{background:hsl(0,45%,45%);margin-inline-start:22px}
+
+/* ===== kids' hub, Oct rehaul: top bar, home card, one-step lesson screen ===== */
+.tb{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;background:var(--surface);border-bottom:1px solid var(--line);padding:8px 16px}
+.tb-home{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-family:var(--display);font-size:1.15rem}
+.tb-home svg,.tb-menu svg{width:22px;height:22px}
+.tb-mid{min-width:0;text-align:center}
+.tb-lesson{font-family:var(--display);font-weight:400;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.tb-end{display:flex;align-items:center;gap:10px}
+.tb-menu{display:flex;align-items:center;gap:6px;border:2px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 12px;font-weight:700}
+.tb-menu[aria-expanded="true"]{border-color:var(--grass);background:var(--grass-soft)}
+.gpill{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.gpill i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.gpill.building i{background:var(--xp);animation:blink 1s infinite}
+.gpill.running i{background:var(--grass)}
+.gpill.error i{background:var(--red)}
+.gpill.error{color:var(--red)}
+.menu{background:var(--surface);border-bottom:2px solid var(--grass);padding:12px 16px;display:grid;gap:10px}
+.menu[hidden]{display:none}
+.menu-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.menu .dock{border:0;box-shadow:none;padding:0;background:none}
+.menu .dbtn{min-height:46px;font-size:.98rem}
+.menu .seat{display:flex;gap:6px;align-items:center;font-weight:700;color:var(--muted)}
+.gerr:empty{display:none}
+.gerr{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--red-soft);color:var(--ink);border-bottom:3px solid var(--red);padding:10px 16px}
+.gerr b{color:var(--red)}
+@keyframes blink{50%{opacity:.35}}
+/* the game button inside a step */
+[data-gbtn]{display:grid}
+.gb-play{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;max-width:520px;margin-inline:auto;padding:18px 24px;border:0;border-radius:12px;background:var(--grass);color:var(--grass-ink);font-family:var(--display);font-size:1.6rem;box-shadow:0 6px 0 color-mix(in srgb,var(--grass) 55%,#000)}
+.gb-play svg{width:30px;height:30px}
+.gb-play:active{transform:translateY(4px);box-shadow:0 2px 0 color-mix(in srgb,var(--grass) 55%,#000)}
+.gb{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;max-width:620px;width:100%;margin-inline:auto;border-radius:12px;padding:16px 20px;border:2px solid var(--line);background:var(--bg)}
+.gb div{display:grid;gap:2px}
+.gb b{font-size:1.2rem}
+.gb span{color:var(--muted)}
+.gb.busy{border-color:var(--xp);justify-content:flex-start}
+.gb.live{border-color:var(--grass);background:var(--grass-soft)}
+.gb.bad{border-color:var(--red);background:var(--red-soft)}
+.gb.off{color:var(--muted)}
+.gb .spin,.spin{width:26px;height:26px;border:4px solid var(--line);border-top-color:var(--xp);border-radius:50%;animation:spin2 1s linear infinite;flex:none}
+@keyframes spin2{to{transform:rotate(360deg)}}
+/* home */
+.h-hero{display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--surface);border:3px solid var(--grass);border-radius:14px;padding:22px 24px;box-shadow:0 6px 0 var(--grass-soft)}
+.h-txt{display:grid;gap:8px;min-width:240px;flex:1}
+.h-txt small{color:var(--grass);font-weight:800}
+.h-txt h1{font-size:clamp(1.6rem,4vw,2.4rem)}
+.h-prog{height:12px;border-radius:6px;background:var(--sunk);overflow:hidden;max-width:420px}
+.h-prog i{display:block;height:100%;background:var(--xp-bar);min-width:6px}
+.h-step{color:var(--muted);font-weight:700}
+.h-go{font-size:1.4rem;padding:.6em 1.6em}
+.h-h{margin:34px 0 12px;font-size:1.4rem}
+.h-h small{font-family:var(--body);font-size:.9rem;color:var(--muted);margin-inline-start:10px}
+/* lesson */
+.lp{min-height:100vh;display:grid;grid-template-rows:auto auto auto 1fr auto}
+.lp-st{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:10px 16px;background:var(--bg)}
+.lp-st button{display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 14px 5px 8px;font-weight:700;color:var(--muted)}
+.lp-st button span{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--sunk);font-size:.85rem}
+.lp-st button.done{color:var(--grass);border-color:var(--grass-soft)}
+.lp-st button.done span{background:var(--grass);color:var(--grass-ink)}
+.lp-st button.cur{color:var(--ink);border-color:var(--grass);background:var(--grass-soft)}
+.lp-st button.cur span{background:var(--grass);color:var(--grass-ink)}
+.lp-st i{width:22px;height:3px;background:var(--line);border-radius:2px}
+.lp-main{padding:18px 16px 110px;display:grid;justify-items:center;align-items:start}
+.lp-card{width:100%;max-width:980px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px clamp(16px,3vw,32px);display:grid;gap:18px;box-shadow:0 4px 0 var(--line)}
+.lp-head{display:flex;gap:16px;align-items:center}
+.lp-n{display:grid;place-items:center;flex:none;width:56px;height:56px;border-radius:14px;background:var(--grass);color:var(--grass-ink);font-family:var(--display);font-size:1.8rem}
+.lp-head small{color:var(--muted);font-weight:700}
+.lp-head h1{font-size:clamp(1.6rem,3.4vw,2.3rem)}
+.lp-say{font-size:1.2rem;display:grid;gap:10px}
+.lp-say ol,.lp-say ul{margin:0;padding-inline-start:1.4em;display:grid;gap:8px}
+.lp-say li::marker{font-weight:800;color:var(--grass)}
+.lp-do{display:grid;gap:14px}
+.lp-expect{background:var(--grass-soft);border-radius:10px;padding:12px 16px;font-size:1.05rem}
+.lp-expect b{display:block;color:var(--grass);font-size:.9rem}
+.lp-note{background:var(--xp-soft);border-radius:10px;padding:12px 16px}
+.lp-help{border:2px dashed var(--line);border-radius:10px;padding:10px 16px}
+.lp-help summary{cursor:pointer;font-weight:800;color:var(--sky)}
+.lp-help ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.lp-help li b{display:block}
+.lp-card .chal{border-top:1px solid var(--line);padding-top:16px}
+.lp-foot{position:fixed;bottom:0;left:0;right:0;z-index:15;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px}
+.lp-next{font-size:1.25rem;padding:.5em 1.6em}
+.lp-dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.lp-dots i{width:12px;height:12px;border-radius:50%;background:var(--sunk);border:1px solid var(--line)}
+.lp-dots i.done{background:var(--grass);border-color:var(--grass)}
+.lp-dots i.cur{background:var(--xp);border-color:var(--xp);transform:scale(1.25)}
+.lp-sub{font-size:1.4rem;margin-top:6px}
+.ingame{margin:0;padding-inline-start:1.4em;display:grid;gap:8px;font-size:1.05rem}
+.lp-studio{display:block}
+.drv-in{display:grid;gap:12px;justify-items:start}
+.drv-in ol{margin:0;padding-inline-start:1.3em;display:grid;gap:6px}
+.drv-in svg{width:22px;height:22px}
+/* the road of a lesson, drawn big on its first step */
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;counter-reset:road}
+.road div{position:relative;display:grid;gap:6px;justify-items:center;text-align:center;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:14px 10px}
+.road b{font-size:1.1rem}
+.road span{color:var(--muted);font-size:.95rem}
+.road .rn{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--grass);color:var(--grass-ink);font-family:var(--display);font-size:1.2rem}
+.road .mc{width:48px;height:48px}
+@media (max-width:640px){.tb-home span,.tb-menu span,.gpill span{display:none}.lp-st i{display:none}.lp-foot{grid-template-columns:1fr 1fr}.lp-dots{display:none}}
 `;
 function injectStyle(doc){ const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); }
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap";
@@ -503,10 +603,10 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":
 /* ===== course map ===== */
 const UNITS = [
   { n:1, name:"מתחילים", sub:"מיינקראפט עובד, העולם שלי על נייר", color:"#3B8735", icon:"1",
-    lessons:[ {n:1, title:"התקנה והעולם שלי", build:"כרטיס העולם, ומיינקראפט שעובד על המחשב", open:true} ] },
+    lessons:[ {n:1, title:"העולם שלי", build:"שם לעולם, ומיינקראפט שנפתח בכפתור אחד", open:true} ] },
   { n:2, name:"החפצים הראשונים", sub:"מהכרטיס אל תוך המשחק", color:"#2B6A99", icon:"2",
     lessons:[
-      {n:2, title:"החפץ הראשון שלי", build:"חפץ עם שם, ציור והסבר שלכם, בתוך המשחק", open:true},
+      {n:2, title:"החפץ הראשון שלי", build:"חפץ משלכם, עם שם, ציור וכוח, בתוך המשחק", open:true},
       {n:3, title:"מה החפץ עושה?", build:"כוח לחפץ, מבלוקים בסטודיו"},
       {n:4, title:"חפץ עם מחיר", build:"חפץ חזק שיש לו חיסרון"},
       {n:5, title:"אפקט שמשנה את המשחק", build:"אוכל או שיקוי עם אפקט חדש"} ] },
@@ -586,15 +686,6 @@ function gemPromptBox(text){
   return `<div class="prompt"><div class="row"><b>כותבים בג׳מיני:</b><button class="btn ghost" data-copy="${esc(text)}">העתקה</button></div><pre>${esc(text)}</pre></div>`;
 }
 
-
-/* What Gemini's screen looks like, with the 4 things the kids need */
-const GEMINI_MOCK = `<div class="gm" dir="rtl">
-  <div class="gm-side"><div class="gm-new">+ צ׳אט חדש <i>3</i></div><div class="gm-lbl">צ׳אטים קודמים</div></div>
-  <div class="gm-main">
-    <div class="bub ai"><b>ג׳מיני</b>רעיון מעניין! ומה המחיר של החפץ הזה?</div>
-    <div class="gm-input">כותבים כאן, ו־Enter שולח <i>2</i></div>
-  </div>
-</div>`;
 
 const COPY_FLOW = `<div class="flow" dir="rtl">
   <div class="st go"><b>להעתיק לג׳מיני</b><small>בסטודיו, בלשונית ג׳מיני</small></div><span class="ar">←</span>
@@ -697,70 +788,37 @@ const ITEM_NEEDS = `<div class="today">
 </div>`;
 
 /* ===== lesson 1 steps ===== */
+/* ===== lessons 1 and 2, as one road: every step is one thing to do, done right on the step =====
+   Steps hold widgets that index.html mounts: studio pieces (data-studio → STUDIO.mount), the game button (data-gbtn),
+   the Drive save (data-drive). "stations" = the few stops shown above the step: [name, first step index]. */
+const studioIn = o => `<div class="lp-studio" data-studio="${esc(JSON.stringify(o))}"></div>`;
+const gameBtn = () => `<div data-gbtn></div>`;
+const driveBox = () => `<div data-drive></div>`;
+const road = list => `<div class="road">${list.map((x, i) => `<div><span class="rn">${i + 1}</span><b>${x[0]}</b><span>${x[1]}</span></div>`).join("")}</div>`;
+const MC_MENU = `<div class="mcmenu"><div class="logo">MINECRAFT</div>
+  <div class="mcbtn hot">Singleplayer <small>← 1</small></div><div class="mcbtn">Multiplayer</div><div class="mcbtn">Options...</div></div>`;
+const IN_GAME = `<ol class="ingame"><li><b>Singleplayer</b>, ואז העולם שלכם. אין עולם? <b>Create New World</b>, ב־Game Mode בוחרים <b>Creative</b>, ו־<b>Create</b>.</li>
+  <li>לוחצים <kbd>E</kbd>, ובלשוניות למעלה מוצאים את הלשונית עם השם של העולם שלכם.</li></ol>`;
+
 const L1 = {
-  n:1, unit:"יחידה 1 · מתחילים", title:"שיעור 1: התקנה והעולם שלי",
+  n:1, unit:"יחידה 1 · מתחילים", title:"שיעור 1: העולם שלי",
+  stations:[["הקוד",1],["העולם",2],["מיינקראפט",4],["דרייב",5]],
   steps:[
-    { type:"פתיחה", title:"מה עושים היום",
-      body:`<p>היום עושים שלושה דברים. מתחילים בהתקנה, כי היא לוקחת זמן. בזמן שהמחשב עובד, אנחנו מדברים וממציאים עולם.</p>`,
-      expect:"בסוף השיעור: מיינקראפט פתוח על המחשב שלכם, וכרטיס עולם מלא.",
-      visual:()=>`<div class="today">
-        <div><span class="num">1</span><b>מתקינים</b><span>מהדיסק און קי. המחשב עושה את העבודה.</span></div>
-        <div><span class="num">2</span><b>ממציאים עולם</b><span>מדברים על מה עולם צריך, וממלאים כרטיס עולם על דף.</span></div>
-        <div><span class="num">3</span><b>פוגשים את ג׳מיני</b><span>שותף לרעיונות, שעוזר לכם לחשוב.</span></div>
-      </div>` },
+    { title:"ברוכים הבאים",
+      body:`<p>בקורס הזה אתם בונים עולם משלכם בתוך מיינקראפט: חפצים, יצורים וחוקים שאתם ממציאים.</p><p>הכול קורה בדף הזה. עושים מה שכתוב בשלב, ולוחצים <b>הבא</b>.</p>`,
+      visual:()=>road([["ממציאים","על דף, עם טושים"],["בונים בדף הזה","שם, ציור, ומה הדבר עושה. בלי קוד"],["נכנסים למשחק","כפתור אחד, והעולם שלכם במיינקראפט"],["שומרים","בסוף כל שיעור, בדרייב"]]) },
 
-    { type:"הוראה", title:"מתקינים מהדיסק און קי",
-      body:`<ol>
-        <li>מכניסים את הדיסק און קי למחשב.</li>
-        <li>פותחים את סייר הקבצים: <kbd>Win</kbd> + <kbd>E</kbd>.</li>
-        <li>ברשימה בצד שמאל, לוחצים על הדיסק און קי.</li>
-        <li>לוחצים פעמיים על <code>install-from-usb</code>.</li>
-        <li>נפתח חלון שחור. לא סוגרים אותו.</li>
-      </ol>`,
-      expect:"החלון השחור כותב Copying... ואחרי כמה דקות: You can take the stick out now.",
-      note:"לא מוציאים את הדיסק עד שכתוב שאפשר. אחר כך מעבירים אותו למי שעוד לא התקין.",
-      stuck:[
-        ["לא רואים את הדיסק און קי","מוציאים ומכניסים שוב, או מנסים כניסת USB אחרת."],
-        ["קפץ חלון כחול: Windows protected your PC","לוחצים More info ואז Run anyway."],
-        ["כתוב ERROR","לא סוגרים את החלון. מרימים יד ומראים למורה."],
-        ["החלון נסגר מיד","מרימים יד. כנראה שהמחשב חוסם את זה, והמורה יבדוק."]
-      ],
-      visual:()=>`<div class="win"><div class="tb"><span>File Explorer</span><span>USB Drive (E:)</span></div>
-        <div class="side"><div class="nav"><div>Desktop</div><div>Documents</div><div>Downloads</div><div>This PC</div><div class="sel">USB Drive (E:)</div></div>
-        <div class="files"><div class="file"><span class="fi"></span>MAKE</div><div class="file hot"><span class="fi"></span>install-from-usb</div><div class="file"><span class="fi"></span>make-usb</div><div class="file"><span class="fi"></span>school-check</div>
-        <p class="callout">← לוחצים פעמיים כאן</p></div></div></div>` },
+    { title:"הקוד שלכם",
+      body:`<p>כשפתחתם את הדף, בחרתם 4 ספרות. רק עם הקוד הזה נכנסים לעולם שלכם.</p>
+        <ul><li>לא מספרים לאף אחד את הקוד.</li><li>הולכים מהמחשב? למעלה: <b>תפריט</b>, ואז <b>נעילה</b>.</li><li>שכחתם את הקוד? המורה פותח בקוד שלו, ובוחרים קוד חדש.</li></ul>` },
 
-    { type:"הוראה", title:"החלון השחור עובד. לא סוגרים!",
-      body:`<p>המחשב מעתיק את מיינקראפט, ואחר כך פותח אותו לבד. בינתיים, עיניים למורה.</p><p>מדי פעם מציצים: מה כתוב בחלון?</p>`,
-      expect:"בסוף נפתח חלון של מיינקראפט, לבד. מרימים יד כשזה קורה.",
-      note:"לא לוחצים עם העכבר בתוך החלון השחור. לחיצה יכולה לעצור אותו. אם הוא נעצר, לוחצים Enter.",
-      visual:()=>`<div class="console"><span class="w">MAKE - Minecraft modding - install from USB</span>
-Do NOT close this window and do NOT pull out the stick.
+    { title:"איך קוראים לעולם שלכם?",
+      body:`<p>בדף 1 כתבתם רעיון לעולם. כותבים כאן את השם שלו.</p>`,
+      visual:()=>studioIn({ parts:["world"] }),
+      expect:"השם נשמר לבד. במשחק זה יהיה השם של הלשונית שלכם." },
 
-[1/3] Copying from the stick ...
-[1/3] Copy OK
-  Desktop: Minecraft
-Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
-
-[3/3] Starting Minecraft to check it works. No internet needed.
-&gt; Task :runClient</div>` },
-
-    { type:"שיחה", title:"מה זה מוד, ומי בונה אותו?",
-      body:`<p><b>מוד</b> זה תוספת שמשנה את מיינקראפט: חפצים חדשים, יצורים חדשים, חוקים חדשים.</p>
-        <p>אתם בונים אותו בעצמכם, ב<b>סטודיו</b> שבדף הזה: מציירים, נותנים שמות, ומחברים בלוקים שאומרים מה כל דבר עושה. בלי לכתוב קוד.</p>
-        <p><b>ג׳מיני</b> הוא שותף לרעיונות. הוא שואל שאלות ובודק את ההיגיון, אבל את העולם ממציאים אתם.</p>`,
-      why:"מי שאומר לבינה מלאכותית ״תמציא לי״ מקבל משהו שהוא לא בחר. בקורס הזה אתם ממציאים, ואתם בונים.",
-      visual:()=>EQ + ROLES },
-
-    { type:"שיחה", title:"מה עולם צריך?",
-      body:`<p>איזה מקום במיינקראפט אתם הכי זוכרים? למה דווקא אותו?</p>
-        <p>לעולם שזוכרים יש ארבעה דברים. מדברים עליהם יחד, ואחר כך כל אחד ממציא את העולם שלו.</p>`,
-      why:"עולם שאין בו רעיון, צבעים וחוקים משלו נראה כמו עוד Plains. אף אחד לא זוכר Plains.",
-      visual:()=>postcards(["nether","end","deep","plains"], "tag") + WORLD_NEEDS },
-
-    { type:"פעילות", title:"כרטיס העולם שלי",
-      body:`<p>15 דקות. קודם על הדף, עם טושים.</p><p>אחר כך מעתיקים לכאן, וזה נשמר במחשב. אין תשובות נכונות. זה העולם שלכם.</p>`,
-      why:"משפט קצר על העולם עונה בשבילכם על המון שאלות אחר כך: איזה יצורים יש, איזה צבעים, מה מסוכן.",
+    { title:"כרטיס העולם",
+      body:`<p>מעתיקים לכאן את דף 1. אין תשובות נכונות: זה העולם שלכם.</p>`,
       hints:[
         "חושבים על משהו שאתם אוהבים: חיה, מקום, תקופה, מאכל. מה קורה אם הוא ענק? מפחיד? חי בשמיים?",
         "דוגמאות: ״פיראטים בשמיים על איים מרחפים״ · ״יער שהלילה בו לא נגמר״ · ״דבורים ענקיות שבנו עיר מדבש״.",
@@ -768,59 +826,26 @@ Copy finished at 16:12. <span class="w">You can take the stick out now.</span>
       ],
       visual:()=>worldCardForm() },
 
-    { type:"בדיקה", title:"מיינקראפט נפתח!",
-      body:`<ol>
-        <li>לוחצים <b>Singleplayer</b>.</li>
-        <li>לוחצים על <b>Game Mode</b> עד שכתוב <b>Creative</b>, ואז <b>Create New World</b>.</li>
-        <li>כשאתם בתוך העולם, לוחצים <kbd>F2</kbd>. זה מצלם את המסך.</li>
-        <li>לוחצים <kbd>Esc</kbd>, ואז <b>Mods</b>, ומחפשים את המוד ברשימה.</li>
-      </ol>`,
-      expect:"ברשימת המודים יש מוד בשם My World. זה המוד שלכם.",
-      note:"קפץ מסך Welcome to Minecraft? לוחצים Continue. מיינקראפט עוד לא נפתח? זה בסדר: ממשיכים לשלב הבא ובודקים שוב בסוף.",
-      visual:()=>`<div class="mcmenu"><div class="logo">MINECRAFT</div>
-        <div class="mcbtn hot">Singleplayer <small>← 1</small></div><div class="mcbtn">Multiplayer</div><div class="mcbtn hot">Mods <small>← 4</small></div><div class="mcbtn">Options...</div></div>` },
+    { title:"נכנסים למיינקראפט",
+      body:`<p>לוחצים על הכפתור הירוק. המחשב בונה את העולם שלכם, ומיינקראפט נפתח לבד אחרי דקה או שתיים.</p>${IN_GAME}`,
+      visual:()=>gameBtn() + MC_MENU,
+      expect:"יש לשונית עם השם של העולם שלכם, ובה חפץ אחד: ״החפץ הראשון״, עם ריבוע סגול ושחור. זה בסדר: בשיעור 2 ממציאים את החפץ שלכם.",
+      stuck:[
+        ["קפץ מסך Welcome to Minecraft","לוחצים Continue."],
+        ["לא מוצאים את הלשונית","בתפריט של E יש חצים למעלה, שעוברים בין עמודי הלשוניות."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
+      ] },
 
-    { type:"שיחה", title:"מה זה ג׳מיני",
-      body:`<p><b>ג׳מיני</b> הוא הצ׳אט של גוגל עם בינה מלאכותית, כמו ChatGPT. כותבים לו הודעה, והוא עונה.</p>
-        <ol><li>נכנסים ל־<code>gemini.google.com</code> ומתחברים עם החשבון של משרד החינוך.</li>
-        <li>למטה יש תיבה. כותבים בה ולוחצים <kbd>Enter</kbd> כדי לשלוח.</li>
-        <li>בצד יש תפריט. שם פותחים צ׳אט חדש.</li></ol>`,
-      why:"ג׳מיני לא זוכר צ׳אטים קודמים. לכן הסטודיו שולח לו כל פעם את העולם שלכם מחדש.",
-      note:"לא כותבים לג׳מיני את השם האמיתי שלכם, את בית הספר או איפה אתם גרים.",
-      stuck:[["לא מצליחים להתחבר","בודקים שזה החשבון של משרד החינוך. אם זה עדיין לא עובד, מרימים יד."],["כתוב שאין גישה ל־Gemini","מרימים יד."]],
-      visual:()=>GEMINI_MOCK },
-
-    { type:"שיחה", title:"איך מדברים עם ג׳מיני בקורס",
-      body:`<p>בכל פעם שמבקשים משהו מג׳מיני, עושים אותו דבר:</p>
-        <ol><li>בסטודיו, בלשונית <b>ג׳מיני</b>, לוחצים <b>להעתיק לג׳מיני</b>. זה מעתיק את החוקים של הקורס ואת העולם שלכם.</li>
-        <li>בג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
-        <li>מתחת כותבים מה אתם רוצים, ושולחים.</li></ol>`,
-      why:"בלי החוקים, ג׳מיני ממציא בשבילכם שמות ורעיונות, וכותב קוד שלא צריך. והוא לא זוכר צ׳אטים קודמים, אז הסטודיו שולח לו את החוקים ואת העולם שלכם כל פעם מחדש.",
-      note:"החוקים באנגלית. ככה ג׳מיני מבין אותם הכי טוב, והוא עונה לכם בעברית.",
-      visual:()=>COPY_FLOW },
-
-    { type:"בדיקה", title:"מדברים עם ג׳מיני",
-      body:`<ol>
-        <li>פותחים את הסטודיו, ולמעלה ליד ״העולם:״ כותבים את השם של העולם שלכם.</li>
-        <li>בג׳מיני פותחים צ׳אט חדש.</li>
-        <li>בסטודיו, בלשונית <b>ג׳מיני</b>, לוחצים <b>להעתיק לג׳מיני</b>, ובג׳מיני לוחצים <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
-        <li>מתחת כותבים את השורה מהמסגרת, עם העולם שלכם מכרטיס העולם, ושולחים.</li>
-        <li>עונים על השאלה שג׳מיני שואל.</li>
-      </ol>`,
-      expect:"ג׳מיני עונה בעברית ושואל שאלה על העולם שלכם.",
-      note:"הלשונית ״ג׳מיני״ מופיעה כשיש בסטודיו חפץ. אין עדיין? לוחצים ״+ חפץ חדש״, גם אם הוא עוד ריק.",
-      visual:()=>toStudio("ליד ״העולם:״ כותבים את השם, ואז הלשונית ״ג׳מיני״", ["world","gem"]) + gemPromptBox("היום מתחילים עולם למיינקראפט. העולם שלי: ") + `<div class="chat"><div class="bub me"><b>אתם</b>(החוקים והעולם) היום מתחילים עולם למיינקראפט. העולם שלי: פיראטים בשמיים על איים מרחפים</div><div class="bub ai"><b>ג׳מיני</b>נשמע מסקרן! שאלה ראשונה: מה מחזיק את האיים באוויר?</div></div>` },
-
-    { type:"סיום", title:"מסיימים",
-      body:`<ul><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם לפי השלבים שם.</li></ul>`,
-      why:"המחשב של בית הספר יכול להתאפס, ואולי בשבוע הבא תשבו ליד מחשב אחר. מה שבדרייב שלכם נשאר שלכם.",
-      expect:"בשיעור הבא: החפץ הראשון שלכם, בתוך המשחק.",
-      visual:()=>`<div class="checks"><div><span class="ok"></span>מיינקראפט נפתח</div><div><span class="ok"></span>כרטיס העולם מלא</div><div><span class="ok"></span>ג׳מיני ענה לי</div><div><span class="ok"></span>העולם שלי שמור בדרייב</div></div>` }
+    { title:"שומרים בדרייב",
+      body:`<p>המחשב של בית הספר יכול להתאפס. מה שבדרייב שלכם נשאר שלכם.</p>`,
+      visual:()=>driveBox(),
+      expect:"בדרייב יש קובץ ששמו מתחיל ב־myworld.",
+      note:"בשבוע הבא המחשב התאפס, או שקיבלתם מחשב אחר? למעלה: <b>תפריט</b>, ואז <b>דרייב</b>, ומחזירים משם את העולם." }
   ],
   challenges:[
-    {id:"mc", lvl:"חובה", t:"מיינקראפט עובד", d:"נכנסתי לעולם Creative ומצאתי את המוד ברשימה."},
-    {id:"card", lvl:"חובה", t:"כרטיס עולם", d:"העולם שלי בשורה אחת, שלושה צבעים, וחוק אחד."},
-    {id:"gem", lvl:"חובה", t:"ג׳מיני ענה", d:"שלחתי לו את העולם שלי מהסטודיו, ועניתי על שאלה אחת."}
+    {id:"card", lvl:"חובה", t:"כרטיס העולם", d:"העולם שלי בשורה אחת, שלושה צבעים וחוק אחד."},
+    {id:"mc", lvl:"חובה", t:"מיינקראפט נפתח", d:"מצאתי במשחק את הלשונית עם השם של העולם שלי."},
+    {id:"drive", lvl:"חובה", t:"שמור בדרייב", d:"קובץ הגיבוי שלי נמצא בדרייב."}
   ]
 };
 
@@ -930,58 +955,18 @@ const SLIDES = [
 
 
 /* ===== lesson 2: my first item ===== */
-/* A big link from a lesson step into the studio (studio.js). The studio shows a way back to the lesson. */
-const toStudio = (what, hl) => studioMock(hl || []) + `<a class="st-entry" href="#studio"><b>פותחים את הסטודיו</b><span>${what}</span><i>←</i></a>`;
-/* A small drawing of the studio, with the place to press marked in yellow. */
-function studioMock(hl){
-  const h = k => hl.includes(k) ? " hl" : "";
-  const px = "..........,...####...,..#yyyy#..,.#yywyyy#.,.#ywyyyy#.,.#yyyyyy#.,.#yyyyyy#.,..#yyyy#..,...####...,..........".split(",");
-  return `<div class="smock" aria-hidden="true">
-    <div class="sm-top"><b>הסטודיו</b><span class="sm-w${h("world")}">העולם: עיר הדבורים</span></div>
-    <div class="sm-main">
-      <div class="sm-list"><div class="sm-card"><i></i>מטבע דבש</div><div class="sm-new${h("new")}">+ חפץ חדש</div></div>
-      <div class="sm-edit">
-        <div class="sm-tabs"><span class="on">הציור והשם</span><span>מה הוא עושה?</span><span class="${h("gem")}">ג׳מיני</span></div>
-        <div class="sm-body"><div class="sm-grid${h("paint")}">${pxSVG(px, { "#":"#7a5a10", y:"#fed83d", w:"#fff6b0" }, true)}</div>
-          <div class="sm-fields${h("fields")}"><small>השם במשחק</small><i>מטבע דבש</i><small>המשפט מתחת לשם</small><i>הדבורים מקבלות רק אותו.</i><small>הקוד באנגלית</small><i dir="ltr">honey_coin</i></div></div>
-        <div class="sm-foot"><span>מוכן למשחק.</span><span class="sm-play${h("play")}">לנסות במשחק</span></div>
-      </div>
-    </div></div>`;
-}
 const PAPER2 = `<div class="checks"><div><span class="ok"></span>שם החפץ, והמשפט שמתחתיו</div><div><span class="ok"></span>בשביל מה הוא?</div><div><span class="ok"></span>המחיר שלו</div><div><span class="ok"></span>איפה משיגים אותו, וכמה בערימה</div><div><span class="ok"></span>ציור של 16 על 16</div></div>`;
 const L2 = {
   n:2, unit:"יחידה 2 · החפצים הראשונים", title:"שיעור 2: החפץ הראשון שלי",
+  stations:[["דף 2",1],["מקל ברקים",2],["החפץ שלי",4],["במשחק",7],["דרייב",8]],
   steps:[
-    { type:"פתיחה", title:"מה עושים היום",
-      body:`<p>היום ממציאים חפץ לעולם שלכם ומכניסים אותו למשחק, עם שם, משפט וציור שלכם.</p>`,
-      expect:"בסוף השיעור החפץ שלכם נמצא במשחק, בלשונית של העולם שלכם.",
-      note:"העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. לוחצים למעלה על <b>דרייב</b>, ומחזירים את העולם שלכם מהדרייב.",
-      visual:()=>`<div class="today">
-        <div><span class="num">1</span><b>מה הופך חפץ למעולה?</b><span>מדברים על זה יחד.</span></div>
-        <div><span class="num">2</span><b>מקל ברקים</b><span>חפץ מוכן: מנסים אותו במשחק, ומשנים.</span></div>
-        <div><span class="num">3</span><b>ממציאים על הדף</b><span>כרטיס, וציור של 16 על 16.</span></div>
-        <div><span class="num">4</span><b>בונים בסטודיו</b><span>מציירים, נותנים שם, ונכנסים למשחק. בלי קוד.</span></div>
-      </div>` },
+    { title:"היום: חפץ משלכם, בתוך המשחק",
+      body:`<p>היום ממציאים חפץ ומכניסים אותו למשחק, עם שם, ציור וכוח שאתם בוחרים.</p>`,
+      visual:()=>road([["דף 2","ממציאים את החפץ על דף"],["מקל ברקים","חפץ מוכן: מנסים אותו, ומשנים"],["החפץ שלי","שם, ציור, ומה הוא עושה"],["במשחק","בודקים שהכול עובד"]]),
+      note:"העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. למעלה: <b>תפריט</b>, ואז <b>דרייב</b>, ומחזירים משם את העולם." },
 
-    { type:"שיחה", title:"מה הופך חפץ למעולה?",
-      body:`<p>מה החפץ הכי טוב במיינקראפט? ומה החפץ שאתם אף פעם לא משתמשים בו?</p>
-        <p>לחפץ מעולה יש ארבעה דברים. מדברים עליהם יחד, ואחר כך כל אחד ממציא חפץ לעולם שלו.</p>`,
-      why:"חרב שהורגת כל דבר במכה אחת כיפית לחמש דקות. אחר כך כבר אין סכנה, ואין משחק. המחיר הוא החלק המעניין.",
-      visual:()=>itemRow(["pick","pearl","bow","apple","totem","wings","potato","dirt"]) + ITEM_NEEDS },
-
-    { type:"פעילות", title:"חפץ מוכן: מקל ברקים",
-      body:`<ol><li>לוחצים <b>לטעון את מקל הברקים לסטודיו</b>. הוא נכנס לסטודיו עם ציור, שם ובלוקים.</li><li>בלשונית <b>מה הוא עושה?</b> קוראים את הבלוקים: מתי, מה קורה, ומה המחיר.</li><li>לוחצים <b>לנסות במשחק</b>, ומכים יצור במקל.</li><li>משנים דבר אחד: ברק לאש, או 3 שניות ל־10. ובודקים שוב.</li></ol>`,
-      why:"ככה מתחילים חפץ בקורס: מדוגמה שעובדת, ומשנים אותה עד שהיא שלכם.",
-      note:"שינוי נכנס למשחק רק כשהוא נפתח מחדש: ״לסגור את מיינקראפט״, ושוב ״לנסות במשחק״.",
-      stuck:[["לא קורה כלום כשמכים","מחזיקים את המקל ביד ומכים יצור, לא קובייה. ואם המקל נח, מחכים 3 שניות."],["אין כפתור לטעון","פותחים את הדף מ־Minecraft בתפריט Start."]],
-      visual:()=>`<div class="ready"><div class="rb"><div class="rb-h">כשמכים יצור עם החפץ</div><div class="rb-d">ברק על היצור</div><div class="rb-p">החפץ נח 3 שניות</div></div>
-        <button class="btn go" data-ready="lightning_stick">לטעון את מקל הברקים לסטודיו</button></div>`,
-      mount:(root, served) => { const b = root.querySelector("[data-ready]"); if (!b) return; if (!served || !window.STUDIO) { b.disabled = true; return; }
-        b.addEventListener("click", () => window.STUDIO.addReady(b.dataset.ready)); } },
-
-    { type:"פעילות", title:"ממציאים על הדף",
-      body:`<p>דף 2, עם טושים. קודם הכרטיס, אחר כך הציור ברשת של 16 על 16.</p><p>מי שסיים, עובר לסטודיו.</p>`,
-      note:"היום נכנסים למשחק השם, המשפט, הציור וכמה בערימה. מי שמספיק, נותן לחפץ גם כוח, מדוגמה.",
+    { title:"ממציאים על הדף",
+      body:`<ol><li>לוקחים את דף 2 וטושים.</li><li>קודם הכרטיס: השם, המשפט מתחת לשם, בשביל מה החפץ, ומה המחיר שלו.</li><li>אחר כך הציור, ברשת של 16 על 16.</li></ol>`,
       hints:[
         "חפץ מהעולם שלכם: מה מוצאים שם? מה אוספים? במה סוחרים?",
         "המשפט מתחת לשם יכול לרמוז בשביל מה החפץ, או מה המחיר שלו.",
@@ -989,52 +974,58 @@ const L2 = {
       ],
       visual:()=>PAPER2 },
 
-    { type:"הוראה", title:"בסטודיו: חפץ חדש",
-      body:`<ol><li>פותחים את הסטודיו, ולוחצים <b>+ חפץ חדש</b>.</li><li>מעתיקים מהדף את השם ואת המשפט.</li><li>כותבים קוד באנגלית: אותיות קטנות, בלי רווחים. למשל <code>honey_coin</code>.</li><li>בוחרים כמה בערימה, וכמה החפץ נדיר.</li></ol>`,
-      why:"את השם בעברית רואים השחקנים. את הקוד באנגלית מכיר המשחק.",
-      note:"הסטודיו שומר לבד, כל הזמן. אין כפתור שמירה.",
-      visual:()=>toStudio("״+ חפץ חדש״, ואז השם, המשפט והקוד", ["new","fields"]) },
-
-    { type:"פעילות", title:"בסטודיו: מציירים",
-      body:`<ol><li>בוחרים צבע, ומציירים בלוח לפי הציור שעל הדף.</li><li>ליד הלוח רואים איך החפץ ייראה במשחק, עם השם בצבע של הנדירות.</li></ol>`,
-      why:"במיינקראפט כל חפץ הוא 16 על 16 משבצות. כשיש מעט משבצות, מחליטים מה הכי חשוב בצורה.",
-      hints:["מתחילים מקו מתאר כהה, ואז ממלאים.","שניים עד ארבעה צבעים מספיקים. צבע בהיר אחד נותן ברק.","לחיצה ימנית בעכבר מוחקת."],
-      visual:()=>toStudio("הלשונית ״הציור והשם״", ["paint"]) },
-
-    { type:"בדיקה", title:"בודקים במשחק",
-      body:`<ol><li>בסטודיו, מתחת לחפץ, כתוב אם הוא מוכן למשחק. אם חסר משהו, משלימים.</li><li>לוחצים <b>לנסות במשחק</b>. המחשב בונה את העולם שלכם ופותח את מיינקראפט. זה לוקח דקה או שתיים.</li><li>נכנסים לעולם במצב Creative, לוחצים <kbd>E</kbd>, ומוצאים את הלשונית של העולם שלכם.</li><li>בודקים מול הדף: השם, המשפט, הציור וכמה בערימה.</li></ol>`,
-      expect:"הכול כמו בדף. ואם משהו שונה, זה בדיוק מה שמתקנים עכשיו.",
+    { title:"מקל ברקים: חפץ שכבר עובד",
+      body:`<p>זה חפץ מוכן. ככה הוא נראה במשחק, וזה מה שהוא עושה:</p>`,
+      visual:()=>studioIn({ ready:"lightning_stick", parts:["card"] }) + `<h2 class="lp-sub">מנסים אותו</h2>` + gameBtn()
+        + `<ol class="ingame"><li><b>Singleplayer</b>, ואז העולם שלכם. אין עולם? <b>Create New World</b>, <b>Creative</b>, ו־<b>Create</b>.</li><li>לוחצים <kbd>E</kbd>, הלשונית של העולם שלכם, ולוקחים את מקל הברקים.</li><li>מכים במקל Zombie או חזיר.</li></ol>`,
+      expect:"נופל ברק על היצור. אחרי כל מכה המקל נח 3 שניות.",
       stuck:[
-        ["החפץ לא במשחק","בסטודיו, מתחת לחפץ, כתוב מה חסר. בדרך כלל זה הקוד באנגלית."],
-        ["יש ריבוע סגול ושחור במקום הציור","לחפץ עוד אין ציור. מציירים בסטודיו, וסוגרים ופותחים את המשחק מחדש."],
-        ["שיניתי בסטודיו, ובמשחק לא רואים","שינוי נכנס רק כשהמשחק נפתח מחדש. סוגרים את מיינקראפט ולוחצים שוב לנסות במשחק."],
+        ["אין יצור בסביבה","בתפריט של E מחפשים Zombie Spawn Egg, ולוחצים איתו לחיצה ימנית על הרצפה."],
+        ["לא קורה כלום כשמכים","מחזיקים את המקל ביד ומכים יצור, לא קובייה. ואם המקל נח, מחכים 3 שניות."],
         ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
-      ],
-      visual:()=>studioMock(["play"]) + `<div class="checks"><div><span class="ok"></span>השם של החפץ, כמו בדף</div><div><span class="ok"></span>המשפט מתחת לשם</div><div><span class="ok"></span>הציור שלכם</div><div><span class="ok"></span>כמה נכנסים בערימה</div></div>` },
+      ] },
 
-    { type:"פעילות", title:"שם לעולם",
-      body:`<p>בסטודיו, למעלה ליד ״העולם:״, כותבים את השם מכרטיס העולם.</p><p>בפעם הבאה שהמשחק נפתח, זה השם של הלשונית שלכם.</p>`,
-      expect:"במשחק, במצב Creative, יש לשונית עם השם של העולם שלכם.",
-      visual:()=>toStudio("למעלה: ״העולם:״", ["world"]) },
+    { title:"משנים את מקל הברקים",
+      body:`<p>אלה הבלוקים של המקל. משנים בהם דבר אחד:</p><ul><li><b>קל:</b> לוחצים על המספר 3 וכותבים 10. עכשיו המקל נח יותר.</li><li><b>מגניב:</b> מהתפריט <b>עושים</b> גוררים את ״לזמן Zombie״ אל מתחת לברק.</li></ul><p>אחר כך סוגרים את מיינקראפט, פותחים שוב, ובודקים.</p>`,
+      visual:()=>studioIn({ ready:"lightning_stick", parts:["power"] }) + gameBtn(),
+      note:"שינוי נכנס למשחק רק כשפותחים אותו מחדש." },
 
-    { type:"פעילות", title:"נשאר זמן? כוח לחפץ שלכם",
-      body:`<ol><li>בסטודיו בוחרים את החפץ שלכם, ופותחים את <b>מה הוא עושה?</b></li><li>ב<b>מתחילים מדוגמה</b> בוחרים דוגמה שמתאימה למה שכתבתם בדף: בשביל מה החפץ, ומה המחיר שלו.</li><li>משנים את הדוגמה עד שהיא מתאימה לחפץ שלכם, ובודקים במשחק.</li></ol>`,
-      hints:["אין דוגמה שמתאימה בדיוק? לוקחים את הכי קרובה, ומחליפים בה בלוק אחד.","לכל כוח יש מחיר. אם מחקתם את המחיר, מה ימנע מהשחקן להשתמש בו כל הזמן?"],
-      visual:()=>toStudio("החפץ שלכם, ואז ״מה הוא עושה?״") },
+    { title:"החפץ שלכם: שם",
+      body:`<p>מעתיקים מהדף את השם ואת המשפט שמתחתיו. אחר כך בוחרים כמה נכנסים בערימה, וכמה החפץ נדיר.</p>`,
+      visual:()=>studioIn({ tag:"l2", parts:["fields"] }),
+      expect:"בצד רואים את החפץ כמו במשחק, והשם בצבע של הנדירות." },
 
-    { type:"סיום", title:"מסיימים",
-      body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם.</li></ul>
-        `,
-      expect:"בשבוע הבא: כוחות עם ״אם״. רק בלילה, רק בסיכוי, רק עם Shift.",
-      visual:()=>`<div class="checks"><div><span class="ok"></span>החפץ שלי במשחק</div><div><span class="ok"></span>מראים למי שיושב לידכם</div><div><span class="ok"></span>העולם שלי שמור בדרייב</div></div>` }
+    { title:"החפץ שלכם: ציור",
+      body:`<p>מציירים לפי הציור שעל הדף. הציור נשמר לבד.</p>`,
+      visual:()=>studioIn({ tag:"l2", parts:["paint"] }),
+      hints:["מתחילים מקו מתאר כהה, ואז ממלאים.","שניים עד ארבעה צבעים מספיקים. צבע בהיר אחד נותן ברק.","לחיצה ימנית בעכבר מוחקת."] },
+
+    { title:"החפץ שלכם: מה הוא עושה?",
+      body:`<ol><li>בוחרים דוגמה שמתאימה למה שכתבתם בדף: בשביל מה החפץ, ומה המחיר שלו.</li><li>משנים אותה עד שהיא שלכם: מספרים, יצורים, אפקטים, או בלוקים שלמים.</li></ol>`,
+      visual:()=>studioIn({ tag:"l2", parts:["power"] }),
+      hints:["אין דוגמה שמתאימה בדיוק? לוקחים את הכי קרובה, ומחליפים בה בלוק אחד.","לכל כוח יש מחיר. אם מחקתם את המחיר, מה ימנע מהשחקן להשתמש בו כל הזמן?"] },
+
+    { title:"בודקים במשחק",
+      body:`<ol><li>מיינקראפט פתוח? סוגרים אותו.</li><li>לוחצים על הכפתור הירוק.</li><li>במשחק: <kbd>E</kbd>, הלשונית של העולם שלכם, והחפץ שלכם.</li><li>בודקים מול הדף: השם, המשפט, הציור, ומה החפץ עושה.</li></ol>`,
+      visual:()=>studioIn({ tag:"l2", parts:["card","check"] }) + gameBtn(),
+      expect:"הכול כמו בדף. ואם משהו שונה, זה בדיוק מה שמתקנים עכשיו: חוזרים לשלב שלו, משנים, ובודקים שוב.",
+      stuck:[
+        ["יש ריבוע סגול ושחור במקום הציור","לחפץ עוד אין ציור. חוזרים לשלב הציור, ואז סוגרים ופותחים את המשחק."],
+        ["שיניתי, ובמשחק לא רואים","שינוי נכנס רק כשהמשחק נפתח מחדש. סוגרים את מיינקראפט, ופותחים שוב."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
+      ] },
+
+    { title:"שומרים ומסיימים",
+      body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>סוגרים את מיינקראפט.</li><li>שומרים את העולם בדרייב:</li></ul>`,
+      visual:()=>driveBox(),
+      expect:"בשבוע הבא: כוחות עם ״אם״. רק בלילה, רק בסיכוי, רק עם Shift." }
   ],
   challenges:[
     {id:"card", lvl:"חובה", t:"דף 2", d:"בשביל מה החפץ, מה המחיר, ואיפה משיגים אותו."},
     {id:"tweak", lvl:"חובה", t:"מקל ברקים", d:"ניסיתי אותו במשחק, ושיניתי בו דבר אחד."},
     {id:"item", lvl:"חובה", t:"החפץ שלי", d:"החפץ במשחק, עם השם, המשפט והציור שלכם."},
-    {id:"power", lvl:"אתגר", t:"כוח לחפץ שלי", d:"החפץ שלי עושה משהו, מדוגמה ששיניתי."},
-    {id:"world", lvl:"אתגר", t:"שם לעולם", d:"הלשונית במשחק נקראת בשם של העולם שלכם."},
-    {id:"second", lvl:"אתגר", t:"חפץ שני", d:"עוד חפץ מהעולם שלכם, עם ציור משלו."},
+    {id:"power", lvl:"חובה", t:"כוח לחפץ שלי", d:"החפץ שלי עושה משהו, מדוגמה ששיניתי."},
+    {id:"second", lvl:"אתגר", t:"חפץ שני", d:"בסטודיו (תפריט, ואז הסטודיו): עוד חפץ מהעולם שלכם."},
     {id:"shade", lvl:"אתגר", t:"צל וברק", d:"בציור יש צבע כהה לצל וצבע בהיר לברק."}
   ]
 };
@@ -1095,5 +1086,5 @@ const LESSONS = { 1: L1, 2: L2 };
 const DECKS = { 1: SLIDES };
 window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
   gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK,
-  LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES };
+  LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES, studioIn, gameBtn, driveBox, road, MC_MENU };
 })();

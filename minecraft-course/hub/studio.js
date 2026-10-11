@@ -20,12 +20,21 @@ async function load(){
   catch(e){ S.world = { version:1, items:[] }; S.err = "הסטודיו עובד רק כשפותחים את הדף מ־Minecraft בתפריט Start."; }
   S.world.items = Array.isArray(S.world.items) ? S.world.items : [];
   S.world.world = S.world.world || {};
+  // Every item gets an English code by itself; kids never have to invent one.
+  let fixed = false;
+  S.world.items.forEach(it => { if (!it.id){ it.id = nextId(); fixed = true; } });
+  if (fixed) save();
   if (S.sel < 0 && S.world.items.length) S.sel = 0;
   S.loaded = true;
 }
+/* item_1, item_2...: the code the game knows an item by. Kept short and unique. */
+function nextId(){ const used = new Set((S.world ? S.world.items : []).map(x => x.id)); let n = 1; while (used.has("item_" + n)) n++; return "item_" + n; }
 let saveT = null;
-function save(){ clearTimeout(saveT); S.msg = "שומר..."; paintStatus(); saveT = setTimeout(doSave, 600); }
+function save(){ clearTimeout(saveT); S.dirty = true; S.msg = "שומר..."; paintStatus(); saveT = setTimeout(doSave, 600); }
+/* Before the game builds: send whatever is still waiting to be saved. */
+async function flush(){ clearTimeout(saveT); if (S.dirty) await doSave(); return !S.err; }
 async function doSave(){
+  S.dirty = false;
   try {
     const r = await H.api("/api/studio-save", { method:"POST", body: b64(JSON.stringify(S.world)) });
     if (r.status === 401) return H.lock();
@@ -57,14 +66,14 @@ function paintThumbs(root){ root.querySelectorAll("canvas[data-px]").forEach(c =
 /* One item at a time, in three tabs: how it looks, what it does, and Gemini. */
 const PANES = [["look","הציור והשם"],["power","מה הוא עושה?"],["gem","ג׳מיני"]];
 function render(app){
+  host = null;
   if (window.STUDIO_BLOCKS) window.STUDIO_BLOCKS.unmount();
   if (!S.loaded){ app.innerHTML = `<div class="wrap"><p>טוען...</p></div>`; load().then(() => render(app)); return; }
   const items = S.world.items, it = items[S.sel], last = H.LS.get("lastLesson", 0);
   S.pane = S.pane || H.LS.get("stpane", "look");
-  app.innerHTML = `<div class="wrap studio">
-    <div class="top"><div class="brand"><h1>הסטודיו</h1><label class="st-wn"><span>העולם:</span><input id="st-wname" maxlength="40" value="${esc(S.world.world.name || "")}" placeholder="שם העולם שלכם"></label></div>
-      <div class="tools">${last ? `<a class="btn ghost" href="#lesson${last}">→ חזרה לשיעור ${last}</a>` : ""}<a class="btn ghost" href="#home">לקורס</a>${H.langBtn ? H.langBtn() : ""}</div></div>
-    <div id="dock"></div>
+  app.innerHTML = `${H.topBar ? H.topBar(`<b class="tb-lesson">הסטודיו</b>`) : ""}<div class="wrap studio">
+    <div class="st-top"><label class="st-wn"><span>העולם:</span><input id="st-wname" maxlength="40" value="${esc(S.world.world.name || "")}" placeholder="שם העולם שלכם"></label>
+      ${last ? `<a class="btn ghost" href="#lesson${last}">→ חזרה לשיעור ${last}</a>` : ""}</div>
     <div class="st-main">
       <aside class="st-list"><h2>החפצים שלי</h2>
         <div class="st-cards">${items.map((x, i) => `<button class="st-card ${i === S.sel ? "on" : ""}" data-sel="${i}">${thumb(x, 36)}<span>${esc(x.name || "בלי שם")}</span><i class="st-dot ${state(x)}"></i></button>`).join("")}</div>
@@ -87,34 +96,36 @@ function editor(it){
     <div class="st-status" id="st-status" role="status"></div></div>`;
 }
 function lookPane(it){
-  return `<div class="st-grid">
-    <div class="st-paint">
+  return `<div class="st-grid">${paintHTML()}<div class="st-fields">${previewHTML(it)}${fieldsHTML(it, true)}</div></div>`;
+}
+function paintHTML(){
+  return `<div class="st-paint">
       <canvas id="st-c" width="320" height="320" aria-label="לוח ציור 16 על 16"></canvas>
       <div class="st-pal">${COLORS.map(c => `<button data-col="${c}" style="background:${c}" class="${c === S.color ? "on" : ""}" aria-label="צבע"></button>`).join("")}<input type="color" id="st-cc" value="#ff66aa" aria-label="צבע משלכם"></div>
       <div class="st-tools">${[["pen","עיפרון"],["erase","מחק"],["fill","דלי"]].map(([k, t]) => `<button class="btn ghost ${S.tool === k ? "on" : ""}" data-tool="${k}">${t}</button>`).join("")}<button class="btn ghost" id="st-undo">צעד אחורה</button><button class="btn ghost" id="st-clear">לנקות</button></div>
-    </div>
-    <div class="st-fields">
-      <div class="st-prev"><div class="sl"><canvas id="pv-c" width="16" height="16"></canvas></div><div class="tip"><b id="pv-n" style="color:${rarCol(it.rarity)}">${esc(it.name || "?")}</b><span id="pv-l">${esc(it.lore || "")}</span></div></div>
-      <label>השם במשחק<input data-f="name" maxlength="40" value="${esc(it.name || "")}" placeholder="למשל: מטבע דבש"></label>
-      <label>המשפט מתחת לשם<input data-f="lore" maxlength="80" value="${esc(it.lore || "")}" placeholder="למשל: הדבורים מקבלות רק אותו."></label>
-      <label>הקוד באנגלית <small>אותיות קטנות, בלי רווחים</small><input data-f="id" dir="ltr" maxlength="40" value="${esc(it.id || "")}" placeholder="honey_coin"></label>
-      <div class="st-row"><span>כמה בערימה</span><div class="chs">${[1,16,64].map(n => `<button data-stack="${n}" class="${+it.stack === n ? "on" : ""}">${n}</button>`).join("")}</div><input data-f="stack" type="number" min="1" max="64" value="${+it.stack || 64}" dir="ltr" aria-label="כמה בערימה"></div>
-      <div class="st-row"><span>כמה נדיר</span><div class="chs">${RARITY.map(([k, t, c]) => `<button data-rar="${k}" class="${(it.rarity || "common") === k ? "on" : ""}" style="--rc:${c}"><i></i>${t}</button>`).join("")}</div></div>
-    </div>
-  </div>`;
+    </div>`;
 }
-function powerPane(it){
+/* The item as the game shows it: picture in a slot, and the name in its rarity colour. */
+const previewHTML = it => `<div class="st-prev"><div class="sl"><canvas id="pv-c" width="16" height="16"></canvas></div><div class="tip"><b id="pv-n" style="color:${rarCol(it.rarity)}">${esc(it.name || "?")}</b><span id="pv-l">${esc(it.lore || "")}</span></div></div>`;
+function fieldsHTML(it, withCode){
+  return `<label>השם במשחק<input data-f="name" maxlength="40" value="${esc(it.name || "")}" placeholder="למשל: מטבע דבש"></label>
+      <label>המשפט מתחת לשם<input data-f="lore" maxlength="80" value="${esc(it.lore || "")}" placeholder="למשל: הדבורים מקבלות רק אותו."></label>
+      ${withCode ? `<label>הקוד באנגלית <small>המחשב בחר אותו. אפשר לשנות: אותיות קטנות, בלי רווחים.</small><input data-f="id" dir="ltr" maxlength="40" value="${esc(it.id || "")}" placeholder="honey_coin"></label>` : ""}
+      <div class="st-row"><span>כמה בערימה</span><div class="chs">${[1,16,64].map(n => `<button data-stack="${n}" class="${+it.stack === n ? "on" : ""}">${n}</button>`).join("")}</div><input data-f="stack" type="number" min="1" max="64" value="${+it.stack || 64}" dir="ltr" aria-label="כמה בערימה"></div>
+      <div class="st-row"><span>כמה נדיר</span><div class="chs">${RARITY.map(([k, t, c]) => `<button data-rar="${k}" class="${(it.rarity || "common") === k ? "on" : ""}" style="--rc:${c}"><i></i>${t}</button>`).join("")}</div></div>`;
+}
+function powerPane(it, noExamples){
   const X = (window.STUDIO_BLOCKS && window.STUDIO_BLOCKS.EXAMPLES) || [], E = H.LS.get("lang", "he") === "en";
-  return `<details class="st-ex" ${it.power ? "" : "open"}><summary>מתחילים מדוגמה</summary>
+  const ex = noExamples ? "" : `<details class="st-ex" ${it.power ? "" : "open"}><summary>מתחילים מדוגמה</summary>
       <div class="st-exs">${X.map(x => `<button data-ex="${x.id}"><b>${esc((E ? x.en : x.he)[0])}</b><small>${esc((E ? x.en : x.he)[1])}</small></button>`).join("")}</div>
-      <small>הדוגמה נכנסת לחפץ הזה, ואז משנים בה מה שרוצים: מספרים, יצורים, אפקטים, או בלוקים שלמים.</small></details>
-    <p class="st-lead">גוררים בלוקים מהתפריט: קודם ״מתי״, ובתוכו מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div><ul class="st-lint" id="st-lint"></ul>`;
+      <small>הדוגמה נכנסת לחפץ הזה, ואז משנים בה מה שרוצים: מספרים, יצורים, אפקטים, או בלוקים שלמים.</small></details>`;
+  return `${ex}<p class="st-lead">גוררים בלוקים מהתפריט: קודם ״מתי״, ובתוכו מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div><ul class="st-lint" id="st-lint"></ul>`;
 }
 /* An example's picture rows → the studio's 256 colours. */
 const picOf = pic => { const px = Array(256).fill(""); if (!pic) return px; pic.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (pic.pal[ch]) px[y * 16 + x] = pic.pal[ch]; })); return px; };
 /* A lesson's ready item: picture, name and blocks, straight into the studio (index.html calls this from a lesson step). */
-async function addReady(exId){
-  const B = window.STUDIO_BLOCKS, x = B && B.EXAMPLES.find(e => e.id === exId); if (!x) return;
+async function ensureReady(exId){
+  const B = window.STUDIO_BLOCKS, x = B && B.EXAMPLES.find(e => e.id === exId); if (!x) return -1;
   if (!S.loaded) await load();
   const items = S.world.items, E = H.LS.get("lang", "he") === "en";
   let i = items.findIndex(t => t.id === x.id);
@@ -123,8 +134,57 @@ async function addReady(exId){
     B.loadInto(it, x.prog); items.push(it); i = items.length - 1;
     savePicture(it); clearTimeout(saveT); await doSave();
   }
+  return i;
+}
+async function addReady(exId){
+  const i = await ensureReady(exId); if (i < 0) return;
   S.sel = i; S.pane = "power"; S.undo = []; S.sugg = null;
   if (location.hash === "#studio") render(document.getElementById("app")); else location.hash = "#studio";
+}
+/* A lesson's own item ("tag" = which lesson step made it). Made empty the first time, with an automatic code. */
+function ensureTagged(tag){
+  const items = S.world.items;
+  let i = items.findIndex(t => t.tag === tag);
+  if (i < 0){ items.push({ id: nextId(), tag, name:"", lore:"", stack:64, rarity:"common", px:[] }); i = items.length - 1; save(); }
+  return i;
+}
+
+/* ---------- studio pieces inside a lesson step ----------
+   index.html calls STUDIO.mount(el, {ready | tag, parts}) so a kid names, draws or programs the lesson's item right
+   in the step, without leaving the lesson. parts: "world", "fields", "paint", "card", "power", "check". */
+let host = null;
+function rerender(app){ if (host && document.body.contains(host.el)) return mountPart(host.el, host.opts); host = null; render(app); }
+/* The whole item on one card: picture, name and line as in the game, and its blocks (its "code"), read-only. */
+function cardHTML(it){
+  return `<div class="st-cardv"><div class="st-itemc">${previewHTML(it)}</div>
+    ${it.power ? `<div class="st-code"><b>מה הוא עושה: הבלוקים שלו</b><div id="st-blk-ro"></div></div>` : `<div class="st-code st-nocode">עוד אין לחפץ בלוקים, אז הוא לא עושה כלום. זה בסדר.</div>`}</div>`;
+}
+function partHTML(p, it){
+  if (p === "world") return `<label class="st-wn st-wn-big"><span>השם של העולם שלכם</span><input id="st-wname" maxlength="40" value="${esc(S.world.world.name || "")}" placeholder="למשל: עיר הדבורים"></label>`;
+  if (!it) return "";
+  if (p === "fields") return `<div class="st-grid st-grid-f"><div class="st-fields">${fieldsHTML(it, false)}</div><div>${previewHTML(it)}</div></div>`;
+  if (p === "paint") return `<div class="st-grid">${paintHTML()}<div class="st-fields">${previewHTML(it)}<small class="st-hint">לחיצה ימנית מוחקת. קו מתאר כהה, ושניים עד ארבעה צבעים.</small></div></div>`;
+  if (p === "card") return cardHTML(it);
+  if (p === "power") return powerPane(it, host && host.opts.ready);
+  if (p === "check") return `<div class="st-check" id="st-check">${checkHTML(it)}</div>`;
+  return "";
+}
+async function mountPart(el, opts){
+  if (window.STUDIO_BLOCKS) window.STUDIO_BLOCKS.unmount();
+  if (!S.loaded){ el.innerHTML = `<p class="st-loading">טוען...</p>`; await load(); }
+  let i = -1;
+  if (opts.ready) i = await ensureReady(opts.ready); else if (opts.tag) i = ensureTagged(opts.tag);
+  if (i >= 0){ if (S.sel !== i) S.undo = []; S.sel = i; }
+  host = { el, opts };
+  const it = S.world.items[S.sel];
+  const edits = opts.parts.some(p => p === "fields" || p === "paint" || p === "power" || p === "world");
+  el.innerHTML = `<div class="studio st-embed">${opts.parts.map(p => partHTML(p, it)).join("")}${edits ? `<div class="st-status" id="st-status" role="status"></div>` : ""}</div>`;
+  bind(el); paintThumbs(el); paintStatus();
+  if (it) paintPreview(el, it);
+  const blk = el.querySelector("#st-blk"), ro = el.querySelector("#st-blk-ro");
+  if (blk && it && window.STUDIO_BLOCKS){ window.STUDIO_BLOCKS.mount(blk, it, () => { paintLint(it); save(); }); paintLint(it); }
+  else if (ro && it && window.STUDIO_BLOCKS) window.STUDIO_BLOCKS.mount(ro, it, null, true);
+  if (H.afterEmbed) H.afterEmbed(el);
 }
 function gemPane(it){
   return `<div class="st-gcards">
@@ -169,12 +229,13 @@ function paintStatus(){ const el = document.getElementById("st-status"); if (!el
 /* ---------- behaviour ---------- */
 function bind(app){
   const items = S.world.items;
-  app.querySelectorAll("[data-sel]").forEach(b => b.addEventListener("click", () => { S.sel = +b.dataset.sel; S.undo = []; S.sugg = null; if (!S.saveErr) S.err = ""; render(app); }));
-  app.querySelector("#st-new").addEventListener("click", () => { items.push({ id:"", name:"", lore:"", stack:64, rarity:"common", px:[] }); S.sel = items.length - 1; S.undo = []; S.pane = "look"; save(); render(app); });
+  app.querySelectorAll("[data-sel]").forEach(b => b.addEventListener("click", () => { S.sel = +b.dataset.sel; S.undo = []; S.sugg = null; if (!S.saveErr) S.err = ""; rerender(app); }));
+  const nb = app.querySelector("#st-new");
+  if (nb) nb.addEventListener("click", () => { items.push({ id: nextId(), name:"", lore:"", stack:64, rarity:"common", px:[] }); S.sel = items.length - 1; S.undo = []; S.pane = "look"; save(); rerender(app); });
   const wn = app.querySelector("#st-wname");
-  wn.addEventListener("input", () => { S.world.world.name = wn.value.trim(); save(); });
+  if (wn) wn.addEventListener("input", () => { S.world.world.name = wn.value.trim(); save(); });
   const it = items[S.sel]; if (!it) return;
-  app.querySelectorAll("[data-pane]").forEach(b => b.addEventListener("click", () => { S.pane = b.dataset.pane; H.LS.set("stpane", S.pane); render(app); }));
+  app.querySelectorAll("[data-pane]").forEach(b => b.addEventListener("click", () => { S.pane = b.dataset.pane; H.LS.set("stpane", S.pane); rerender(app); }));
   // fields
   app.querySelectorAll("[data-f]").forEach(inp => inp.addEventListener("input", () => {
     const f = inp.dataset.f;
@@ -187,8 +248,10 @@ function bind(app){
   }));
   app.querySelectorAll("[data-stack]").forEach(b => b.addEventListener("click", () => { it.stack = +b.dataset.stack; app.querySelector('[data-f="stack"]').value = it.stack; app.querySelectorAll("[data-stack]").forEach(x => x.classList.toggle("on", x === b)); save(); }));
   app.querySelectorAll("[data-rar]").forEach(b => b.addEventListener("click", () => { it.rarity = b.dataset.rar; app.querySelectorAll("[data-rar]").forEach(x => x.classList.toggle("on", x === b)); paintPreview(app, it); save(); }));
-  app.querySelector("#st-del").addEventListener("click", () => { if (!confirm("למחוק את החפץ " + (it.name || "") + "?")) return; items.splice(S.sel, 1); S.sel = Math.min(S.sel, items.length - 1); save(); render(app); });
-  app.querySelector("#st-play").addEventListener("click", async () => {
+  const del = app.querySelector("#st-del");
+  if (del) del.addEventListener("click", () => { if (!confirm("למחוק את החפץ " + (it.name || "") + "?")) return; items.splice(S.sel, 1); S.sel = Math.min(S.sel, items.length - 1); save(); rerender(app); });
+  const play = app.querySelector("#st-play");
+  if (play) play.addEventListener("click", async () => {
     const c = check(it);
     if (c.hard.length){ S.err = "החפץ הזה עוד לא ייכנס למשחק: " + c.hard[0]; paintStatus(); return; }
     if (!S.saveErr) S.err = "";
@@ -199,7 +262,7 @@ function bind(app){
   app.querySelectorAll("[data-ex]").forEach(b => b.addEventListener("click", () => {
     const x = window.STUDIO_BLOCKS.EXAMPLES.find(e => e.id === b.dataset.ex); if (!x) return;
     if (it.power && !confirm("להחליף את הבלוקים של החפץ בדוגמה? את הבלוקים הקודמים אפשר להחזיר ב״גרסאות״.")) return;
-    window.STUDIO_BLOCKS.loadInto(it, x.prog); S.msg = "הדוגמה נכנסה. עכשיו משנים בה מה שרוצים."; S.err = ""; save(); render(app);
+    window.STUDIO_BLOCKS.loadInto(it, x.prog); S.msg = "הדוגמה נכנסה. עכשיו משנים בה מה שרוצים."; S.err = ""; save(); rerender(app);
   }));
   // painter
   const cv = app.querySelector("#st-c");
@@ -368,19 +431,20 @@ function suggestion(){
 function bindSuggestion(app){
   const ok = app.querySelector("#sg-ok"), no = app.querySelector("#sg-no"); if (!ok) return;
   ok.addEventListener("click", () => {
-    if (S.sugg.program){ const it = S.world.items[S.sel]; window.STUDIO_BLOCKS.loadInto(it, S.sugg.program); S.sugg = null; S.msg = "הבלוקים של ג׳מיני נכנסו. אפשר לשנות אותם, ולהחזיר את הקודמים ב״גרסאות״."; save(); render(app); return; }
+    if (S.sugg.program){ const it = S.world.items[S.sel]; window.STUDIO_BLOCKS.loadInto(it, S.sugg.program); S.sugg = null; S.msg = "הבלוקים של ג׳מיני נכנסו. אפשר לשנות אותם, ולהחזיר את הקודמים ב״גרסאות״."; save(); rerender(app); return; }
     S.sugg.changes.forEach(c => { if (c.isNew) S.world.items.push(Object.assign({ id:c.id, name:"", lore:"", stack:64, rarity:"common", px:[] }, c.ch)); else Object.assign(c.cur, c.ch); });
-    S.sugg = null; S.msg = "השינוי נכנס לעיצוב."; save(); render(app); });
+    S.sugg = null; S.msg = "השינוי נכנס לעיצוב."; save(); rerender(app); });
   no.addEventListener("click", () => { S.sugg = null; app.querySelector("#st-sugg").innerHTML = ""; });
 }
 
 /* ---------- styles ---------- */
 const CSS = `
-.studio .brand{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.studio .st-top{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .studio .st-wn{display:flex;gap:8px;align-items:center;font-weight:700;color:var(--muted)}
 .studio .st-wn input{font:inherit;font-size:1.1rem;font-weight:700;color:var(--ink);padding:4px 10px;border:2px solid transparent;border-bottom-color:var(--line);border-radius:6px;background:transparent;width:16em;max-width:60vw}
 .studio .st-wn input:hover,.studio .st-wn input:focus{border-color:var(--grass);outline:none;background:var(--bg)}
 .studio .st-main{display:grid;grid-template-columns:210px 1fr;gap:16px;margin-top:14px;align-items:start}
+.wrap.studio{padding-top:16px}
 .studio .st-list{display:grid;gap:8px;align-content:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
 .studio .st-list h2{font-size:1.05rem;margin:0}
 .studio .st-cards{display:grid;gap:4px}
@@ -465,7 +529,31 @@ const CSS = `
 .studio .tip{background:rgba(16,0,16,.94);border:3px solid;border-image:linear-gradient(#5000FF,#28007F) 1;padding:.35em .7em;display:grid;gap:.1em;text-align:start;color:#fff}
 .studio .tip b{font-family:var(--display);font-weight:400}
 .studio .tip span{color:#AAAAAA}
-@media (max-width:900px){.studio .st-main,.studio .st-grid,.studio .st-gcards{grid-template-columns:1fr}}
+/* studio pieces inside a lesson step */
+.st-embed{display:grid;gap:14px}
+.st-embed .st-grid-f{grid-template-columns:1fr auto;align-items:start}
+.st-embed .st-hint{color:var(--muted)}
+.st-embed .st-status{min-height:1.4em}
+.studio .st-wn-big{display:grid;gap:6px;color:var(--ink);font-size:1.05rem}
+.studio .st-wn-big input{font-size:1.4rem;border:2px solid var(--line);background:var(--surface);width:100%;max-width:520px}
+.studio .st-cardv{display:grid;gap:12px;justify-items:start}
+.studio .st-readable{border:2px solid var(--line);border-radius:8px;padding:10px 14px;background:var(--surface)}
+.studio .st-readable b{color:var(--muted);font-size:.9rem}
+.studio .st-readable pre{margin:4px 0 0;font-family:var(--body);font-size:1.1rem;font-weight:700;line-height:1.6;white-space:pre-wrap}
+.studio .st-itemc .st-prev{padding:16px 18px}
+.studio .st-itemc .sl{width:96px;height:96px;padding:8px}
+.studio .st-itemc .tip{font-size:1.35rem}
+.studio .st-cardv{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;justify-items:stretch}
+.studio #st-blk-ro .blocklyScrollbarHorizontal,.studio #st-blk-ro .blocklyScrollbarVertical{display:none}
+.studio .st-code{display:grid;gap:6px}
+.studio .st-code b{color:var(--muted)}
+.studio #st-blk-ro{height:210px;border:1px solid var(--line);border-radius:10px;overflow:hidden;direction:ltr;background:#fff}
+.studio .st-nocode{color:var(--muted);align-self:center}
+.st-embed .st-status{font-size:.9rem;color:var(--muted)}
+.st-embed .st-status.bad{color:var(--red);font-size:1rem}
+@media (max-width:900px){.studio .st-cardv{grid-template-columns:1fr}}
+.st-loading{color:var(--muted)}
+@media (max-width:900px){.studio .st-main,.studio .st-grid,.studio .st-gcards,.st-embed .st-grid-f{grid-template-columns:1fr}}
 `;
-window.STUDIO = { render, CSS, addReady, reset: () => { S.loaded = false; S.sel = -1; S.sugg = null; S.pane = ""; } };
+window.STUDIO = { render, CSS, addReady, mount: mountPart, flush, check: () => S.world ? S.world.items.map(it => ({ name: it.name, id: it.id, hard: check(it).hard })) : [], item: tag => S.world && S.world.items.find(t => t.tag === tag || t.id === tag), reset: () => { S.loaded = false; S.sel = -1; S.sugg = null; S.pane = ""; } };
 })();

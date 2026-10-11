@@ -24,99 +24,125 @@ function applyLang(){ app.dir = isEn() ? "ltr" : "rtl"; app.lang = isEn() ? "en"
 const langBtn = () => EN ? `<button class="btn ghost" id="lang">${isEn() ? "עברית" : "English"}</button>` : "";
 function bindLang(){ const b = app.querySelector("#lang"); if (b) b.addEventListener("click", () => { LS.set("lang", isEn() ? "he" : "en"); DOCK.key = ""; route(); }); }
 
-/* ===== HOME ===== */
-function renderHome(){
-  const done = LS.get("lessonsDone", []);
-  const total = H.UNITS.reduce((a,u)=>a+u.lessons.length,0);
-  const seat = LS.get("seat","");
-  app.innerHTML = `<div class="wrap">
-    <div class="top">
-      <div class="brand"><h1>מודים למיינקראפט</h1><p>העולם שלכם, קובייה אחרי קובייה · 20 שיעורים · MAKE</p></div>
-      <div class="tools">
-        <label class="seat" for="seat">מחשב מספר
-          <select id="seat"><option value="">?</option>${[1,2,3,4,5,6,7,8].map(n=>`<option ${String(n)===String(seat)?"selected":""}>${n}</option>`).join("")}</select></label>
-        <button class="btn ghost" id="bigtxt" aria-pressed="${app.classList.contains("big")}">אותיות גדולות</button>${langBtn()}
-      </div>
-    </div>
+/* ===== TOP BAR: one thin bar on every page. The game's controls live in its menu, and inside the lesson steps
+   that need them (a big "open Minecraft" button right where the step says to open it). ===== */
+const MENU = { open: false };
+function topBar(mid){
+  const seat = LS.get("seat", "");
+  return `<header class="tb">
+    <a class="tb-home" href="#home">${ICON.home}<span>מודים למיינקראפט</span></a>
+    <div class="tb-mid">${mid || ""}</div>
+    <div class="tb-end"><span class="gpill" data-gpill></span>
+      <button class="tb-menu" id="tb-menu" aria-expanded="${MENU.open}">${ICON.menu}<span>תפריט</span></button></div>
+  </header>
+  <div class="menu" id="menu" ${MENU.open ? "" : "hidden"}>
+    <div class="menu-row">${langBtn()}<button class="btn ghost" id="bigtxt" aria-pressed="${app.classList.contains("big")}">אותיות גדולות</button>
+      <label class="seat">מחשב מספר <select id="seat"><option value="">?</option>${[1,2,3,4,5,6,7,8].map(n => `<option ${String(n) === String(seat) ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
     <div id="dock"></div>
-    <a class="st-entry" href="#studio"><b>הסטודיו</b><span>כאן בונים את העולם שלכם: חפצים, ובקרוב גם יצורים, חוקים ומקומות.</span><i>←</i></a>
-    <div class="progress"><div class="row"><b>ההתקדמות שלכם</b><span>${done.length} מתוך ${total} שיעורים</span></div>
-      <div class="xp" style="--n:${total}">${Array.from({length:total},(_,i)=>`<i class="${i<done.length?"on":""}"></i>`).join("")}</div></div>
-    <div class="timeline">${H.UNITS.map(u=>`
-      <section class="unit"><div class="ico" style="background:${u.color}">${u.icon}</div>
-        <div><div class="head"><h2>${u.name}</h2><span>${u.sub}</span></div>
-        <div class="cards">${u.lessons.map(l=>{
-          const isDone = done.includes(l.n);
-          const meta = `<div class="meta">${l.open && H.LESSONS[l.n]?`<span class="chip go">${H.LESSONS[l.n].steps.length} שלבים</span>`:`<span class="chip">בקרוב</span>`}${isDone?`<span class="chip gold">הושלם</span>`:""}</div>`;
-          return (l.open && H.LESSONS[l.n])
-            ? `<a class="lcard open" href="#lesson${l.n}"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</a>`
-            : `<div class="lcard soon"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</div>`;
-        }).join("")}</div></div></section>`).join("")}
-    </div>
-  </div>`;
-  app.querySelector("#seat").addEventListener("change", e => LS.set("seat", e.target.value));
-  app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); renderHome(); });
-  bindLang(); applyLang();
-  paintDock();
+  </div>
+  <div id="gerr" role="alert"></div>`;
+}
+function bindTop(){
+  const m = app.querySelector("#tb-menu");
+  if (m) m.addEventListener("click", () => { MENU.open = !MENU.open; m.setAttribute("aria-expanded", MENU.open); const p = app.querySelector("#menu"); if (p) p.hidden = !MENU.open; });
+  const b = app.querySelector("#bigtxt");
+  if (b) b.addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); b.setAttribute("aria-pressed", app.classList.contains("big")); });
+  const s = app.querySelector("#seat");
+  if (s) s.addEventListener("change", e => LS.set("seat", e.target.value));
+  bindLang();
 }
 
-/* ===== LESSON PLAYER ===== */
+/* ===== HOME: what to do next, in one big card ===== */
+function renderHome(){
+  const done = LS.get("lessonsDone", []);
+  const open = H.UNITS.flatMap(u => u.lessons).filter(l => l.open && H.LESSONS[l.n]);
+  const next = open.find(l => !done.includes(l.n)) || open[open.length - 1];
+  const N = H.LESSONS[next.n].steps.length, step = Math.min(LS.get("l" + next.n + "step", 0), N - 1);
+  const LT = (isEn() && EN.lesson(next.n)) || H.LESSONS[next.n];
+  const total = H.UNITS.reduce((a, u) => a + u.lessons.length, 0);
+  app.innerHTML = `<div class="home">${topBar("")}
+    <div class="wrap">
+      <section class="h-hero">
+        <div class="h-txt"><small>${step ? "ממשיכים מאיפה שעצרתם" : "השיעור הבא"}</small>
+          <h1>${LT.title}</h1>
+          <div class="h-prog" aria-hidden="true"><i style="width:${Math.round(step / N * 100)}%"></i></div>
+          <span class="h-step">שלב ${step + 1} מתוך ${N}</span></div>
+        <a class="btn go h-go" href="#lesson${next.n}">${step ? "להמשיך" : "להתחיל"} ←</a>
+      </section>
+      <a class="st-entry" href="#studio"><b>הסטודיו</b><span>כל החפצים של העולם שלכם, במקום אחד.</span><i>←</i></a>
+      <h2 class="h-h">כל הקורס <small>${done.length} מתוך ${total} שיעורים</small></h2>
+      <div class="timeline">${H.UNITS.map(u => `
+        <section class="unit"><div class="ico" style="background:${u.color}">${u.icon}</div>
+          <div><div class="head"><h2>${u.name}</h2><span>${u.sub}</span></div>
+          <div class="cards">${u.lessons.map(l => {
+            const ok = l.open && H.LESSONS[l.n], isDone = done.includes(l.n);
+            const meta = `<div class="meta">${ok ? `<span class="chip go">${H.LESSONS[l.n].steps.length} שלבים</span>` : `<span class="chip">בקרוב</span>`}${isDone ? `<span class="chip gold">הושלם</span>` : ""}</div>`;
+            return ok ? `<a class="lcard open" href="#lesson${l.n}"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</a>`
+                      : `<div class="lcard soon"><span class="n">שיעור ${l.n}</span><h3>${l.title}</h3><span class="b">בונים: ${l.build}</span>${meta}</div>`;
+          }).join("")}</div></div></section>`).join("")}
+      </div>
+    </div></div>`;
+  bindTop(); applyLang(); paintDock();
+}
+
+/* ===== LESSON PLAYER: one step = one thing to do, done right here ===== */
 let lessonN = 1, stepIx = 0;
 function lessonFromHash(){ const m = location.hash.match(/^#lesson(\d+)$/); return m && H.LESSONS[+m[1]] ? +m[1] : 0; }
+/* The lesson's road: a few stops (paper → ready item → my item → in the game), the current one lit. */
+function stationsHTML(L, LT){
+  const st = (LT && LT.stations) || L.stations; if (!st) return "";
+  let cur = -1; st.forEach((x, i) => { if (stepIx >= x[1]) cur = i; });
+  return `<nav class="lp-st" aria-label="הדרך של השיעור">${st.map((x, i) => `<button data-go="${x[1]}" class="${i < cur ? "done" : i === cur ? "cur" : ""}"><span>${i + 1}</span>${x[0]}</button>`).join(`<i aria-hidden="true"></i>`)}</nav>`;
+}
 function renderPlayer(){
   const L = H.LESSONS[lessonN], N = L.steps.length;
-  stepIx = Math.max(0, Math.min(N-1, stepIx));
+  stepIx = Math.max(0, Math.min(N - 1, stepIx));
   const s = isEn() ? EN.step(lessonN, stepIx, L.steps[stepIx]) : L.steps[stepIx];
-  const ch = LS.get("l" + lessonN + "chal", {});
   const LT = (isEn() && EN.lesson(lessonN)) || L;
   LS.set("lastLesson", lessonN);
-  app.innerHTML = `<div class="pl">
-    <header class="pbar">
-      <div id="dock"></div>
-      <div class="r1">
-        <div class="tools"><a class="btn ghost" href="#home">→ לקורס</a><div class="t"><small>${LT.unit}</small><b>${LT.title}</b></div></div>
-        <div class="tools"><span class="chip gold">${stepIx+1}/${N}</span><button class="btn ghost" id="bigtxt">אותיות גדולות</button>${langBtn()}</div>
-      </div>
-      <div class="hotbar" role="tablist" aria-label="שלבי השיעור">${L.steps.map((x,i)=>`<button class="slot ${i===stepIx?"cur":""} ${i<stepIx?"done":""}" data-go="${i}" role="tab" aria-selected="${i===stepIx}" title="${esc(x.title)}">${i+1}</button>`).join("")}</div>
-    </header>
-    <main class="pmain">
-      <section class="panel" aria-live="polite">
-        <div class="k"><span class="chip go">${s.type}</span><small>שלב ${stepIx+1} / ${N}</small></div>
-        <h2>${s.title}</h2>
-        <div class="body">${s.body}</div>
-        ${s.why?`<div class="box why"><b>למה?</b>${s.why}</div>`:""}
-        ${s.expect?`<div class="box expect"><b>מה אמור לקרות</b>${s.expect}</div>`:""}
-        ${s.note?`<div class="box note"><b>שימו לב</b>${s.note}</div>`:""}
-        ${(s.hints||s.stuck)?`<div class="helprow">${s.hints?`<button class="btn ghost" id="hint">רמז</button>`:""}${s.stuck?`<button class="btn ghost" id="stuck">נתקעתי</button>`:""}</div><div class="reveal" id="reveal"></div>`:""}
-        <div class="chal"><h3>אתגרי השיעור</h3><small>מסמנים מה שסיימתם. זה נשמר על המחשב הזה.</small>
-          ${(isEn() ? EN.challenges(lessonN, L.challenges) : L.challenges).map(c=>`<label for="ch-${c.id}"><input type="checkbox" id="ch-${c.id}" data-ch="${c.id}" ${ch[c.id]?"checked":""}><span><b>${c.t}</b> <small>(${c.lvl})</small><br>${c.d}</span></label>`).join("")}
-        </div>
-      </section>
-      <section class="work">${s.visual()}</section>
-    </main>
-    <footer class="pfoot">
-      <button class="btn ghost" id="prev" ${stepIx===0?"disabled":""}>→ חזרה</button>
-      <small>אפשר גם עם החצים במקלדת</small>
-      ${stepIx<N-1?`<button class="btn go" id="next">הבא ←</button>`:`<a class="btn go" href="#home" id="finish">סיימתי ←</a>`}
+  const last = stepIx === N - 1, ch = LS.get("l" + lessonN + "chal", {});
+  const help = (s.hints || []).map((h, i) => `<li><b>רמז ${i + 1}</b>${h}</li>`).concat((s.stuck || []).map(([q, a]) => `<li><b>${q}</b>${a}</li>`));
+  app.innerHTML = `<div class="lp">${topBar(`<b class="tb-lesson">${LT.title}</b>`)}
+    ${stationsHTML(L, LT)}
+    <main class="lp-main"><article class="lp-card" aria-live="polite">
+      <div class="lp-head"><span class="lp-n">${stepIx + 1}</span><div><small>שלב ${stepIx + 1} מתוך ${N}</small><h1>${s.title}</h1></div></div>
+      ${s.body ? `<div class="lp-say">${s.body}</div>` : ""}
+      ${s.visual ? `<div class="lp-do">${s.visual()}</div>` : ""}
+      ${s.expect ? `<div class="lp-expect"><b>מה אמור לקרות</b>${s.expect}</div>` : ""}
+      ${s.note ? `<div class="lp-note">${s.note}</div>` : ""}
+      ${help.length ? `<details class="lp-help"><summary>נתקעתי</summary><ul>${help.join("")}</ul></details>` : ""}
+      ${last ? `<div class="chal"><h3>סיימתם? אתגרים</h3>
+        ${(isEn() ? EN.challenges(lessonN, L.challenges) : L.challenges).map(c => `<label for="ch-${c.id}"><input type="checkbox" id="ch-${c.id}" data-ch="${c.id}" ${ch[c.id] ? "checked" : ""}><span><b>${c.t}</b> <small>(${c.lvl})</small><br>${c.d}</span></label>`).join("")}</div>` : ""}
+    </article></main>
+    <footer class="lp-foot">
+      <button class="btn ghost" id="prev" ${stepIx === 0 ? "disabled" : ""}>→ חזרה</button>
+      <div class="lp-dots" aria-hidden="true">${L.steps.map((_, i) => `<i class="${i < stepIx ? "done" : i === stepIx ? "cur" : ""}"></i>`).join("")}</div>
+      ${last ? `<a class="btn go lp-next" href="#home" id="finish">סיימתי ←</a>` : `<button class="btn go lp-next" id="next">הבא ←</button>`}
     </footer>
   </div>`;
-  const go = i => { stepIx = i; LS.set("l" + lessonN + "step", i); renderPlayer(); window.scrollTo(0,0); };
+  const go = i => { stepIx = i; LS.set("l" + lessonN + "step", i); renderPlayer(); window.scrollTo(0, 0); };
   app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(+b.dataset.go)));
   const p = app.querySelector("#prev"), n = app.querySelector("#next"), f = app.querySelector("#finish");
-  if (p) p.addEventListener("click", () => go(stepIx-1));
-  if (n) n.addEventListener("click", () => go(stepIx+1));
-  if (f) f.addEventListener("click", () => { const d = LS.get("lessonsDone", []); if (!d.includes(lessonN)) { d.push(lessonN); LS.set("lessonsDone", d); } });
-  app.querySelector("#bigtxt").addEventListener("click", () => { app.classList.toggle("big"); LS.set("big", app.classList.contains("big")); });
-  const rv = app.querySelector("#reveal");
-  let hi = 0, si = 0;
-  const h = app.querySelector("#hint"), st = app.querySelector("#stuck");
-  if (h) h.addEventListener("click", () => { if (hi < s.hints.length){ rv.insertAdjacentHTML("beforeend", `<div class="item"><b>רמז ${hi+1}</b>${s.hints[hi]}</div>`); hi++; } if (hi >= s.hints.length) h.disabled = true; });
-  if (st) st.addEventListener("click", () => { if (si < s.stuck.length){ const [q,a] = s.stuck[si]; rv.insertAdjacentHTML("beforeend", `<div class="item"><b>${q}</b>${a}</div>`); si++; } if (si >= s.stuck.length) st.disabled = true; });
+  if (p) p.addEventListener("click", () => go(stepIx - 1));
+  if (n) n.addEventListener("click", () => go(stepIx + 1));
+  if (f) f.addEventListener("click", () => { const d = LS.get("lessonsDone", []); if (!d.includes(lessonN)){ d.push(lessonN); LS.set("lessonsDone", d); } });
   app.querySelectorAll("[data-ch]").forEach(c => c.addEventListener("change", () => { const v = LS.get("l" + lessonN + "chal", {}); v[c.dataset.ch] = c.checked; LS.set("l" + lessonN + "chal", v); }));
   H.bindCopy(app); H.bindSil(app); H.bindWorldCard(app);
-  bindLang(); applyLang();
-  if (s.mount) s.mount(app.querySelector(".work"), DOCK.on);
+  bindTop(); applyLang();
+  const work = app.querySelector(".lp-do");
+  if (s.mount && work) s.mount(work, DOCK.on);
+  mountWidgets(app);
   paintDock();
+}
+/* Things a step can hold: studio pieces (data-studio), the game button (data-gbtn), the Drive save (data-drive). */
+function mountWidgets(root){
+  root.querySelectorAll("[data-studio]").forEach(el => { if (!window.STUDIO) return; try { window.STUDIO.mount(el, JSON.parse(el.dataset.studio)); } catch(e){} });
+  root.querySelectorAll("[data-drive]").forEach(el => {
+    el.innerHTML = `<div class="drv-in"><button class="btn go" data-dv="backup" ${DOCK.on ? "" : "disabled"}>${ICON.drive}<span>להוריד את קובץ הגיבוי</span></button>
+      <ol><li>פותחים את <a href="https://drive.google.com" target="_blank" rel="noopener">הדרייב</a>, עם החשבון של משרד החינוך.</li>
+      <li>לוחצים <b>+ חדש</b>, ואז <b>העלאת קובץ</b>, ובוחרים מתיקיית <b>הורדות</b> את הקובץ <b dir="ltr">myworld</b>.</li></ol></div>`;
+    el.querySelector("[data-dv]").addEventListener("click", () => backup());
+  });
 }
 
 /* ===== DOCK: the buttons that run Minecraft. Shown when the page is opened from the "Minecraft" desktop icon ===== */
@@ -132,7 +158,9 @@ const ICON = {
   drive: SVG('<path d="M7 18a4 4 0 0 1-.6-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/><path d="M12 16v-5M9.5 13.5L12 11l2.5 2.5"/>'),
   studio: SVG('<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>'),
   stop:  SVG('<rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor"/>'),
-  lock:  SVG('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>')
+  lock:  SVG('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+  home:  SVG('<path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/>'),
+  menu:  SVG('<path d="M4 7h16M4 12h16M4 17h16"/>')
 };
 function dockHTML(){
   if (!DOCK.on || !DOCK.s) return "";
@@ -165,12 +193,34 @@ function dockHTML(){
       ${DOCK.versions.length ? `<ul class="vlist">${DOCK.versions.map(v=>`<li><span class="vt">${esc(v.time)}</span><span class="vd">${esc(v.day)}</span><span class="vw">${esc(v.what)}</span><button class="btn ghost" data-restore="${esc(v.id)}" ${busy?"disabled":""}>להחזיר</button></li>`).join("")}</ul>` : `<p class="vnote">עדיין אין גרסאות שמורות.</p>`}
     </div>` : ""}
     <div class="dock-status ${tone}" role="status">${s.phase==="building"?'<i class="spin"></i>':""}<span>${esc(s.message)}</span></div>
-    ${s.phase==="error" ? `<div class="dock-err"><b>המשחק לא נבנה.</b>
-      <ol><li>מרימים יד וקוראים למורה.</li><li>או: ב״גרסאות״ מחזירים את הגרסה האחרונה שעבדה, ולוחצים שוב שחק.</li></ol>
-      <div><button class="btn ghost" data-act="copy-error">להעתיק את השגיאה</button></div></div>` : ""}
   </div>`;
 }
+/* The game, wherever a page shows it: the small light in the top bar, the big button inside a step, the red banner. */
+const GTXT = { idle:"מיינקראפט סגור", building:"המחשב בונה...", running:"מיינקראפט פתוח", error:"המשחק לא נבנה", off:"לא מחובר" };
+function gbtnHTML(ph){
+  if (!DOCK.on || ph === "off") return `<div class="gb off">הכפתור עובד רק כשפותחים את הדף מ־Minecraft בתפריט Start.</div>`;
+  if (ph === "building") return `<div class="gb busy"><i class="spin"></i><div><b>המחשב בונה את העולם שלכם</b><span>דקה או שתיים. בינתיים לא סוגרים את הדף.</span></div></div>`;
+  if (ph === "running") return `<div class="gb live"><div><b>מיינקראפט פתוח</b><span>שיניתם משהו? סוגרים את המשחק, ופותחים שוב.</span></div><button class="btn ghost" data-g="stop">לסגור את מיינקראפט</button></div>`;
+  if (ph === "error") return `<div class="gb bad"><div><b>המשחק לא נבנה</b><span>מרימים יד וקוראים למורה.</span></div><button class="btn ghost" data-g="copy-error">להעתיק את השגיאה</button></div>`;
+  return `<button class="gb-play" data-g="play">${ICON.play}<span>לפתוח את מיינקראפט</span></button>`;
+}
+function paintGame(){
+  const s = DOCK.s || { phase: DOCK.on ? "idle" : "off" }, ph = DOCK.on ? s.phase : "off";
+  document.querySelectorAll("[data-gpill]").forEach(el => { el.className = "gpill " + ph; el.innerHTML = `<i></i><span>${GTXT[ph] || ""}</span>`; });
+  document.querySelectorAll("[data-gbtn]").forEach(el => {
+    el.innerHTML = gbtnHTML(ph);
+    el.querySelectorAll("[data-g]").forEach(b => b.addEventListener("click", async () => {
+      if (b.dataset.g === "play" && window.STUDIO && window.STUDIO.flush) await window.STUDIO.flush();
+      act(b.dataset.g);
+    }));
+  });
+  const ge = document.getElementById("gerr");
+  if (ge) ge.innerHTML = ph === "error" ? `<div class="gerr"><b>המשחק לא נבנה.</b> מרימים יד וקוראים למורה, או מחזירים ב״תפריט ← גרסאות״ את הגרסה האחרונה שעבדה.<button class="btn ghost" data-ge>להעתיק את השגיאה</button></div>` : "";
+  const gb = ge && ge.querySelector("[data-ge]"); if (gb) gb.addEventListener("click", () => act("copy-error"));
+  if (isEn()) document.querySelectorAll("[data-gpill],[data-gbtn],#gerr").forEach(el => EN.translate(el));
+}
 function paintDock(){
+  paintGame();
   const d = document.getElementById("dock");
   if (!d) return;
   d.innerHTML = dockHTML();
@@ -254,16 +304,6 @@ async function act(name){
     if (DOCK.vopen) loadVersions();
   } catch(e){ poll(); }
 }
-/* "Without Gemini": the item card becomes an item in MyItems.java on the computer itself. */
-H.addItem = async card => {
-  try {
-    const r = await api("/api/add-item", { method:"POST", body: b64(JSON.stringify({ id: card.code || "", name: card.name || "", lore: card.line || "", stack: card.stack || "" })) });
-    if (r.status === 401) return showLock();
-    const j = await r.json();
-    setDock({ phase:j.phase, message: j.ok ? j.message : j.result, error:j.error }); window.scrollTo(0, 0);
-  } catch(e){ poll(); }
-};
-
 /* ===== CODE LOCK: each kid's hub opens only with their own 4 digits (or the teacher's code) ===== */
 const LOCK = { shown: false, mode: "unlock", first: "", typed: "", msg: "" };
 try { H.token = sessionStorage.getItem("mkmod.tok") || ""; } catch(e){ H.token = ""; }
@@ -318,6 +358,7 @@ if (DOCK.on){ poll(); setInterval(poll, 1500); }
 
 /* ===== router ===== */
 function route(){
+  MENU.open = false;
   if (LOCK.shown) return paintLock();
   if (location.hash === "#studio" && window.STUDIO) return window.STUDIO.render(app);
   const n = lessonFromHash();
@@ -325,13 +366,15 @@ function route(){
 }
 window.addEventListener("hashchange", route);
 document.addEventListener("keydown", e => {
-  if (LOCK.shown || e.target.matches("input,textarea,select") || !lessonFromHash()) return;
+  if (LOCK.shown || e.target.matches("input,textarea,select") || e.target.closest(".studio,.blocklyWidgetDiv,.blocklyDropDownDiv") || !lessonFromHash()) return;
   if (e.key === "ArrowLeft" && stepIx < H.LESSONS[lessonN].steps.length-1){ stepIx++; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
   if (e.key === "ArrowRight" && stepIx > 0){ stepIx--; LS.set("l" + lessonN + "step", stepIx); renderPlayer(); }
 });
 /* What the studio (studio.js) uses from this page. */
 H.api = api; H.lock = showLock; H.act = act; H.langBtn = langBtn;
-H.afterRender = () => { bindLang(); applyLang(); paintDock(); };
+H.topBar = topBar;
+H.afterRender = () => { bindTop(); applyLang(); paintDock(); };
+H.afterEmbed = el => { if (isEn()) EN.translate(el); };
 if (DOCK.on && !H.token) showLock(); else route();
 })();
 </script>

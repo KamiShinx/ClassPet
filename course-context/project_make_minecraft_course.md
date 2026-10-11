@@ -227,3 +227,16 @@ line, not our files). Replaced by `C:\MAKE\update.bat` (newest commit via the Gi
 `mod\tools\update-hub.ps1`, curl bootstrap on first run). No more hashes for Ben. Also fixed: the update never copied
 StudioPower.java; 26.2 keeps entity constants in `EntityTypes` (lightning didn't compile); "close Minecraft" now uses
 `gradlew --stop` (killing java from the hub got flagged too).
+
+**11 Oct: kids' hub rehaul (Ben: "lessons 1 and 2 are messy, I don't understand it at all"; "everything in one
+pipeline"; "a kid sees the full code of an item, tests it, then makes their own or edits the ready ones").**
+- One thin top bar on every page (home · lesson title · game light · Menu). The old 6-button dock now lives in Menu.
+- Lesson screen: one centred card per step = title, 1–3 lines, the thing to DO right there, "מה אמור לקרות", and
+  "נתקעתי" (hints + stuck, folded). A road of 4–5 stations on top. Challenges only on the last step. Fixed footer.
+- Studio pieces mount inside steps (`STUDIO.mount(el,{ready|tag,parts})`, parts world/fields/paint/card/power/check),
+  and the game button (`data-gbtn`) and Drive save (`data-drive`) sit in the steps that need them. No page jumps.
+- Item codes are automatic (item_1, item_2...); kids never type one. The ready item's card shows its real blocks,
+  read-only. Examples are hidden on the ready stick (so it can't be overwritten by mistake).
+- L1 (6 steps): welcome, your code, world name, world card, into Minecraft, Drive. Gemini steps dropped from L1.
+- L2 (9 steps): today, page 2, lightning stick (card + test), change it, your item: name / picture / what it does
+  (from an example), check in the game, save. English for both. Deck demo and "עכשיו אתם" follow the new steps.

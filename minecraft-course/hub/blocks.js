@@ -151,15 +151,18 @@ function setLang(cb){
   const s = document.createElement("script"); s.src = "blockly/msg_en.js";
   s.onload = () => { window.__blocklyEn = Object.assign({}, B.Msg); cb(); }; s.onerror = cb; document.head.appendChild(s);
 }
-function mount(div, item, onChange){
+function mount(div, item, onChange, readOnly){
   const B = window.Blockly;
   if (!B){ div.innerHTML = `<p class="st-noblk">${en() ? "The block editor didn't load. Open the page from Minecraft in the Start menu." : "עורך הבלוקים לא נטען. פותחים את הדף מ־Minecraft בתפריט Start."}</p>`; return; }
   setLang(() => {
     defineAll();
     if (ws){ try { ws.dispose(); } catch(e){} ws = null; }
-    ws = B.inject(div, { toolbox: toolbox(), rtl: !en(), media: "blockly/media/", sounds: false, trashcan: true,
+    // Read-only: the blocks shown as a picture of the item's "code" (a lesson's ready item), nothing to drag.
+    ws = B.inject(div, readOnly ? { readOnly: true, rtl: !en(), media: "blockly/media/", sounds: false, renderer: "zelos", move: { scrollbars: true, drag: true, wheel: false } }
+      : { toolbox: toolbox(), rtl: !en(), media: "blockly/media/", sounds: false, trashcan: true,
       zoom: { controls: true, wheel: false, startScale: 0.85 }, move: { scrollbars: true, drag: true, wheel: true }, renderer: "zelos" });
     if (item.blocks){ try { B.serialization.workspaces.load(item.blocks, ws); } catch(e){} }
+    if (readOnly){ const fit = () => { try { B.svgResize(ws); ws.zoomToFit(); if (ws.getScale() > 1) ws.setScale(1); ws.scrollCenter(); } catch(e){} }; fit(); setTimeout(fit, 60); return; }
     item.power = compile(ws);   // the program always comes from the blocks on screen
     let t = null;
     ws.addChangeListener(e => {

@@ -94,6 +94,14 @@ function stationsHTML(L, LT){
   let cur = -1; st.forEach((x, i) => { if (stepIx >= x[1]) cur = i; });
   return `<nav class="lp-st" aria-label="הדרך של השיעור">${st.map((x, i) => `<button data-go="${x[1]}" class="${i < cur ? "done" : i === cur ? "cur" : ""}"><span>${i + 1}</span>${x[0]}</button>`).join(`<i aria-hidden="true"></i>`)}</nav>`;
 }
+/* Steps about one item (its name, picture, blocks, test) get tabs, so a kid can jump back and forth between them. */
+function tabsHTML(L, LT, s){
+  const g = L.steps[stepIx].group; if (!g) return "";
+  const name = ((LT && LT.groups) || L.groups || {})[g] || "";
+  const steps = L.steps.map((x, i) => [x, i]).filter(([x]) => x.group === g);
+  const tab = i => (isEn() && EN.step(lessonN, i, L.steps[i]).tab) || L.steps[i].tab;
+  return `<nav class="lp-tabs" aria-label="${esc(name)}"><span>${name}:</span>${steps.map(([x, i]) => `<button data-go="${i}" class="${i === stepIx ? "on" : ""}">${tab(i)}</button>`).join("")}</nav>`;
+}
 function renderPlayer(){
   const L = H.LESSONS[lessonN], N = L.steps.length;
   stepIx = Math.max(0, Math.min(N - 1, stepIx));
@@ -105,6 +113,7 @@ function renderPlayer(){
   app.innerHTML = `<div class="lp">${topBar(`<b class="tb-lesson">${LT.title}</b>`)}
     ${stationsHTML(L, LT)}
     <main class="lp-main"><article class="lp-card" aria-live="polite">
+      ${tabsHTML(L, LT, s)}
       <div class="lp-head"><span class="lp-n">${stepIx + 1}</span><div><small>שלב ${stepIx + 1} מתוך ${N}</small><h1>${s.title}</h1></div></div>
       ${s.body ? `<div class="lp-say">${s.body}</div>` : ""}
       ${s.visual ? `<div class="lp-do">${s.visual()}</div>` : ""}

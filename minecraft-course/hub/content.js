@@ -549,6 +549,11 @@ a.dbtn{text-decoration:none}
 .lp-main{padding:18px 16px 110px;display:grid;justify-items:center;align-items:start}
 .lp-card{width:100%;max-width:980px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px clamp(16px,3vw,32px);display:grid;gap:18px;box-shadow:0 4px 0 var(--line)}
 .lp-head{display:flex;gap:16px;align-items:center}
+.lp-tabs{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:-6px 0 -2px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.lp-tabs > span{font-weight:800;color:var(--muted);margin-inline-end:4px}
+.lp-tabs button{font:inherit;font-weight:800;padding:6px 14px;border:2px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);cursor:pointer}
+.lp-tabs button:hover{border-color:var(--grass)}
+.lp-tabs button.on{background:var(--grass);border-color:var(--grass);color:var(--grass-ink)}
 .lp-n{display:grid;place-items:center;flex:none;width:56px;height:56px;border-radius:14px;background:var(--grass);color:var(--grass-ink);font-family:var(--display);font-size:1.8rem}
 .lp-head small{color:var(--muted);font-weight:700}
 .lp-head h1{font-size:clamp(1.6rem,3.4vw,2.3rem)}
@@ -943,14 +948,10 @@ const SLIDES = [
     notes:"להשאיר על המסך בזמן שהם כותבים. מי שמעתיק דוגמה כמו שהיא, מחליף בה לפחות מילה אחת." },
   { label:"מי זה?", html:`<h2>מי זה?</h2>${guessGrid()}`,
     notes:"ממלא זמן: רק אם ההתקנות עוד רצות. כל ריבוע מראה כמה פיקסלים מהפנים של יצור. מנחשים, ואז לוחצים כאן על הריבוע: התמונה מתרחקת ורואים את כל הפנים, גם במקרן. אחרי כל אחד: ״איך ידעתם?״ (לפי הצבעים.)" },
-  { label:"מיינקראפט נפתח?", html:`<h2>מיינקראפט נפתח?</h2><ol class="big"><li>Singleplayer</li><li>Game Mode: <b>Creative</b> ← Create New World</li><li><kbd>F2</kbd> מצלם את המסך</li><li><kbd>Esc</kbd> ← Mods ← מוצאים את המוד</li></ol>`,
-    notes:"80–88 דק׳. בפעם הראשונה קופץ מסך Welcome to Minecraft: לוחצים Continue. מי שמיינקראפט עוד לא נפתח אצלו: רושמים את מספר המחשב, ובודקים בהפסקה." },
-  { label:"ג׳מיני", html:`<h2>מה זה ג׳מיני</h2><ol class="big"><li><code>gemini.google.com</code>, עם החשבון של משרד החינוך</li><li>כותבים למטה, <kbd>Enter</kbd> שולח</li><li>תפריט בצד: צ׳אט חדש</li><li>ג׳מיני לא זוכר צ׳אטים קודמים</li></ol>`,
-    notes:"רק אם נשאר זמן. אחרת עושים את זה בתחילת שיעור 2. מראים את כל זה על המקרן, בחשבון שלך. בנקודה האחרונה מסבירים: בגלל זה הסטודיו שולח לו כל פעם את העולם שלהם מחדש." },
-  { label:"מדברים עם ג׳מיני", html:`<h2>איך מדברים עם ג׳מיני בקורס</h2>${COPY_FLOW}<p class="sub">החוקים של הקורס והעולם שלכם, בכל הודעה מחדש</p>`,
-    notes:"רק אם נשאר זמן. אחרת בתחילת שיעור 2. מראים על המקרן: צ׳אט חדש, בסטודיו בלשונית ג׳מיני להעתיק לג׳מיני, Ctrl+V, ומתחת ״העולם שלי: ...״. אחר כך הם עושים את אותו דבר. מי שלא הספיק: עושה את זה בתחילת שיעור 2." },
-  { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ הראשון שלכם, בתוך המשחק</p><ul class="big"><li>סוגרים את מיינקראפט</li></ul>`,
-    notes:"88–90 דק׳. שומרים בדרייב. לרשום אילו מחשבים לא סיימו את ההתקנה, ולבדוק אותם בהפסקה, לפני שיעור 2." }
+  { label:"בדף: שיעור 1", html:`<h2>עכשיו בדף: שיעור 1</h2><ol class="big"><li>הקוד שלכם</li><li>השם של העולם</li><li>כרטיס העולם, מדף 1</li><li>נכנסים למיינקראפט: הכפתור הירוק</li><li>שומרים בדרייב</li></ol>`,
+    notes:"80–88 דק׳. כל ילד פותח את Minecraft מתפריט Start, בוחר קוד, ולוחץ ״להתחיל״ בשיעור 1. אלה בדיוק ששת השלבים בדף שלהם. במיינקראפט: Singleplayer, Creative, Create New World, ואז E והלשונית עם השם של העולם שלהם. בפעם הראשונה קופץ מסך Welcome to Minecraft: לוחצים Continue. מי שמיינקראפט לא נפתח אצלו: רושמים את מספר המחשב, ובודקים בהפסקה." },
+  { label:"סיום", html:`<h2>בשבוע הבא</h2><p class="quote">החפץ הראשון שלכם, בתוך המשחק</p><ul class="big"><li>שומרים בדרייב</li><li>סוגרים את מיינקראפט</li></ul>`,
+    notes:"88–90 דק׳. השלב האחרון בדף שלהם הוא ״שומרים בדרייב״: הכפתור מוריד קובץ, ומעלים אותו לדרייב. לרשום אילו מחשבים לא סיימו, ולבדוק אותם בהפסקה, לפני שיעור 2." }
 ];
 
 
@@ -959,6 +960,8 @@ const PAPER2 = `<div class="checks"><div><span class="ok"></span>שם החפץ, 
 const L2 = {
   n:2, unit:"יחידה 2 · החפצים הראשונים", title:"שיעור 2: החפץ הראשון שלי",
   stations:[["דף 2",1],["מקל ברקים",2],["החפץ שלי",4],["במשחק",7],["דרייב",8]],
+  // Steps about one item get tabs on top, to jump straight back to the picture or on to the blocks.
+  groups:{ stick:"מקל ברקים", mine:"החפץ שלי" },
   steps:[
     { title:"היום: חפץ משלכם, בתוך המשחק",
       body:`<p>היום ממציאים חפץ ומכניסים אותו למשחק, עם שם, ציור וכוח שאתם בוחרים.</p>`,
@@ -974,7 +977,7 @@ const L2 = {
       ],
       visual:()=>PAPER2 },
 
-    { title:"מקל ברקים: חפץ שכבר עובד",
+    { title:"מקל ברקים: חפץ שכבר עובד", group:"stick", tab:"מנסים אותו",
       body:`<p>זה חפץ מוכן. ככה הוא נראה במשחק, וזה מה שהוא עושה:</p>`,
       visual:()=>studioIn({ ready:"lightning_stick", parts:["card"] }) + `<h2 class="lp-sub">מנסים אותו</h2>` + gameBtn()
         + `<ol class="ingame"><li><b>Singleplayer</b>, ואז העולם שלכם. אין עולם? <b>Create New World</b>, <b>Creative</b>, ו־<b>Create</b>.</li><li>לוחצים <kbd>E</kbd>, הלשונית של העולם שלכם, ולוקחים את מקל הברקים.</li><li>מכים במקל Zombie או חזיר.</li></ol>`,
@@ -985,27 +988,27 @@ const L2 = {
         ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
       ] },
 
-    { title:"משנים את מקל הברקים",
+    { title:"משנים את מקל הברקים", group:"stick", tab:"משנים את הבלוקים",
       body:`<p>אלה הבלוקים של המקל. משנים בהם דבר אחד:</p><ul><li><b>קל:</b> לוחצים על המספר 3 וכותבים 10. עכשיו המקל נח יותר זמן בין מכה למכה.</li><li><b>מגניב:</b> מהתפריט ״עושים״ גוררים את ״לזמן Zombie״ אל מתחת לברק.</li></ul><p>אחר כך סוגרים את מיינקראפט, פותחים שוב, ובודקים.</p>`,
       visual:()=>studioIn({ ready:"lightning_stick", parts:["power"] }) + gameBtn(),
       note:"שינוי נכנס למשחק רק כשפותחים אותו מחדש." },
 
-    { title:"החפץ שלכם: שם",
+    { title:"החפץ שלכם: שם", group:"mine", tab:"שם",
       body:`<p>מעתיקים מהדף את השם ואת המשפט שמתחתיו. אחר כך בוחרים כמה נכנסים בערימה, וכמה החפץ נדיר.</p>`,
       visual:()=>studioIn({ tag:"l2", parts:["fields"] }),
       expect:"בצד רואים את החפץ כמו במשחק, והשם בצבע של הנדירות." },
 
-    { title:"החפץ שלכם: ציור",
+    { title:"החפץ שלכם: ציור", group:"mine", tab:"ציור",
       body:`<p>מציירים לפי הציור שעל הדף. הציור נשמר לבד.</p>`,
       visual:()=>studioIn({ tag:"l2", parts:["paint"] }),
       hints:["מתחילים מקו מתאר כהה, ואז ממלאים.","שניים עד ארבעה צבעים מספיקים. צבע בהיר אחד נותן ברק.","לחיצה ימנית בעכבר מוחקת."] },
 
-    { title:"החפץ שלכם: מה הוא עושה?",
+    { title:"החפץ שלכם: מה הוא עושה?", group:"mine", tab:"מה הוא עושה",
       body:`<ol><li>בוחרים דוגמה שמתאימה למה שכתבתם בדף: בשביל מה החפץ, ומה המחיר שלו.</li><li>משנים אותה עד שהיא שלכם: מספרים, יצורים, אפקטים, או בלוקים שלמים.</li></ol>`,
       visual:()=>studioIn({ tag:"l2", parts:["power"] }),
       hints:["אין דוגמה שמתאימה בדיוק? לוקחים את הכי קרובה, ומחליפים בה בלוק אחד.","לכל כוח יש מחיר. אם מחקתם את המחיר, מה ימנע מהשחקן להשתמש בו כל הזמן?"] },
 
-    { title:"בודקים במשחק",
+    { title:"בודקים במשחק", group:"mine", tab:"בודקים במשחק",
       body:`<ol><li>מיינקראפט פתוח? סוגרים אותו.</li><li>לוחצים על הכפתור הירוק.</li><li>במשחק: <kbd>E</kbd>, הלשונית של העולם שלכם, והחפץ שלכם.</li><li>בודקים מול הדף: השם, המשפט, הציור, ומה החפץ עושה.</li></ol>`,
       visual:()=>studioIn({ tag:"l2", parts:["card","check"] }) + gameBtn(),
       expect:"הכול כמו בדף. ואם משהו שונה, זה בדיוק מה שמתקנים עכשיו: חוזרים לשלב שלו, משנים, ובודקים שוב.",

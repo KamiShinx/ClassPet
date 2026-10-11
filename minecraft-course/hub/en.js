@@ -194,7 +194,7 @@ const EN_L = {
         body:`<p>In this course you build your own world inside Minecraft: items, creatures and rules that you invent.</p><p>Everything happens on this page. Do what the step says, then press <b>Next</b>.</p>`,
         visual:()=>H.road([["Invent","On paper, with markers"],["Build on this page","Name, picture, and what it does. No code"],["Into the game","One button, and your world is in Minecraft"],["Save","At the end of every lesson, in Drive"]]) },
       { title:"Your code",
-        body:`<p>When you opened the page, you chose 4 digits. Only this code opens your world.</p>
+        body:`<p>When you opened the page, you chose 4 digits. This code opens your world, and only this code.</p>
           <ul><li>Don't tell anyone your code.</li><li>Leaving the computer? At the top: <b>Menu</b>, then <b>Lock</b>.</li><li>Forgot your code? The teacher opens it with theirs, and you choose a new one.</li></ul>` },
       { title:"What's your world called?",
         body:`<p>On page 1 you wrote an idea for a world. Write its name here.</p>`,
@@ -210,8 +210,8 @@ const EN_L = {
       { title:"Save in Drive",
         body:`<p>School computers can be reset. What's in your Drive stays yours.</p>`,
         expect:"Your Drive has a file whose name starts with myworld.",
-        note:"Next week the computer was reset, or you got a different one? At the top: <b>Menu</b>, then <b>Drive</b>, and bring your world back from there." }
-    ], challenges:{ card:["World card","My world in one line, three colours and one rule."], mc:["Minecraft opened","I found the tab with my world's name in the game."], drive:["Saved in Drive","My backup file is in my Drive."] } },
+        note:"If next week the computer is reset, or you get a different one, bring your world back from Drive: at the top, <b>Menu</b> then <b>Drive</b>." }
+    ], challenges:{ card:["World card","My world in one line, three colours and one rule."], mc:["Minecraft opened","I found the tab with my world's name in the game."], drive:["I saved in Drive","My backup file is in my Drive."] } },
   2: { unit:"Unit 2 · The first items", title:"Lesson 2: My first item",
     stations:[["Page 2",1],["Lightning stick",2],["My item",4],["In the game",7],["Drive",8]],
     steps:[
@@ -230,7 +230,7 @@ const EN_L = {
         expect:"Lightning strikes the creature. After every hit the stick rests 3 seconds.",
         stuck:[["No creature around","In the E menu look for Zombie Spawn Egg, and right-click the ground with it."],["Nothing happens when I hit","Hold the stick and hit a creature, not a block. And if the stick is resting, wait 3 seconds."],["A red box appeared: the game didn't build","Raise your hand and call the teacher."]] },
       { title:"Change the lightning stick",
-        body:`<p>These are the stick's blocks. Change one thing:</p><ul><li><b>Easy:</b> click the number 3 and type 10. Now the stick rests longer.</li><li><b>Cool:</b> from the <b>Do</b> menu, drag "Summon Zombie" under the lightning.</li></ul><p>Then close Minecraft, open it again, and check.</p>`,
+        body:`<p>These are the stick's blocks. Change one thing:</p><ul><li><b>Easy:</b> click the number 3 and type 10. Now the stick rests longer between hits.</li><li><b>Cool:</b> from the <b>Do</b> menu, drag "Summon Zombie" under the lightning.</li></ul><p>Then close Minecraft, open it again, and check.</p>`,
         note:"A change goes into the game only when it opens again." },
       { title:"Your item: name",
         body:`<p>Copy the name and the line under it from your paper. Then choose the stack size, and how rare the item is.</p>`,

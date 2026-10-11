@@ -81,7 +81,7 @@ function render(app){
 }
 function editor(it){
   return `<nav class="st-panes">${PANES.map(([k, t]) => `<button data-pane="${k}" class="${S.pane === k ? "on" : ""}">${t}</button>`).join("")}</nav>
-  <div class="st-pane">${S.pane === "power" ? powerPane() : S.pane === "gem" ? gemPane(it) : lookPane(it)}</div>
+  <div class="st-pane">${S.pane === "power" ? powerPane(it) : S.pane === "gem" ? gemPane(it) : lookPane(it)}</div>
   <div class="st-foot"><div class="st-check" id="st-check">${checkHTML(it)}</div>
     <button class="btn go" id="st-play">לנסות במשחק</button><button class="btn ghost st-del" id="st-del">למחוק</button>
     <div class="st-status" id="st-status" role="status"></div></div>`;
@@ -103,8 +103,28 @@ function lookPane(it){
     </div>
   </div>`;
 }
-function powerPane(){
-  return `<p class="st-lead">גוררים בלוקים מהתפריט: קודם ״מתי״, ובתוכו מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div><ul class="st-lint" id="st-lint"></ul>`;
+function powerPane(it){
+  const X = (window.STUDIO_BLOCKS && window.STUDIO_BLOCKS.EXAMPLES) || [], E = H.LS.get("lang", "he") === "en";
+  return `<details class="st-ex" ${it.power ? "" : "open"}><summary>מתחילים מדוגמה</summary>
+      <div class="st-exs">${X.map(x => `<button data-ex="${x.id}"><b>${esc((E ? x.en : x.he)[0])}</b><small>${esc((E ? x.en : x.he)[1])}</small></button>`).join("")}</div>
+      <small>הדוגמה נכנסת לחפץ הזה, ואז משנים בה מה שרוצים: מספרים, יצורים, אפקטים, או בלוקים שלמים.</small></details>
+    <p class="st-lead">גוררים בלוקים מהתפריט: קודם ״מתי״, ובתוכו מה קורה. אל תשכחו מחיר.</p><div id="st-blk"></div><ul class="st-lint" id="st-lint"></ul>`;
+}
+/* An example's picture rows → the studio's 256 colours. */
+const picOf = pic => { const px = Array(256).fill(""); if (!pic) return px; pic.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (pic.pal[ch]) px[y * 16 + x] = pic.pal[ch]; })); return px; };
+/* A lesson's ready item: picture, name and blocks, straight into the studio (index.html calls this from a lesson step). */
+async function addReady(exId){
+  const B = window.STUDIO_BLOCKS, x = B && B.EXAMPLES.find(e => e.id === exId); if (!x) return;
+  if (!S.loaded) await load();
+  const items = S.world.items, E = H.LS.get("lang", "he") === "en";
+  let i = items.findIndex(t => t.id === x.id);
+  if (i < 0){
+    const it = { id: x.id, name: (E ? x.en : x.he)[0], lore: x.lore ? x.lore[E ? 1 : 0] : "", stack: 1, rarity: x.rarity || "common", px: picOf(x.pic) };
+    B.loadInto(it, x.prog); items.push(it); i = items.length - 1;
+    savePicture(it); clearTimeout(saveT); await doSave();
+  }
+  S.sel = i; S.pane = "power"; S.undo = []; S.sugg = null;
+  if (location.hash === "#studio") render(document.getElementById("app")); else location.hash = "#studio";
 }
 function gemPane(it){
   return `<div class="st-gcards">
@@ -175,6 +195,12 @@ function bind(app){
     clearTimeout(saveT); await doSave(); if (S.err || !H.act) return;
     await H.act("play"); S.msg = "כשמיינקראפט נפתח: E, ואז הלשונית של העולם שלכם."; paintStatus(); window.scrollTo(0, 0);
   });
+  // examples
+  app.querySelectorAll("[data-ex]").forEach(b => b.addEventListener("click", () => {
+    const x = window.STUDIO_BLOCKS.EXAMPLES.find(e => e.id === b.dataset.ex); if (!x) return;
+    if (it.power && !confirm("להחליף את הבלוקים של החפץ בדוגמה? את הבלוקים הקודמים אפשר להחזיר ב״גרסאות״.")) return;
+    window.STUDIO_BLOCKS.loadInto(it, x.prog); S.msg = "הדוגמה נכנסה. עכשיו משנים בה מה שרוצים."; S.err = ""; save(); render(app);
+  }));
   // painter
   const cv = app.querySelector("#st-c");
   if (cv){
@@ -404,6 +430,13 @@ const CSS = `
 .studio .st-prev .sl{width:56px;height:56px;background:#8B8B8B;border:3px solid;border-color:#373737 #fff #fff #373737;padding:5px;display:grid;flex:none}
 .studio .st-prev canvas{width:100%;height:100%;image-rendering:pixelated}
 .studio .st-lead{margin:0 0 10px;color:var(--muted)}
+.studio .st-ex{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:12px;background:var(--bg)}
+.studio .st-ex summary{cursor:pointer;font-weight:800}
+.studio .st-ex > small{color:var(--muted)}
+.studio .st-exs{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin:10px 0 6px}
+.studio .st-exs button{display:grid;gap:2px;text-align:start;font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer}
+.studio .st-exs button:hover{border-color:var(--grass)}
+.studio .st-exs small{color:var(--muted);line-height:1.35}
 .studio #st-blk{height:460px;border:1px solid var(--line);border-radius:8px;overflow:hidden;direction:ltr}
 .studio .st-noblk{padding:16px;color:var(--red)}
 .studio .st-lint{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:4px}
@@ -434,5 +467,5 @@ const CSS = `
 .studio .tip span{color:#AAAAAA}
 @media (max-width:900px){.studio .st-main,.studio .st-grid,.studio .st-gcards{grid-template-columns:1fr}}
 `;
-window.STUDIO = { render, CSS, reset: () => { S.loaded = false; S.sel = -1; S.sugg = null; S.pane = ""; } };
+window.STUDIO = { render, CSS, addReady, reset: () => { S.loaded = false; S.sel = -1; S.sugg = null; S.pane = ""; } };
 })();

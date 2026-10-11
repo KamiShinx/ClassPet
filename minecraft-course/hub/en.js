@@ -122,6 +122,8 @@ const D = {
   "הישגים שמובילים את השחקן בעולם":"Achievements that lead the player through the world", "יצור שני, חוק שני, או בוס":"A second creature, a second rule, or a boss",
   "ממשיכים את מה שבחרתם":"Keep going with what you chose", "שום דבר חדש, רק תיקונים":"Nothing new, only fixes",
   "שותף משחק בעולם שלכם, ואתם מתקנים מה שלא עבד":"A partner plays your world, and you fix what didn't work", "המשפחות מגיעות ומשחקות בעולם שלכם":"Families come and play your world",
+  "מתחילים מדוגמה":"Start from an example", "הדוגמה נכנסת לחפץ הזה, ואז משנים בה מה שרוצים: מספרים, יצורים, אפקטים, או בלוקים שלמים.":"The example goes into this item, then you change what you like: numbers, creatures, effects, or whole blocks.",
+  "הדוגמה נכנסה. עכשיו משנים בה מה שרוצים.":"The example is in. Now change what you like.", "כשלוחצים לחיצה ימנית על יצור":"When you right-click a creature",
   // the cleaned dock and studio (7 Oct)
   "הסטודיו":"Studio", "לסגור את מיינקראפט":"Close Minecraft", "המשחק לא נבנה.":"The game didn't build.",
   "מרימים יד וקוראים למורה.":"Raise your hand and call the teacher.", "או: ב״גרסאות״ מחזירים את הגרסה האחרונה שעבדה, ולוחצים שוב שחק.":"Or: in \"Versions\" bring back the last version that worked, and press Play again.",
@@ -176,8 +178,9 @@ const EN_L = {
       expect:"By the end of the lesson your item is in the game, in your world's tab.",
       note:"Your world is gone? The computer was probably reset, or it's a different computer. Press <b>Drive</b> at the top and bring your world back from Drive.",
       visual:()=>`<div class="today"><div><span class="num">1</span><b>What makes an item great?</b><span>We talk about it together.</span></div>
-        <div><span class="num">2</span><b>Invent it on paper</b><span>A card, and a 16 by 16 drawing.</span></div>
-        <div><span class="num">3</span><b>Build it in the studio</b><span>Draw, name it, and into the game. No code.</span></div></div>` },
+        <div><span class="num">2</span><b>Lightning stick</b><span>A ready item: try it in the game, and change it.</span></div>
+        <div><span class="num">3</span><b>Invent it on paper</b><span>A card, and a 16 by 16 drawing.</span></div>
+        <div><span class="num">4</span><b>Build it in the studio</b><span>Draw, name it, and into the game. No code.</span></div></div>` },
     { type:"Talk", title:"What makes an item great?",
       body:`<p>What's the best item in Minecraft? And which item do you never use?</p><p>A great item has four things. We talk about them together, then everyone invents an item for their world.</p>`,
       why:"A sword that kills everything in one hit is fun for five minutes. After that there's no danger, and no game. The price is the interesting part.",
@@ -185,9 +188,16 @@ const EN_L = {
         <div><span class="num">2</span><b>What's the price?</b><span>An Ender Pearl takes you far, and hurts you.</span></div>
         <div><span class="num">3</span><b>How rare is it?</b><span>Dirt: 64 in a stack. Totem of Undying: one.</span></div>
         <div><span class="num">4</span><b>Name and shape</b><span>Diamond Sword: you know what it does before you read.</span></div></div>` },
+    { type:"Activity", title:"A ready item: the lightning stick",
+      body:`<ol><li>Press <b>Load the lightning stick into the studio</b>. It goes into the studio with a picture, a name and blocks.</li><li>In the <b>What does it do?</b> tab, read the blocks: when, what happens, and the price.</li><li>Press <b>Try it in the game</b>, and hit a creature with the stick.</li><li>Change one thing: lightning to fire, or 3 seconds to 10. And check again.</li></ol>`,
+      why:"This is how you start an item in this course: from an example that works, and you change it until it's yours.",
+      note:"A change goes into the game only when it opens again: \"Close Minecraft\", and \"Try it in the game\" again.",
+      stuck:[["Nothing happens when I hit","Hit with the stick in your hand, a creature and not a block. And if the stick is resting, wait 3 seconds."],["There's no load button","Open the page from Minecraft in the Start menu."]],
+      visual:()=>`<div class="ready"><div class="rb" dir="ltr"><div class="rb-h">When you hit a creature with the item</div><div class="rb-d">Lightning on the creature</div><div class="rb-p">The item rests 3 seconds</div></div>
+        <button class="btn go" data-ready="lightning_stick">Load the lightning stick into the studio</button></div>` },
     { type:"Activity", title:"Invent it on paper",
       body:`<p>Page 2, with markers. First the card, then the drawing on the 16 by 16 grid.</p><p>When you're done, go to the studio.</p>`,
-      note:"Today the name, the line, the picture and the stack size go into the game. And what does the item do? You build that next week.",
+      note:"Today the name, the line, the picture and the stack size go into the game. If you have time, give your item a power too, from an example.",
       hints:["An item from your world: what do you find there? What do you collect? What do people trade?","The line under the name can hint what the item is for, or what it costs.","Stuck on the price? Think what the item can't do, or what you lose when you use it."],
       visual:()=>`<div class="checks"><div><span class="ok"></span>The item's name, and the line under it</div><div><span class="ok"></span>What is it for?</div><div><span class="ok"></span>Its price</div><div><span class="ok"></span>Where you get it, and the stack size</div><div><span class="ok"></span>A 16 by 16 drawing</div></div>` },
     { type:"How to", title:"In the studio: a new item",
@@ -209,15 +219,15 @@ const EN_L = {
       body:`<p>In the studio, at the top next to "World:", write the name from your world card.</p><p>The next time the game opens, that's the name of your tab.</p>`,
       expect:"In the game, in Creative mode, there's a tab with your world's name.",
       visual:()=>`<a class="st-entry" href="#studio"><b>Open the studio</b><span>At the top: "World:"</span><i>→</i></a>` },
-    { type:"Activity", title:"Time left? A second item",
-      body:`<p>Another item from your world, with its own picture. Maybe something that goes with the first one: the coin, and the hive where you find it.</p>`,
-      hints:["A dark colour for shadow and a light one for shine, and the picture already looks 3D.","A rare item gets its name in another colour. Which of your items is the rarest?"],
-      visual:()=>`<a class="st-entry" href="#studio"><b>Open the studio</b><span>"+ New item"</span><i>→</i></a>` },
+    { type:"Activity", title:"Time left? A power for your item",
+      body:`<ol><li>In the studio pick your item, and open <b>What does it do?</b></li><li>In <b>Start from an example</b> pick one that fits what you wrote on paper: what the item is for, and its price.</li><li>Change the example until it fits your item, and check it in the game.</li></ol>`,
+      hints:["No example fits exactly? Take the closest one, and swap one block.","Every power has a price. If you deleted the price, what stops a player from using it all the time?"],
+      visual:()=>`<a class="st-entry" href="#studio"><b>Open the studio</b><span>Your item, then "What does it do?"</span><i>→</i></a>` },
     { type:"End", title:"Finishing",
-      body:`<ul><li>Show your item to whoever sits next to you.</li><li>Close Minecraft.</li><li>Press <b>Drive</b> at the top, and save your world in your Drive.</li></ul><p>Did you see the "What does it do?" tab in the studio? We open it next week.</p>`,
-      expect:"Next week: what your item does.",
+      body:`<ul><li>Show your item to whoever sits next to you.</li><li>Close Minecraft.</li><li>Press <b>Drive</b> at the top, and save your world in your Drive.</li></ul>`,
+      expect:"Next week: powers with \"if\": only at night, only by chance, only with Shift.",
       visual:()=>`<div class="checks"><div><span class="ok"></span>My item is in the game</div><div><span class="ok"></span>Show the person next to you</div><div><span class="ok"></span>My world is saved in Drive</div></div>` }
-  ], challenges:{ card:["Page 2","What the item is for, the price, and where you get it."], item:["My item","The item in the game, with your name, line and picture."],
+  ], challenges:{ card:["Page 2","What the item is for, the price, and where you get it."], tweak:["Lightning stick","I tried it in the game, and changed one thing in it."], item:["My item","The item in the game, with your name, line and picture."], power:["A power for my item","My item does something, from an example I changed."],
     world:["Name your world","The tab in the game has your world's name."], second:["A second item","Another item from your world, with its own picture."],
     shade:["Shadow and shine","The picture has a dark colour for shadow and a light one for shine."] } }
 };

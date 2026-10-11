@@ -354,11 +354,13 @@ const CSS = `
 /* arms and legs swing from the top */
 .mob3 .sw>.bx{transform:translateY(calc(var(--ph)*var(--p)/2))}
 .mob3 .zarm{rotate:x 90deg}
-.mob3 .leg{animation:walk 1.2s ease-in-out infinite}
-.mob3 .leg2{animation:walk 1.2s ease-in-out infinite reverse}
-.mob3 .arm{animation:walk 1.2s ease-in-out infinite reverse}
-.mob3 .arm2{animation:walk 1.2s ease-in-out infinite}
+/* Opposite limbs are half a step apart (a negative delay): "reverse" does nothing on a swing that is the same both ways. */
+.mob3 .leg,.mob3 .arm2{animation:walk 1.2s ease-in-out infinite}
+.mob3 .leg2,.mob3 .arm{animation:walk 1.2s ease-in-out -.6s infinite}
 @keyframes walk{0%,100%{rotate:x 22deg}50%{rotate:x -22deg}}
+.mb-enderman .mob3 .sw{animation-name:walkslow;animation-duration:1.8s}
+.mb-enderman .mob3 .leg2,.mb-enderman .mob3 .arm{animation-delay:-.9s}
+@keyframes walkslow{0%,100%{rotate:x 12deg}50%{rotate:x -12deg}}
 .mb .flat{display:none}
 /* day and night */
 .dn{position:relative;width:min(980px,100%);aspect-ratio:16/8;border:3px solid var(--ink);border-radius:8px;overflow:hidden;background:var(--sky,rgb(120,167,255));transition:background .3s}
@@ -685,14 +687,15 @@ const DECK2 = [
 
   { label:"הדגמה", html:`<h2>מהדף למשחק</h2><div class="steps">
       <div><span class="ico k">Minecraft</span><b>פותחים את הדף</b>מהסמל, בתפריט Start</div>
+      <div><span class="ico k">מקל ברקים</span><b>חפץ מוכן</b>לטעון, לקרוא את הבלוקים</div>
       <div><span class="ico k">+ חפץ חדש</span><b>בסטודיו</b>השם, המשפט והקוד מהדף</div>
       <div><span class="ico k">16×16</span><b>מציירים</b>לפי הציור שעל הדף</div>
       <div><span class="ico k">לנסות במשחק</span><b>המחשב בונה</b>דקה או שתיים</div>
       <div>${img("block_grass_block_side","ico")}<b>במשחק</b>E, והלשונית של העולם שלכם</div></div><div class="row3">${classItem()}</div>`,
-    notes:"52–60 דק׳. מדגימים על המקרן, עם החפץ של הכיתה, צעד אחרי צעד. 1. לוחצים על Minecraft בתפריט Start, מקלידים את הקוד, והדף נפתח. 2. הסטודיו, ״+ חפץ חדש״: השם, המשפט, קוד באנגלית, כמה בערימה וכמה נדיר. 3. מציירים לפי הציור של הכיתה, ומראים שהתצוגה ליד הלוח משתנה. 4. מתחת לחפץ כתוב ״מוכן למשחק״. לוחצים ״לנסות במשחק״. 5. מיינקראפט נפתח (דקה או שתיים: בינתיים מסבירים), Creative, E, הלשונית, והחפץ של הכיתה שם. מראים בקצרה את הלשונית ״מה הוא עושה?״ ואומרים: בשבוע הבא." },
+    notes:"52–60 דק׳. מדגימים על המקרן, צעד אחרי צעד. 1. לוחצים על Minecraft בתפריט Start, מקלידים את הקוד, והדף נפתח. 2. שיעור 2, השלב ״חפץ מוכן: מקל ברקים״: ״לטעון את מקל הברקים לסטודיו״. קוראים יחד את הבלוקים: מתי, מה קורה, ומה המחיר. 3. ״+ חפץ חדש״: החפץ של הכיתה, עם השם, המשפט והקוד באנגלית, ומציירים לפי הציור של הכיתה. 4. ״לנסות במשחק״ פעם אחת, לשני החפצים. מיינקראפט נפתח (דקה או שתיים: בינתיים מסבירים), Creative, E, הלשונית. מכים Zombie עם מקל הברקים. 5. מראים איך משנים: ברק לאש. השינוי נכנס כשסוגרים ופותחים שוב, ואת זה הם כבר יעשו לבד." },
 
-  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><div class="duo"><ol class="big"><li>הסטודיו: ״+ חפץ חדש״</li><li>השם, המשפט והקוד מהדף</li><li>מציירים לפי הדף</li><li>לנסות במשחק</li><li>מוצאים את החפץ במשחק</li></ol><div>${timer("t2",25*60)}</div></div>`,
-    notes:"60–85 דק׳. מפעילים את השעון. מסתובבים בכיתה. מי שתקוע: קודם שואל את מי שיושב לידו. מי שסיים: חפץ שני, או שם לעולם (בסטודיו, למעלה). מיינקראפט לא נפתח, או כתוב שהוא כבר פתוח? ״לסגור את מיינקראפט״ ואז שוב ״שחק״." },
+  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><div class="duo"><ol class="big"><li>מקל ברקים: לטעון, לנסות, לשנות דבר אחד</li><li>הסטודיו: ״+ חפץ חדש״ מהדף</li><li>מציירים לפי הדף</li><li>לנסות במשחק</li><li>נשאר זמן? כוח מדוגמה</li></ol><div>${timer("t2",25*60)}</div></div>`,
+    notes:"60–85 דק׳. מפעילים את השעון. מסתובבים בכיתה. מי שתקוע: קודם שואל את מי שיושב לידו. מי שסיים: כוח לחפץ שלו מ״מתחילים מדוגמה״, או שם לעולם (בסטודיו, למעלה). מיינקראפט לא נפתח, או כתוב שהוא כבר פתוח? ״לסגור את מיינקראפט״ ואז שוב ״שחק״." },
 
   { label:"משהו לא עבד?", html:`<h2>משהו לא עבד?</h2><div class="rules">
       <div><b>החפץ לא במשחק</b>מתחת לחפץ בסטודיו כתוב מה חסר.</div>
@@ -701,8 +704,8 @@ const DECK2 = [
       <div><b>המשחק לא נפתח</b>״לסגור את מיינקראפט״, ואז שוב ״שחק״.</div></div>`,
     notes:"להשאיר על המסך בזמן העבודה, אם לא צריך את השעון." },
 
-  { label:"סיום", html:`<div class="ci">${tooltip("החפץ שלכם",["???"],"epic")}</div><h1>ומה הוא עושה?</h1><p class="sub">בשבוע הבא.</p>`,
-    notes:"85–90 דק׳. שניים או שלושה מראים את החפץ שלהם על המקרן. אחר כך כולם: דרייב ← שומרים את העולם, וסוגרים את מיינקראפט. המשפט לסיום: היום לחפץ שלכם יש שם וציור. בשבוע הבא הוא יעשה משהו." }
+  { label:"סיום", html:`<div class="ci">${tooltip("החפץ שלכם",["רק בלילה?"],"epic")}</div><h1>ומתי הוא עובד?</h1><p class="sub">בשבוע הבא: ״אם״.</p>`,
+    notes:"85–90 דק׳. שניים או שלושה מראים את החפץ שלהם על המקרן. אחר כך כולם: דרייב ← שומרים את העולם, וסוגרים את מיינקראפט. המשפט לסיום: היום החפץ שלכם נכנס למשחק, ומקל הברקים עבד תמיד. בשבוע הבא מחליטים מתי הכוח עובד: רק בלילה, רק בסיכוי, רק עם Shift." }
 ];
 
 H.DECKS[2] = DECK2;

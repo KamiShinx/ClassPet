@@ -476,6 +476,14 @@ a.dbtn{text-decoration:none}
 .smock .hl{outline:3px solid #f5c400;outline-offset:2px;border-radius:6px;animation:smhl 1.4s ease-in-out infinite}
 @keyframes smhl{50%{outline-color:transparent}}
 @media (prefers-reduced-motion:reduce){.smock .hl{animation:none}}
+
+/* a lesson's ready item */
+.ready{display:grid;gap:16px;justify-items:center}
+.ready .rb{display:grid;gap:6px;direction:rtl;min-width:280px}
+.ready .rb div{padding:10px 14px;border-radius:8px;font-weight:800;color:#fff}
+.ready .rb-h{background:hsl(35,45%,45%);border-radius:14px 14px 6px 6px}
+.ready .rb-d{background:hsl(205,45%,45%);margin-inline-start:22px}
+.ready .rb-p{background:hsl(0,45%,45%);margin-inline-start:22px}
 `;
 function injectStyle(doc){ const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); }
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap";
@@ -950,8 +958,9 @@ const L2 = {
       note:"העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. לוחצים למעלה על <b>דרייב</b>, ומחזירים את העולם שלכם מהדרייב.",
       visual:()=>`<div class="today">
         <div><span class="num">1</span><b>מה הופך חפץ למעולה?</b><span>מדברים על זה יחד.</span></div>
-        <div><span class="num">2</span><b>ממציאים על הדף</b><span>כרטיס, וציור של 16 על 16.</span></div>
-        <div><span class="num">3</span><b>בונים בסטודיו</b><span>מציירים, נותנים שם, ונכנסים למשחק. בלי קוד.</span></div>
+        <div><span class="num">2</span><b>מקל ברקים</b><span>חפץ מוכן: מנסים אותו במשחק, ומשנים.</span></div>
+        <div><span class="num">3</span><b>ממציאים על הדף</b><span>כרטיס, וציור של 16 על 16.</span></div>
+        <div><span class="num">4</span><b>בונים בסטודיו</b><span>מציירים, נותנים שם, ונכנסים למשחק. בלי קוד.</span></div>
       </div>` },
 
     { type:"שיחה", title:"מה הופך חפץ למעולה?",
@@ -960,9 +969,19 @@ const L2 = {
       why:"חרב שהורגת כל דבר במכה אחת כיפית לחמש דקות. אחר כך כבר אין סכנה, ואין משחק. המחיר הוא החלק המעניין.",
       visual:()=>itemRow(["pick","pearl","bow","apple","totem","wings","potato","dirt"]) + ITEM_NEEDS },
 
+    { type:"פעילות", title:"חפץ מוכן: מקל ברקים",
+      body:`<ol><li>לוחצים <b>לטעון את מקל הברקים לסטודיו</b>. הוא נכנס לסטודיו עם ציור, שם ובלוקים.</li><li>בלשונית <b>מה הוא עושה?</b> קוראים את הבלוקים: מתי, מה קורה, ומה המחיר.</li><li>לוחצים <b>לנסות במשחק</b>, ומכים יצור עם המקל.</li><li>משנים דבר אחד: ברק לאש, או 3 שניות ל־10. ובודקים שוב.</li></ol>`,
+      why:"ככה מתחילים חפץ בקורס: מדוגמה שעובדת, ומשנים אותה עד שהיא שלכם.",
+      note:"שינוי נכנס למשחק רק כשהוא נפתח מחדש: ״לסגור את מיינקראפט״, ושוב ״לנסות במשחק״.",
+      stuck:[["לא קורה כלום כשמכים","מכים עם המקל ביד, יצור ולא קובייה. ואם המקל נח, מחכים 3 שניות."],["אין כפתור לטעון","פותחים את הדף מ־Minecraft בתפריט Start."]],
+      visual:()=>`<div class="ready"><div class="rb"><div class="rb-h">כשמכים יצור עם החפץ</div><div class="rb-d">ברק על היצור</div><div class="rb-p">החפץ נח 3 שניות</div></div>
+        <button class="btn go" data-ready="lightning_stick">לטעון את מקל הברקים לסטודיו</button></div>`,
+      mount:(root, served) => { const b = root.querySelector("[data-ready]"); if (!b) return; if (!served || !window.STUDIO) { b.disabled = true; return; }
+        b.addEventListener("click", () => window.STUDIO.addReady(b.dataset.ready)); } },
+
     { type:"פעילות", title:"ממציאים על הדף",
       body:`<p>דף 2, עם טושים. קודם הכרטיס, אחר כך הציור ברשת של 16 על 16.</p><p>מי שסיים, עובר לסטודיו.</p>`,
-      note:"היום נכנסים למשחק השם, המשפט, הציור וכמה בערימה. ומה החפץ עושה? את זה בונים בשבוע הבא.",
+      note:"היום נכנסים למשחק השם, המשפט, הציור וכמה בערימה. מי שמספיק, נותן לחפץ גם כוח, מדוגמה.",
       hints:[
         "חפץ מהעולם שלכם: מה מוצאים שם? מה אוספים? במה סוחרים?",
         "המשפט מתחת לשם יכול לרמוז בשביל מה החפץ, או מה המחיר שלו.",
@@ -998,20 +1017,22 @@ const L2 = {
       expect:"במשחק, במצב Creative, יש לשונית עם השם של העולם שלכם.",
       visual:()=>toStudio("למעלה: ״העולם:״", ["world"]) },
 
-    { type:"פעילות", title:"נשאר זמן? חפץ שני",
-      body:`<p>עוד חפץ מהעולם שלכם, עם ציור משלו. אולי משהו שהולך עם החפץ הראשון: המטבע, והכוורת שבה מוצאים אותו.</p>`,
-      hints:["צבע כהה לצל וצבע בהיר לברק, וכבר הציור נראה תלת־ממדי.","חפץ נדיר מקבל שם בצבע אחר. איזה חפץ אצלכם הכי נדיר?"],
-      visual:()=>toStudio("״+ חפץ חדש״", ["new"]) },
+    { type:"פעילות", title:"נשאר זמן? כוח לחפץ שלכם",
+      body:`<ol><li>בסטודיו בוחרים את החפץ שלכם, ופותחים את <b>מה הוא עושה?</b></li><li>ב<b>מתחילים מדוגמה</b> בוחרים דוגמה שמתאימה למה שכתבתם בדף: בשביל מה החפץ, ומה המחיר שלו.</li><li>משנים את הדוגמה עד שהיא מתאימה לחפץ שלכם, ובודקים במשחק.</li></ol>`,
+      hints:["אין דוגמה שמתאימה בדיוק? לוקחים את הכי קרובה, ומחליפים בה בלוק אחד.","לכל כוח יש מחיר. אם מחקתם את המחיר, מה ימנע מהשחקן להשתמש בו כל הזמן?"],
+      visual:()=>toStudio("החפץ שלכם, ואז ״מה הוא עושה?״") },
 
     { type:"סיום", title:"מסיימים",
       body:`<ul><li>מראים את החפץ למי שיושב לידכם.</li><li>סוגרים את מיינקראפט.</li><li>לוחצים למעלה על <b>דרייב</b>, ושומרים את העולם בדרייב שלכם.</li></ul>
-        <p>ראיתם בסטודיו את הלשונית ״מה הוא עושה?״ אותה פותחים בשבוע הבא.</p>`,
-      expect:"בשבוע הבא: מה החפץ שלכם עושה.",
+        `,
+      expect:"בשבוע הבא: כוחות עם ״אם״: רק בלילה, רק בסיכוי, רק עם Shift.",
       visual:()=>`<div class="checks"><div><span class="ok"></span>החפץ שלי במשחק</div><div><span class="ok"></span>מראים למי שיושב לידכם</div><div><span class="ok"></span>העולם שלי שמור בדרייב</div></div>` }
   ],
   challenges:[
     {id:"card", lvl:"חובה", t:"דף 2", d:"בשביל מה החפץ, מה המחיר, ואיפה משיגים אותו."},
+    {id:"tweak", lvl:"חובה", t:"מקל ברקים", d:"ניסיתי אותו במשחק, ושיניתי בו דבר אחד."},
     {id:"item", lvl:"חובה", t:"החפץ שלי", d:"החפץ במשחק, עם השם, המשפט והציור שלכם."},
+    {id:"power", lvl:"אתגר", t:"כוח לחפץ שלי", d:"החפץ שלי עושה משהו, מדוגמה ששיניתי."},
     {id:"world", lvl:"אתגר", t:"שם לעולם", d:"הלשונית במשחק נקראת בשם של העולם שלכם."},
     {id:"second", lvl:"אתגר", t:"חפץ שני", d:"עוד חפץ מהעולם שלכם, עם ציור משלו."},
     {id:"shade", lvl:"אתגר", t:"צל וברק", d:"בציור יש צבע כהה לצל וצבע בהיר לברק."}

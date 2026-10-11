@@ -293,5 +293,32 @@ function lint(prog){
   if (anyStrong && !anyPrice) add(E ? "A strong power with no price. What stops a player from using it all the time?" : "כוח חזק בלי מחיר. מה ימנע מהשחקן להשתמש בו כל הזמן?");
   return out;
 }
-window.STUDIO_BLOCKS = { mount, unmount, compile, DEFS, toBlocks, readable, loadInto, LISTS, lint };
+
+/* ---------- ready-made examples: a kid loads one into an item, then changes it ----------
+   Each has a price, so the examples teach "power + price". lesson = the lesson that introduces it. */
+const EXAMPLES = [
+  { id:"lightning_stick", lesson:2, he:["מקל ברקים","מכים יצור, ונופל עליו ברק. אחר כך המקל נח."], en:["Lightning stick","Hit a creature and lightning strikes it. Then the stick rests."],
+    lore:["הברק יודע את מי להכות.","The lightning knows whom to strike."], rarity:"rare",
+    pic:{ pal:{ k:"#2b1d0e", w:"#8a5a2b", y:"#fed83d", Y:"#fff6b0" }, rows:["..........kkkk..","........kkyyyk..","........kyYyk...",".......kyyyk....","......kyyyyykk..",".......kkyyyk...","........kyyk....",".......kwkk.....","......kwk.......",".....kwk........","....kwk.........","...kwk..........","..kwk...........",".kwk............","kwk.............","kk.............."] },
+    prog:{ on:{ hit:[{a:"lightning",who:"target"},{a:"cooldown",s:3}] } } },
+  { id:"fire_sword", lesson:3, he:["חרב אש","מכים יצור, והוא עולה באש. כל מכה עולה אוכל."], en:["Fire sword","Hit a creature and it catches fire. Every hit costs food."],
+    prog:{ on:{ hit:[{a:"fire",who:"target",s:4},{a:"hunger",n:1}] } } },
+  { id:"spring", lesson:3, he:["קפיץ","לחיצה ימנית, ואתם עפים למעלה."], en:["Spring","Right-click and you fly up."],
+    prog:{ on:{ use:[{a:"launch",who:"me",p:2},{a:"sound",snd:"entity.firework_rocket.launch"},{a:"cooldown",s:2}] } } },
+  { id:"jump_stone", lesson:3, he:["אבן הקפיצה","לחיצה ימנית, ואתם קופצים 8 קוביות קדימה."], en:["Jump stone","Right-click and you jump 8 blocks forward."],
+    prog:{ on:{ use:[{a:"tp",n:8},{a:"sound",snd:"entity.enderman.teleport"},{a:"cooldown",s:5}] } } },
+  { id:"speed_potion", lesson:3, he:["שיקוי מהירות","לחיצה ימנית: רצים מהר. השיקוי נגמר."], en:["Speed potion","Right-click: you run fast. The potion is used up."],
+    prog:{ on:{ use:[{a:"effect",e:"speed",who:"me",s:15,l:2},{a:"sound",snd:"entity.player.levelup"},{a:"consume"}] } } },
+  { id:"push_glove", lesson:3, he:["כפפת הדיפה","לחיצה ימנית על יצור, והוא עף אחורה."], en:["Push glove","Right-click a creature and it flies back."],
+    prog:{ on:{ use_mob:[{a:"push",who:"target",p:3},{a:"cooldown",s:2}] } } },
+  { id:"friend_cookie", lesson:3, he:["עוגיית חברות","לחיצה ימנית על יצור: הוא מתרפא וזוהר. העוגייה נגמרת."], en:["Friendship cookie","Right-click a creature: it heals and glows. The cookie is used up."],
+    prog:{ on:{ use_mob:[{a:"heal",who:"target",n:4},{a:"effect",e:"glowing",who:"target",s:10,l:1},{a:"consume"}] } } },
+  { id:"night_charm", lesson:4, he:["קמע הלילה","כשהוא ביד ויש לילה, רואים בחושך."], en:["Night charm","While you hold it at night, you see in the dark."],
+    prog:{ on:{ hold:[{if:{c:"night"},then:[{a:"effect",e:"night_vision",who:"me",s:12,l:1}]}] } } },
+  { id:"luck_stick", lesson:4, he:["מקל המזל","מכים יצור: לפעמים פיצוץ, ולפעמים כלום."], en:["Luck stick","Hit a creature: sometimes an explosion, sometimes nothing."],
+    prog:{ on:{ hit:[{if:{c:"chance",p:25},then:[{a:"explode",who:"target",p:2,brk:false}],else:[{a:"msg",t:"פספוס!"}]},{a:"cooldown",s:2}] } } },
+  { id:"wolf_whistle", lesson:4, he:["משרוקית הזאבים","Shift ולחיצה ימנית: שני זאבים מגיעים לעזור."], en:["Wolf whistle","Shift and right-click: two wolves come to help."],
+    prog:{ on:{ use:[{if:{c:"sneak"},then:[{a:"spawn",m:"wolf",who:"me",n:2},{a:"sound",snd:"entity.wolf.howl"},{a:"cooldown",s:30}],else:[{a:"msg",t:"לוחצים Shift כדי לקרוא לזאבים"}]}] } } }
+];
+window.STUDIO_BLOCKS = { mount, unmount, compile, DEFS, toBlocks, readable, loadInto, LISTS, lint, EXAMPLES };
 })();

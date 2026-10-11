@@ -301,7 +301,7 @@ const EXAMPLES = [
     lore:["הברק יודע את מי להכות.","The lightning knows whom to strike."], rarity:"rare",
     pic:{ pal:{ k:"#2b1d0e", w:"#8a5a2b", y:"#fed83d", Y:"#fff6b0" }, rows:["..........kkkk..","........kkyyyk..","........kyYyk...",".......kyyyk....","......kyyyyykk..",".......kkyyyk...","........kyyk....",".......kwkk.....","......kwk.......",".....kwk........","....kwk.........","...kwk..........","..kwk...........",".kwk............","kwk.............","kk.............."] },
     prog:{ on:{ hit:[{a:"lightning",who:"target"},{a:"cooldown",s:3}] } } },
-  { id:"fire_sword", lesson:3, he:["חרב אש","מכים יצור, והוא עולה באש. כל מכה עולה אוכל."], en:["Fire sword","Hit a creature and it catches fire. Every hit costs food."],
+  { id:"fire_sword", lesson:3, he:["חרב אש","מכים יצור, והוא עולה באש. כל מכה מורידה אוכל."], en:["Fire sword","Hit a creature and it catches fire. Every hit costs food."],
     prog:{ on:{ hit:[{a:"fire",who:"target",s:4},{a:"hunger",n:1}] } } },
   { id:"spring", lesson:3, he:["קפיץ","לחיצה ימנית, ואתם עפים למעלה."], en:["Spring","Right-click and you fly up."],
     prog:{ on:{ use:[{a:"launch",who:"me",p:2},{a:"sound",snd:"entity.firework_rocket.launch"},{a:"cooldown",s:2}] } } },

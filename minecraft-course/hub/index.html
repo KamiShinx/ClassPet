@@ -17,6 +17,8 @@ H.injectStyle(document);
 if (window.STUDIO){ const st = document.createElement("style"); st.textContent = window.STUDIO.CSS; document.head.appendChild(st); }
 const app = document.getElementById("app");
 if (LS.get("big", false)) app.classList.add("big");
+/* The lessons were rebuilt (Oct): forget where a kid stopped in the old steps, once, so nobody lands mid-lesson. */
+if (LS.get("hubv", 0) < 2){ ["l1step","l2step","l1chal","l2chal","lessonsDone","lastLesson","itemcard","stpane"].forEach(k => { try { localStorage.removeItem("mkmod." + k); } catch(e){} }); LS.set("hubv", 2); }
 /* Language: Hebrew, or English for kids who find Hebrew hard (en.js holds the English). */
 const EN = window.HUB_EN;
 const isEn = () => !!EN && LS.get("lang", "he") === "en";

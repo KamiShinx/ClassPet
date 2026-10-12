@@ -51,6 +51,9 @@ if (Test-Path $tools) {
   $bat = $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update.bat")
   foreach ($k in $get.Keys) { [IO.File]::WriteAllBytes((Join-Path (Join-Path $makeRoot 'mod') $k), $get[$k]) }
   [IO.File]::WriteAllBytes((Join-Path $makeRoot 'update.bat'), $bat)
+  # The stick's files, ready to copy onto the USB stick (make-usb, install-from-usb, update-from-usb).
+  $sf = Join-Path $makeRoot 'stick-files'; New-Item -ItemType Directory -Force $sf | Out-Null
+  foreach ($n in 'make-usb.bat', 'install-from-usb.bat', 'update-from-usb.bat') { [IO.File]::WriteAllBytes((Join-Path $sf $n), $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/$n")) }
   Write-Host "Course tools updated (the kid's own files are untouched)." -ForegroundColor Green
 }
 

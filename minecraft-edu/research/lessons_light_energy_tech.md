@@ -735,31 +735,34 @@ Source shorthand used below:
 
 ## 2. Recurring exercise types (counted over the Ministry activities in section 1)
 
-Counted by hand from the tags above. Ideas and external-only titles are excluded, and each activity is counted
-once per type. "≈" means a few entries were borderline.
+Method: section 1 has **76 activities with a "Types:" line**. Ideas, external-only titles and the sound entries
+K1–K4 (which have no tags) are excluded. Each row counts the activities that carry at least one tag from that group,
+so one activity can count in several rows. The counts came from a script over the tags, not from estimates.
 
-| # | Type | Count | Best examples |
+| # | Type (tags grouped) | Activities | Best examples |
 |---|---|---|---|
-| 1 | **Hands-on experiment** (mostly "do it, record, conclude"; a few fair tests) | 17 | SH3 the Dor shadow-size experiment (hypothesis frame, table, circle-one conclusion, return to the story); R3 the magic lantern (students design their own test) |
-| 2 | **Argument, explanation or conclusion writing** ("לנסח טיעון פשוט", "הסבירו") | 22 | E3 Almog versus Omer (use the data to decide who is right); CL2 the solar-panel subsidy proposal |
-| 3 | **Design / build a device or model** | 16 | D5 אל-דמע (full design cycle); EY2 activity 4 (eye model to explicit requirements, with peer review) |
-| 4 | **Data table** (fill in or design) | 8 | E3 "plan the table yourself: how many columns, rows, titles?"; LV2 the pine-desert data |
-| 5 | **Flow diagram / input–process–output diagram** | 8 | TS2 olive-press flow (action → product, desired versus undesired); TS3 functional plus structural diagram |
-| 6 | **Reading comprehension** (short passage + questions) | 8 | S2 the glow-worm article; LV3 melatonin and screens |
-| 7 | **Observation** (open, then structured) | 9 | EY1 eye movements and front parts (memory → mirror → text); RF1 the coin in the bowl |
-| 8 | **Sorting / classification** | 7 | EY1 sort eye movements by function; D5 sort questions into information / inquiry / technological |
-| 9 | **Comparison table** (often with criteria the student chooses) | 6 | PR1 olive harvest by hand versus by machine (student-built criteria); S5 oil lamp versus candle |
-| 10 | **Matching / ordering / labelling** | 8 | EY1/EY2 label the diagram + draw lines from part to description; S4 order seven lighting technologies |
-| 11 | **Circle the answer / multiple choice / yes–no** | 5 | R4 "נוצר צל / לא נוצר צל"; K1 multi-select "circle all the data you need" |
-| 12 | **Graph** (draw or read) | 5 | E3 draw a bar graph; CL5 read Israel's CO₂ pie chart |
-| 13 | **Information research / merging sources** | 6 | CL1 biogas merged text; SH1 find everyday uses of shadow |
-| 14 | **Rating matrix and decision** (0–3 or 1–5 against requirements) | 3 | D3 the idea matrix + individual vote + round; D5 ideas scored 1–5 |
-| 15 | **Question-asking / question sorting** | 3 | EY1 "question map"; D5 ten questions, filter, merge, sort |
-| 16 | **Creative product** (theatre, skit, advert, poster, video) | 5 | SH2 the shadow theatre with a video; K1 write an advert |
-| 17 | **Games / puzzles** (crossword, domino, cipher, escape box, describe-and-build) | 4 | CL5 the climate escape box; TS3 the describe-and-build game |
-| 18 | **Reflection / metacognition** | 4+ (in almost every TAU unit) | EY2 "מה היה קשה? מה הפתיע?"; CL4 "אילו פעולות תבצעו בעקבות הלמידה?" |
-| 19 | **Survey** | 2 | D5 onion sensitivity by age; CL7 footprint questionnaire |
-| 20 | **Guided imagery** | 1 | EY2 the journey into your eye |
+| 1 | **Argument / explanation / conclusion writing** (`argument` `explanation` `letter-writing` `debate` `rules-writing`) | 23 | E3 Almog versus Omer (use the data to decide who is right); CL2 the solar-panel subsidy proposal |
+| 2 | **Observation, including teacher demos** (`observation` `observation-log` `field-observation` `demonstration`) | 15 | EY1 eye movements and front parts (memory → mirror → text); TS2 the olive-press visit |
+| 3 | **Build a device or model** (`build-device` `model-building` `hands-on-making`) | 14 | EY2 activity 4 (eye model to explicit requirements, peer review); SH2 the shadow theatre |
+| 4 | **Hands-on experiment** (mostly "do it, record, conclude"; few true fair tests) | 12 | SH3 the Dor shadow-size experiment (hypothesis frame, table, circle-one conclusion, back to the story); R3 the magic lantern (students design the test) |
+| 5 | **Comparison** (`comparison` `comparison-table` `compare-groups`) | 10 | PR1 olive harvest by hand versus by machine (students choose the criteria); S5 oil lamp versus candle |
+| 6 | **Matching / ordering / labelling** | 9 | EY1/EY2 label the diagram + draw lines from part to description; S4 order seven lighting technologies |
+| 7 | **Flow diagram / input–process–output diagram** | 8 | TS2 the olive-press flow (action → product, desired versus undesired); TS3 the functional plus structural diagram |
+| 8 | **Design process** (`design-process` `portfolio`) | 8 | D5 אל-דמע (the full cycle); D3 the idea matrix |
+| 9 | **Data table** (fill in or design) | 7 | E3 "plan the table: how many columns, rows, titles?"; LV2 the pine-desert data |
+| 10 | **Reading comprehension** (passage + questions) | 7 | S2 the glow-worm article; LV3 melatonin and screens |
+| 11 | **Sorting / classification** | 6 | EY1 sort eye movements by function; D5 sort questions into information / inquiry / technological |
+| 12 | **Reflection / self-check / peer critique** | 6 (and inside nearly every TAU unit) | EY2 "מה היה קשה? מה הפתיע?"; D2 the "look back" checklist |
+| 13 | **Graph** (draw or read) | 5 | E3 draw a bar graph; CL5 read Israel's CO₂ pie chart |
+| 14 | **Information research / merging sources** | 5 | CL1 the biogas merged text; SH1 find everyday uses of shadow |
+| 15 | **Creative product** (theatre, skit, advert, poster, video) | 5 | SH2 the shadow theatre with a video; D5 publish an advert |
+| 16 | **Drawing** (from memory, from observation, technical) | 4 | EY1 draw your eye from memory, then with a mirror; TS3 the structural diagram |
+| 17 | **Circle the answer / yes–no** | 3 | R4 "נוצר צל / לא נוצר צל"; SH3 circle the right conclusion. Untagged: K1's multi-select "circle all the data you need" |
+| 18 | **Rating matrix and decision** (0–3 or 1–5 against requirements) | 3 | D3 the matrix + individual vote + round; D5 ideas scored 1–5 |
+| 19 | **Question-asking / question sorting** | 3 | EY1 "question map"; D5 ten questions, filter, merge, sort |
+| 20 | **Games / puzzles** (word puzzle, cipher, escape box, describe-and-build) | 3 | CL5 the climate escape box; TS3 describe-and-build |
+| 21 | **Survey** | 2 | D5 onion sensitivity by age; CL7 the footprint questionnaire |
+| 22 | **Guided imagery** | 1 | EY2 the journey into your eye |
 
 **Patterns that stand out.**
 - **The story-problem frame.** Almost every unit opens with a short story about a child with a problem (Dor's

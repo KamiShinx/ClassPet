@@ -79,26 +79,26 @@ const S1 = [
       r.querySelectorAll("#shapes button").forEach(b => b.addEventListener("click", () => { sh = +b.dataset.i; paint(); hop(r.querySelector("#t3")); }));
       r.querySelectorAll("#extras button").forEach(b => b.addEventListener("click", () => { const i = +b.dataset.i; ex.has(i) ? ex.delete(i) : ex.add(i); paint(); }));
       r.querySelector("#sil").addEventListener("click", () => { sil = !sil; paint(); }); paint(); },
-    notes:"5–8 דק׳. קודם שלוש הצורות, בלי להסביר: ״את מי הייתם מחבקים? ממי הייתם בורחים?״ ״לא שיניתי פנים, ולא שיניתי צבע. רק צורה. עגול נראה חמוד, מרובע נראה חזק, מחודד נראה מסוכן. מי שמעצב דמויות בוחר צורה לפני כל דבר אחר.״ ואז ״בחושך״: ״מזהים אותה?״ מוסיפים קרן: ״ועכשיו?״ מוסיפים את שלושתם: ״עכשיו זה כבר בלגן. דבר אחד מיוחד מספיק. ככה מזהים דמות גם מהצללית שלה.״" },
+    notes:"5–8 דק׳. קודם שלוש הצורות, בלי להסביר: ״את מי הייתם מחבקים? ממי הייתם בורחים?״ ״לא שיניתי את הפנים, ולא שיניתי את הצבע. רק את הצורה. עגול נראה חמוד, מרובע נראה חזק, מחודד נראה מסוכן. מי שמעצב דמויות בוחר צורה לפני כל דבר אחר.״ ואז ״בחושך״: ״מזהים אותה?״ מוסיפים קרן: ״ועכשיו?״ מוסיפים גם שלוש עיניים וכדור צמר: ״עכשיו זה כבר בלגן. מספיק דבר אחד מיוחד. ככה מזהים דמות גם מהצללית שלה.״" },
 
   { html:`<div class="toybox" id="t4"></div><p class="sub">מה היא הכי רוצה?</p><div class="chips big" id="wants">${WANTS.map((x, i) => `<button data-i="${i}">${x[0]}</button>`).join("")}</div>`,
     mount: r => { const paint = i => { r.querySelector("#t4").innerHTML = toy(Object.assign({}, POP, { sad: true, say: i == null ? "אני רעבה." : WANTS[i][1] })); r.querySelectorAll("#wants button").forEach((b, k) => b.classList.toggle("on", k === i)); if (i != null) hop(r.querySelector("#t4")); };
       r.querySelectorAll("#wants button").forEach(b => b.addEventListener("click", () => paint(+b.dataset.i))); paint(null); },
-    notes:"8–10 דק׳. ״היא רעבה. מה היא אומרת? תלוי מה היא רוצה.״ לוחצים על שלושתם. ״אותה חיה, אותו ציור, אותו רעב. ויצאו שלוש חיות שונות לגמרי. האופי שלה הוא לא הציור. האופי שלה הוא מה שהיא רוצה, ואיך היא מדברת בגלל זה.״" },
+    notes:"8–10 דק׳. ״היא רעבה. מה היא אומרת? תלוי מה היא רוצה.״ לוחצים על שלושתם. ״אותה חיה, אותו ציור, אותו רעב. ויצאו שלוש חיות שונות לגמרי. האופי שלה הוא לא הציור. האופי שלה הוא מה שהיא רוצה, ואיך שהיא מדברת בגלל זה.״" },
 
   { html:`<div class="plan"><div class="pcol" data-c="0"><b>רואים</b><small>הדף</small></div><div class="pcol" data-c="1"><b>עושים</b><small>השרת</small></div><div class="pcol" data-c="2"><b>זוכרת</b><small>הגיליון</small></div></div><div class="chips big" id="pool">${PLAN.map((x, i) => `<button data-i="${i}">${x[0]}</button>`).join("")}</div><button class="btn go" id="names">ובאפליקציה?</button>`,
     mount: r => { r.querySelectorAll("#pool button").forEach(b => b.addEventListener("click", () => { const c = r.querySelector(`.pcol[data-c="${PLAN[+b.dataset.i][1]}"]`); b.classList.add("on"); c.appendChild(b); hop(b); }));
       r.querySelector("#names").addEventListener("click", () => r.querySelector(".plan").classList.add("named")); },
-    notes:"10–13 דק׳. ״זאת התוכנית של פופקורן. כל דבר בה שייך לאחד משלושה מקומות.״ על כל פתק שואלים את הכיתה לאן, ולוחצים עליו. ״כפתור: לדגדג״ שייך ל״עושים״: ״הכפתור עצמו נמצא על המסך. אבל כשלוחצים עליו, מישהו צריך לעשות משהו.״ בסוף ״ובאפליקציה?״: ״לשלושת המקומות האלה יש שמות. מה שרואים זה הדף. מי שעושה זה השרת. ומה שהיא זוכרת נמצא בגיליון. תכננתם חיה, ויצאה לכם תוכנית של אפליקציה.״" },
+    notes:"10–13 דק׳. ״זאת התוכנית של פופקורן. כל דבר בה שייך לאחד משלושה מקומות.״ על כל פתק שואלים את הכיתה לאן, ולוחצים עליו. ״כפתור: לדגדג״ שייך ל״עושים״: ״הכפתור עצמו נמצא על המסך. אבל מה שקורה כשלוחצים עליו, את זה מישהו צריך לעשות.״ בסוף ״ובאפליקציה?״: ״לשלושת המקומות האלה יש שמות. מה שרואים זה הדף. מי שעושה זה השרת. ומה שהיא זוכרת נמצא בגיליון. תכננתם חיה, ויצאה לכם תוכנית של אפליקציה.״" },
 
   { html:`<div class="dia"><div class="dc page"><b>הדף</b><div class="toybox sm">${toy({ c: "#8C7FFF", big: true })}</div><div class="dbar"><i></i></div><span class="dnum">50</span><small class="dsay"></small><button class="btn" data-a="feed">להאכיל 🍎</button></div>
       <div class="dc srv"><b>השרת</b><span class="ico">⚙️</span></div>
       <div class="dc sheet"><b>הגיליון</b><table class="m-sheet"><tr><th>key</th><th>value</th></tr><tr><td>full</td><td class="cell">50</td></tr></table></div>
       <div class="lane"><span class="pkt" hidden></span></div></div>
     <div class="dctl"><button class="btn" data-a="refresh">רענון</button><button class="btn" data-a="close">סוגרים את הדף</button><button class="btn" data-a="friend">דף של חבר</button><button class="btn" data-a="kill">מכבים את השרת</button><div class="dc friend" hidden><b>הדף של חבר</b><span class="dnum"></span></div></div>
-    <p class="sub">הדף מראה · השרת מחליט · הגיליון זוכר</p>`,
+    <p class="sub">הדף מראה · השרת עושה · הגיליון זוכר</p>`,
     mount: diaMount,
-    notes:"13–16 דק׳. ״ועכשיו נראה איך שלושת המקומות האלה עובדים.״ לוחצים ״להאכיל״: ״הדף לא יודע כלום. הוא מבקש מהשרת, והשרת כותב בגיליון.״ ״רענון״: ״דף שוכח הכול. הוא שואל שוב, ומקבל את התשובה מהגיליון.״ ״סוגרים את הדף״: ״החיה מתה? לא. היא בגיליון.״ ״דף של חבר״: ״כל דף שייפתח, שלי, שלכם, של חבר, שואל את אותו שרת.״ ״מכבים את השרת״ ואז ״להאכיל״: ״בלי שרת, הדף הוא סתם ציור.״ ולסיום: ״כל אפליקציה שיש לכם בטלפון בנויה ככה. משהו שרואים, מישהו שמחליט, ומשהו שזוכר.״" },
+    notes:"13–16 דק׳. ״ועכשיו נראה איך שלושת המקומות האלה עובדים.״ לוחצים ״להאכיל״: ״הדף לא יודע כלום. הוא מבקש מהשרת, והשרת כותב בגיליון.״ ״רענון״: ״דף שוכח הכול. הוא שואל שוב את השרת, והשרת עונה לפי הגיליון.״ ״סוגרים את הדף״: ״החיה מתה? לא. היא בגיליון.״ ״דף של חבר״: ״כל דף שייפתח, שלי, שלכם, של חבר, שואל את אותו שרת.״ ״מכבים את השרת״ ואז ״להאכיל״: ״בלי שרת, הדף הוא סתם ציור.״ ולסיום: ״כמעט כל אפליקציה שיש לכם בטלפון בנויה ככה. משהו שרואים, מישהו שעושה, ומשהו שזוכר.״" },
 
   { html:`<div class="duo"><div class="who"><span class="ico">🎨</span><b>אתם</b><span class="bub" id="bub">תעשה לי חיה</span><div class="dctl"><button class="btn" data-a="vague">״תעשה לי חיה״</button><button class="btn go" data-a="plan">עם התוכנית</button></div></div><div class="who"><span class="ico">🤖</span><b>ג׳מיני</b><div class="toybox" id="guess"><span class="q">?</span></div></div></div><p class="sub">מה שלא אמרתם, הוא מנחש</p>`,
     mount: r => { const g = r.querySelector("#guess");
@@ -113,7 +113,7 @@ const S1 = [
     notes:"18–20 דק׳. לוחצים ״הלאה״, הודעה אחרי הודעה. ״לא חייבים לתת לו פקודות. אפשר לדבר איתו. תגידו לו: תשאל אותי קודם. תגידו לו: תן לי שלוש אפשרויות. הוא מציע, ואתם מחליטים.״" },
 
   { html:`<div class="two"><div class="col"><span class="bub">זה לא יפה, תתקן</span><button class="btn" data-a="bad">לשלוח</button><div class="toybox" id="bad">${toy({ c: "#9B6BFF", horn: true, bent: true, name: "פופקורן" })}</div></div>
-      <div class="col"><span class="bub">שנה רק את העיניים: גדולות פי שניים</span><button class="btn" data-a="good">לשלוח</button><div class="toybox" id="good">${toy({ c: "#9B6BFF", horn: true, bent: true, name: "פופקורן" })}</div></div></div>
+      <div class="col"><span class="bub">תשנה רק את העיניים: גדולות פי שניים</span><button class="btn" data-a="good">לשלוח</button><div class="toybox" id="good">${toy({ c: "#9B6BFF", horn: true, bent: true, name: "פופקורן" })}</div></div></div>
     <button class="btn go" data-a="bug">ואם משהו נשבר?</button><div class="bugcard" id="bugcard" hidden><b>מה עשיתי</b><b>מה ציפיתי שיקרה</b><b>מה קרה בפועל</b><b>ההודעה האדומה</b></div>`,
     mount: r => { r.querySelector("[data-a=bad]").addEventListener("click", () => { const b = r.querySelector("#bad"); b.innerHTML = toy({ c: "#7BD389", sq: true, eyes3: true, sad: true, name: "?!" }); hop(b); });
       r.querySelector("[data-a=good]").addEventListener("click", () => { const g = r.querySelector("#good"); g.innerHTML = toy({ c: "#9B6BFF", horn: true, bent: true, big: true, name: "פופקורן" }); hop(g); });
@@ -122,5 +122,5 @@ const S1 = [
 
   { html:`<div class="path" id="path"><div><span>🥚</span><b>ביצה</b></div><i>←</i><div><span>🐣</span><b>בוקעת</b></div><i>←</i><div><span>👆</span><b>כפתור משלי</b></div><i>←</i><div><span>🤝</span><b>חבר</b></div></div>`,
     mount: r => { let n = 0; const d = [...r.querySelectorAll("#path > div")], go = () => { n = (n % d.length) + 1; d.forEach((x, i) => x.classList.toggle("on", i < n)); }; r.querySelector("#path").addEventListener("click", go); go(); },
-    notes:"22 דק׳, ונשאר על המקרן עד הסוף. ״מתחילים מביצה: אפליקציה אמיתית, אבל ריקה. אתם וג׳מיני גורמים לה לבקוע. אחר כך ממציאים לה כפתור שאין לאף חיה אחרת. ובסוף חבר לוחץ עליו מהמחשב שלו.״ כולם בדף של הקורס, ״להתחיל״. בזמן העבודה: מי שתקוע פותח ״נתקעתי״ בתחתית השלב, אחר כך שואל את השכן, ורק אז אותך. בדקה 78: שלושה־ארבעה מראים את החיה שלהם על המקרן, עם הגיליון לידה. כולם שומרים עותק." }
+    notes:"22 דק׳, ונשאר על המקרן עד הסוף. ״מתחילים מביצה: אפליקציה אמיתית, אבל ריקה. אתם וג׳מיני גורמים לה לבקוע. אחר כך ממציאים לה כפתור שאין לאף חיה אחרת. ובסוף חבר לוחץ עליו מהמחשב שלו.״ כולם בדף של הקורס, ״להתחיל״. בזמן העבודה: מי שתקוע פותח ״נתקעתי״ בתחתית השלב, אחר כך שואל את השכן, ורק אז אותך. בדקה 78: שלושה־ארבעה מראים את החיה שלהם על המקרן, עם הגיליון לידה. כולם מגבים: יוצרים עותק של הגיליון." }
 ];

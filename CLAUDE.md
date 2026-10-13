@@ -57,7 +57,7 @@ filler (course overview, silhouette game) because its real job is installing the
 ## Rules
 
 - Never use an API key or any paid service without asking Ben first, each time.
-- Hebrew for anything kids read; write it directly, plain and short.
+- Hebrew for anything kids read; write it directly, plain and short. Before handing any of it over, follow `course-context/hebrew_kids_checklist.md` (two fresh audits, one after the other).
 - No real names or IDs of kids anywhere (Ministry rule).
 - Videos are raw material: design for 2026 practice and for Gemini, not for what a tutorial happened to show.
 - A cloud session can't download YouTube video reliably; the transcripts are already in `transcripts.zip`.

@@ -1,0 +1,18 @@
+# Minecraft-edu: decisions so far (13 Oct 2026)
+
+A new project, separate from the MAKE modding course (`minecraft-course/`), but reusing its know-how.
+
+- **What:** our own "Minecraft Education, but on Java": mods, worlds and maps that teach the Israeli elementary
+  curriculum. Ben + his partner. Full control is the point; the kids' no-code studio is at most a small part.
+- **Who:** grade 6 (כיתה ו) first.
+- **Subjects:** science (מדע וטכנולוגיה) + English, combined. The game, its instructions and characters are in
+  **Hebrew**; English is a subject learned inside it, like science (e.g. a quest asks for "three red flowers").
+- **Order:** the school version first (45-minute periods, ~30 kids); a private-lesson / after-school (חוג) version later.
+  Plan: offer it through Geffen (גפ"ן) next school year.
+- **Tech call:** worlds + datapacks wherever possible, Java only where needed (less fragile).
+- **Open issue:** Java licences. The MAKE hub runs the dev client (`runClient`, offline name), which works, but
+  Mojang's licence wants each player to own the game. Don't pitch it as "free"; decide later who pays (school /
+  Geffen / we bring laptops).
+- **Curriculum:** the cloud box can't reach Ministry sites (pop/meyda/edu.gov.il blocked). Ben's PC session is
+  downloading the grade 6 science + English curriculum, vocabulary lists and lesson plans into
+  `minecraft-edu/curriculum/` with an `INDEX.md`. Next: read them and map topics to worlds/quests.

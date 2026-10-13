@@ -140,6 +140,66 @@ kbd{background:var(--sunk);border:1px solid var(--line);border-bottom-width:3px;
 .lib .clip small{color:var(--muted)}
 .form .tip{color:var(--pri);font-weight:600}
 @media (max-width:640px){.trio{grid-template-columns:1fr}.trio > i{transform:rotate(90deg)}.vs{grid-template-columns:1fr}.lp-st i{display:none}.foot{grid-template-columns:1fr 1fr}.dots{display:none}.m-cols{grid-template-columns:1fr}}
+/* meeting 1, version 3: the kid's own words, the Sheet, and the slides' toys */
+.form textarea{resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 16px;font-weight:700}
+.chips button.on{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+.cycle{background:var(--sunk);border-radius:12px;padding:10px 14px}
+.m-sheet{border-collapse:collapse;direction:ltr;margin-inline:auto;font-family:var(--mono);font-size:14px;background:#fff;color:#202124}
+.m-sheet td,.m-sheet th{border:1px solid #dadce0;padding:4px 14px;text-align:left}
+.m-sheet th{background:#f1f3f4;font-weight:400;color:#5f6368}
+.m-sheet .new td{background:#fff8d6}
+.help h3{margin-top:16px;font-size:1.1rem}
+.help .form,.help .prompt{margin-top:10px}
+.toybox{position:relative;width:220px;display:grid;justify-items:center}
+.toybox.sm{width:110px}.build .toybox{width:240px}.toybox.xl{width:min(300px,34vh);cursor:pointer}
+.toy{width:100%;display:block}
+.toy-name{font-size:1.4rem}
+.toy-say{position:absolute;top:-10px;inset-inline-start:-60px;background:#fff;color:#231B3A;border:3px solid #231B3A;border-radius:16px;padding:4px 12px;font-weight:800;white-space:nowrap}
+.hop{animation:hop .35s}
+@keyframes hop{40%{transform:translateY(-22px) rotate(-5deg)}}
+.dia{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;width:min(1050px,92vw);padding-bottom:70px}
+.dc{background:var(--surface);border:3px solid var(--line);border-radius:18px;padding:14px;display:grid;gap:8px;justify-items:center;align-content:start;font-size:1.3rem;min-height:min(290px,38vh)}
+.dc .ico{font-size:4rem}
+.dc.closed{background:#1b1b1b;border-color:#1b1b1b;color:#888}.dc.closed > *:not(b){visibility:hidden}
+.dc.dead{opacity:.3}
+.dbar{width:140px;height:14px;background:var(--sunk);border-radius:7px;overflow:hidden}.dbar i{display:block;height:100%;background:#F29E38;transition:width .3s}
+.dnum{font-weight:800;font-size:1.6rem}
+.dsay{color:#C62828;font-weight:700;min-height:1.2em;font-size:1rem}
+.lane{position:absolute;left:0;right:0;bottom:8px;height:50px;border-top:4px dashed var(--line)}
+.pkt{position:absolute;top:8px;transform:translateX(50%);background:var(--hl);color:#231B3A;border-radius:999px;padding:4px 16px;font-weight:800;font-size:1.2rem;transition:inset-inline-start .6s ease-in-out;white-space:nowrap}
+.pkt[hidden]{display:none}
+.dctl{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}
+.dc.friend{min-height:0;display:flex;gap:14px;padding:6px 16px;align-items:center}
+.dc.friend[hidden]{display:none}
+.duo,.two{display:grid;grid-template-columns:1fr 1fr;gap:60px;width:min(1000px,90vw)}
+.who,.col{display:grid;gap:14px;justify-items:center;align-content:start}
+.who .ico{font-size:5rem;line-height:1}.who b{font-size:1.8rem}
+.bub{background:var(--surface);border:3px solid var(--ink);border-radius:18px;padding:8px 20px;font-size:1.5rem;font-weight:700}
+#guess{min-height:220px;align-content:center}.q{font-size:6rem;color:var(--muted)}
+.build{display:grid;grid-template-columns:1fr 240px;gap:50px;align-items:center;width:min(1050px,92vw)}
+.build > .toybox:first-child{order:2}
+.chips.big{justify-content:center}.chips.big button{font-size:1.4rem;padding:10px 22px}
+.chat{height:min(46vh,420px);overflow:auto;display:grid;gap:10px;align-content:start;text-align:start;padding:6px}
+.msg{max-width:85%;padding:10px 16px;border-radius:16px;font-size:1.25rem}
+.msg.me{background:var(--pri);color:var(--pri-ink);justify-self:start}
+.msg.ai{background:var(--surface);border:2px solid var(--line);justify-self:end}
+.bugcard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:min(1000px,90vw)}
+.bugcard[hidden]{display:none}
+.bugcard b{background:var(--warn-soft);border-radius:12px;padding:12px;font-size:1.25rem}
+.form h3{margin-top:10px;font-size:1.15rem;color:var(--pri)}
+.dbar.wide{width:min(420px,60vw);height:22px;border-radius:11px}
+.sil .toy *{fill:#16131f !important;stroke:#16131f !important}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:min(1050px,92vw)}
+.pcol{background:var(--surface);border:3px solid var(--line);border-radius:18px;padding:12px;min-height:min(250px,34vh);display:grid;gap:8px;align-content:start;justify-items:center}
+.pcol > b{font-size:1.8rem}.pcol > small{font-size:1.3rem;font-weight:800;color:var(--pri);visibility:hidden}
+.plan.named .pcol > small{visibility:visible}
+.pcol button{font-size:1.15rem !important;padding:6px 14px !important}
+.path{display:flex;gap:26px;align-items:center;cursor:pointer}
+.path div{display:grid;gap:8px;justify-items:center;opacity:.22;transition:opacity .3s,transform .3s}
+.path div.on{opacity:1;transform:scale(1.08)}
+.path span{font-size:clamp(4rem,9vw,7rem);line-height:1.1}.path b{font-size:1.6rem}.path i{font-style:normal;font-size:2.4rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -172,48 +232,119 @@ function bindCopy(root){
 }
 const promptBox = (title, text) => `<div class="prompt"><div class="ph"><span>${title}</span><button class="btn go" data-copy>להעתיק</button></div><pre>${esc(text)}</pre></div>`;
 
+/* The starter's Pet.html (the egg), copied here by the build so that the first message to Gemini can carry it. */
+const EGG = "<\!-- Pet.html: כל מה ששייך לחיה שלי: הציור, הצבעים, המשפטים והכפתורים. זה הקובץ שמשנים.\n     המנוע (Engine.html) נותן שלושה דברים:\n     pet                          מה שכתוב בגיליון. למשל: pet.name, pet.full\n     server.add(\"full\", 15, 100)  מוסיף 15 לשורה full בגיליון, עד 100 לכל היותר. אם אין שורה בשם הזה, השרת יוצר אותה\n     draw()                       הפונקציה שמציירת את החיה. המנוע קורא לה בכל פעם שמגיעים מספרים חדשים מהגיליון -->\n<style>\n  body { margin: 0; padding: 18px; background: #FFF6DC; color: #3A2E1F; font-family: Arial, sans-serif; text-align: center; }\n  h1 { margin: 6px 0; font-size: 34px; }\n  #stage { width: 230px; margin: 0 auto; transition: transform .15s; }\n  #stage.jump { transform: translateY(-18px) rotate(-4deg); }\n  #say { font-size: 20px; min-height: 30px; }\n  .bar { display: flex; gap: 10px; align-items: center; justify-content: center; font-size: 18px; margin: 10px 0; }\n  .track { width: 220px; height: 18px; background: #E9DDB8; border-radius: 9px; overflow: hidden; }\n  #fullBar { height: 100%; width: 50%; background: #F29E38; transition: width .3s; }\n  button { font-size: 20px; padding: 10px 20px; margin: 6px; border: 0; border-radius: 14px; background: #3A2E1F; color: #fff; cursor: pointer; }\n<\/style>\n\n<h1 id=\"name\"><\/h1>\n<div id=\"stage\">\n  <svg viewBox=\"0 0 200 200\">\n    <ellipse cx=\"100\" cy=\"186\" rx=\"52\" ry=\"8\" fill=\"#E9DDB8\"/>\n    <path d=\"M100 18 C150 18 172 92 172 128 C172 166 140 184 100 184 C60 184 28 166 28 128 C28 92 50 18 100 18 Z\" fill=\"#FFFDF5\" stroke=\"#3A2E1F\" stroke-width=\"5\"/>\n    <circle cx=\"74\" cy=\"92\" r=\"11\" fill=\"#F29E38\"/><circle cx=\"128\" cy=\"126\" r=\"15\" fill=\"#F29E38\"/><circle cx=\"92\" cy=\"150\" r=\"8\" fill=\"#F29E38\"/>\n    <path d=\"M118 40 L108 58 L124 66 L112 84\" fill=\"none\" stroke=\"#3A2E1F\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <\/svg>\n<\/div>\n<p id=\"say\"><\/p>\n<div class=\"bar\"><span>שובע<\/span><div class=\"track\"><div id=\"fullBar\"><\/div><\/div><b id=\"fullNum\"><\/b><\/div>\n<p>ליטופים: <b id=\"pats\">0<\/b><\/p>\n<button onclick=\"feed()\">להאכיל 🍎<\/button>\n<button onclick=\"pat()\">ללטף ✋<\/button>\n\n<script>\nvar pats = 0;   // הליטופים נמצאים רק בדף. הם לא נשמרים בגיליון.\n\nfunction feed() {\n  server.add(\"full\", 15, 100);   // השרת מוסיף 15 לשורה full בגיליון\n  jump();\n}\n\nfunction pat() {\n  pats = pats + 1;\n  draw();\n  jump();\n}\n\nfunction draw() {\n  var full = Number(pet.full) || 0;\n  document.getElementById(\"name\").textContent = pet.name || \"ביצה\";\n  document.getElementById(\"fullBar\").style.width = full + \"%\";\n  document.getElementById(\"fullNum\").textContent = full;\n  document.getElementById(\"pats\").textContent = pats;\n  document.getElementById(\"say\").textContent = full < 30 ? \"הביצה רועדת. היא רעבה.\" : \"משהו זז שם בפנים...\";\n}\n\nfunction jump() {\n  var stage = document.getElementById(\"stage\");\n  stage.classList.add(\"jump\");\n  setTimeout(function () { stage.classList.remove(\"jump\"); }, 160);\n}\n<\/script>\n<\!-- END Pet -->";
+const END = "<" + "!-- END Pet --" + ">";
+const yt = (id, a, b) => `<div class="yt"><iframe src="https://www.youtube.com/embed/${id}?start=${a}&end=${b}&rel=0&cc_load_policy=1&cc_lang_pref=iw&hl=he" allow="autoplay; fullscreen; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="סרטון"></iframe></div>`;
 /* ===== the pet's design card: kept in this browser only ===== */
 const CARD = [
-  ["name", "איך קוראים לחיה?", "למשל: פופקורן", "שם"],
-  ["shape", "מה הצורה שלה?", "למשל: עגולה כמו כדור", "צורה", "צורות עגולות נראות חמודות. צורות מחודדות נראות מסוכנות."],
+  ["name", "איך קוראים לה?", "למשל: פופקורן", "שם"],
+  ["kind", "איזו חיה היא?", "למשל: חתול־דג. אפשר להמציא", "איזו חיה", "הכי טוב חיה שאין בעולם: מחברים שתי חיות, או נותנים רגליים לענן."],
+  ["shape", "מה הצורה שלה?", "למשל: עגולה כמו כדור", "צורה", "עגול נראה חמוד. מרובע נראה חזק. מחודד נראה מסוכן."],
   ["colors", "שניים או שלושה צבעים", "למשל: סגול וצהוב", "צבעים"],
-  ["special", "דבר אחד מיוחד, שיש רק לה", "למשל: קרן אחת", "דבר מיוחד"],
-  ["food", "מה היא הכי אוהבת לאכול?", "למשל: פיצה 🍕", "אוכל אהוב"],
-  ["toy", "במה היא אוהבת לשחק?", "למשל: כדור צמר 🧶", "משחק אהוב"],
-  ["want", "מה היא הכי רוצה?", "למשל: שלא יפסיקו לשחק איתה", "מה היא הכי רוצה"],
-  ["hungry", "מה היא אומרת כשהיא רעבה?", "למשל: אני גוססת פה! פיצה!!!", "מה היא אומרת כשהיא רעבה"]
+  ["special", "דבר אחד שיש רק לה", "למשל: קרן אחת עקומה", "מה שיש רק לה", "דבר אחד, לא חמישה. ככה מזהים אותה גם מרחוק."],
+  ["want", "מה היא הכי רוצה בעולם?", "למשל: שלא יפסיקו לשים לב אליה", "מה היא הכי רוצה"],
+  ["voice", "מה היא אומרת כשהיא רעבה?", "למשל: אני גוססת פה! פיצה!!!", "מה היא אומרת כשהיא רעבה", "לפי מה שהיא רוצה: חיה שרוצה שקט וחיה שרוצה תשומת לב לא מדברות אותו דבר."]
 ];
 const card = () => LS.get("card", {});
-const cardText = () => { const c = card(); return CARD.map(x => x[3] + ": " + (c[x[0]] || "(עוד לא כתבתי)")).join("\n"); };
-const cardForm = () => `<div class="form">${CARD.map(([k, q, ph, , tip]) => `<label>${q}<input data-card="${k}" maxlength="120" placeholder="${esc(ph)}" value="${esc(card()[k] || "")}">${tip ? `<small class="tip">${tip}</small>` : ""}</label>`).join("")}<small id="card-saved"></small></div>`;
+const cardText = () => { const c = card(); return CARD.map(x => x[3] + ": " + (c[x[0]] || "(עוד לא החלטתי)")).join("\n"); };
+const cardRows = (from, to) => CARD.slice(from, to).map(([k, q, ph, , tip]) => `<label>${q}<input data-card="${k}" maxlength="120" placeholder="${esc(ph)}" value="${esc(card()[k] || "")}">${tip ? `<small class="tip">${tip}</small>` : ""}</label>`).join("");
+const cardForm = () => `<div class="form"><h3>מי היא?</h3>${cardRows(0, 5)}<h3>מה היא רוצה?</h3>${cardRows(5, 7)}<h3>מה עושים איתה, ומה היא זוכרת?</h3><p>להאכיל וללטף יש לכל חיה. מתכננים כפתור שלישי, שמתאים רק לה. כל לחיצה עליו תיכתב בגיליון, בשורה שאתם נותנים לה שם.</p></div>${btnForm()}<small id="card-saved"></small>`;
 function bindCard(root){
   root.querySelectorAll("[data-card]").forEach(i => i.addEventListener("input", () => { const c = card(); c[i.dataset.card] = i.value; LS.set("card", c); const s = root.querySelector("#card-saved"); if (s) s.textContent = "נשמר בדפדפן הזה"; }));
 }
-const askPrompt = () => `אני בונה אתר עם חיה וירטואלית. זה הכרטיס שלה:
+
+/* ===== messages to Gemini: a fixed frame, and the kid's own words inside it =====
+   A "mine" box is text the kid has to write. The copy button wakes up only when it has enough words. */
+const mine = () => LS.get("mine", {});
+const words = s => String(s || "").trim().split(/\s+/).filter(Boolean).length;
+const mineBox = (key, q, ph) => `<div class="form"><label>${q}<textarea data-mine="${key}" rows="2" maxlength="300" placeholder="${esc(ph)}">${esc(mine()[key] || "")}</textarea></label></div>`;
+/* A prompt box that rebuilds itself while the kid types. need = [[key, minimum words], ...] */
+const livePrompt = (id, title, need) => `<div class="prompt" data-live="${id}" data-need='${JSON.stringify(need || [])}'><div class="ph"><span>${title}</span><button class="btn go" data-copy>להעתיק</button></div><pre></pre></div>`;
+
+const askPrompt = () => `אני בונה אפליקציה של חיה וירטואלית. אני המעצב, ואתה כותב את הקוד.
+זאת התוכנית של החיה:
 ${cardText()}
 
-לפני שאתה עושה משהו: תשאל אותי 3 שאלות שיעזרו לי לדייק את החיה. אל תמציא בשבילי. תשאל אחת אחרי השנייה, ותחכה לתשובה שלי.`;
-const svgPrompt = () => `תצייר לי את החיה שלי כ־SVG, לפי הכרטיס:
-${cardText()}
+עדיין לא כותבים קוד. קודם תשאל אותי 3 שאלות על איך היא נראית ואיך היא מתנהגת. שאלה אחת בכל פעם, ותחכה לתשובה שלי. אל תמציא במקומי.`;
 
-חשוב:
-- viewBox="0 0 200 200", רקע שקוף, בלי טקסט.
-- רק הצבעים מהכרטיס, ועוד שחור ולבן.
-- צורה פשוטה וברורה, שמזהים גם כשהיא קטנה. עיניים גדולות, באמצע הציור.
-- תשלח רק את קוד ה־SVG, מ־<svg ועד </svg>, בלי הסברים.`;
+const hatchPrompt = () => `עכשיו בונים. זה הקובץ Pet.html מהאפליקציה שלי. כרגע יש בו ביצה.
+מה שאני רוצה: ${mine().decided || "____"}
+
+תחליף את הביצה בחיה שלי: ציור חדש ב-SVG, צבעים, רקע, והמשפטים שהיא אומרת.
+חוקים:
+1. משנים רק את הקובץ הזה.
+2. השורות עם server.add נשארות, והפונקציה draw נשארת בשם draw.
+3. שולחים את הקובץ המלא, מהשורה הראשונה ועד ${END}. בלי "..." ובלי "שאר הקוד נשאר אותו דבר".
+
+הקובץ:
+${EGG}`;
+
+const TALK = [
+  ["only", "לשנות דבר אחד", "מה לשנות, ואיך?", "למשל: את העיניים, שיהיו גדולות פי שניים", t => `שנה רק את זה: ${t}\nכל השאר נשאר בדיוק כמו שהוא. תשלח שוב את הקובץ המלא, עד ${END}.`],
+  ["three", "לבקש 3 אפשרויות", "אפשרויות למה?", "למשל: למה שהיא אומרת כשהיא שמחה", t => `תן לי 3 אפשרויות: ${t}\nעדיין בלי קוד. אני בוחר, ורק אז אתה משנה.`],
+  ["no", "זה לא מה שהתכוונתי", "למה התכוונתם?", "למשל: שהיא תהיה מרובעת, לא עגולה", t => `זה לא מה שהתכוונתי. התכוונתי לזה: ${t}\nתשנה רק את זה, ותשלח שוב את הקובץ המלא, עד ${END}.`]
+];
+const talkPrompt = () => { const m = mine(), t = TALK.find(x => x[0] === (m.talkKind || "only")); return t[4](m.talk || "____"); };
+const talkBox = () => { const k = mine().talkKind || "only", t = TALK.find(x => x[0] === k);
+  return `<div class="chips">${TALK.map(x => `<button data-talk="${x[0]}" class="${x[0] === k ? "on" : ""}">${x[1]}</button>`).join("")}</div>` + mineBox("talk", t[2], t[3]) + livePrompt("talk", "מדביקים באותו צ׳אט", [["talk", 2]]); };
+
+const BTN = [
+  ["label", "הכפתור שלה: שם ואימוג׳י", "למשל: לדגדג 🤣"],
+  ["does", "מה קורה לה כשלוחצים?", "למשל: היא מתגלגלת מצחוק"],
+  ["says", "ומה היא אומרת?", "למשל: די!!! מספיק!!!"],
+  ["key", "מה היא זוכרת? שם לשורה בגיליון: מילה אחת, באנגלית", "למשל: tickles"]
+];
+const btnForm = () => `<div class="form">${BTN.map(([k, q, ph]) => `<label>${q}<input data-mine="${k}" maxlength="80" placeholder="${esc(ph)}" value="${esc(mine()[k] || "")}" ${k === "key" ? 'dir="ltr" style="text-align:left"' : ""}></label>`).join("")}</div>`;
+const keyName = () => (String(mine().key || "").toLowerCase().replace(/[^a-z0-9]/g, "") || "clicks");
+const optionsPrompt = () => { const m = mine(); return `אני רוצה להוסיף לחיה שלי כפתור חדש.
+הכפתור: ${m.label || "____"}
+מה קורה לה כשלוחצים: ${m.does || "____"}
+מה היא אומרת: ${m.says || "____"}
+
+עדיין בלי קוד. תציע 3 דרכים שונות שזה יכול להיראות על המסך, שתי שורות לכל אחת. אני אבחר.`; };
+const buildPrompt = () => `${mine().pick || "____"}
+
+עכשיו תוסיף את הכפתור לקובץ Pet.html.
+החיה צריכה לזכור כל לחיצה: server.add("${keyName()}", 1) מוסיף 1 לשורה ${keyName()} בגיליון, והמספר העדכני נמצא ב-pet.${keyName()}. תציג את המספר הזה בדף.
+תשנה רק מה שצריך בשביל הכפתור. תשלח את הקובץ המלא, עד ${END}.
+
+הקובץ שלי עכשיו:`;
+const bugPrompt = () => { const m = mine(); return `משהו נשבר.
+מה עשיתי: ${m.bugDid || "____"}
+מה ציפיתי שיקרה: ${m.bugWant || "____"}
+מה קרה בפועל: ${m.bugGot || "____"}
+ההודעה האדומה במסך: ${m.bugErr || "אין"}
+
+תתקן רק את זה, בלי לשנות שום דבר אחר. תשלח את הקובץ המלא, עד ${END}.`; };
+const bugBox = () => `<div class="form"><label>מה עשיתם?<input data-mine="bugDid" placeholder="למשל: הדבקתי את הקובץ החדש ולחצתי על לדגדג" value="${esc(mine().bugDid || "")}"></label>
+  <label>מה ציפיתם שיקרה?<input data-mine="bugWant" placeholder="למשל: שהמספר יעלה ב-1" value="${esc(mine().bugWant || "")}"></label>
+  <label>מה קרה בפועל?<input data-mine="bugGot" placeholder="למשל: שום דבר לא זז" value="${esc(mine().bugGot || "")}"></label>
+  <label>יש הודעה אדומה במסך? מעתיקים אותה לכאן<input data-mine="bugErr" dir="ltr" style="text-align:left" value="${esc(mine().bugErr || "")}"></label></div>` + livePrompt("bug", "מדביקים באותו צ׳אט", [["bugDid", 2], ["bugGot", 2]]);
+const LIVE = { ask: askPrompt, hatch: hatchPrompt, talk: talkPrompt, options: optionsPrompt, build: buildPrompt, bug: bugPrompt };
+function bindMine(root){
+  const fill = () => root.querySelectorAll("[data-live]").forEach(box => {
+    box.querySelector("pre").textContent = LIVE[box.dataset.live]();
+    const need = JSON.parse(box.dataset.need || "[]"), m = mine(), okNow = need.every(([k, n]) => words(m[k]) >= n);
+    const b = box.querySelector("[data-copy]"); b.disabled = !okNow; b.title = okNow ? "" : "קודם כותבים בתיבות, במילים שלכם";
+  });
+  root.querySelectorAll("[data-mine]").forEach(i => i.addEventListener("input", () => { const m = mine(); m[i.dataset.mine] = i.value; LS.set("mine", m); fill(); }));
+  root.querySelectorAll("[data-talk]").forEach(b => b.addEventListener("click", () => { const m = mine(); m.talkKind = b.dataset.talk; LS.set("mine", m); renderLesson(); }));
+  fill();
+}
 
 /* ===== drawings of the screens: where to click (numbered yellow marks) ===== */
 const mock = (title, inner) => `<div class="mock" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span>${title}</span></div><div class="in">${inner}</div></div>`;
 const MOCK = {
   gemini: () => mock("gemini.google.com", `<div class="m-cols"><div class="m-side"><span class="m-btn mk" data-n="1">+ צ׳אט חדש</span><span style="color:#5f6368">צ׳אטים קודמים</span></div>
-    <div style="display:grid;gap:40px;align-content:space-between;min-height:150px"><b style="font-size:20px">שלום, איך אפשר לעזור?</b><div class="m-input mk" data-n="2">כותבים או מדביקים כאן (Ctrl+V), ו־Enter</div></div></div>`),
+    <div style="display:grid;gap:40px;align-content:space-between;min-height:150px"><b style="font-size:20px">שלום, איך אפשר לעזור?</b><div class="m-input mk" data-n="2">מדביקים כאן (Ctrl+V), ו־Enter</div></div></div>`),
   copy: () => mock("Google Sheets", `<div class="m-dialog"><b>ליצור עותק של המסמך? (Copy document)</b><div>שם: <span class="m-btn mk" data-n="1">החיה של ___</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="2">יצירת עותק (Make a copy)</span></div></div>`),
   ext: () => mock("Google Sheets", `<div class="m-menu"><span>קובץ</span><span>עריכה</span><span>תצוגה</span><span>הוספה</span><span>עיצוב</span><span>נתונים</span><span class="mk" data-n="1">תוספים (Extensions)</span><span>עזרה</span></div>
     <div class="m-drop" style="margin-inline-start:260px"><div>תוספים</div><div class="mk" data-n="2">Apps Script</div></div>`),
   editor: () => mock("Apps Script", `<div class="m-row" style="justify-content:space-between"><b>החיה של ___</b><span class="m-btn m-blue">פריסה (Deploy) ▾</span></div>
-    <div class="m-cols"><div class="m-side"><b>קבצים</b><span>Code.gs</span><span>Index.html</span></div>
-    <div style="display:grid;gap:8px"><div class="m-row"><span class="m-btn mk" data-n="2">▶ הפעלה (Run)</span><span class="m-btn mk" data-n="1">setup ▾</span></div><div class="m-code">function setup() {\n  ...\n}</div></div></div>`),
-  perm: () => mock("accounts.google.com", `<div class="m-dialog"><b>Google לא אימתה את האפליקציה הזו</b><div style="color:#5f6368">האפליקציה שלכם. זה בסדר.</div><div class="m-row"><span class="mk" data-n="1" style="color:#1a73e8">מתקדם (Advanced)</span></div><div class="mk" data-n="2" style="color:#1a73e8">מעבר אל החיה של ___ (לא בטוח)</div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="3">אישור (Allow)</span></div></div>`),
+    <div class="m-cols"><div class="m-side"><b>קבצים</b><span>Code.gs</span><span>Index.html</span><span>Engine.html</span><span class="mk" data-n="1">Pet.html</span></div>
+    <div class="m-code">&lt;!-- Pet.html: כל מה ששייך לחיה שלי --&gt;\n&lt;style&gt;\n  ...\n&lt;!-- END Pet --&gt;</div></div>`),
+  perm: () => mock("accounts.google.com", `<div class="m-dialog"><b>Google לא אימתה את האפליקציה הזו</b><div style="color:#5f6368">זו האפליקציה שלכם. זה בסדר.</div><div class="m-row"><span class="mk" data-n="1" style="color:#1a73e8">מתקדם (Advanced)</span></div><div class="mk" data-n="2" style="color:#1a73e8">מעבר אל החיה של ___ (לא בטוח)</div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="3">אישור (Allow)</span></div></div>`),
   deploy: () => mock("Apps Script", `<div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="1">פריסה (Deploy) ▾</span></div>
     <div class="m-drop" style="margin-inline-start:auto;margin-inline-end:0"><div class="mk" data-n="2">פריסה חדשה (New deployment)</div><div>ניהול פריסות (Manage deployments)</div></div>
     <div class="m-dialog"><div class="m-row"><span class="mk" data-n="3">⚙️</span> בחירת סוג: <b>אפליקציית אינטרנט (Web app)</b></div><div>הפעלה בתור (Execute as): <b>אני (Me)</b></div><div>למי יש גישה (Who has access): <span class="m-btn mk" data-n="4">כל אחד (Anyone) ▾</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="5">פריסה (Deploy)</span></div></div>`),
@@ -224,120 +355,238 @@ const MOCK = {
   manage: () => mock("Apps Script", `<div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="1">פריסה (Deploy) ▾</span></div>
     <div class="m-drop" style="margin-inline-start:auto;margin-inline-end:0"><div>פריסה חדשה (New deployment)</div><div class="mk" data-n="2">ניהול פריסות (Manage deployments)</div></div>
     <div class="m-dialog"><div class="m-row" style="justify-content:space-between"><b>הפריסה הפעילה</b><span class="mk" data-n="3">✏️</span></div><div>גרסה (Version): <span class="m-btn mk" data-n="4">גרסה חדשה (New version) ▾</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="5">פריסה (Deploy)</span></div></div>`),
-  paste: () => mock("Apps Script · Index.html", `<div class="m-code">  &lt;div class="stage" id="stage"&gt;\n<span class="mk" data-n="1">&lt;!-- PET START --&gt;</span>\n<span style="background:#fde68a">&lt;svg ...&gt;  ← מוחקים מכאן...\n  ...\n&lt;/svg&gt;       ...ועד כאן, ומדביקים את הציור מג׳מיני</span>\n<span class="mk" data-n="2">&lt;!-- PET END --&gt;</span>\n  &lt;/div&gt;</div>`)
+  paste: () => mock("Apps Script · Pet.html", `<div class="m-code"><span class="mk" data-n="1" style="background:#fde68a">&lt;!-- Pet.html: כל מה ששייך לחיה שלי ...\n&lt;style&gt;\n  ...                 Ctrl+A מסמן הכול, Ctrl+V מדביק במקומו\n&lt;/script&gt;</span>\n<span class="mk" data-n="2">&lt;!-- END Pet --&gt;</span>   ← השורה האחרונה. חייבת להיות שם</div>`),
+  sheet: key => mock("Google Sheets · pet", `<table class="m-sheet"><tr><th>key</th><th>value</th><th>max</th></tr><tr><td>name</td><td>ביצה</td><td></td></tr><tr><td>full</td><td>65</td><td>100</td></tr>${key ? `<tr class="new"><td><span class="mk" data-n="1">${esc(key)}</span></td><td>7</td><td></td></tr>` : ""}</table>`)
 };
-/* A clip from YouTube, from second a to second b, with Hebrew captions when the video has them. */
-const yt = (id, a, b) => `<div class="yt"><iframe src="https://www.youtube.com/embed/${id}?start=${a}&end=${b}&rel=0&cc_load_policy=1&cc_lang_pref=iw&hl=he" allow="autoplay; fullscreen; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="סרטון"></iframe></div>`;
 const road = list => `<div class="road">${list.map((x, i) => `<div><span class="rn">${i + 1}</span><b>${x[0]}</b><span>${x[1]}</span></div>`).join("")}</div>`;
-const TRIO = `<div class="trio"><div><span class="ico">🖥️</span><b>הדף</b><span>מה שרואים: החיה והכפתורים</span></div><i>⇄</i>
-  <div><span class="ico">⚙️</span><b>השרת</b><span>מקבל בקשות: ״תאכיל את החיה״</span></div><i>⇄</i>
-  <div><span class="ico">📊</span><b>הגיליון</b><span>הזיכרון: כמה היא שבעה, מי ביקר</span></div></div>`;
-/* The same three boxes, showing only the first n: for building the picture up on the slides. */
-const trioN = n => `<div class="trio"><div><span class="ico">🖥️</span><b>הדף</b><span>מה שרואים: החיה והכפתורים</span></div><i class="${n < 2 ? "off" : ""}">⇄</i>
-  <div class="${n < 2 ? "off" : ""}"><span class="ico">⚙️</span><b>השרת</b><span>מקבל בקשות: ״תאכיל את החיה״</span></div><i class="${n < 3 ? "off" : ""}">⇄</i>
-  <div class="${n < 3 ? "off" : ""}"><span class="ico">📊</span><b>הגיליון</b><span>הזיכרון: כמה היא שבעה, מי ביקר</span></div></div>`;
+const TRIO = `<div class="trio"><div><span class="ico">🖥️</span><b>הדף</b><span>מה שרואים. שוכח הכול ברענון</span></div><i>⇄</i>
+  <div><span class="ico">⚙️</span><b>השרת</b><span>מקבל בקשות, וכותב בגיליון</span></div><i>⇄</i>
+  <div><span class="ico">📊</span><b>הגיליון</b><span>הזיכרון של החיה</span></div></div>`;
 const demoLink = () => ok(CFG.demo) ? `<a class="big-link" href="${esc(CFG.demo)}" target="_blank" rel="noopener">🐲 להאכיל את החיה של המורה</a>` : `<p class="missing">הקישור לחיה של המורה עוד לא הוגדר.</p>`;
-const templateLink = () => ok(CFG.template) ? `<a class="big-link" href="${esc(copyLink(CFG.template))}" target="_blank" rel="noopener">📋 ליצור עותק של החיה</a>` : `<p class="missing">הקישור לתבנית עוד לא הוגדר. מרימים יד.</p>`;
+const templateLink = () => ok(CFG.template) ? `<a class="big-link" href="${esc(copyLink(CFG.template))}" target="_blank" rel="noopener">🥚 לקחת ביצה</a>` : `<p class="missing">הקישור לביצה עוד לא הוגדר. מרימים יד.</p>`;
+const vs = (bad, badWhy, good, goodWhy) => `<div class="vs"><div class="bad"><b>״${bad}״</b>${badWhy}</div><div class="good"><b>״${good}״</b>${goodWhy}</div></div>`;
+const cycle = `<p class="cycle"><b>כל פעם אותו סיבוב:</b> מעתיקים את הקוד מג׳מיני ← ב־Pet.html: <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>Ctrl</kbd>+<kbd>V</kbd> ← <kbd>Ctrl</kbd>+<kbd>S</kbd> ← מרעננים את הקישור שלכם.</p>`;
+/* What to do when Gemini broke the pet: shown under "נתקעתי" in every step that talks to Gemini. */
+const BROKE = [
+  ["החיה נעלמה, או שהדף נשבר", "קודם כול: בעורך, <kbd>Ctrl</kbd>+<kbd>Z</kbd> כמה פעמים, עד שהקוד הקודם חוזר. <kbd>Ctrl</kbd>+<kbd>S</kbd>, ומרעננים."],
+  ["יש פס אדום בראש הדף", "מעולה, זה בדיוק מה שג׳מיני צריך לראות. מעתיקים את השורה שבפס, וממלאים את דוח הבאג כאן למטה."],
+  ["ג׳מיני הסתבך לגמרי", "גוללים למעלה בצ׳אט, לקוד האחרון שעבד, ומעתיקים אותו שוב. חמש דקות של מאבק? חוזרים אחורה ומבקשים אחרת."]
+];
 
 /* ===== meeting 1: one action per step ===== */
 const M1 = {
-  n:1, title:"מפגש 1: החיה שלי, באינטרנט",
-  stations:[["מתחילים",0],["העיצוב",2],["העותק",4],["השרת",5],["באוויר",6],["חבר",8],["הציור",9],["הקישורים",10]],
+  n:1, title:"מפגש 1: החיה שלי",
+  stations:[["מתחילים",0],["התוכנית",1],["הביצה",2],["בוקעת",5],["הכפתור שלי",8],["חברים",10]],
   steps:[
-    { title:"היום: חיה משלכם, באינטרנט",
-      body:`<p>היום אתם בונים חיה וירטואלית שחיה באתר אמיתי. כל מי שיש לו את הקישור יכול לבקר אותה ולהאכיל אותה.</p>`,
-      visual:() => road([["מעצבים","איך היא נראית, מה היא אוהבת"],["מדברים עם ג׳מיני","הוא שואל, אתם מחליטים"],["מעלים לאוויר","אתר אמיתי, עם שרת וזיכרון"],["חבר מאכיל","מהמחשב שלו, אצלכם בגיליון"]]) + TRIO },
+    { title:"היום: חיה שאתם המצאתם, באפליקציה אמיתית",
+      body:`<p>עד סוף המפגש תהיה לכם אפליקציה עם חיה שאין לאף אחד אחר, וקישור שאפשר לשלוח לחברים.</p><p>קוד אתם לא כותבים. אתם מחליטים, וג׳מיני מקליד.</p>`,
+      visual:() => road([["תוכנית","מי היא, ומה היא זוכרת"],["ביצה","אפליקציה אמיתית, באוויר"],["בוקעת","ג׳מיני בונה מה שתיארתם"],["כפתור משלכם","והיא זוכרת כל לחיצה"],["חבר","לוחץ מהמחשב שלו"]]) },
 
-    { title:"נכנסים לג׳מיני",
-      body:`<ol><li>פותחים את <a href="https://gemini.google.com" target="_blank" rel="noopener"><b>gemini.google.com</b></a> בכרטיסייה חדשה.</li><li>מתחברים עם החשבון של משרד החינוך.</li><li>לוחצים <b>+ צ׳אט חדש</b>.</li></ol>`,
-      visual:() => MOCK.gemini(),
-      expect:"ג׳מיני פתוח, ומחכה לכם.",
-      stuck:[["כתוב שאין גישה לג׳מיני","בודקים שזה החשבון של משרד החינוך, ולא חשבון אחר. אם עדיין אין גישה, מרימים יד."]] },
+    { title:"התוכנית של החיה",
+      body:`<p>זה החלק הכי חשוב היום. את הקוד ג׳מיני יכתוב בחצי דקה. להחליט מי היא, את זה הוא לא יכול לעשות במקומכם.</p><p>כל מה שתכתבו כאן, ג׳מיני יבנה. מה שלא תכתבו, הוא ינחש.</p>`,
+      visual:() => cardForm(), mount:root => { bindCard(root); bindMine(root); },
+      hints:["אין רעיון? מחברים שתי חיות: חתול־דג, ינשוף־קקטוס, ענן עם רגליים.","הכפתור בא ממה שהיא רוצה. רוצה תשומת לב? לדגדג 🤣. רוצה שקט? לכבות לה את האור 🌙.","השורה בגיליון סופרת משהו: כמה פעמים דגדגו אותה, כמה שירים שרו לה."] },
 
-    { title:"כרטיס החיה",
-      body:`<p>ממציאים את החיה שלכם. אין תשובות נכונות, רק החיה שלכם.</p>`,
-      visual:() => cardForm(), mount:root => bindCard(root),
-      hints:["חיה שאין בעולם: מה קורה אם מחברים שתי חיות? חתול־דג? ענן עם רגליים?","דבר אחד מיוחד מספיק: קרן, משקפיים, שלוש עיניים.","מה שהיא רוצה הוא מה שיהפוך אותה למצחיקה: תשומת לב, שקט, עוד פיצה."] },
+    { title:"לוקחים ביצה",
+      body:`<ol><li>לוחצים על הכפתור. נפתח חלון של Google.</li><li>בשם כותבים <b>החיה של</b> ואת הכינוי שלכם, ולוחצים <b>יצירת עותק</b>.</li><li>בגיליון שנפתח: <b>תוספים</b>, ואז <b>Apps Script</b>.</li></ol>`,
+      visual:() => templateLink() + MOCK.copy() + MOCK.ext() + MOCK.editor(),
+      expect:"נפתח עורך עם ארבעה קבצים. Pet.html הוא החיה, וכרגע יש בו רק ביצה.",
+      note:"קיבלתם אפליקציה ריקה: דף, שרת וגיליון, וביצה באמצע. כל מה שיקרה לביצה מעכשיו, אתם מחליטים.",
+      stuck:[["כתוב שאין הרשאה","בודקים שאתם מחוברים עם החשבון של משרד החינוך. לא עוזר? מרימים יד."],["אין Apps Script בתפריט, או שכתוב שהוא חסום","מרימים יד. בינתיים ממשיכים לשלב ״ג׳מיני שואל, אתם עונים״."]] },
 
-    { title:"ג׳מיני שואל אתכם",
-      body:`<ol><li>מעתיקים את ההודעה, ומדביקים בג׳מיני (<kbd>Ctrl</kbd> + <kbd>V</kbd>).</li><li>עונים על השאלות שלו, אחת אחת.</li><li>תשובה טובה? מעדכנים את הכרטיס בשלב הקודם.</li></ol>`,
-      visual:() => promptBox("מדביקים בג׳מיני", askPrompt()) + `<div class="vs"><div class="bad"><b>״תעשה לי חיה״</b>ג׳מיני ממציא חיה שאתם לא בחרתם.</div><div class="good"><b>כרטיס, ו״תשאל אותי קודם״</b>ג׳מיני עוזר לכם לדייק את החיה שלכם.</div></div>`,
-      note:"ג׳מיני לא מכיר את החיה שלכם. הוא יודע רק מה שכתבתם לו בצ׳אט הזה, ומה שלא אמרתם, הוא מנחש. הוא שותף לחשיבה, לא מי שמחליט: אם הוא מציע משהו שלא אהבתם, כותבים לו ״לא, אני רוצה ש...״." },
+    { title:"מעלים את הביצה לאוויר",
+      body:`<ol><li>בעורך: <b>פריסה</b>, ואז <b>פריסה חדשה</b>.</li><li>ליד ״בחירת סוג״ לוחצים על ⚙️, ובוחרים <b>אפליקציית אינטרנט</b>.</li><li>ב״למי יש גישה״ בוחרים <b>כל אחד</b>, ולוחצים <b>פריסה</b>.</li><li>Google שואלת אם מותר לאפליקציה לכתוב בגיליון שלכם. מותר: <b>הרשאת גישה</b>, בוחרים את החשבון, <b>מתקדם</b>, <b>מעבר אל החיה של...</b>, <b>אישור</b>.</li><li>מעתיקים את הקישור, ופותחים אותו בכרטיסייה חדשה.</li></ol>`,
+      visual:() => MOCK.deploy() + MOCK.perm() + MOCK.url(),
+      expect:"ביצה, באינטרנט, בכתובת שהיא רק שלכם.",
+      stuck:[["אין ״כל אחד״ ברשימה","בוחרים את האפשרות הכי רחבה שיש, ומרימים יד."],["״Google לא אימתה את האפליקציה״","ברור שלא: בניתם אותה לפני דקה. מתקדם, ואז מעבר אל החיה של..."],["הדף ריק","חוזרים לעורך ובודקים שיש ארבעה קבצים. חסר אחד? מרימים יד."]] },
 
-    { title:"מעתיקים את החיה",
-      body:`<ol><li>לוחצים על הכפתור. נפתח גיליון של Google.</li><li>בשם כותבים <b>החיה של</b> ואת הכינוי שלכם.</li><li>לוחצים <b>יצירת עותק</b>.</li></ol>`,
-      visual:() => templateLink() + MOCK.copy(),
-      expect:"נפתח גיליון חדש, שלכם. בתחתית יש לשוניות.",
-      stuck:[["כתוב שאין הרשאה","בודקים שאתם מחוברים עם החשבון של משרד החינוך. אם זה לא עוזר, מרימים יד."]] },
-
-    { title:"מעירים את השרת",
-      body:`<ol><li>בגיליון: <b>תוספים</b>, ואז <b>Apps Script</b>. נפתח העורך של השרת.</li><li>למעלה בוחרים <b>setup</b>, ולוחצים <b>הפעלה</b>.</li><li>השרת שלכם רוצה לכתוב בגיליון שלכם, אז Google שואלת פעם אחת אם אתם מרשים: <b>בדיקת הרשאות</b>, בוחרים את החשבון, ו<b>אישור</b>.</li><li>אם Google כותבת שהאפליקציה לא אומתה: <b>מתקדם</b>, ואז <b>מעבר אל החיה של...</b>. זה בסדר, זו האפליקציה שלכם.</li></ol>`,
-      visual:() => MOCK.ext() + MOCK.editor() + MOCK.perm(),
-      expect:"בגיליון נוספו שתי לשוניות: pet (החיה) ו־log (מי ביקר).",
-      stuck:[["הכפתור ״הפעלה״ אפור","שומרים קודם: Ctrl + S."],["כתוב שהאדמין חסם את Apps Script","מרימים יד. בינתיים ממשיכים לשלב הציור עם ג׳מיני."],["Google אומרת שהאפליקציה לא מאומתת","זה בסדר: זו האפליקציה שלכם. לוחצים מתקדם, ואז מעבר אל..."]],
-      note:"מה זה השרת? Code.gs: הקוד שמקבל בקשות מהדף, וכותב בגיליון. Index.html: הדף עצמו." },
-
-    { title:"מעלים לאוויר",
-      body:`<ol><li>בעורך: <b>פריסה</b>, ואז <b>פריסה חדשה</b>.</li><li>ליד ״בחירת סוג״ לוחצים ⚙️ ובוחרים <b>אפליקציית אינטרנט</b>.</li><li>בגישה בוחרים <b>כל אחד</b> (אם אין, את האפשרות הכי רחבה). לוחצים <b>פריסה</b>.</li><li>מעתיקים את הקישור שמסתיים ב־<code>/exec</code>, ופותחים אותו בכרטיסייה חדשה.</li></ol>`,
-      visual:() => MOCK.deploy() + MOCK.url(),
-      expect:"החיה בלובי באתר שלכם! לוחצים להאכיל, והפס עולה. עוד לא מאמינים למסך: בשלב הבא בודקים בגיליון.",
-      stuck:[["ביקשו שוב הרשאות","זה רגיל בפעם הראשונה: מאשרים כמו בשלב הקודם."],["הדף ריק או כתוב שגיאה","בודקים שהקובץ נקרא Index ולא Index.html.html. אם לא, מרימים יד."]] },
-
-    { title:"הגיליון הוא הזיכרון",
-      body:`<ol><li>באתר מאכילים את החיה פעם אחת.</li><li>חוזרים לגיליון. בלשונית <b>pet</b> המספר של <b>full</b> עלה, ובלשונית <b>log</b> יש שורה חדשה.</li><li>בלשונית <b>pet</b>, ליד <b>name</b>, כותבים את השם מהכרטיס.</li><li>מרעננים את האתר: השם החדש שם.</li><li>עוד ניסוי: בגיליון, ליד <b>full</b>, כותבים <b>5</b>, ומרעננים את האתר. מה החיה אומרת?</li></ol>`,
+    { title:"מה הביצה זוכרת?",
+      body:`<ol><li>מלטפים את הביצה 5 פעמים, ומאכילים אותה פעמיים.</li><li>מרעננים את הדף (<kbd>F5</kbd>). מה נשאר, ומה התאפס?</li><li>חוזרים לגיליון, ללשונית <b>pet</b>. מה כתוב ליד <b>full</b>?</li><li>ליד <b>full</b> כותבים <b>5</b>, ולוחצים <kbd>Enter</kbd>. חוזרים לביצה, ומחכים כמה שניות.</li></ol>`,
       visual:() => TRIO,
-      expect:"החיה אומרת שהיא רעבה. לא הדף החליט את זה: הגיליון. הדף שואל את השרת, והשרת קורא מהגיליון. לכן לא מאמינים למסך, בודקים בגיליון." },
+      expect:"הליטופים התאפסו, והשובע נשאר. הליטופים היו רק בדף, ודף שוכח הכול ברגע שמרעננים אותו. השובע עבר דרך השרת ונכתב בגיליון. ומה שכתוב בגיליון, זה מה שהחיה זוכרת." },
 
-    { title:"חבר מאכיל",
-      body:`<ol><li>שולחים את הקישור של האתר לחבר: במייל של משרד החינוך, או בצ׳אט של Google.</li><li>החבר פותח אותו במחשב שלו, כותב כינוי, ומאכיל.</li><li>אתם בודקים בלשונית <b>log</b> בגיליון.</li></ol>`,
-      visual:() => TRIO,
-      expect:"הכינוי של החבר מופיע באתר שלכם, וגם שורה חדשה בגיליון. אף אחד לא שלח לכם קובץ: המחשב שלו ביקש מהשרת שלכם, והשרת כתב בגיליון.",
-      stuck:[["אי אפשר לשלוח קישור במייל או בצ׳אט","מעתיקים את הקישור לקובץ שהמורה פתח לכיתה, או מרימים יד."],["החבר רואה בקשה להתחבר","בפריסה, בגישה, לא נבחר ״כל אחד״. מרימים יד."]] },
+    { title:"ג׳מיני שואל, אתם עונים",
+      body:`<ol><li>פותחים את <a href="https://gemini.google.com" target="_blank" rel="noopener"><b>gemini.google.com</b></a> בכרטיסייה חדשה, עם החשבון של משרד החינוך.</li><li>מעתיקים את ההודעה, ומדביקים אותה בג׳מיני.</li><li>עונים לו על כל שאלה. שאלה משעממת? כותבים לו ״שאלה אחרת״.</li></ol>`,
+      visual:() => livePrompt("ask", "מדביקים בג׳מיני") + MOCK.gemini() + vs("תעשה לי חיה", "ג׳מיני ממציא חיה שלא אתם בחרתם.", "זאת התוכנית. תשאל אותי קודם", "ג׳מיני בונה את החיה שלכם."),
+      mount:root => bindMine(root),
+      note:"ג׳מיני לא מכיר את החיה שלכם. כל מה שלא תגידו לו, הוא ינחש.",
+      stuck:[["כתוב שאין גישה לג׳מיני","בודקים שזה החשבון של משרד החינוך, ולא חשבון אחר. עדיין אין? מרימים יד."],["הוא התחיל לכתוב קוד בלי לשאול","כותבים לו: ״עצור. עדיין בלי קוד. קודם תשאל אותי 3 שאלות.״"]] },
 
-    { title:"ציור מג׳מיני",
-      body:`<ol><li>מעתיקים את ההודעה ומדביקים בג׳מיני.</li><li>מעתיקים את הקוד שג׳מיני שולח (כפתור ההעתקה ליד הקוד).</li><li>בעורך פותחים את <b>Index.html</b>, מוחקים את ה־SVG שבין <code>PET START</code> ל־<code>PET END</code>, ומדביקים את הציור.</li><li>שומרים: <kbd>Ctrl</kbd> + <kbd>S</kbd>.</li></ol>`,
-      visual:() => promptBox("מדביקים בג׳מיני", svgPrompt()) + MOCK.paste(),
-      note:"מחליפים רק את מה שבין שני הסימנים. כל השאר הוא החיבור לשרת, ואם הוא נמחק, החיה מפסיקה לעבוד.",
-      hints:["לא אוהבים את הציור? כותבים לג׳מיני מה לשנות: ״תגדיל את העיניים״, ״תוסיף לה כובע״.","אפשר לשנות גם את האוכל והמשחק: למטה ב־Index.html, ב־LOOK, מחליפים את 🍎 ו־⚽."],
-      stuck:[["הציור שבור או ריק","הדבקתם יותר או פחות מה־SVG. Ctrl + Z, ומדביקים שוב רק מ־&lt;svg ועד &lt;/svg&gt;."]] },
+    { title:"הביצה בוקעת",
+      body:`<ol><li>כותבים בתיבה מה החלטתם עם ג׳מיני, במילים שלכם.</li><li>מעתיקים את ההודעה, ומדביקים אותה באותו צ׳אט.</li><li>ג׳מיני שולח קוד. לוחצים על כפתור ההעתקה שמעל הקוד.</li><li>בעורך פותחים את <b>Pet.html</b>. <kbd>Ctrl</kbd>+<kbd>A</kbd> מסמן הכול, <kbd>Ctrl</kbd>+<kbd>V</kbd> מדביק במקומו. שומרים: <kbd>Ctrl</kbd>+<kbd>S</kbd>.</li><li><b>פריסה</b>, ואז <b>בדיקת פריסות</b>. מעתיקים את הקישור שנגמר ב־<code>/dev</code>, ופותחים אותו.</li><li>היא עדיין נקראת ״ביצה״? השם שלה כתוב בגיליון. בלשונית <b>pet</b>, ליד <b>name</b>, כותבים את השם האמיתי שלה.</li></ol>`,
+      visual:() => mineBox("decided", "מה החלטתם עם ג׳מיני?", "למשל: עיניים ענקיות, רקע של לילה, וכשהיא רעבה היא נהיית אדומה") + livePrompt("hatch", "מדביקים באותו צ׳אט", [["decided", 4]]) + MOCK.paste() + MOCK.testdep(),
+      mount:root => bindMine(root),
+      expect:"הביצה בקעה, ויש לכם חיה שאין לאף אחד אחר. הקישור הזה הוא שלכם: הוא תמיד מראה את מה ששמרתם הרגע. משאירים אותו פתוח.",
+      note:"השורה האחרונה בקובץ חייבת להיות <code>&lt;!-- END Pet --&gt;</code>. אין אותה? ג׳מיני נקטע באמצע. כותבים לו: ״נקטעת. תשלח שוב את הקובץ המלא.״",
+      tools:true },
 
-    { title:"שני קישורים: שלי ושל החברים",
-      body:`<p>שמרתם, ובאתר שום דבר לא השתנה? זה בכוונה. לאתר יש שני קישורים:</p>
-        <ul><li><b>שלי</b> (נגמר ב־<code>/dev</code>): מראה כל שינוי, מיד אחרי <kbd>Ctrl</kbd> + <kbd>S</kbd>. רק אתם יכולים לפתוח אותו.</li><li><b>של החברים</b> (נגמר ב־<code>/exec</code>): מתעדכן רק כשמעלים גרסה חדשה.</li></ul>
-        <ol><li><b>פריסה</b>, ואז <b>בדיקת פריסות</b>. מעתיקים את הקישור ופותחים אותו: הציור החדש שם.</li><li>מוכנים להראות לחברים? <b>פריסה</b>, <b>ניהול פריסות</b>, ✏️, ובגרסה בוחרים <b>גרסה חדשה</b>. לוחצים <b>פריסה</b>.</li><li>מרעננים את הקישור של החברים.</li></ol>`,
-      visual:() => MOCK.testdep() + MOCK.manage(),
-      expect:"בקישור שלכם רואים את הציור מיד. בקישור של החברים הוא מופיע רק אחרי גרסה חדשה. ככה חברים לא רואים את החיה באמצע העבודה.",
-      stuck:[["שיניתי, ואצל החברים שום דבר לא השתנה","לא העליתם גרסה חדשה, או לא שמרתם עם Ctrl + S."],["אין ״בדיקת פריסות״ בתפריט","מרימים יד. בינתיים מעלים גרסה חדשה אחרי כל שינוי."]] },
+    { title:"לא בדיוק מה שרציתם?",
+      body:`<p>זה אף פעם לא יוצא מושלם בפעם הראשונה. גם לא למי שזה המקצוע שלו. בוחרים דבר אחד שמפריע לכם, ואומרים לג׳מיני בדיוק מה.</p>`,
+      visual:() => talkBox() + cycle + vs("זה לא יפה, תתקן", "ג׳מיני מנחש מה לא יפה. לפעמים הוא מחליף לכם את כל החיה.", "שנה רק את העיניים: גדולות פי שניים", "משתנה רק מה שביקשתם."),
+      mount:root => bindMine(root),
+      expect:"החיה נראית כמו שרציתם? שומרים: בגיליון, <b>קובץ</b>, <b>יצירת עותק</b>, ובשם כותבים <b>שמירה 1</b>. אם משהו יישבר בהמשך, יש לאן לחזור.",
+      tools:true },
 
-    { title:"שומרים ומסיימים",
-      body:`<ol><li>בגיליון: <b>קובץ</b>, ואז <b>יצירת עותק</b>.</li><li>בשם כותבים <b>שמירה 1: החיה עובדת</b>.</li></ol><p>זה ״שמירת משחק״: אם משהו יישבר בשבוע הבא, חוזרים לכאן.</p>`,
-      expect:"בשבוע הבא החיה מתחילה לחיות: רעב, מצבי רוח, והיא מתגעגעת כשאתם לא שם.",
-      note:`רוצים להבין איפה החיה גרה באמת? <a href="#lib1"><b>לדף של מפגש 1</b></a>: שלושה סרטונים קצרים וניסוי אחד. לא חובה.` }
+    { title:"כפתור שיש רק לחיה שלכם",
+      body:`<p>עכשיו הכפתור שתכננתם בהתחלה. רוצים לשנות בו משהו? זה הזמן.</p><ol><li>בודקים את ארבע השורות.</li><li>מעתיקים את ההודעה, ומדביקים באותו צ׳אט.</li><li>קוראים את שלוש ההצעות של ג׳מיני, ובוחרים אחת.</li></ol>`,
+      visual:() => btnForm() + livePrompt("options", "מדביקים באותו צ׳אט", [["label", 1], ["does", 2], ["says", 1]]),
+      mount:root => bindMine(root),
+      hints:["אף הצעה לא טובה? כותבים לו: ״עוד 3, יותר מצחיקות״.","הצעה טובה, חוץ מדבר אחד? בשלב הבא כותבים לו מה לשנות בה."] },
+
+    { title:"והיא זוכרת",
+      body:`<ol><li>כותבים בתיבה איזו הצעה בחרתם, ומה לשנות בה.</li><li>מעתיקים את ההודעה ומדביקים בג׳מיני. <b>עוד לא שולחים.</b></li><li>בעורך, ב־<b>Pet.html</b>: <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>Ctrl</kbd>+<kbd>C</kbd>. חוזרים לג׳מיני, מדביקים מתחת להודעה, ושולחים.</li><li>את הקוד שחוזר מדביקים על כל <b>Pet.html</b>. <kbd>Ctrl</kbd>+<kbd>S</kbd>, ומרעננים את הקישור שלכם.</li><li>לוחצים על הכפתור החדש כמה פעמים, ופותחים את הגיליון, בלשונית <b>pet</b>.</li></ol>`,
+      visual:() => mineBox("pick", "איזו הצעה בחרתם, ומה לשנות בה?", "למשל: הצעה 2, אבל שהיא תקפוץ יותר גבוה") + livePrompt("build", "מדביקים באותו צ׳אט, ומתחת את הקובץ", [["pick", 3]]) + MOCK.sheet(keyName()),
+      mount:root => bindMine(root),
+      expect:"בגיליון יש שורה חדשה, בשם שאתם בחרתם, והמספר בה עולה בכל לחיצה. לא אתם כתבתם אותה: הדף ביקש מהשרת, והשרת כתב. עכשיו תכתבו שם 40 בעצמכם, ותחזרו לחיה.",
+      tools:true },
+
+    { title:"חבר לוחץ",
+      body:`<p>החברים שלכם עדיין רואים ביצה. הקישור שלהם מתעדכן רק כשמפרסמים גרסה חדשה.</p><ol><li><b>פריסה</b>, <b>ניהול פריסות</b>, ואז ✏️.</li><li>ב״גרסה״ בוחרים <b>גרסה חדשה</b>, ולוחצים <b>פריסה</b>.</li><li>שולחים לחבר את הקישור שנגמר ב־<code>/exec</code>: במייל של משרד החינוך, או בצ׳אט של Google.</li><li>החבר כותב כינוי, ולוחץ על הכפתור שהמצאתם.</li></ol>`,
+      visual:() => MOCK.manage() + TRIO,
+      expect:"המספר בגיליון שלכם עלה, מהמחשב של החבר. הוא לא נגע בגיליון, ולא שלח לכם שום קובץ. הדף אצלו ביקש מהשרת שלכם, והשרת כתב.",
+      stuck:[["החבר עדיין רואה ביצה","לא פרסמתם גרסה חדשה, או שלא שמרתם קודם עם Ctrl+S."],["מבקשים מהחבר להתחבר","בפריסה, ב״למי יש גישה״, לא נבחר ״כל אחד״. מרימים יד."],["אי אפשר לשלוח קישור","החבר בא אליכם ולוחץ אצלכם, או שמרימים יד."]] },
+
+    { title:"שומרים, וזהו",
+      body:`<ol><li>בגיליון: <b>קובץ</b>, ואז <b>יצירת עותק</b>.</li><li>בשם כותבים <b>שמירה 2: החיה שלי</b>.</li></ol>`,
+      expect:"בשבוע הבא היא מתחילה לחיות: היא נהיית רעבה לבד, יש לה מצבי רוח, והיא מתגעגעת כשאתם לא באים.",
+      note:`רוצים להבין איפה החיה גרה באמת? <a href="#lib1"><b>הדף של מפגש 1</b></a>. לא חובה.` }
   ],
   challenges:[
-    ["food", "אוכל ומשחק משלה", "ב־LOOK שבתחתית Index.html: האוכל, המשחק, ומה היא אומרת."],
-    ["color", "צבעים משלה", "בראש Index.html: הצבע של החיה והרקע."],
-    ["pose", "ציור שני", "בקשו מג׳מיני ציור של החיה כשהיא שמחה."]
+    ["btn2", "עוד כפתור", "כפתור רביעי, עם שורה משלו בגיליון. אותו סיבוב כמו קודם."],
+    ["lines", "שלושה משפטים", "בקשו מג׳מיני 3 אפשרויות למה שהיא אומרת כשהיא שמחה, ותבחרו."],
+    ["why", "מה זה server.add?", "בקשו מג׳מיני להסביר בשתי שורות, בלי קוד, מה קורה מהרגע שלוחצים על הכפתור ועד שהמספר בגיליון משתנה."]
   ]
 };
 
-/* ===== teacher slides for meeting 1 (open #slides1; arrows to move, N for notes) ===== */
+/* ===== teacher slides for meeting 1 (open ?page=slides1; arrows to move, N for notes) =====
+   Every slide is something to click, not something to read. The explanation is what the teacher says (the notes). */
+/* The toy pet of the slides: one drawing, changed by options. */
+const toy = (o = {}) => `<svg class="toy" viewBox="0 0 200 200">${o.egg
+  ? `<path d="M100 22 C146 22 168 92 168 128 C168 164 138 182 100 182 C62 182 32 164 32 128 C32 92 54 22 100 22 Z" fill="#FFFDF5" stroke="#231B3A" stroke-width="5"/><circle cx="76" cy="96" r="10" fill="#F29E38"/><circle cx="126" cy="128" r="14" fill="#F29E38"/><circle cx="92" cy="152" r="7" fill="#F29E38"/>`
+  : `${o.horn ? `<path d="${o.bent ? "M88 54 Q84 12 124 8 Q106 26 114 54 Z" : "M88 54 L100 8 L112 54 Z"}" fill="#FFC83D" stroke="#231B3A" stroke-width="4" stroke-linejoin="round"/>` : ""}
+    ${o.tri ? `<path d="M100 40 L176 180 L24 180 Z" fill="${o.c || "#B9B4C7"}" stroke="#231B3A" stroke-width="5" stroke-linejoin="round"/>` : `<rect x="34" y="48" width="132" height="132" rx="${o.sq ? 16 : 66}" fill="${o.c || "#B9B4C7"}" stroke="#231B3A" stroke-width="5"/>`}
+    ${(o.tri ? [[80, 126], [120, 126]] : [[72, 104], [128, 104]]).concat(o.eyes3 ? [[100, o.tri ? 96 : 76]] : []).map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${o.big ? (o.tri ? 14 : 19) : 10}" fill="#fff" stroke="#231B3A" stroke-width="4"/><circle cx="${x}" cy="${y}" r="${o.big ? 8 : 4}" fill="#231B3A"/>`).join("")}
+    <path d="M80 ${o.tri ? 160 : 142} Q100 ${(o.sad ? 128 : 162) + (o.tri ? 16 : 0)} 120 ${o.tri ? 160 : 142}" fill="none" stroke="#231B3A" stroke-width="5" stroke-linecap="round"/>
+    ${o.yarn ? `<circle cx="172" cy="170" r="17" fill="#FF7AA8" stroke="#231B3A" stroke-width="4"/><path d="M160 164 Q172 174 184 162 M161 176 Q172 168 182 178" fill="none" stroke="#231B3A" stroke-width="2"/>` : ""}`}</svg>${o.name ? `<b class="toy-name">${o.name}</b>` : ""}${o.say ? `<span class="toy-say">${o.say}</span>` : ""}`;
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const randomToy = () => ({ c: pick(["#7BD389", "#FF9F68", "#6EC6FF", "#FF7AA8", "#C9A227", "#9AA0A6"]), sq: Math.random() < .5, horn: Math.random() < .4, eyes3: Math.random() < .35, big: Math.random() < .4, sad: Math.random() < .3 });
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const hop = el => { el.classList.remove("hop"); void el.offsetWidth; el.classList.add("hop"); };
+
+/* slide 2: one press, from the page to the server to the Sheet and back */
+function diaMount(root){
+  const st = { sheet: 50, page: 50, open: true, on: true, friend: false, busy: false }, $ = s => root.querySelector(s), P = 16, S = 50, G = 84;
+  const paint = () => {
+    $(".cell").textContent = st.sheet; $(".dc.page").classList.toggle("closed", !st.open); $(".dc.srv").classList.toggle("dead", !st.on);
+    $(".page .dnum").textContent = st.page == null ? "?" : st.page; $(".page .dbar i").style.width = (st.page || 0) + "%";
+    $("[data-a=close]").textContent = st.open ? "סוגרים את הדף" : "פותחים את הדף"; $("[data-a=kill]").textContent = st.on ? "מכבים את השרת" : "מדליקים את השרת";
+    $(".dc.friend").hidden = !st.friend; $(".friend .dnum").textContent = st.on ? st.sheet : "?";
+  };
+  const fly = async (text, from, to) => { const p = $(".pkt"); p.textContent = text; p.style.transition = "none"; p.style.insetInlineStart = from + "%"; p.hidden = false; void p.offsetWidth; p.style.transition = ""; p.style.insetInlineStart = to + "%"; await sleep(620); };
+  const ask = async (msg, change) => {
+    $(".dsay").textContent = "";
+    await fly(msg, P, S);
+    if (!st.on){ $(".pkt").textContent = "✗"; await sleep(700); $(".pkt").hidden = true; st.page = null; $(".dsay").textContent = "אופס. השרת לא עונה"; paint(); return; }
+    await fly(msg, S, G);
+    if (change){ st.sheet = Math.min(100, st.sheet + change); paint(); hop($(".cell")); }
+    await sleep(300); await fly(String(st.sheet), G, S); await fly(String(st.sheet), S, P);
+    $(".pkt").hidden = true; st.page = st.sheet; paint(); hop($(".page .toy"));
+  };
+  root.querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", async () => {
+    if (st.busy) return; st.busy = true; const a = b.dataset.a;
+    if (a === "feed" && st.open) await ask("להאכיל!", 15);
+    if (a === "refresh" && st.open){ st.page = null; paint(); await sleep(450); await ask("מה המצב?", 0); }
+    if (a === "close"){ st.open = !st.open; if (st.open){ st.page = null; paint(); await ask("מה המצב?", 0); } else paint(); }
+    if (a === "kill"){ st.on = !st.on; paint(); }
+    if (a === "friend"){ st.friend = !st.friend; paint(); }
+    st.busy = false;
+  }));
+  paint();
+}
+/* slide 5: a conversation that moves one message per click */
+const CHAT = [
+  ["me", "זאת החיה שלי: פופקורן, סגולה, עם קרן אחת. עדיין בלי קוד. תשאל אותי 3 שאלות.", { c: "#9B6BFF", horn: true, name: "פופקורן" }],
+  ["ai", "שאלה 1: הקרן שלה ישרה או עקומה?"],
+  ["me", "עקומה. כמו בננה.", { bent: true }],
+  ["ai", "שאלה 2: מה הדבר הראשון שרואים כשמסתכלים עליה?"],
+  ["me", "את העיניים. הן ענקיות.", { big: true }],
+  ["ai", "שאלה 3: מה היא אומרת כשהיא רעבה?"],
+  ["me", "תן לי 3 אפשרויות."],
+  ["ai", "1. ״אני גוועת.״<br>2. ״פיצה. עכשיו.״<br>3. ״מישהו ראה את האוכל שלי?״"],
+  ["me", "2, אבל שתצעק.", { say: "פיצה!!! עכשיו!!!" }]
+];
+const POP = { c: "#9B6BFF", horn: true, bent: true, big: true, name: "פופקורן" };
+const SHAPES = [["עגולה", {}, "חמודה"], ["מרובעת", { sq: true }, "חזקה"], ["מחודדת", { tri: true }, "מסוכנת"]];
+const EXTRAS = [["קרן", { horn: true }], ["שלוש עיניים", { eyes3: true }], ["כדור צמר", { yarn: true }]];
+const WANTS = [["תשומת לב", "היי! מישהו?! אני פה!!!"], ["שקט", "אוכל. ואז שיעזבו אותי."], ["פיצה", "פיצה!!! עכשיו!!!"]];
+const PLAN = [["הציור של פופקורן", 0], ["כפתור: לדגדג 🤣", 1], ["כמה פעמים דגדגו אותה", 2], ["״פיצה!!! עכשיו!!!״", 0], ["כפתור: להאכיל 🍎", 1], ["כמה היא שבעה", 2], ["השם שלה", 2]];
+let slideTimer = 0;
+
 const S1 = [
-  { html:`<h1>החיה שלכם, באינטרנט</h1><p class="sub">אפליקציות ומשחקים עם ג׳מיני · מפגש 1</p>`, notes:"0–1 דק׳. הכותרת, ומיד לשקופית הבאה." },
-  { html:`<h1>תאכילו את החיה שלי</h1>${demoLink()}`, notes:"1–5 דק׳. הם פותחים את הדף של הקורס ולוחצים ״להאכיל את החיה של המורה״. אצלך על המקרן: האתר של החיה שלך, והפסים עולים לבד. לפני השיעור: בגיליון של החיה שלך, full ו־joy על 20, אחרת אין מה לראות. להגיד: לחיצה אחת, ומחכים. השרת איטי כשכולם לוחצים יחד." },
-  { html:yt("kBXQZMmiA4s", 75, 146), notes:"5–6 דק׳. code.org, דקה ועשר, עם כתוביות בעברית. מחשב מבקש דף ממחשב אחר, רחוק, שנקרא שרת. אחרי הסרטון: ״כשפתחתם את הקישור של החיה שלי, זה מה שקרה.״ כדי להמשיך: לוחצים על החצים למעלה, כי אחרי לחיצה על הסרטון המקלדת שלו." },
-  { html:yt("kBXQZMmiA4s", 185, 218), notes:"6–7 דק׳. חצי דקה: כשממלאים משהו ושולחים, הדפדפן שולח את המידע לשרת. ״וכשלחצתם להאכיל, זה מה שקרה.״" },
-  { html:`<h1>רגע. איפה החיה גרה?</h1>`, notes:"7–10 דק׳. פותחים על המקרן את הגיליון של החיה שלך. מראים את הלשונית log מתמלאת. ״אף אחד לא שלח לי כלום, ובכל זאת אני יודע שהאכלתם. איך?״" },
-  { html:`<h1>דף</h1>${trioN(1)}`, notes:"10–12 דק׳, שלוש שקופיות. הדף: מה שרואים. במסעדה, זה הלקוח." },
-  { html:`<h1>דף · שרת</h1>${trioN(2)}`, notes:"השרת: מקבל בקשות ומחליט. במסעדה, זה המלצר." },
-  { html:`<h1>דף · שרת · גיליון</h1>${trioN(3)}<p class="sub">לקוח לא נכנס למטבח. הוא מבקש מהמלצר.</p>`, notes:"הגיליון: הזיכרון. במסעדה, המטבח. רק השרת נוגע בגיליון. לשאול: ״מי כתב עכשיו בגיליון שלי, אתם או השרת?״ ביחד קוראים לזה אפליקציה עם בקאנד." },
-  { html:`<h1>ג׳מיני: מדברים, לא מפקדים</h1><div class="vs"><div class="bad"><b>״תעשה לי חיה״</b>ג׳מיני ממציא משהו שלא בחרתם</div><div class="good"><b>כרטיס, ו״תשאל אותי קודם״</b>החיה שלכם, מדויקת</div></div>`, notes:"12–14 דק׳. מה שלא אמרתם לו, הוא מנחש, ולכן ״תעשה לי חיה״ נותן חיה שיש לכולם. הכרטיס הוא התוכנית: ככה עובדים גם אנשים שבונים עם בינה מלאכותית בתור מקצוע. מדגימים על המקרן: מדביקים את ההודעה מהשלב ״ג׳מיני שואל אתכם״, ועונים בקול על שאלה אחת שלו." },
-  { html:`<h1>היום אתם</h1><ol><li>כרטיס החיה, וג׳מיני שואל</li><li>עותק של החיה</li><li>מעירים את השרת, ומעלים לאוויר</li><li>חבר מאכיל</li><li>ציור מג׳מיני</li><li>שני קישורים: שלי ושל החברים</li></ol>`, notes:"14–75 דק׳. כולם בדף של הקורס, ״להתחיל״, שלב אחרי שלב. מסתובבים. מי שתקוע: ״נתקעתי״ בתחתית השלב, אחר כך השכן, ואז אתה. שלושה דברים שיקרו: (1) הכפתור ״הפעלה״ אפור: לא שמרו, Ctrl+S. (2) Google מבקשת הרשאה בפעם הראשונה: מאשרים. (3) ״שיניתי ולא קרה כלום״: הקישור הלא נכון, או שלא העלו גרסה חדשה (שלב 11)." },
-  { html:`<h1>שומרים</h1><p class="sub">קובץ ← יצירת עותק ← ״שמירה 1: החיה עובדת״</p><p class="sub">בשבוע הבא: היא מתחילה לחיות</p>`, notes:"75–90 דק׳. שניים־שלושה מראים את החיה שלהם על המקרן. כולם שומרים עותק." }
+  { html:`<div class="toybox xl" id="t1">${toy({ c: "#8C7FFF", big: true })}</div><h1>תאכילו אותה</h1>${demoLink()}`,
+    mount: r => r.querySelector("#t1").addEventListener("click", e => hop(e.currentTarget)),
+    notes:"0–3 דק׳. לפני השיעור: בגיליון של החיה שלך, full על 20. ״זאת החיה שלי, והיא באמת באינטרנט. כל אחד פותח את הדף של הקורס, לוחץ על הכפתור הסגול, ומאכיל אותה פעם אחת.״ על המקרן, בחלון שני: הגיליון שלך. מרעננים, והשורות ב־log מתמלאות. ״אף אחד מכם לא שלח לי כלום. אז מי כתב אצלי בגיליון?״" },
+
+  { html:`<div class="toybox" id="t2"></div><div class="dbar wide"><i id="b2"></i></div><div class="dctl"><button class="btn go" data-a="feed">להאכיל 🍎</button><button class="btn" data-a="needs">חיה בלי צרכים</button></div><p class="sub" id="s2">היא צריכה אתכם</p>`,
+    mount: r => { let full = 80, needs = true; const paint = () => { r.querySelector("#t2").innerHTML = toy(Object.assign({}, POP, needs ? { sad: full < 35, say: full < 35 ? "אני רעבה!!!" : "" } : {})); r.querySelector("#b2").style.width = (needs ? full : 100) + "%"; r.querySelector(".dbar").style.visibility = needs ? "" : "hidden"; r.querySelector("#s2").textContent = needs ? "היא צריכה אתכם" : "סתם ציור"; r.querySelector("[data-a=needs]").textContent = needs ? "חיה בלי צרכים" : "חיה עם צרכים"; };
+      clearInterval(slideTimer); slideTimer = setInterval(() => { if (!r.isConnected) return clearInterval(slideTimer); if (!needs || full <= 0) return; const was = full; full = Math.max(0, full - 3); if ((was >= 35) !== (full >= 35)) paint(); else r.querySelector("#b2").style.width = full + "%"; }, 280);
+      r.querySelector("[data-a=feed]").addEventListener("click", () => { if (needs){ full = Math.min(100, full + 35); } paint(); if (needs) hop(r.querySelector("#t2")); });
+      r.querySelector("[data-a=needs]").addEventListener("click", () => { needs = !needs; paint(); }); paint(); },
+    notes:"3–5 דק׳. לא אומרים כלום, ונותנים לפס לרדת עד שהיא צועקת. ״מי רוצה להאכיל אותה?״ מאכילים. ואז ״חיה בלי צרכים״, ולוחצים להאכיל: כלום. ״מה ההבדל? אותו ציור בדיוק. ההבדל הוא שהיא צריכה משהו, ושרואים עליה שהיא צריכה. חיה שלא צריכה אתכם היא סתם תמונה. זה מה שמתכננים היום: מה היא צריכה, ואיך רואים את זה עליה.״" },
+
+  { html:`<div class="build"><div style="display:grid;gap:18px"><div class="chips big" id="shapes">${SHAPES.map((x, i) => `<button data-i="${i}">${x[0]}</button>`).join("")}</div><div class="chips big" id="extras">${EXTRAS.map((x, i) => `<button data-i="${i}">${x[0]}</button>`).join("")}</div><div class="chips big"><button id="sil">בחושך</button></div></div><div class="toybox" id="t3"></div></div><p class="sub" id="s3"></p>`,
+    mount: r => { let sh = 0, sil = false; const ex = new Set(), paint = () => { const t = r.querySelector("#t3"); t.innerHTML = toy(Object.assign({ c: "#9B6BFF" }, SHAPES[sh][1], ...[...ex].map(i => EXTRAS[i][1]))); t.classList.toggle("sil", sil); r.querySelector("#s3").textContent = SHAPES[sh][2]; r.querySelectorAll("#shapes button").forEach((b, i) => b.classList.toggle("on", i === sh)); r.querySelectorAll("#extras button").forEach((b, i) => b.classList.toggle("on", ex.has(i))); r.querySelector("#sil").classList.toggle("on", sil); };
+      r.querySelectorAll("#shapes button").forEach(b => b.addEventListener("click", () => { sh = +b.dataset.i; paint(); hop(r.querySelector("#t3")); }));
+      r.querySelectorAll("#extras button").forEach(b => b.addEventListener("click", () => { const i = +b.dataset.i; ex.has(i) ? ex.delete(i) : ex.add(i); paint(); }));
+      r.querySelector("#sil").addEventListener("click", () => { sil = !sil; paint(); }); paint(); },
+    notes:"5–8 דק׳. קודם שלוש הצורות, בלי להסביר: ״את מי הייתם מחבקים? ממי הייתם בורחים?״ ״לא שיניתי פנים, ולא שיניתי צבע. רק צורה. עגול נראה חמוד, מרובע נראה חזק, מחודד נראה מסוכן. מי שמעצב דמויות בוחר צורה לפני כל דבר אחר.״ ואז ״בחושך״: ״מזהים אותה?״ מוסיפים קרן: ״ועכשיו?״ מוסיפים את שלושתם: ״עכשיו זה כבר בלגן. דבר אחד מיוחד מספיק. ככה מזהים דמות גם מהצללית שלה.״" },
+
+  { html:`<div class="toybox" id="t4"></div><p class="sub">מה היא הכי רוצה?</p><div class="chips big" id="wants">${WANTS.map((x, i) => `<button data-i="${i}">${x[0]}</button>`).join("")}</div>`,
+    mount: r => { const paint = i => { r.querySelector("#t4").innerHTML = toy(Object.assign({}, POP, { sad: true, say: i == null ? "אני רעבה." : WANTS[i][1] })); r.querySelectorAll("#wants button").forEach((b, k) => b.classList.toggle("on", k === i)); if (i != null) hop(r.querySelector("#t4")); };
+      r.querySelectorAll("#wants button").forEach(b => b.addEventListener("click", () => paint(+b.dataset.i))); paint(null); },
+    notes:"8–10 דק׳. ״היא רעבה. מה היא אומרת? תלוי מה היא רוצה.״ לוחצים על שלושתם. ״אותה חיה, אותו ציור, אותו רעב. ויצאו שלוש חיות שונות לגמרי. האופי שלה הוא לא הציור. האופי שלה הוא מה שהיא רוצה, ואיך היא מדברת בגלל זה.״" },
+
+  { html:`<div class="plan"><div class="pcol" data-c="0"><b>רואים</b><small>הדף</small></div><div class="pcol" data-c="1"><b>עושים</b><small>השרת</small></div><div class="pcol" data-c="2"><b>זוכרת</b><small>הגיליון</small></div></div><div class="chips big" id="pool">${PLAN.map((x, i) => `<button data-i="${i}">${x[0]}</button>`).join("")}</div><button class="btn go" id="names">ובאפליקציה?</button>`,
+    mount: r => { r.querySelectorAll("#pool button").forEach(b => b.addEventListener("click", () => { const c = r.querySelector(`.pcol[data-c="${PLAN[+b.dataset.i][1]}"]`); b.classList.add("on"); c.appendChild(b); hop(b); }));
+      r.querySelector("#names").addEventListener("click", () => r.querySelector(".plan").classList.add("named")); },
+    notes:"10–13 דק׳. ״זאת התוכנית של פופקורן. כל דבר בה הולך לאחד משלושה מקומות.״ על כל פתק שואלים את הכיתה לאן, ולוחצים עליו. ״כפתור: לדגדג״ הולך ל״עושים״: ״הכפתור עצמו נמצא על המסך. אבל כשלוחצים עליו, מישהו צריך לעשות משהו.״ בסוף ״ובאפליקציה?״: ״לשלושת המקומות האלה יש שמות. מה שרואים זה הדף. מי שעושה זה השרת. ומה שהיא זוכרת נמצא בגיליון. תכננתם חיה, ויצאה לכם תוכנית של אפליקציה.״" },
+
+  { html:`<div class="dia"><div class="dc page"><b>הדף</b><div class="toybox sm">${toy({ c: "#8C7FFF", big: true })}</div><div class="dbar"><i></i></div><span class="dnum">50</span><small class="dsay"></small><button class="btn" data-a="feed">להאכיל 🍎</button></div>
+      <div class="dc srv"><b>השרת</b><span class="ico">⚙️</span></div>
+      <div class="dc sheet"><b>הגיליון</b><table class="m-sheet"><tr><th>key</th><th>value</th></tr><tr><td>full</td><td class="cell">50</td></tr></table></div>
+      <div class="lane"><span class="pkt" hidden></span></div></div>
+    <div class="dctl"><button class="btn" data-a="refresh">רענון</button><button class="btn" data-a="close">סוגרים את הדף</button><button class="btn" data-a="friend">דף של חבר</button><button class="btn" data-a="kill">מכבים את השרת</button><div class="dc friend" hidden><b>הדף של חבר</b><span class="dnum"></span></div></div>
+    <p class="sub">הדף מראה · השרת מחליט · הגיליון זוכר</p>`,
+    mount: diaMount,
+    notes:"13–16 דק׳. ״ועכשיו נראה את שלושת המקומות האלה עובדים.״ לוחצים ״להאכיל״: ״הדף לא יודע כלום. הוא מבקש מהשרת, והשרת כותב בגיליון.״ ״רענון״: ״דף שוכח הכול. הוא שואל שוב, ומקבל את התשובה מהגיליון.״ ״סוגרים את הדף״: ״החיה מתה? לא. היא בגיליון.״ ״דף של חבר״: ״כל דף שייפתח, שלי, שלכם, של חבר, שואל את אותו שרת.״ ״מכבים את השרת״ ואז ״להאכיל״: ״בלי שרת, הדף הוא סתם ציור.״ ולסיום: ״כל אפליקציה שיש לכם בטלפון בנויה ככה. משהו שרואים, מישהו שמחליט, ומשהו שזוכר.״" },
+
+  { html:`<div class="duo"><div class="who"><span class="ico">🎨</span><b>אתם</b><span class="bub" id="bub">תעשה לי חיה</span><div class="dctl"><button class="btn" data-a="vague">״תעשה לי חיה״</button><button class="btn go" data-a="plan">עם התוכנית</button></div></div><div class="who"><span class="ico">🤖</span><b>ג׳מיני</b><div class="toybox" id="guess"><span class="q">?</span></div></div></div><p class="sub">מה שלא אמרתם, הוא מנחש</p>`,
+    mount: r => { const g = r.querySelector("#guess");
+      r.querySelector("[data-a=vague]").addEventListener("click", async () => { r.querySelector("#bub").textContent = "תעשה לי חיה"; for (let i = 0; i < 9; i++){ g.innerHTML = toy(randomToy()); await sleep(110); } hop(g); });
+      r.querySelector("[data-a=plan]").addEventListener("click", () => { r.querySelector("#bub").textContent = "פופקורן: עגולה, סגולה, קרן אחת עקומה, עיניים ענקיות"; g.innerHTML = toy(POP); hop(g); }); },
+    notes:"16–18 דק׳. ״תעשה לי חיה״ שלוש־ארבע פעמים, וכל פעם יוצאת חיה אחרת. ״אותה בקשה בדיוק. למה כל פעם יוצא משהו אחר? כי לא אמרתי לו כלום, אז הוא ניחש.״ ואז ״עם התוכנית״, כמה פעמים: תמיד פופקורן. ״בפיתוח עם AI אתם המעצבים, ואתם הבוס. ג׳מיני מקליד, ומהר מאוד. אבל כשהבוס שותק, המקליד ממציא. בגלל זה החלק הכי חשוב היום הוא התוכנית, ולא הקוד.״" },
+
+  { html:`<div class="build"><div class="chat" id="chat"></div><div class="toybox" id="t5"></div></div><button class="btn go" id="more">הלאה</button>`,
+    mount: r => { let n = 0; const o = {}, step = () => { if (n >= CHAT.length) return; const [who, text, change] = CHAT[n++]; const c = r.querySelector("#chat"); c.insertAdjacentHTML("beforeend", `<div class="msg ${who}">${text}</div>`); c.scrollTop = c.scrollHeight;
+        if (change){ Object.assign(o, change); r.querySelector("#t5").innerHTML = toy(o); hop(r.querySelector("#t5")); } if (n >= CHAT.length) r.querySelector("#more").disabled = true; };
+      r.querySelector("#t5").innerHTML = toy(o); r.querySelector("#more").addEventListener("click", step); step(); },
+    notes:"18–20 דק׳. לוחצים ״הלאה״, הודעה אחרי הודעה. ״לא חייבים לתת לו פקודות. אפשר לדבר איתו. תגידו לו: תשאל אותי קודם. תגידו לו: תן לי שלוש אפשרויות. הוא מציע, ואתם מחליטים.״" },
+
+  { html:`<div class="two"><div class="col"><span class="bub">זה לא יפה, תתקן</span><button class="btn" data-a="bad">לשלוח</button><div class="toybox" id="bad">${toy({ c: "#9B6BFF", horn: true, bent: true, name: "פופקורן" })}</div></div>
+      <div class="col"><span class="bub">שנה רק את העיניים: גדולות פי שניים</span><button class="btn" data-a="good">לשלוח</button><div class="toybox" id="good">${toy({ c: "#9B6BFF", horn: true, bent: true, name: "פופקורן" })}</div></div></div>
+    <button class="btn go" data-a="bug">ואם משהו נשבר?</button><div class="bugcard" id="bugcard" hidden><b>מה עשיתי</b><b>מה ציפיתי שיקרה</b><b>מה קרה בפועל</b><b>ההודעה האדומה</b></div>`,
+    mount: r => { r.querySelector("[data-a=bad]").addEventListener("click", () => { const b = r.querySelector("#bad"); b.innerHTML = toy({ c: "#7BD389", sq: true, eyes3: true, sad: true, name: "?!" }); hop(b); });
+      r.querySelector("[data-a=good]").addEventListener("click", () => { const g = r.querySelector("#good"); g.innerHTML = toy({ c: "#9B6BFF", horn: true, bent: true, big: true, name: "פופקורן" }); hop(g); });
+      r.querySelector("[data-a=bug]").addEventListener("click", () => { r.querySelector("#bugcard").hidden = false; }); },
+    notes:"20–22 דק׳. קודם ״לשלוח״ בצד של ״תתקן״: ״׳תתקן׳ לא אומר לו כלום, אז הוא מתחיל מהתחלה. וככה נעלמת לכם חיה שעבדתם עליה חצי שעה.״ ואז בצד השני: ״אומרים לו מה לשנות, ומה לא.״ ואז ״ואם משהו נשבר?״: ״ג׳מיני טועה. הרבה. ׳זה לא עובד׳ לא עוזר לו. מספרים לו מה עשיתם, מה ציפיתם שיקרה, ומה קרה. כמו שמספרים לרופא.״" },
+
+  { html:`<div class="path" id="path"><div><span>🥚</span><b>ביצה</b></div><i>←</i><div><span>🐣</span><b>בוקעת</b></div><i>←</i><div><span>👆</span><b>כפתור משלי</b></div><i>←</i><div><span>🤝</span><b>חבר</b></div></div>`,
+    mount: r => { let n = 0; const d = [...r.querySelectorAll("#path > div")], go = () => { n = (n % d.length) + 1; d.forEach((x, i) => x.classList.toggle("on", i < n)); }; r.querySelector("#path").addEventListener("click", go); go(); },
+    notes:"22 דק׳, ונשאר על המקרן עד הסוף. ״מתחילים מביצה: אפליקציה אמיתית, אבל ריקה. אתם וג׳מיני גורמים לה לבקוע. אחר כך ממציאים לה כפתור שאין לאף חיה אחרת. ובסוף חבר לוחץ עליו מהמחשב שלו.״ כולם בדף של הקורס, ״להתחיל״. בזמן העבודה: מי שתקוע פותח ״נתקעתי״ בתחתית השלב, אחר כך שואל את השכן, ורק אז אותך. בדקה 78: שלושה־ארבעה מראים את החיה שלהם על המקרן, עם הגיליון לידה. כולם שומרים עותק." }
 ];
 
 /* ===== the optional page of meeting 1: where does my pet live? ===== */
-const libPrompt = `בניתי אתר עם חיה וירטואלית ב-Google Apps Script. יש לי דף (Index.html), שרת (Code.gs) וגיליון.
+const libPrompt = `בניתי אתר עם חיה וירטואלית ב-Google Apps Script. יש לי דף (Pet.html), שרת (Code.gs) וגיליון.
 תסביר לי בלי קוד, כמו לבן 14, מה קורה מהרגע שחבר שלי לוחץ "להאכיל" ועד שהמספר בגיליון משתנה.
 אחר כך תשאל אותי 3 שאלות, אחת אחרי השנייה, כדי לבדוק שהבנתי. אל תגלה את התשובה לפני שעניתי.`;
 function renderLib(){
@@ -347,16 +596,16 @@ function renderLib(){
       <p>החיה שלכם לא גרה במחשב שלכם. היא גרה במחשב של Google, שנקרא <b>שרת</b>. בגלל זה חבר יכול לבקר אותה גם כשהמחשב שלכם כבוי.</p>
       <p>כשמישהו פותח את הקישור, המחשב שלו מבקש מהשרת את הדף. כשהוא לוחץ להאכיל, המחשב שלו שולח לשרת בקשה.</p>
       <p>השרת הוא היחיד שנוגע בגיליון. הדף רק מבקש. כמו במסעדה: הלקוח לא נכנס למטבח, הוא מבקש מהמלצר.</p>
-      <p>הגיליון הוא הזיכרון. מה שכתוב בו נכון, גם אם הדף מראה משהו אחר.</p>
+      <p>הגיליון הוא הזיכרון. מה שכתוב בו הוא מה שנכון, גם אם הדף מראה משהו אחר.</p>
       <p>לכל אפליקציה שאתם מכירים יש את אותם שלושה חלקים: דף, שרת וזיכרון.</p>
     </div>
     ${TRIO}
-    <h2>שלושה סרטונים קצרים</h2>
+    <h2>שלושה סרטונים קצרים, למי שרוצה</h2>
     <div class="clip">${yt("kBXQZMmiA4s", 75, 218)}<small>איך דפדפן מבקש דף משרת, ואיך הוא שולח לו מידע. 2:20 דקות, עם כתוביות בעברית.</small></div>
     <div class="clip">${yt("5o8CwafCxnU", 238, 307)}<small>איך שם של אתר הופך לכתובת. דקה, עם כתוביות בעברית. הקישור הארוך של החיה שלכם הוא כתובת כזאת.</small></div>
     <div class="clip">${yt("j_uf3eJtLkw", 0, 142)}<small>המלצר והמסעדה. 2:20 דקות, באנגלית.</small></div>
     <h2>ניסוי על החיה שלכם</h2>
-    <div class="say"><ol><li>פותחים את האתר של החיה בטלפון, ומאכילים פעם אחת. אחר כך מאכילים פעם אחת מהמחשב.</li><li>בגיליון, בלשונית <b>log</b>: איזו שורה היא מהטלפון, ואיזו מהמחשב? איך אפשר לדעת?</li><li>בגיליון, ליד <b>joy</b>, כותבים <b>5</b>, ומרעננים את האתר. מה החיה אומרת? מי החליט את זה?</li></ol></div>
+    <div class="say"><ol><li>פותחים את האתר של החיה בטלפון, ומאכילים פעם אחת. אחר כך מאכילים פעם אחת מהמחשב.</li><li>בגיליון, בלשונית <b>log</b>: איזו שורה היא מהטלפון, ואיזו מהמחשב? איך אפשר לדעת?</li><li>בגיליון, ליד <b>full</b>, כותבים <b>5</b>, וחוזרים לחיה. מה היא אומרת? מי החליט את זה?</li></ol></div>
     <h2>שאלה לג׳מיני</h2>
     ${promptBox("מדביקים בג׳מיני", libPrompt)}
   </article></div>`;
@@ -371,7 +620,7 @@ function renderHome(){
     <section class="hero"><div style="display:grid;gap:8px"><small>${step ? "ממשיכים מאיפה שעצרתם" : "המפגש הבא"}</small><h1>${M1.title}</h1><span style="color:var(--muted);font-weight:700">שלב ${step + 1} מתוך ${N}</span></div>
       <a class="btn go" href="#m1">${step ? "להמשיך" : "להתחיל"} ←</a></section>
     ${demoLink()}
-    <div class="tiles"><a class="tile" href="#lib1"><b>הדף של מפגש 1</b><span>איפה החיה שלי גרה? לא חובה</span></a><div class="tile soon"><b>מפגש 2: היא חיה</b><span>רעב, מצבי רוח, ופרצופים</span></div><div class="tile soon"><b>מפגש 3: הזמן עובר</b><span>היא מתגעגעת כשאתם לא שם</span></div><div class="tile soon"><b>מפגש 4: מבקרים</b><span>כל הכיתה מבקרת, בבת אחת</span></div></div>
+    <div class="tiles"><a class="tile" href="#lib1"><b>הדף של מפגש 1</b><span>איפה החיה שלי גרה? לא חובה</span></a><div class="tile soon"><b>מפגש 2: היא חיה</b><span>היא נהיית רעבה, ויש לה מצבי רוח</span></div><div class="tile soon"><b>מפגש 3: הזמן עובר</b><span>היא מתגעגעת כשאתם לא שם</span></div><div class="tile soon"><b>מפגש 4: מבקרים</b><span>כל הכיתה מבקרת, בבת אחת</span></div></div>
     <p style="text-align:center"><a href="#slides1" style="color:var(--muted)">למורה: המצגת של מפגש 1</a></p>
   </div>`;
 }
@@ -388,7 +637,7 @@ function renderLesson(){
       ${s.visual ? `<div class="do">${s.visual()}</div>` : ""}
       ${s.expect ? `<div class="expect"><b>מה אמור לקרות</b>${s.expect}</div>` : ""}
       ${s.note ? `<div class="note">${s.note}</div>` : ""}
-      ${help.length ? `<details class="help"><summary>נתקעתי</summary><ul>${help.join("")}</ul></details>` : ""}
+      ${help.length || s.tools ? `<details class="help"><summary>${s.tools ? "נתקעתי, או שג׳מיני שבר משהו" : "נתקעתי"}</summary><ul>${help.concat(s.tools ? BROKE.map(([q, a]) => `<li><b>${q}</b>${a}</li>`) : []).join("")}</ul>${s.tools ? `<h3>דוח באג</h3>` + bugBox() + `<h3>להתחיל מחדש מהביצה</h3><p>מעתיקים, ומדביקים על כל Pet.html. החיה נמחקת, אבל האפליקציה חוזרת לעבוד.</p>` + promptBox("Pet.html של הביצה", EGG) : ""}</details>` : ""}
       ${last ? `<div class="chal"><h3>סיימתם? אתגרים</h3>${L.challenges.map(([id, t, d]) => `<label><input type="checkbox" data-ch="${id}" ${ch[id] ? "checked" : ""}><span><b>${t}</b><br>${d}</span></label>`).join("")}</div>` : ""}
     </article></main>
     <footer class="foot"><button class="btn" id="prev" ${ix === 0 ? "disabled" : ""}>→ חזרה</button><div class="dots">${L.steps.map((_, i) => `<i class="${i < ix ? "done" : i === ix ? "cur" : ""}"></i>`).join("")}</div>
@@ -409,7 +658,7 @@ function renderSlides(){
     <div class="notes" ${notes ? "" : "hidden"}><b>הערות:</b><span>${S1[si].notes}</span></div></div>`;
   app.querySelector("#sl-next").addEventListener("click", () => { si++; renderSlides(); });
   app.querySelector("#sl-prev").addEventListener("click", () => { si--; renderSlides(); });
-  try { window.focus(); } catch(e){}   // so the arrow keys work without clicking the page first
+  if (S1[si].mount) S1[si].mount(app.querySelector(".stage"));
 }
 function route(){
   const h = location.hash;
@@ -421,7 +670,7 @@ function route(){
 document.addEventListener("keydown", e => {
   if (e.target.matches("input,textarea")) return;
   if (location.hash === "#slides1"){
-    if (e.key === "ArrowLeft" || e.key === " "){ si++; renderSlides(); }
+    if (e.key === "ArrowLeft" || (e.key === " " && !e.target.closest("button"))){ si++; renderSlides(); }
     else if (e.key === "ArrowRight"){ si--; renderSlides(); }
     else if (e.key === "n" || e.key === "N" || e.key === "מ"){ notes = !notes; renderSlides(); }
     else if (e.key === "f" || e.key === "F" || e.key === "כ"){ if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else document.exitFullscreen(); }

@@ -1,0 +1,76 @@
+<!-- Engine.html: המנוע. הוא מחבר את הדף לשרת, ומראה הודעה אדומה כשמשהו נשבר. לא משנים את הקובץ הזה.
+     מה שהוא נותן ל-Pet.html:
+     pet                          מה שכתוב בגיליון: pet.name, pet.full, וכל שורה אחרת
+     server.add("full", 15, 100)  מבקש מהשרת להוסיף 15 לשורה full, עד 100 לכל היותר
+     draw()                       פונקציה שנמצאת ב-Pet.html. המנוע קורא לה בכל פעם שמגיעים מספרים מהגיליון -->
+<style>
+  #eng-strip{position:sticky;top:0;z-index:99;background:#C62828;color:#fff;font:700 15px/1.5 Arial,sans-serif;padding:10px 14px;text-align:right;direction:rtl}
+  #eng-strip code{display:block;direction:ltr;text-align:left;background:rgba(0,0,0,.25);border-radius:6px;padding:6px 8px;margin-top:6px;font:13px Consolas,monospace;white-space:pre-wrap;user-select:all}
+  #eng-foot{margin:26px auto 12px;max-width:420px;font:14px/1.5 Arial,sans-serif;color:#555;text-align:center;direction:rtl}
+  #eng-foot input{font:inherit;padding:5px 9px;border:1px solid #bbb;border-radius:8px;width:150px}
+</style>
+<div id="eng-strip" hidden></div>
+<script>
+var pet = {};
+var server = (function () {
+  var real = typeof google !== "undefined" && google.script && google.script.run;
+  var fake = { name: "ביצה", full: 50, visits: [] };   // כשפותחים את הדף בלי שרת (למשל בתצוגה של ג׳מיני)
+  var maxes = {}, busy = 0;
+
+  function strip(text, detail) {
+    var s = document.getElementById("eng-strip");
+    s.hidden = false; s.textContent = text;
+    if (detail) { var c = document.createElement("code"); c.textContent = detail; s.appendChild(c); }
+  }
+  function who() { var i = document.getElementById("eng-who"); return (i && i.value.trim()) || "אורח"; }
+  function foot() {
+    var f = document.getElementById("eng-foot");
+    if (!f) {
+      f = document.createElement("div"); f.id = "eng-foot";
+      f.innerHTML = 'הכינוי שלכם: <input id="eng-who" maxlength="20" placeholder="אורח"><div id="eng-visits"></div>';
+      document.body.appendChild(f);
+      try { f.querySelector("input").value = localStorage.getItem("pet.who") || ""; } catch (e) {}
+      f.querySelector("input").addEventListener("input", function () { try { localStorage.setItem("pet.who", this.value); } catch (e) {} });
+    }
+    var v = (pet.visits || []).map(function (x) { return x.who; }).filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+    document.getElementById("eng-visits").textContent = v.length ? "ביקרו לאחרונה: " + v.join(", ") : "";
+  }
+  function redraw() {
+    try { if (typeof draw === "function") draw(); } catch (e) { strip("משהו נשבר ב-draw. מעתיקים את השורה הזאת לג׳מיני:", String(e && e.message || e)); }
+    foot();
+  }
+  function show(p) {
+    if (p && typeof p === "object") { Object.keys(pet).forEach(function (k) { delete pet[k]; }); for (var k in p) pet[k] = p[k]; }
+    redraw();
+  }
+  function fail(e) { strip("השרת לא ענה. מעתיקים את השורה הזאת לג׳מיני, או מרימים יד:", String(e && e.message || e)); }
+  function load() {
+    if (!real) return show(fake);
+    google.script.run.withSuccessHandler(function (p) { if (!busy) show(p); }).withFailureHandler(fail).getPet();
+  }
+  function add(key, amount, max) {
+    key = String(key); amount = Number(amount) || 0;
+    if (max != null && max !== "") maxes[key] = Number(max);
+    var v = (Number(pet[key]) || 0) + amount;
+    if (maxes[key] != null) v = Math.min(maxes[key], v);
+    pet[key] = Math.max(0, v);
+    redraw();                                   // קודם בדף, מיד. התשובה של השרת תגיע עוד רגע
+    if (!real) { fake[key] = pet[key]; fake.visits.unshift({ who: who(), key: key }); return; }
+    busy++;
+    google.script.run
+      .withSuccessHandler(function (p) { busy--; if (!busy) show(p); })
+      .withFailureHandler(function (e) { busy--; fail(e); })
+      .add(key, amount, max == null ? "" : max, who());
+  }
+
+  window.addEventListener("error", function (e) {
+    strip("משהו נשבר בדף. מעתיקים את השורה הזאת לג׳מיני:", (e.message || "שגיאה") + (e.lineno ? "  (שורה " + e.lineno + ")" : ""));
+  });
+  window.addEventListener("load", function () {
+    if (typeof draw !== "function") strip("הקובץ Pet.html לא שלם: אין בו את הפונקציה draw. כנראה שג׳מיני נקטע באמצע. כותבים לו: ״נקטעת. תשלח שוב את הקובץ המלא, עד END Pet.״");
+    load();
+    setInterval(function () { if (!busy && !document.hidden) load(); }, 5000);   // כל 5 שניות: שואלים את השרת מה חדש
+  });
+  return { add: add, load: load };
+})();
+</script>

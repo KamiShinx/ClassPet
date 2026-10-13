@@ -22,3 +22,12 @@ vague vs specific prompts side by side in every lesson. (3) Talk, don't command:
 "suggest 3 options", "what's missing in my plan"; first answer = draft. (4) Never "זה לא עובד": bug report template
 (what I did / expected / happened / error or screenshot). (5) Annotated real conversations as models, incl.
 pushback ("no, that's not what I meant", "change only X"). Spoon-feed the mechanics, not the ideas.
+
+**13 Oct 2026, Ben on web-app meeting 1 (after calling v2 "just copy paste and create a copy of a google sheet",
+slides "underwhelming", Hebrew "suck"):** "we need to do the same like minecraft. coding becomes so easy/unrelevant
+that they just need to learn the design aspect and planning aspects, and learn how thing work." Also: "not 'watch
+this video', we need full on explanations, even with low amount of words in the slides", "really fun and actually
+educational". **How to apply:** every lesson's weight = a design talk (interactive slides the teacher clicks while
+explaining, like the Minecraft "what does a world need?" talk) + a written plan by the kid + how the thing works;
+the build is the short, easy part. No YouTube clip as the explanation. A lesson that is mostly click-paths is a fail.
+(My reading: the plan the kid writes should map onto the system's parts, e.g. see / do / remember = page / server / Sheet.)

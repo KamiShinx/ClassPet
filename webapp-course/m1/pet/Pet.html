@@ -1,0 +1,62 @@
+<!-- Pet.html: כל מה ששייך לחיה שלי: הציור, הצבעים, המשפטים והכפתורים. זה הקובץ שמשנים.
+     המנוע (Engine.html) נותן שלושה דברים:
+     pet                          מה שכתוב בגיליון. למשל: pet.name, pet.full
+     server.add("full", 15, 100)  מוסיף 15 לשורה full בגיליון, עד 100 לכל היותר. אם אין שורה בשם הזה, השרת יוצר אותה
+     draw()                       הפונקציה שמציירת את החיה. המנוע קורא לה בכל פעם שמגיעים מספרים חדשים מהגיליון -->
+<style>
+  body { margin: 0; padding: 18px; background: #FFF6DC; color: #3A2E1F; font-family: Arial, sans-serif; text-align: center; }
+  h1 { margin: 6px 0; font-size: 34px; }
+  #stage { width: 230px; margin: 0 auto; transition: transform .15s; }
+  #stage.jump { transform: translateY(-18px) rotate(-4deg); }
+  #say { font-size: 20px; min-height: 30px; }
+  .bar { display: flex; gap: 10px; align-items: center; justify-content: center; font-size: 18px; margin: 10px 0; }
+  .track { width: 220px; height: 18px; background: #E9DDB8; border-radius: 9px; overflow: hidden; }
+  #fullBar { height: 100%; width: 50%; background: #F29E38; transition: width .3s; }
+  button { font-size: 20px; padding: 10px 20px; margin: 6px; border: 0; border-radius: 14px; background: #3A2E1F; color: #fff; cursor: pointer; }
+</style>
+
+<h1 id="name"></h1>
+<div id="stage">
+  <svg viewBox="0 0 200 200">
+    <ellipse cx="100" cy="186" rx="52" ry="8" fill="#E9DDB8"/>
+    <path d="M100 18 C150 18 172 92 172 128 C172 166 140 184 100 184 C60 184 28 166 28 128 C28 92 50 18 100 18 Z" fill="#FFFDF5" stroke="#3A2E1F" stroke-width="5"/>
+    <circle cx="74" cy="92" r="11" fill="#F29E38"/><circle cx="128" cy="126" r="15" fill="#F29E38"/><circle cx="92" cy="150" r="8" fill="#F29E38"/>
+    <path d="M118 40 L108 58 L124 66 L112 84" fill="none" stroke="#3A2E1F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</div>
+<p id="say"></p>
+<div class="bar"><span>שובע</span><div class="track"><div id="fullBar"></div></div><b id="fullNum"></b></div>
+<p>ליטופים: <b id="pats">0</b></p>
+<button onclick="feed()">להאכיל 🍎</button>
+<button onclick="pat()">ללטף ✋</button>
+
+<script>
+var pats = 0;   // הליטופים נמצאים רק בדף. הם לא נשמרים בגיליון.
+
+function feed() {
+  server.add("full", 15, 100);   // השרת מוסיף 15 לשורה full בגיליון
+  jump();
+}
+
+function pat() {
+  pats = pats + 1;
+  draw();
+  jump();
+}
+
+function draw() {
+  var full = Number(pet.full) || 0;
+  document.getElementById("name").textContent = pet.name || "ביצה";
+  document.getElementById("fullBar").style.width = full + "%";
+  document.getElementById("fullNum").textContent = full;
+  document.getElementById("pats").textContent = pats;
+  document.getElementById("say").textContent = full < 30 ? "הביצה רועדת. היא רעבה." : "משהו זז שם בפנים...";
+}
+
+function jump() {
+  var stage = document.getElementById("stage");
+  stage.classList.add("jump");
+  setTimeout(function () { stage.classList.remove("jump"); }, 160);
+}
+</script>
+<!-- END Pet -->

@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: b316a12b-8ab8-427a-8055-3553d4f67d84
-  modified: 2026-09-24T15:01:16.552Z
+  modified: 2026-10-05T13:00:08.003Z
 ---
 
 Second course for Ben's work (MAKE?), started 2026-09-23 right after [[project-make-minecraft-course]].
@@ -51,7 +51,7 @@ with a copy button (blanks for the kid's own ideas), annotated screenshot of whe
 short animation (GIF/video) for fiddly click paths (deploy, make a copy, permission screen), screenshot of the
 expected result + "if you see this instead". Coworker Yuval built makers-lab for robotics; Ben wants "the same thing
 in a way". Reference copy at C:/Users/Ben/code/ref/makers-lab (node_modules DELETED 24 Sep to free C — run `npm install`
-before `npm run dev`; launch config "makers-lab-ref" port 3200).
+before `npm run dev`; launch config "makers-lab-ref" port 3200; demo class code MAKER1, teacher code maker2026).
 **Disk rule (Ben, 24 Sep): C and D are nearly full — put all research/media on E.**
 
 Screenshots of makers-lab + what to copy vs fix: `webapp-course-research/hub_ref/NOTES.md` (its instruction steps show
@@ -98,6 +98,20 @@ meeting (layout, forms/feedback/states, shared UI, HUD + game feel, user testing
 (hierarchy, spacing, colour/type, states, forms, mobile, RTL, accessibility, onboarding, game UI/juice, user testing,
 design vocabulary for prompting Gemini) + pixel art + 2D level design. Research round launched for these videos.
 
+**5 Oct: BOTH MAKE courses moved to one branch for Claude cloud sessions (Ben has $250 credit there):**
+KamiShinx/ClassPet branch `claude/make-courses` (commit 9cf8704) = webapp + minecraft branches merged + root
+`CLAUDE.md` (orientation) + `course-context/` (copies of these memory files) + COURSE_DRAFT.md, hub_ref screenshots,
+all notes, library transcripts.zip. Work may continue THERE: pull that branch before touching the courses locally.
+Not pushed: makers-lab source (Yuval's code), raw videos.
+
+**WARNING (found 5 Oct): KamiShinx/ClassPet is a PUBLIC repo** (`gh repo view` says so), unlike the other backup
+repos. On 5 Oct I pushed `course-context/` (Ben's preferences + quotes), makers-lab screenshots (Yuval's platform) and
+`transcripts.zip` there believing it private; told Ben. **His call (5 Oct): make it PRIVATE, but LATER** ("we're still
+working in it"): `minecraft-course/setup/install.bat` downloads starter.zip + hub files from raw.githubusercontent, which
+breaks when private. Plan: first make install.bat use local files next to it, then `gh repo edit --visibility private`.
+REMIND HIM once the install script is settled. Scrub anything
+personal before pushing to it. The `hebrew` skill is in the repo at `.claude/skills/hebrew/` (scrubbed copy, f8cb829).
+
 **24 Sep, library research DONE:** Ben's huge video list + my gap picks (547 videos, ~525 h) triaged by captions/
 Whisper (Ben: "start with captions to understand if theyre even relevant") → 385 judged: 101 core / 102 useful / 182
 skip. Map of 60 library pages (22 ★ homework-first, tagged P1–P4) in ClassPet `webapp-course/LIBRARY_MAP.md` (commit
@@ -127,45 +141,19 @@ using [[reference-video-research-pipeline]] (run_all.py). P1 Learn Google Sheets
 Rameez Imdad AI-built business dashboards (adult ERP/CRM, not kid project ideas); P3 Laurence Svekis (doGet/doPost,
 JSON APIs, plus Docs/Forms automation). Deliver results as one REVIEW-style md ([[feedback-review-files-for-comments]]).
 
-**13 Oct: the course starts NEXT TUESDAY (20 Oct), not November.** Facts from Ben today:
-- Kids come to **Ben's workplace** and use its laptops and PCs (Ben controls the machines).
-- Ben teaches from his **personal Gmail** (no Ministry teacher account) → sharing kids' Ministry Sheets with him may be
-  blocked; test it.
-- No student account tested yet; Ben can get one later this week. Test card: `webapp-course/STUDENT_ACCOUNT_TEST.md`.
-- At the workplace the network is less blocked, and the kids COULD use GPT Pro on the workplace account, but **the
-  course is written for Gemini on the Ministry accounts**; GPT Pro is only a fallback on a blocked day.
-
-**13 Oct: Phase 1 app = a VIRTUAL PET (Tamagotchi).** Ben rejected 7 utility/social ideas ("suck"); his rule: "it
-should just be fun and not too complicated". M1 hatch it (own pet on a real site, feeding saves, a friend feeds it),
-M2 moods + bars, M3 time passes (hunger while away), M4 the whole class visits at once (→ the lock).
-Built for meeting 1 (`webapp-course/`): `m1/pet/Code.gs` + `Index.html` (the starter: tabs pet/log, getPet/feed/
-play, LOOK + PET START/END for kids to restyle, works without a server in Gemini's preview), `hub/Code.gs` +
-`Index.html` (the kids' 12-step lesson in the same one-action style as the Minecraft hub, design card in
-localStorage, copy-prompt boxes, drawn click-path mocks with Hebrew+English UI names, slides at `?page=slides1`),
-`TEACHER_SETUP.md` (template, demo pet, hub; ~20 min on Ben's Gmail). Untested on a real Apps Script account.
-
-**13 Oct, PC session: meeting 1 tested end to end + video plan.** Ben deployed the hub and a demo pet (in a second
-Google account of his, not his main Gmail). Playwright, logged out: hub and pet both open with no sign-in; pet
-feed/play saves and survives a refresh; all 12 steps render at 1366x768 and 1920x1080 with nothing behind the bottom
-bar; design card fills the Gemini prompt; copy button puts the exact prompt on the clipboard; the copy button's link
-ends in /copy (logged out it lands on Google sign-in, so the real "Make a copy" page is still untested with a student
-account); slides: N, F, Space work. Found: demo pet sat at 100/100 (feeding shows nothing: reset full/joy to ~20
-before class); slides ignore arrow keys until one click on the page; card line 5 loses its question mark in the
-prompt; station bar highlights nothing on step 1 and "העותק" on step 6; one feed took 19 s. Report:
-`webapp-course/m1/test-report.json`, shots in `m1/test-shots/`. Proposals from the video research (not built, awaiting
-Ben's 💬): `webapp-course/m1/VIDEO_PLAN.md`. Top ones: move "friend feeds" before the drawing; teach two links (/dev
-"mine", /exec "friends'") instead of "new version" as a chore; open "where does the pet live" with code.org
-kBXQZMmiA4s 1:15-2:26 + 3:05-3:38 (Hebrew captions); design card = shape + 2-3 colours + one special thing + what it
-wants; habit sentence "לא מאמינים למסך. בודקים בגיליון."
-**13 Oct, later: Ben said "can you make the changes?" → built into `hub/Index.html`** (not live until he pastes it and
-publishes a new version). Steps: card = 8 fields (name, shape, colours, one special thing, food, toy, what she wants,
-hungry line), prompt lines are "label: answer"; order now 8 Sheet → 9 friend feeds → 10 drawing → 11 "two links: mine
-(/dev, Deploy → Test deployments) and the friends' (/exec, new version)" → 12 save; habit sentence in steps 7-8; the
-"set full to 5" experiment; grey Run button and "if Google says unverified" in step 6; 8 stations. Slides: 11 (two
-code.org clip slides kBXQZMmiA4s 75-146 s and 185-218 s via a `yt()` helper, "where does she live", three build-up
-slides with `trioN(n)` + the restaurant line, Gemini, today, save); on-screen arrow buttons and `window.focus()` so
-keys work without a click. New optional page `#lib1` ("איפה החיה שלי גרה?": text, 3 clips, experiment, Gemini prompt),
-linked from the home tiles and the last step. Fixed: `<svg` text in a help item was being parsed as a tag. Local
-Playwright test passes (no JS errors, clips load, nothing behind the bottom bar). Still to verify live inside Google's
-frame: YouTube embeds, `window.focus()`, and "Test deployments" on a student account.
-
+**13 Oct 2026, meeting 1 rebuilt as v3 (in repo, local tests pass; NOT yet deployed, NOT yet seen by Ben):** after his
+verdict on v2 (see [[feedback-courses-conversation-is-the-skill]]) two Sonnet designers debated (A: build from zero by
+talking to Gemini; B: working starter then real changes); I judged: B's spine + A's content + my own engine idea.
+The starter is now an **egg**: `m1/pet/` = `Code.gs` (generic `getPet` + `add(key, amount, max, who)`), `Index.html`
+(frame with includes), `Engine.html` (frozen: `pet`, `server.add`, 5 s polling, red error strip, offline fake server),
+`Pet.html` (the ONLY file kids/Gemini rewrite, ends with `<!-- END Pet -->`). Kids: plan (who she is / what she wants /
+her own button + Sheet row name) -> egg live -> "what does the egg remember" experiment (pats reset, full stays) ->
+Gemini asks 3 questions -> hatch -> push back -> own button that writes its own Sheet row -> friend -> save.
+Hub prompts = fixed frame + a box the kid must write in (copy disabled until enough words). Deck = 10 clickable slides,
+no YouTube: hook, needs, shape/silhouette, want/voice, plan sort (see/do/remember -> page/server/Sheet), one-press
+diagram, vague vs plan, ask-first chat, "תתקן" vs "שנה רק", path. Build scripts in the session scratchpad
+(`hub_v3_build.py` embeds Pet.html into the hub as `EGG`): after editing `m1/pet/Pet.html`, the hub's EGG must be
+rebuilt. To go live: hub `Index.html` new version (Chrome, needs Ben's yes) AND the template Sheet's script needs the
+4 new files + `setup` re-run (TEACHER_SETUP.md). Untested: everything on a student account, real Gemini.
+ASD-STE100 test (Ben's idea): round 2 of the debate was briefed in STE; replies were tighter and more checkable, but the
+format rules (word cap, fixed parts, "NOT TESTED") changed at the same time, so not a clean result.

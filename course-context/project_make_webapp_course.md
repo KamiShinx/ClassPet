@@ -143,3 +143,18 @@ play, LOOK + PET START/END for kids to restyle, works without a server in Gemini
 `Index.html` (the kids' 12-step lesson in the same one-action style as the Minecraft hub, design card in
 localStorage, copy-prompt boxes, drawn click-path mocks with Hebrew+English UI names, slides at `?page=slides1`),
 `TEACHER_SETUP.md` (template, demo pet, hub; ~20 min on Ben's Gmail). Untested on a real Apps Script account.
+
+**13 Oct, PC session: meeting 1 tested end to end + video plan.** Ben deployed the hub and a demo pet (in a second
+Google account of his, not his main Gmail). Playwright, logged out: hub and pet both open with no sign-in; pet
+feed/play saves and survives a refresh; all 12 steps render at 1366x768 and 1920x1080 with nothing behind the bottom
+bar; design card fills the Gemini prompt; copy button puts the exact prompt on the clipboard; the copy button's link
+ends in /copy (logged out it lands on Google sign-in, so the real "Make a copy" page is still untested with a student
+account); slides: N, F, Space work. Found: demo pet sat at 100/100 (feeding shows nothing: reset full/joy to ~20
+before class); slides ignore arrow keys until one click on the page; card line 5 loses its question mark in the
+prompt; station bar highlights nothing on step 1 and "העותק" on step 6; one feed took 19 s. Report:
+`webapp-course/m1/test-report.json`, shots in `m1/test-shots/`. Proposals from the video research (not built, awaiting
+Ben's 💬): `webapp-course/m1/VIDEO_PLAN.md`. Top ones: move "friend feeds" before the drawing; teach two links (/dev
+"mine", /exec "friends'") instead of "new version" as a chore; open "where does the pet live" with code.org
+kBXQZMmiA4s 1:15-2:26 + 3:05-3:38 (Hebrew captions); design card = shape + 2-3 colours + one special thing + what it
+wants; habit sentence "לא מאמינים למסך. בודקים בגיליון."
+

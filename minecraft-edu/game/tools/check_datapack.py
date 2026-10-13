@@ -394,6 +394,8 @@ def check_dialog(path, obj, errors):
             used = set(re.findall(r"\$\((\w+)\)", tpl))
             if used - keys:
                 errors.append("%s: template uses %s but the dialog has no such input" % (path, used - keys))
+            if not used:   # the game refuses this at load time: "No variables in macro" (found on Windows, 13 Oct)
+                errors.append("%s: dynamic/run_command template %r has no $(variable); use run_command with \"command\"" % (path, tpl))
             sample = re.sub(r"\$\((\w+)\)", "1", tpl)
             e = check_command(sample.lstrip("/"))
             if e:
@@ -421,7 +423,8 @@ def main(data):
                             continue
                         lines += 1
                         if st.startswith("$"):
-                            st = re.sub(r"\$\((\w+)\)", "1", st[1:])
+                            # a macro line: put a sample value where each $(name) stands (an id where the name says so)
+                            st = re.sub(r"\$\((\w+)\)", lambda m: "minecraft:stone" if m.group(1) in ("id", "item", "block") else "1", st[1:])
                         e = check_command(st)
                         if e:
                             errors.append("%s:%d %s\n    %s" % (rel, n, e, st[:160]))

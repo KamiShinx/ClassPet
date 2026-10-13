@@ -45,3 +45,26 @@ misode/mcmeta on GitHub; vanilla-mcdoc has the JSON schemas). Java is 4 small fi
 is the riskiest API call (GameRules/LevelSettings constructors may differ in 26.2): Ben's PC session compiles against
 the real (unobfuscated since 26.1) jar and fixes it. Test island = code-generated (`gen_island.py`, preview PNG).
 Root C:\ISLANDS, port 47812, mod id `islands`, working name "Science Islands" / איי המדע.
+
+**13 Oct, late evening (the PC session, on Ben's Windows desktop).** Step 1 now builds and runs; lesson 1 opens by
+itself. What was wrong and is fixed, so the cloud session doesn't repeat it:
+- 26.2 `LevelSettings(name, GameType, new LevelSettings.DifficultySettings(difficulty, hardcore, locked), allowCommands,
+  WorldDataConfiguration)`; no GameRules there; `mc.gui.setScreen`. A first start shows `AccessibilityOnboardingScreen`
+  before the title screen (the mod now answers it). Scripts call `gradlew.bat` by path.
+- Dialog buttons: a fixed command is `{"type":"minecraft:run_command","command":"..."}`. `dynamic/run_command` with no
+  `$(variable)` makes the whole datapack fail to load ("No variables in macro"); `check_datapack.py` now flags it.
+- Sidebar lines: a scoreboard holder whose name starts with `#` is hidden in the sidebar. Quest lines use `islands.q1`...
+- The checker replaces `$(name)` with `1`; it now uses `minecraft:stone` for names `id`, `item`, `block`. Pass
+  coordinates as separate macro numbers, not as one "x y z" string.
+- Ben's play test: **adventure mode**, arrive on the jetty near the island (not at its far end), and the guide is a
+  `minecraft:mannequin` with her own skin (`tools/gen_noa_skin.py`, `profile:{texture:"islands:entity/noa"}`) standing on
+  the jetty. `gen_island.py` has the new places.
+- **Lesson 1, built and tested in the game (by a command script, not by hand):** the quest list (sidebar), the sorting
+  station at the camp (a barrel of 10 named finds, chests "חי" / "לא חי" that check themselves: right = sparks, wrong =
+  the find goes back to the barrel with a hint, the log / wool / egg count in either chest), Noa's three talks, the end.
+  All of it is written by `tools/gen_lesson1.py` (coordinates and the ten finds in one place): edit that, run it.
+  The old test panel (time of day, chickens) is `dialog/l1/panel_test.json`, not shown now.
+- **Not built, and in doubt:** the binoculars quest. Ben, 13 Oct: "looking at animals with binoculars might be silly for
+  11-12 year old kids". Don't build it as planned; a replacement is being discussed with him. Sam, the notebook and the
+  end screen as a real screen are not built either.
+- Hebrew: every kid-facing line goes through `course-context/hebrew_kids_checklist.md` (two fresh audits).

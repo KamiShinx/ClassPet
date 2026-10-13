@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "סיכום שיעור 1",
+    "color": "green"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מיינתם את כל עשרת הממצאים. כל הכבוד."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "שלושה מהם לא היו קלים: בול העץ, הצמר והביצה. חי או לא חי? אולי משהו שבא מצמח או מבעל חיים? על זה נדבר בכיתה."
+      },
+      "width": 300
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "להתראות בשיעור הבא"
+      },
+      "action": {
+        "type": "minecraft:run_command",
+        "command": "trigger islands_act set 31"
+      }
+    }
+  ],
+  "columns": 1
+}

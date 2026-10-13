@@ -1,6 +1,6 @@
 {
   "type": "minecraft:multi_action",
-  "title": { "text": "נועה, ראש המשלחת", "color": "gold" },
+  "title": { "text": "נועה, ראשת המשלחת", "color": "gold" },
   "body": [
     { "type": "minecraft:plain_message", "contents": { "text": "זה חלון בדיקה. כל כפתור כאן משנה משהו בעולם, ככה נבדוק שהכול עובד." }, "width": 300 }
   ],
@@ -8,7 +8,7 @@
     {
       "type": "minecraft:single_option",
       "key": "when",
-      "label": { "text": "שעה ביום" },
+      "label": { "text": "איזו שעה ביום?" },
       "width": 220,
       "options": [
         { "id": "10", "display": { "text": "בוקר" }, "initial": true },

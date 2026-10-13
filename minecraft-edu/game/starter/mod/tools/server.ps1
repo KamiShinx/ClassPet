@@ -89,7 +89,7 @@ function Update-Game {
     # Keep the useful part of the log for the teacher: the first error lines.
     $lines = $all -split "`n" | Where-Object { $_ -match 'ERROR|error:|Exception|FAILED|What went wrong' } | Select-Object -First 25
     $state.error = ($lines -join "`n")
-    $state.phase = 'error'; $state.message = 'המשחק לא נפתח. צלמו את המסך ושלחו לבן.'
+    $state.phase = 'error'; $state.message = 'המשחק לא נפתח. מצלמים את המסך ומראים למורה.'
 }
 
 # "Close Minecraft": asks Gradle itself to stop (gradlew --stop). The hub never kills processes: Windows Defender
@@ -122,8 +122,8 @@ function Invoke-Action([string]$name, [string]$query) {
     $n = Get-Lesson $query
     switch ($name) {
         'play' {
-            if ($busy) { return New-Result $false 'מיינקראפט כבר פתוח. כדי לעבור שיעור, לוחצים ״לסגור את מיינקראפט״.' }
-            if ($n -lt 1) { return New-Result $false 'לא נבחר שיעור.' }
+            if ($busy) { return New-Result $false 'מיינקראפט כבר פתוח. כדי לעבור לשיעור אחר, לוחצים על ״לסגור את מיינקראפט״.' }
+            if ($n -lt 1) { return New-Result $false 'קודם בוחרים שיעור.' }
             $state.lesson = $n
             Start-Game $false
             return New-Result $true $state.message
@@ -131,10 +131,10 @@ function Invoke-Action([string]$name, [string]$query) {
         'restart' {
             # Start a lesson over: delete that lesson's world. The next Play builds it fresh.
             if ($busy) { return New-Result $false 'קודם סוגרים את מיינקראפט.' }
-            if ($n -lt 1) { return New-Result $false 'לא נבחר שיעור.' }
+            if ($n -lt 1) { return New-Result $false 'קודם בוחרים שיעור.' }
             $dir = Get-WorldDir $n
             if (Test-Path $dir) { Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue }
-            $state.message = "שיעור $n יתחיל מההתחלה בפעם הבאה שלוחצים שחק."
+            $state.message = "שיעור $n יתחיל מההתחלה בפעם הבאה שלוחצים על ״לשחק״."
             return New-Result $true $state.message
         }
         'stop' {

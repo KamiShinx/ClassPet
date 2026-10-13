@@ -28,7 +28,7 @@
 
 <header>
   <h1>איי המדע</h1>
-  <div class="status" id="status">מתחבר...</div>
+  <div class="status" id="status">מתחברים...</div>
 </header>
 
 <main>
@@ -42,8 +42,8 @@
 // The lessons. "ready" = there is a map for it in the mod.
 const LESSONS = [
   { n: 1, title: "נוחתים באי", text: "מי גר באי? חי או לא חי?", ready: true },
-  { n: 2, title: "מה כל בעל חיים צריך?", text: "מזון, מים, אוויר, טמפרטורה ומחסה", ready: false },
-  { n: 3, title: "מי גר איפה? סופרים", text: "סופרים בשני מקומות ובונים גרף", ready: false },
+  { n: 2, title: "מה כל בעל חיים צריך?", text: "מזון, מים, אוויר, טמפרטורה מתאימה ומחסה", ready: false },
+  { n: 3, title: "מי גר איפה?", text: "סופרים את בעלי החיים בשני מקומות, ובונים גרף", ready: false },
 ];
 
 let phase = "idle", started = [];
@@ -62,7 +62,7 @@ function render() {
       <div><h2>${l.title}</h2><p>${l.ready ? l.text : "בקרוב"}</p></div>
       <div class="go">
         ${l.ready && started.includes(l.n) ? `<button class="again" data-again="${l.n}" ${busy ? "disabled" : ""}>להתחיל מההתחלה</button>` : ""}
-        <button class="play" data-play="${l.n}" ${!l.ready || busy ? "disabled" : ""}>${started.includes(l.n) ? "להמשיך" : "שחק"}</button>
+        <button class="play" data-play="${l.n}" ${!l.ready || busy ? "disabled" : ""}>${started.includes(l.n) ? "להמשיך" : "לשחק"}</button>
       </div>
     </div>`).join("");
 }
@@ -86,7 +86,7 @@ document.addEventListener("click", ev => {
   if (ev.target.id === "close") post("stop");
 });
 
-function poll() { return fetch("/api/status").then(r => r.json()).then(show).catch(() => { document.getElementById("status").textContent = "השרת סגור. פותחים שוב את הסמל איי המדע."; }); }
+function poll() { return fetch("/api/status").then(r => r.json()).then(show).catch(() => { document.getElementById("status").textContent = "החיבור למשחק נותק. לוחצים שוב על הסמל ״איי המדע״ שעל שולחן העבודה."; }); }
 render();
 poll();
 setInterval(poll, 2000);

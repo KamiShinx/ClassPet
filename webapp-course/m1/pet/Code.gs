@@ -21,20 +21,31 @@ function include(name) {
 /* בונה את שתי הלשוניות, אם הן חסרות. בעותק מהתבנית הן כבר קיימות. */
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let pet = ss.getSheetByName(PET);
-  if (!pet) {
-    pet = ss.insertSheet(PET);
-    pet.getRange(1, 1, 1, 3).setValues([['key', 'value', 'max']]).setFontWeight('bold');
-    pet.getRange(2, 1, 2, 3).setValues([['name', 'ביצה', ''], ['full', 50, 100]]);
-    pet.setFrozenRows(1);
-  }
-  let log = ss.getSheetByName(LOG);
-  if (!log) {
-    log = ss.insertSheet(LOG);
-    log.getRange(1, 1, 1, 4).setValues([['time', 'who', 'key', 'amount']]).setFontWeight('bold');
-    log.setFrozenRows(1);
-  }
+  if (!ss.getSheetByName(PET)) egg_(ss.insertSheet(PET));
+  if (!ss.getSheetByName(LOG)) emptyLog_(ss.insertSheet(LOG));
   return 'ok';
+}
+
+/* מתחילים מחדש: מוחק את כל מה שהחיה זוכרת ואת רשימת הביקורים, ומחזיר ביצה. מריצים מהעורך. */
+function resetSheet() {
+  setup();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  egg_(ss.getSheetByName(PET));
+  emptyLog_(ss.getSheetByName(LOG));
+  return 'ok';
+}
+
+function egg_(sh) {
+  sh.clear();
+  sh.getRange(1, 1, 1, 3).setValues([['key', 'value', 'max']]).setFontWeight('bold');
+  sh.getRange(2, 1, 2, 3).setValues([['name', 'ביצה', ''], ['full', 50, 100]]);
+  sh.setFrozenRows(1);
+}
+
+function emptyLog_(sh) {
+  sh.clear();
+  sh.getRange(1, 1, 1, 4).setValues([['time', 'who', 'key', 'amount']]).setFontWeight('bold');
+  sh.setFrozenRows(1);
 }
 
 function petSheet_() {
@@ -66,7 +77,9 @@ function add(key, amount, max, who) {
   if (!row) { sh.appendRow([key, 0, max === '' || max == null ? '' : Number(max)]); row = sh.getLastRow(); }
   const now = sh.getRange(row, 2, 1, 2).getValues()[0];
   let value = (Number(now[0]) || 0) + (Number(amount) || 0);
-  if (now[1] !== '' && !isNaN(Number(now[1]))) value = Math.min(Number(now[1]), value);
+  const isNum = x => x !== '' && x != null && !isNaN(Number(x));
+  const limit = isNum(max) ? Number(max) : (isNum(now[1]) ? Number(now[1]) : null);   // ה-max שהדף שלח, ואם אין, ה-max שכתוב בגיליון
+  if (limit !== null) value = Math.min(limit, value);
   value = Math.max(0, value);
   sh.getRange(row, 2).setValue(value);
   const log = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(LOG);

@@ -157,3 +157,9 @@ rebuilt. To go live: hub `Index.html` new version (Chrome, needs Ben's yes) AND 
 4 new files + `setup` re-run (TEACHER_SETUP.md). Untested: everything on a student account, real Gemini.
 ASD-STE100 test (Ben's idea): round 2 of the debate was briefed in STE; replies were tighter and more checkable, but the
 format rules (word cap, fixed parts, "NOT TESTED") changed at the same time, so not a clean result.
+**13 Oct, later: v3 is LIVE** (Ben said yes). Hub = version 3 on the same /exec link; the template Sheet's script
+(project bound to the template, in the course's second Google account, slot `/u/1` in Chrome on the desktop PC) now has
+the 4 egg files and its Sheet was reset with `resetSheet()`. Logged-out live test passed (12 steps, 10 slides).
+The demo pet is still the OLD pet (works with slide 1; not hatched from the egg). In the Apps Script editor the
+function picker only takes a click on the option element itself (role=option), and Sheets pages are blocked for the
+Chrome tools by another extension: read Sheets through the public gviz CSV link instead.

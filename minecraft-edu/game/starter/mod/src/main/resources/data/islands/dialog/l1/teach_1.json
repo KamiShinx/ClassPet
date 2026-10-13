@@ -1,0 +1,74 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "מאפיין חיים: רבייה",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "התרנגולת מטילה ביצים, ומהן בוקעים אפרוחים. יצורים חיים מעמידים צאצאים שדומים להם."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "בלי רבייה, לא היו נשארות תרנגולות בעולם."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מתייגים כאן: תרנגולת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "מה מאלה הוא רבייה?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "כבשה אוכלת עשב"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "סוס רץ באחו"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "פרה ממליטה עגל"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 31$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

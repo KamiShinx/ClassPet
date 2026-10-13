@@ -1,0 +1,146 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "בוחן המשלחת",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "ארבע שאלות על מה שלמדתם היום. עונים לבד, בלי לנחש."
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "q1",
+      "label": {
+        "text": "נהר זורם וזז כל הזמן. האם הוא חי?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "כן, כי הוא זז"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "לא: אין לו את שאר מאפייני החיים"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "רק בחורף"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "q2",
+      "label": {
+        "text": "מה מאלה אינו מאפיין חיים?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "נשימה"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "רבייה"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "צבע"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "q3",
+      "label": {
+        "text": "צמר הוא..."
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "חומר שמקורו ביצור חי"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "יצור חי"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "דומם שאין לו קשר לחיים"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "q4",
+      "label": {
+        "text": "איך ידענו בניסוי שהשתיל חי?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "כי הוא ירוק"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "כי הוא גדל והתפתח"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "כי הוא עמד בשמש"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "לסיים את הבוחן"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 4$(q1)$(q2)$(q3)$(q4)"
+      }
+    }
+  ],
+  "columns": 1
+}

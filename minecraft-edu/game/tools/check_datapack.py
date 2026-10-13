@@ -169,6 +169,11 @@ def parse_arg(parser, props, s, i):
         if "min" in props and v < props["min"] or "max" in props and v > props["max"]:
             raise Fail("number %s out of range" % w)
         return j
+    if parser == "minecraft:operation":   # the game refuses anything else at load time ("Invalid operation")
+        w, j = read_word(s, i)
+        if w not in ("=", "+=", "-=", "*=", "/=", "%=", "<", ">", "><"):
+            raise Fail("unknown scoreboard operation %r" % w)
+        return j
     if parser == "brigadier:string":
         t = props.get("type")
         if t == "greedy":

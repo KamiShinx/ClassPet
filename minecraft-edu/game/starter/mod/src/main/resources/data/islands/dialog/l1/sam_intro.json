@@ -83,6 +83,44 @@
     },
     {
       "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "We use the "
+        },
+        {
+          "text": "words",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "מילים"
+            }
+          }
+        },
+        {
+          "text": " from "
+        },
+        {
+          "text": "class",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "כיתה"
+            }
+          }
+        },
+        {
+          "text": "."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
       "contents": {
         "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
         "color": "gray"

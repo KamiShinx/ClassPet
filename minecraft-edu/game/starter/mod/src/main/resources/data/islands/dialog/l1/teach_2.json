@@ -1,0 +1,74 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "מאפיין חיים: תנועה",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הסוס דוהר באחו. בעלי חיים זזים כדי למצוא מזון, כדי לברוח, וכדי למצוא בני זוג."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "גם צמחים זזים, רק לאט: חמנייה צעירה פונה אל השמש."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מתייגים כאן: סוס.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "האם צמחים זזים?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "לא, אף פעם"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "כן, אבל לאט"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "רק כשיש רוח"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 32$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

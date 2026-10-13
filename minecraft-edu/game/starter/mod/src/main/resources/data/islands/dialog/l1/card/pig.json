@@ -59,33 +59,33 @@
       "type": "minecraft:single_option",
       "key": "doing",
       "label": {
-        "text": "מה עשה בעל החיים?"
+        "text": "איזה מאפיין חיים ראיתם אצלו?"
       },
       "width": 260,
       "options": [
         {
           "id": "1",
           "display": {
-            "text": "אכל"
+            "text": "תנועה"
           },
           "initial": true
         },
         {
           "id": "2",
           "display": {
-            "text": "הלך"
+            "text": "הזנה"
           }
         },
         {
           "id": "3",
           "display": {
-            "text": "עמד"
+            "text": "נשימה"
           }
         },
         {
           "id": "4",
           "display": {
-            "text": "שחה"
+            "text": "תקשורת עם הסביבה"
           }
         }
       ]

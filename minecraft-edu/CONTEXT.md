@@ -90,3 +90,22 @@ replaced by a **census with a tag**.
   played by hand from start to end. Known rough edges: characters walk on top of water; a "new recipe" toast appears
   when the tag is given; big screen titles must stay under about 12 characters.
 - Text went through two audits (Hebrew and Sam's English) per `course-context/hebrew_kids_checklist.md`.
+
+**13 Oct, late night (the PC session): lesson 1 now teaches, not only plays.** Ben: "nothing in Noa and the other remind
+the students of what the teacher taught" and "i need the game to be able to function as a full on lesson".
+- **Teaching stops:** `TEACH` in `gen_lesson1.py`: 7 short talks by Noa at route stops 2 to 8, one per characteristic of
+  life (the Ministry's list: נשימה, הזנה, הפרשה, גדילה והתפתחות, רבייה, תנועה, תקשורת עם הסביבה). Each: two lines, one
+  question, three answers; a wrong answer explains and asks again. `#learn islands` counts them (functions `teach/*`).
+- Stage 1 ends only when `#census >= 8` AND `#learn >= 7` (`census/maybe_done`). Stage 5 is now a **quiz** of 4 questions
+  (`QUIZ`, `quiz/*`, scores `#quiz`, `#quizdone`) and then the summary.
+- The observation card's second question is now "which characteristic of life did you see" (`SEEN_HE`).
+- `/trigger islands_act` ranges, new: 300 to 399 teaching answers, 41111 to 43333 quiz. See `function/act.mcfunction`.
+- **Notebook:** 4 pages (`#notebook_test` 1..4): the characteristics (a tick for each one learned), who lives on the
+  island, the sorting, the experiment. Two rules found the hard way: (1) a line that starts with a Latin letter is laid
+  out left to right and its Hebrew comes out scrambled, so every Hebrew line starts with a Hebrew word; (2) nothing may
+  cross the book's spine: free text goes through `wrapped(...)`, and each page holds its own table columns.
+- A scoreboard operation written `%%=` made one function fail to load without any visible error; `check_datapack.py` now
+  validates operations.
+- Tested: scripted play-through (25 checks) and screenshots of the 4 notebook pages. NOT played by hand start to end.
+  **The new teaching and quiz text has NOT had its two Hebrew audits or a science check yet.** Lesson length not measured.
+- `STARTER_VER` is 7.

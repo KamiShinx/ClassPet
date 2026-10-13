@@ -1,0 +1,74 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "מאפיין חיים: תקשורת עם הסביבה",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "השועל שמע אתכם, וברח. יצורים חיים קולטים מה שקורה מסביב, ומגיבים."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לזה קוראים תקשורת עם הסביבה: לראות, לשמוע, להריח, ולהגיב."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מתייגים כאן: שועל. מחזיקים Shift, ומתקרבים לאט.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "מה מאלה הוא תקשורת עם הסביבה?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "אבן מתגלגלת בהר"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "שועל שומע צעדים ובורח"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "ענן זז בשמיים"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 34$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

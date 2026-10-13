@@ -1,0 +1,74 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "מאפיין חיים: הפרשה",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הגמל שותה הרבה, ומפריש מעט מאוד שתן. ככה הוא שומר מים במדבר."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כל יצור חי מפריש: מוציא מהגוף חומרים שהוא לא צריך."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מתייגים כאן: גמל, ארנב, ואולי גם ארמדיל.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "למה יצור חי מפריש?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "כדי לגדול מהר יותר"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "כדי להוציא מהגוף חומרים מיותרים"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "כי הוא רעב"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 36$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

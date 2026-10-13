@@ -54,7 +54,7 @@ ANIMALS = [
 ]
 CENSUS_GOAL = 8
 PLACES_HE = ["אחו", "יער", "מדבר", "הר", "אגם/ים"]          # option ids 1..5
-DOING_HE = ["אכל", "הלך", "עמד", "שחה"]                   # option ids 1..4
+SEEN_HE = ["תנועה", "הזנה", "נשימה", "תקשורת עם הסביבה"]   # a characteristic of life the kid saw; option ids 1..4
 # the test bench: (key, x, Hebrew, what happens after a week: 1 grew, 2 hatched, 3 nothing)
 BENCH_Z, BENCH_Y = 35, -50
 BENCH = [("sapling", -8, "שתיל", 1), ("egg", -6, "ביצה", 2), ("stone", -5, "אבן", 3), ("wool", -4, "צמר", 3), ("log", -3, "בול עץ", 3)]
@@ -78,6 +78,45 @@ NOA_ROUTE = [
 TOUR_END, WP_STATION, WP_BENCH, WP_SAM = 8, 9, 10, 11
 # Sam's stops: the pasture, then one for each request (chickens, the jetty for the fish, the desert), then the camp.
 SAM_ROUTE = [(8, 33, False), (-9, 39, False), (0, 52, True), (31, 10, False), (2, 37, False)]
+# What Noa teaches at each stop of the tour: (stop number on NOA_ROUTE, the characteristic of life, what she says,
+# the question, three answers, the number of the right answer, which animals to tag there).
+TEACH = [
+    (2, "הזנה", ["הכבשה אוכלת עשב כל היום. כל יצור חי צריך מזון: ממנו הוא מקבל אנרגיה, וחומרים לבניית הגוף.",
+                 "צמחים לא אוכלים. הם מייצרים את המזון שלהם בעצמם, בעזרת אור השמש."],
+     "מאיפה צמח מקבל את המזון שלו?", ["הוא אוכל אדמה", "הוא מייצר אותו בעצמו, בעזרת אור", "הוא לא צריך מזון"], 2,
+     "מתייגים כאן: כבשה, פרה וחזיר."),
+    (3, "רבייה", ["התרנגולת מטילה ביצים, ומהן בוקעים אפרוחים. יצורים חיים מעמידים צאצאים שדומים להם.",
+                  "בלי רבייה, לא היו נשארות תרנגולות בעולם."],
+     "מה מאלה הוא רבייה?", ["כבשה אוכלת עשב", "סוס רץ באחו", "פרה ממליטה עגל"], 3,
+     "מתייגים כאן: תרנגולת."),
+    (4, "תנועה", ["הסוס דוהר באחו. בעלי חיים זזים כדי למצוא מזון, כדי לברוח, וכדי למצוא בני זוג.",
+                  "גם צמחים זזים, רק לאט: חמנייה צעירה פונה אל השמש."],
+     "האם צמחים זזים?", ["לא, אף פעם", "כן, אבל לאט", "רק כשיש רוח"], 2,
+     "מתייגים כאן: סוס."),
+    (5, "נשימה", ["הצפרדע נושמת אוויר. הדג נושם בזימים את החמצן שמומס במים.",
+                  "כל יצור חי נושם, גם צמחים. בנשימה הגוף מפיק אנרגיה מהמזון."],
+     "איך דג נושם מתחת למים?", ["הוא לא נושם בכלל", "הוא עולה לנשום אוויר כל דקה", "בזימים, את החמצן שבמים"], 3,
+     "מתייגים כאן: צפרדע ודג סלמון."),
+    (6, "תקשורת עם הסביבה", ["השועל שמע אתכם, וברח. יצורים חיים קולטים מה שקורה מסביב, ומגיבים.",
+                             "לזה קוראים תקשורת עם הסביבה: לראות, לשמוע, להריח, ולהגיב."],
+     "מה מאלה הוא תקשורת עם הסביבה?", ["אבן מתגלגלת בהר", "שועל שומע צעדים ובורח", "ענן זז בשמיים"], 2,
+     "מתייגים כאן: שועל. מחזיקים Shift, ומתקרבים לאט."),
+    (7, "גדילה והתפתחות", ["גדי קטן גדל, ונהיה עז הרים בוגרת. כל יצור חי גדל, ומשתנה במהלך החיים.",
+                           "גם אפרוח הופך לתרנגולת, וראשן הופך לצפרדע."],
+     "מה מאלה גדל ומתפתח?", ["ערימת חול שגדלה ברוח", "שלולית שמתמלאת בגשם", "ראשן שהופך לצפרדע"], 3,
+     "מתייגים כאן: עז הרים. היא למעלה, על ההר."),
+    (8, "הפרשה", ["הגמל שותה הרבה, ומפריש מעט מאוד שתן. ככה הוא שומר מים במדבר.",
+                  "כל יצור חי מפריש: מוציא מהגוף חומרים שהוא לא צריך."],
+     "למה יצור חי מפריש?", ["כדי לגדול מהר יותר", "כדי להוציא מהגוף חומרים מיותרים", "כי הוא רעב"], 2,
+     "מתייגים כאן: גמל, ארנב, ואולי גם ארמדיל."),
+]
+# The quiz at the end: (question, three answers, the number of the right answer).
+QUIZ = [
+    ("נהר זורם וזז כל הזמן. האם הוא חי?", ["כן, כי הוא זז", "לא: אין לו את שאר מאפייני החיים", "רק בחורף"], 2),
+    ("מה מאלה אינו מאפיין חיים?", ["נשימה", "רבייה", "צבע"], 3),
+    ("צמר הוא...", ["חומר שמקורו ביצור חי", "יצור חי", "דומם שאין לו קשר לחיים"], 1),
+    ("איך ידענו בניסוי שהשתיל חי?", ["כי הוא ירוק", "כי הוא גדל והתפתח", "כי הוא עמד בשמש"], 2),
+]
 TAG_ITEM = 'minecraft:paper[minecraft:item_model="minecraft:name_tag",minecraft:custom_name={text:"תג המשלחת",italic:false},minecraft:custom_data={islands:"tag"}]'
 HOLDS_TAG = 'minecraft:paper[minecraft:custom_data~{islands:"tag"}]'
 ME = "@a[tag=islands_in,limit=1]"
@@ -220,6 +259,7 @@ w("function/lesson/1/start.mcfunction", "\n".join([
     "scoreboard players set #week islands 0", "scoreboard players set #sam islands 0",
     "scoreboard players set #wp_noa islands 0", "scoreboard players set #wpmax_noa islands 0",
     "scoreboard players set #wp_sam islands 0", "scoreboard players set #said_noa islands -1",
+    "scoreboard players set #learn islands 0", "scoreboard players set #quizdone islands 0", "scoreboard players set #quiz islands 0",
     "function islands:quest/setup",
     "scoreboard players set islands.q1 islands_q 9",
     line("islands.q1", "☐ מדברים עם נועה"),
@@ -233,11 +273,12 @@ execute if score #stage islands matches 1 as %s unless items entity @s container
 w("function/lesson/1/talk_guide.mcfunction", """
 # The player (@s) talks to Noa. What she says depends on where the lesson is.
 execute if score #stage islands matches 0 run dialog show @s islands:l1/guide
-execute if score #stage islands matches 1 run dialog show @s islands:l1/guide_census
+execute if score #stage islands matches 1 run function islands:lesson/1/teach/talk
 execute if score #stage islands matches 2 run dialog show @s islands:l1/guide_sort
 execute if score #stage islands matches 3 run dialog show @s islands:l1/guide_bench
 execute if score #stage islands matches 4 run dialog show @s islands:l1/guide_sam
-execute if score #stage islands matches 5 run dialog show @s islands:l1/guide_done
+execute if score #stage islands matches 5 unless score #quizdone islands matches 1 run dialog show @s islands:l1/quiz
+execute if score #stage islands matches 5 if score #quizdone islands matches 1 run dialog show @s islands:l1/guide_done
 execute if score #stage islands matches 6.. run dialog show @s islands:l1/guide_after
 """)
 w("function/lesson/1/use_entity.mcfunction", """
@@ -248,23 +289,26 @@ execute if score #stage islands matches 4 if score #sam islands matches 1..3 run
 """ % HOLDS_TAG)
 
 wj("dialog/l1/guide.json", one_button(NOA, [
-    msg("טוב שהגעתם. לפני הכול, המשלחת צריכה לדעת מי גר על האי הזה."),
+    msg("טוב שהגעתם. המטרה שלנו היום: לדעת מה ההבדל בין יצור חי לדומם, ואיך בודקים את זה."),
+    msg("בדרך נעבור על שבעת מאפייני החיים, אחד בכל תחנה. בכל תחנה אשאל אתכם שאלה אחת."),
     msg("אחרי הכפתור תקבלו את תג המשלחת. מחזיקים אותו ביד, מתקרבים לבעל חיים, ולוחצים עליו קליק ימני. צריך לתייג %d סוגים שונים. אני הולכת לפניכם ומראה את הדרך." % CENSUS_GOAL)],
     "יוצאים לדרך", 30))
 wj("dialog/l1/guide_census.json", notice(NOA, [
-    msg("על האי יש אחו (שדה של דשא), יער, מדבר, הר ואגם. בכל מקום גרים בעלי חיים אחרים."),
-    msg("השועל בורח מכם? מתקרבים אליו בשקט: מחזיקים את מקש Shift.")]))
+    msg("אני מחכה לכם בתחנה הבאה. כשמגיעים אליי, לוחצים עליי קליק ימני."),
+    msg("על האי יש אחו (שדה של דשא), יער, מדבר, הר ואגם. צריך לתייג %d סוגים של בעלי חיים, וללמוד את כל שבעת המאפיינים." % CENSUS_GOAL)]))
 wj("dialog/l1/guide_sort.json", notice(NOA, [
     msg("במחנה מחכה חבית של ממצאים. משלחת קודמת אספה אותם מכל האי, ועדיין אף אחד לא מיין אותם."),
-    msg("לוקחים ממצא מהחבית, ושמים אותו בארגז המתאים: ״חי״ או ״לא חי״. לא בטוחים? בודקים: הוא גדל? הוא צריך מזון ומים? הוא צריך אוויר?")]))
+    msg("עכשיו משתמשים במה שלמדתם בדרך. מי שיש לו מאפייני חיים (נושם, ניזון, גדל, מתרבה) הוא חי. מי שאין לו, הוא דומם: לא חי."),
+    msg("לוקחים ממצא מהחבית, ושמים אותו בארגז המתאים: ״חי״ או ״לא חי״. שכחתם מאפיין? פותחים את המחברת במקש N.")]))
 wj("dialog/l1/guide_bench.json", notice(NOA, [
-    msg("על שולחן הניסוי יש חמישה דברים: שתיל, ביצה, אבן, צמר ובול עץ. אילו מהם חיים? לא מנחשים. בודקים."),
+    msg("על שולחן הניסוי יש חמישה דברים: שתיל, ביצה, אבן, צמר ובול עץ. אילו מהם חיים? לא מנחשים. בודקים: גדילה והתפתחות הן מאפייני חיים."),
     msg("לוחצים קליק ימני על השעון, וחודש עובר. אחר כך רושמים בטבלה מה קרה לכל אחד.")]))
 wj("dialog/l1/guide_sam.json", notice(NOA, [
-    msg("השתיל גדל והביצה בקעה, לכן הם חיים. האבן לא השתנתה, והיא לא חיה. הצמר, בול העץ, העצם והנוצה לא חיים, אבל כולם באו ממשהו חי."),
+    msg("השתיל גדל, ומהביצה בקע אפרוח. גדילה והתפתחות הן מאפייני חיים, לכן הם חיים. האבן לא השתנתה: היא דומם."),
+    msg("הצמר ובול העץ לא חיים, אבל הם חומרים שמקורם ביצורים חיים. גם העצם והנוצה."),
     msg("ועכשיו פוגשים את סם. הוא חוקר במשלחת ומדבר רק אנגלית. הוא מחכה ליד החווה. לוחצים עליו קליק ימני כדי לדבר איתו.")], "הולכים לסם"))
 wj("dialog/l1/guide_done.json", one_button({"text": "סיכום השיעור", "color": "green"}, [
-    msg("זהו, סיימתם את היום הראשון על האי."),
+    msg("זהו, סיימתם את היום הראשון על האי. עכשיו אתם יודעים: ליצור חי יש שבעה מאפייני חיים, ולדומם אין."),
     msg("תייגתם בעלי חיים, מיינתם ממצאים, בדקתם בניסוי מה חי באמת, ועזרתם לסם. הכול רשום במחברת המחקר: לוחצים על המקש N.")],
     "להתראות בשיעור הבא", 31))
 wj("dialog/l1/guide_after.json", notice(NOA, [msg("סיימתם את שיעור 1. אפשר להמשיך לטייל על האי, או לסגור את המשחק.")]))
@@ -284,10 +328,15 @@ for i, (x, z, jetty, say) in enumerate(NOA_ROUTE):
              "execute unless entity @s[distance=..1.3] run return run function islands:path/%s" % ("walk" if i <= TOUR_END else "go"),
              "function islands:path/stand",
              "execute at @s unless entity @a[tag=islands_in,distance=..7] run return 0"]
-    if say:
-        lines.append('execute unless score #said_noa islands matches %d.. run title @a actionbar {text:"נועה: %s",color:"gold"}' % (i, say))
+    if any(t[0] == i for t in TEACH):
+        # a teaching stop: she calls the player once, and moves on only after the question is answered (teach/right)
+        lines.append('execute unless score #said_noa islands matches %d.. run title @a actionbar {text:"נועה: יש כאן משהו לראות. קליק ימני עליי.",color:"gold"}' % i)
         lines.append("execute unless score #said_noa islands matches %d.. run scoreboard players set #said_noa islands %d" % (i, i))
-    lines.append("execute if score #wp_noa islands < #wpmax_noa islands run scoreboard players add #wp_noa islands 1")
+    else:
+        if say:
+            lines.append('execute unless score #said_noa islands matches %d.. run title @a actionbar {text:"נועה: %s",color:"gold"}' % (i, say))
+            lines.append("execute unless score #said_noa islands matches %d.. run scoreboard players set #said_noa islands %d" % (i, i))
+        lines.append("execute if score #wp_noa islands < #wpmax_noa islands run scoreboard players add #wp_noa islands 1")
     w("function/lesson/1/path/noa_%d.mcfunction" % i, "\n".join(lines))
 for j, (x, z, jetty) in enumerate(SAM_ROUTE):
     tick_lines.append("execute if score #wp_sam islands matches %d positioned %s as @e[tag=sam,limit=1] run function islands:lesson/1/path/sam_%s" % (j, stop(x, z, jetty), "go" if j == len(SAM_ROUTE) - 1 else "lead"))
@@ -302,6 +351,79 @@ execute unless entity @s[distance=..1.3] run return run function islands:path/go
 function islands:path/stand
 """)
 
+# ------------------------------------------------------------------ Noa teaches: one characteristic of life at each stop
+def options(key, question, answers):
+    return {"type": "minecraft:single_option", "key": key, "label": {"text": question}, "width": 300,
+            "options": [dict({"id": str(j + 1), "display": {"text": t}}, **({"initial": True} if j == 0 else {})) for j, t in enumerate(answers)]}
+
+
+talk = ["# The player (@s) talks to Noa during the tour: the talk of the stop she is at, if its question is still open."]
+answer = ["# A teaching question was answered (as the player). islands_act = 3, the talk's number, the answer."]
+for k, (stop_i, name, says, question, answers, right, tag_hint) in enumerate(TEACH):
+    wj("dialog/l1/teach_%d.json" % k, {
+        "type": "minecraft:multi_action", "title": {"text": "מאפיין חיים: " + name, "color": "gold"},
+        "body": [msg(t) for t in says] + [msg({"text": tag_hint, "color": "gray"})],
+        "inputs": [options("a", question, answers)],
+        "actions": [{"label": {"text": "זאת התשובה שלי"}, "action": {"type": "minecraft:dynamic/run_command", "template": "trigger islands_act set 3%d$(a)" % k}}],
+        "columns": 1})
+    talk.append("execute if score #wp_noa islands matches %d if score #learn islands matches %d run return run dialog show @s islands:l1/teach_%d" % (stop_i, k, k))
+    answer.append("execute if score #learn islands matches %d if score @s islands_act matches 3%d%d run return run function islands:lesson/1/teach/right" % (k, k, right))
+talk.append("dialog show @s islands:l1/guide_census")
+answer.append("dialog show @s islands:l1/teach_wrong")
+w("function/lesson/1/teach/talk.mcfunction", "\n".join(talk))
+w("function/lesson/1/teach/answer.mcfunction", "\n".join(answer))
+wj("dialog/l1/teach_wrong.json", {"type": "minecraft:multi_action", "title": NOA,
+   "body": [msg("לא בדיוק. קוראים שוב מה שאמרתי, ומנסים עוד פעם.")], "actions": [act("לנסות שוב", 1)], "columns": 1})
+w("function/lesson/1/teach/right.mcfunction", """
+# The right answer: the characteristic is marked in the notebook, and Noa walks on to the next stop.
+scoreboard players add #learn islands 1
+execute at @e[tag=guide,limit=1] run particle minecraft:happy_villager ~ ~1.2 ~ 0.4 0.5 0.4 0 20
+playsound minecraft:entity.player.levelup master @s ~ ~ ~ 1 1.3
+title @s actionbar {text:"נכון! המאפיין סומן במחברת (מקש N).",color:"green"}
+execute store result storage islands:tmp q.n int 1 run scoreboard players get #learn islands
+function islands:lesson/1/teach/show_line with storage islands:tmp q
+execute if score #wp_noa islands < #wpmax_noa islands run scoreboard players add #wp_noa islands 1
+function islands:lesson/1/census/maybe_done
+""")
+w("function/lesson/1/teach/show_line.mcfunction", '$scoreboard players display name islands.q7 islands_q {text:"☐ לומדים עם נועה: $(n) מתוך %d מאפיינים",color:"white"}' % len(TEACH))
+w("function/lesson/1/census/maybe_done.mcfunction", "\n".join([
+    "# The tour ends when both are done: %d kinds tagged, and all %d characteristics learned." % (CENSUS_GOAL, len(TEACH)),
+    "execute unless score #stage islands matches 1 run return 0",
+    "execute if score #census islands matches %d.. run %s" % (CENSUS_GOAL, line("islands.q2", "☑ מתייגים בעלי חיים: %d מתוך %d" % (CENSUS_GOAL, CENSUS_GOAL), "green")),
+    "execute if score #learn islands matches %d.. run %s" % (len(TEACH), line("islands.q7", "☑ לומדים עם נועה: %d מתוך %d מאפיינים" % (len(TEACH), len(TEACH)), "green")),
+    "execute if score #census islands matches %d.. if score #learn islands matches %d.. run function islands:lesson/1/census/done" % (CENSUS_GOAL, len(TEACH)),
+]))
+
+# the quiz at the end
+wj("dialog/l1/quiz.json", {
+    "type": "minecraft:multi_action", "title": {"text": "בוחן המשלחת", "color": "gold"},
+    "body": [msg("ארבע שאלות על מה שלמדתם היום. עונים לבד, בלי לנחש.")],
+    "inputs": [options("q%d" % (j + 1), q, a) for j, (q, a, _) in enumerate(QUIZ)],
+    "actions": [{"label": {"text": "לסיים את הבוחן"}, "action": {"type": "minecraft:dynamic/run_command",
+                 "template": "trigger islands_act set 4" + "".join("$(q%d)" % (j + 1) for j in range(len(QUIZ)))}}],
+    "columns": 1})
+quiz = ["# The quiz was sent (as the player). islands_act = 4 and then one digit for each answer.",
+        "execute unless score #stage islands matches 5 run return 0",
+        "scoreboard players operation #v islands = @s islands_act", "scoreboard players remove #v islands 40000", "scoreboard players set #quiz islands 0"]
+div = 1000
+for j, (_, _, right) in enumerate(QUIZ):
+    quiz += ["scoreboard players operation #digit islands = #v islands", "scoreboard players set #div islands %d" % div,
+             "scoreboard players operation #digit islands /= #div islands", "scoreboard players operation #digit islands %= #10 islands",
+             "scoreboard players set #qz%d islands 0" % (j + 1),
+             "execute if score #digit islands matches %d run scoreboard players set #qz%d islands 1" % (right, j + 1),
+             "scoreboard players operation #quiz islands += #qz%d islands" % (j + 1)]
+    div //= 10
+quiz += ["scoreboard players set #quizdone islands 1",
+         "execute store result storage islands:tmp q.n int 1 run scoreboard players get #quiz islands",
+         "function islands:lesson/1/quiz/show with storage islands:tmp q",
+         "dialog show @s islands:l1/guide_done"]
+w("function/lesson/1/quiz/check.mcfunction", "\n".join(quiz))
+w("function/lesson/1/quiz/show.mcfunction", "\n".join([
+    '$scoreboard players display name islands.q6 islands_q {text:"☑ בוחן המשלחת: $(n) מתוך %d",color:"green"}' % len(QUIZ),
+    "scoreboard players set islands.q8 islands_q 2",
+    line("islands.q8", "☐ נפרדים מנועה"),
+]))
+
 # ------------------------------------------------------------------ stage 1: the census
 w("function/lesson/1/census/begin.mcfunction", "\n".join([
     "# The button in Noa's first talk: the census starts, and Noa walks with the player.",
@@ -309,7 +431,9 @@ w("function/lesson/1/census/begin.mcfunction", "\n".join([
     "scoreboard players set #stage islands 1",
     "scoreboard players set #wpmax_noa islands %d" % TOUR_END,
     line("islands.q1", "☑ מדברים עם נועה", "green"),
-    "scoreboard players set islands.q2 islands_q 8",
+    "scoreboard players set islands.q7 islands_q 8",
+    line("islands.q7", "☐ לומדים עם נועה: 0 מתוך %d מאפיינים" % len(TEACH)),
+    "scoreboard players set islands.q2 islands_q 7",
     "function islands:lesson/1/census/show",
     'title @a actionbar {text:"מחזיקים את התג ביד: קליק ימני על בעל חיים.",color:"yellow"}',
 ]))
@@ -341,16 +465,16 @@ scoreboard players remove #v islands 10000
 scoreboard players operation #k islands = #v islands
 scoreboard players operation #k islands /= #100 islands
 scoreboard players operation #wd islands = #v islands
-scoreboard players operation #wd islands %%= #100 islands
+scoreboard players operation #wd islands %= #100 islands
 scoreboard players operation #where islands = #wd islands
 scoreboard players operation #where islands /= #10 islands
-scoreboard players operation #wd islands %%= #10 islands
+scoreboard players operation #wd islands %= #10 islands
 execute store result storage islands:tmp card.k int 1 run scoreboard players get #k islands
 execute store result storage islands:tmp card.w int 1 run scoreboard players get #where islands
 execute store result storage islands:tmp card.d int 1 run scoreboard players get #wd islands
 function islands:lesson/1/census/card_save with storage islands:tmp card
-execute if score #stage islands matches 1 if score #census islands matches %d.. run function islands:lesson/1/census/done
-""" % CENSUS_GOAL)
+function islands:lesson/1/census/maybe_done
+""")
 w("function/lesson/1/census/card_save.mcfunction", """
 $scoreboard players set #w_$(k) islands $(w)
 $scoreboard players set #d_$(k) islands $(d)
@@ -360,8 +484,7 @@ w("function/lesson/1/census/done.mcfunction", "\n".join([
     "scoreboard players set #stage islands 2",
     "scoreboard players set #wp_noa islands %d" % WP_STATION, "scoreboard players set #wpmax_noa islands %d" % WP_STATION,
     "clear @a %s" % HOLDS_TAG,
-    line("islands.q2", "☑ מתייגים בעלי חיים: %d מתוך %d" % (CENSUS_GOAL, CENSUS_GOAL), "green"),
-    "scoreboard players set islands.q3 islands_q 7",
+    "scoreboard players set islands.q3 islands_q 6",
     "scoreboard players set #sorted islands 0", "scoreboard players set #sorted_shown islands -1",
     "title @a times 10 60 20",
     'title @a subtitle {text:"תייגתם %d סוגים. חוזרים למחנה, לחבית הממצאים",color:"white"}' % CENSUS_GOAL,
@@ -376,8 +499,8 @@ for i, (key, _, he, _, _) in enumerate(ANIMALS):
         "inputs": [
             {"type": "minecraft:single_option", "key": "where", "label": {"text": "איפה מצאתם את בעל החיים?"}, "width": 260,
              "options": [dict({"id": str(j + 1), "display": {"text": t}}, **({"initial": True} if j == 0 else {})) for j, t in enumerate(PLACES_HE)]},
-            {"type": "minecraft:single_option", "key": "doing", "label": {"text": "מה עשה בעל החיים?"}, "width": 260,
-             "options": [dict({"id": str(j + 1), "display": {"text": t}}, **({"initial": True} if j == 0 else {})) for j, t in enumerate(DOING_HE)]},
+            {"type": "minecraft:single_option", "key": "doing", "label": {"text": "איזה מאפיין חיים ראיתם אצלו?"}, "width": 260,
+             "options": [dict({"id": str(j + 1), "display": {"text": t}}, **({"initial": True} if j == 0 else {})) for j, t in enumerate(SEEN_HE)]},
         ],
         "actions": [{"label": {"text": "לרשום במחברת"}, "action": {"type": "minecraft:dynamic/run_command",
                      "template": "trigger islands_act set 1%02d$(where)$(doing)" % (i + 1)}}],
@@ -433,7 +556,7 @@ $data modify storage islands:tmp find.Slot set value $(slot)b
 data modify block %s Items append from storage islands:tmp find
 $data remove block $(bx) -50 35 Items[{id:"$(id)"}]
 playsound minecraft:entity.villager.no master @a %s 1 1
-title @a actionbar {text:"הממצא חזר לחבית. הוא גדל? הוא צריך מזון?",color:"red"}
+title @a actionbar {text:"הממצא חזר לחבית. זוכרים את מאפייני החיים?",color:"red"}
 """ % (FINDS, FINDS))
 w("function/lesson/1/sort/show.mcfunction", """
 # The quest line shows how many finds are sorted.
@@ -448,7 +571,7 @@ w("function/lesson/1/sort/done.mcfunction", "\n".join([
     "scoreboard players set #stage islands 3",
     "scoreboard players set #wp_noa islands %d" % WP_BENCH, "scoreboard players set #wpmax_noa islands %d" % WP_BENCH,
     line("islands.q3", "☑ ממיינים: חי או לא חי? %d מתוך %d" % (N, N), "green"),
-    "scoreboard players set islands.q4 islands_q 6",
+    "scoreboard players set islands.q4 islands_q 5",
     line("islands.q4", "☐ ניסוי: מה קורה אחרי חודש?"),
     "title @a times 10 60 20",
     'title @a subtitle {text:"מיינתם הכול. עכשיו הולכים לנועה, ליד שולחן הניסוי",color:"white"}',
@@ -519,7 +642,7 @@ w("function/lesson/1/bench/done.mcfunction", "\n".join([
     "scoreboard players set #stage islands 4",
     "scoreboard players set #wp_noa islands %d" % WP_SAM, "scoreboard players set #wpmax_noa islands %d" % WP_SAM,
     line("islands.q4", "☑ ניסוי: מה קורה אחרי חודש?", "green"),
-    "scoreboard players set islands.q5 islands_q 5",
+    "scoreboard players set islands.q5 islands_q 4",
     line("islands.q5", "☐ עוזרים לסם: 0 מתוך 3"),
     'summon minecraft:mannequin %s {profile:{texture:"islands:entity/sam",model:"wide"},immovable:1b,hide_description:1b,Invulnerable:1b,Silent:1b,Rotation:[90f,0f],CustomName:{text:"Sam",color:"aqua"},CustomNameVisible:1b,Tags:["islands_npc","sam"]}' % SAM_AT,
     "playsound minecraft:ui.toast.challenge_complete master @a ~ ~ ~ 1 1",
@@ -536,6 +659,7 @@ HOW_HE = {"text": "סם הולך לפניכם. הולכים אחריו, ומרא
 wj("dialog/l1/sam_intro.json", one_button(SAM, [
     msg(gloss("Hi! I am Sam. I only {speak|מדבר} {English|אנגלית}.")),
     msg(gloss("I {love|אוהב} animals. Can you {help|לעזור} me?")),
+    msg(gloss("We use the {words|מילים} from {class|כיתה}.")),
     msg(HELP_HE)], "OK!", 40))
 for i, text in enumerate(REQ):
     wj("dialog/l1/sam_req%d.json" % (i + 1), notice(SAM, [msg(gloss(text)), msg(HOW_HE), msg(HELP_HE)], "OK!"))
@@ -588,8 +712,8 @@ w("function/lesson/1/sam/done.mcfunction", "\n".join([
     "# Sam has his three animals: back to Noa (she is right behind you).",
     "scoreboard players set #stage islands 5",
     line("islands.q5", "☑ עוזרים לסם: 3 מתוך 3", "green"),
-    "scoreboard players set islands.q6 islands_q 4",
-    line("islands.q6", "☐ מדברים עם נועה"),
+    "scoreboard players set islands.q6 islands_q 3",
+    line("islands.q6", "☐ בוחן המשלחת, אצל נועה"),
     "schedule function islands:lesson/1/sam/thanks 50t",
 ]))
 w("function/lesson/1/sam/thanks.mcfunction", "dialog show @a islands:l1/sam_thanks")
@@ -599,7 +723,7 @@ w("function/lesson/1/finish.mcfunction", "\n".join([
     "# The button at the end of Noa's last talk.",
     "execute unless score #stage islands matches 5 run return 0",
     "scoreboard players set #stage islands 6",
-    line("islands.q6", "☑ סיימתם את שיעור 1", "green"),
+    line("islands.q8", "☑ סיימתם את שיעור 1", "green"),
     "title @a times 10 80 20",
     'title @a subtitle {text:"סיימתם את שיעור 1. להתראות בשיעור הבא",color:"white"}',
     'title @a title {text:"כל הכבוד!",color:"green",bold:true}',

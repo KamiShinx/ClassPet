@@ -29,10 +29,10 @@ public final class NotebookKey {
                 mc.gui.setScreen(new NotebookScreen());
             }
         }
-        // For scripted tests: the score "#notebook_test islands" opens the notebook on a page (1, 2 or 3), once.
+        // For scripted tests: the score "#notebook_test islands" opens the notebook on a page (1 to 4), once.
         if (mc.player != null && mc.getSingleplayerServer() != null) {
             int page = LessonEvents.getScore(mc.getSingleplayerServer(), "#notebook_test");
-            if (page >= 1 && page <= 3) {
+            if (page >= 1 && page <= 4) {
                 LessonEvents.setScore(mc.getSingleplayerServer(), "#notebook_test", 0);
                 NotebookScreen screen = mc.gui.screen() instanceof NotebookScreen open ? open : new NotebookScreen();
                 screen.showPage(page - 1);

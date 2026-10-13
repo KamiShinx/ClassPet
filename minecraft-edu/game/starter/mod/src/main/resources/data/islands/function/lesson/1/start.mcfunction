@@ -39,6 +39,9 @@ scoreboard players set #wp_noa islands 0
 scoreboard players set #wpmax_noa islands 0
 scoreboard players set #wp_sam islands 0
 scoreboard players set #said_noa islands -1
+scoreboard players set #learn islands 0
+scoreboard players set #quizdone islands 0
+scoreboard players set #quiz islands 0
 function islands:quest/setup
 scoreboard players set islands.q1 islands_q 9
 scoreboard players display name islands.q1 islands_q {text:"☐ מדברים עם נועה",color:"white"}

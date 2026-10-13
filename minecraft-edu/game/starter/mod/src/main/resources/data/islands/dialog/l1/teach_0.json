@@ -1,0 +1,74 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "מאפיין חיים: הזנה",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הכבשה אוכלת עשב כל היום. כל יצור חי צריך מזון: ממנו הוא מקבל אנרגיה, וחומרים לבניית הגוף."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "צמחים לא אוכלים. הם מייצרים את המזון שלהם בעצמם, בעזרת אור השמש."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מתייגים כאן: כבשה, פרה וחזיר.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "מאיפה צמח מקבל את המזון שלו?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "הוא אוכל אדמה"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "הוא מייצר אותו בעצמו, בעזרת אור"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "הוא לא צריך מזון"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 30$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

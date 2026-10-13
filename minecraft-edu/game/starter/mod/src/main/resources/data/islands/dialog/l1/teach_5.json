@@ -1,0 +1,74 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "מאפיין חיים: גדילה והתפתחות",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "גדי קטן גדל, ונהיה עז הרים בוגרת. כל יצור חי גדל, ומשתנה במהלך החיים."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "גם אפרוח הופך לתרנגולת, וראשן הופך לצפרדע."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מתייגים כאן: עז הרים. היא למעלה, על ההר.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "מה מאלה גדל ומתפתח?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "ערימת חול שגדלה ברוח"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "שלולית שמתמלאת בגשם"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "ראשן שהופך לצפרדע"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 35$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

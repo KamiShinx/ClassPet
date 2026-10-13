@@ -1,5 +1,9 @@
 # Meeting 1 and the video research: what to change (proposals, 13 Oct)
 
+**BUILT 13 Oct (Ben: "can you make the changes?"):** everything in Parts 1–3 is now in `hub/Index.html`, plus the
+bugs from the test. Tested locally at 1366×768 and 1920×1080 (`test-shots/after-changes/`). Not yet live: Ben pastes
+the new `Index.html` into the hub script and publishes a new version. Part 4 (meetings 2–4) is still a plan.
+
 Meeting 1 (the hub's 12 steps and 7 slides) was written without the video research. This file goes through it step
 by step and slide by slide and says where the research teaches it better. Nothing in the hub was changed.
 Write under any 💬 (or start a line with `BEN:`), say "done", and the approved ones get built.

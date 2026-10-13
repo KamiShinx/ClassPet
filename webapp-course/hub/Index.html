@@ -127,6 +127,18 @@ kbd{background:var(--sunk);border:1px solid var(--line);border-bottom-width:3px;
 .sl .notes{background:var(--surface);border-top:2px solid var(--pri);padding:14px 20px;font-size:1.05rem;display:flex;gap:16px;align-items:center}
 .sl .notes[hidden]{display:none}
 .sl .count{position:fixed;top:12px;left:16px;color:var(--muted);font-weight:700}
+.sl .nav{position:fixed;top:8px;right:16px;display:flex;gap:6px;direction:ltr}
+.sl .nav button{width:38px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);font-weight:800}
+.sl .trio .off{visibility:hidden}
+.yt{width:min(1100px,92vw);aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
+.yt iframe{width:100%;height:100%;border:0;display:block}
+.lib{display:grid;gap:18px}
+.lib h2{font-size:1.4rem}
+.lib .txt{font-size:1.12rem;display:grid;gap:10px}
+.lib .clip{display:grid;gap:6px}
+.lib .clip .yt{width:100%}
+.lib .clip small{color:var(--muted)}
+.form .tip{color:var(--pri);font-weight:600}
 @media (max-width:640px){.trio{grid-template-columns:1fr}.trio > i{transform:rotate(90deg)}.vs{grid-template-columns:1fr}.lp-st i{display:none}.foot{grid-template-columns:1fr 1fr}.dots{display:none}.m-cols{grid-template-columns:1fr}}
 </style>
 </head>
@@ -162,16 +174,18 @@ const promptBox = (title, text) => `<div class="prompt"><div class="ph"><span>${
 
 /* ===== the pet's design card: kept in this browser only ===== */
 const CARD = [
-  ["name", "איך קוראים לחיה?", "למשל: פופקורן"],
-  ["look", "איך היא נראית? צורה, צבע, ומשהו מיוחד", "למשל: כדור סגול עם קרן אחת וזנב של חתול"],
-  ["food", "מה היא הכי אוהבת לאכול?", "למשל: פיצה 🍕"],
-  ["toy", "במה היא אוהבת לשחק?", "למשל: כדור צמר 🧶"],
-  ["vibe", "מה האופי שלה, במשפט?", "למשל: עצלנית, אבל כשהיא רעבה היא דרמטית"],
-  ["hungry", "מה היא אומרת כשהיא רעבה?", "למשל: אני גוססת פה! פיצה!!!"]
+  ["name", "איך קוראים לחיה?", "למשל: פופקורן", "שם"],
+  ["shape", "מה הצורה שלה?", "למשל: עגולה כמו כדור", "צורה", "צורות עגולות נראות חמודות. צורות מחודדות נראות מסוכנות."],
+  ["colors", "שניים או שלושה צבעים", "למשל: סגול וצהוב", "צבעים"],
+  ["special", "דבר אחד מיוחד, שיש רק לה", "למשל: קרן אחת", "דבר מיוחד"],
+  ["food", "מה היא הכי אוהבת לאכול?", "למשל: פיצה 🍕", "אוכל אהוב"],
+  ["toy", "במה היא אוהבת לשחק?", "למשל: כדור צמר 🧶", "משחק אהוב"],
+  ["want", "מה היא הכי רוצה?", "למשל: שלא יפסיקו לשחק איתה", "מה היא הכי רוצה"],
+  ["hungry", "מה היא אומרת כשהיא רעבה?", "למשל: אני גוססת פה! פיצה!!!", "מה היא אומרת כשהיא רעבה"]
 ];
 const card = () => LS.get("card", {});
-const cardText = () => { const c = card(); return CARD.map(([k, q]) => q.replace(/\?.*$/, "?").replace(/,.*$/, "") + " " + (c[k] || "(עוד לא כתבתי)")).join("\n"); };
-const cardForm = () => `<div class="form">${CARD.map(([k, q, ph]) => `<label>${q}<input data-card="${k}" maxlength="120" placeholder="${esc(ph)}" value="${esc(card()[k] || "")}"></label>`).join("")}<small id="card-saved"></small></div>`;
+const cardText = () => { const c = card(); return CARD.map(x => x[3] + ": " + (c[x[0]] || "(עוד לא כתבתי)")).join("\n"); };
+const cardForm = () => `<div class="form">${CARD.map(([k, q, ph, , tip]) => `<label>${q}<input data-card="${k}" maxlength="120" placeholder="${esc(ph)}" value="${esc(card()[k] || "")}">${tip ? `<small class="tip">${tip}</small>` : ""}</label>`).join("")}<small id="card-saved"></small></div>`;
 function bindCard(root){
   root.querySelectorAll("[data-card]").forEach(i => i.addEventListener("input", () => { const c = card(); c[i.dataset.card] = i.value; LS.set("card", c); const s = root.querySelector("#card-saved"); if (s) s.textContent = "נשמר בדפדפן הזה"; }));
 }
@@ -184,7 +198,8 @@ ${cardText()}
 
 חשוב:
 - viewBox="0 0 200 200", רקע שקוף, בלי טקסט.
-- חיה חמודה, עם עיניים גדולות, באמצע הציור.
+- רק הצבעים מהכרטיס, ועוד שחור ולבן.
+- צורה פשוטה וברורה, שמזהים גם כשהיא קטנה. עיניים גדולות, באמצע הציור.
 - תשלח רק את קוד ה־SVG, מ־<svg ועד </svg>, בלי הסברים.`;
 
 /* ===== drawings of the screens: where to click (numbered yellow marks) ===== */
@@ -203,22 +218,31 @@ const MOCK = {
     <div class="m-drop" style="margin-inline-start:auto;margin-inline-end:0"><div class="mk" data-n="2">פריסה חדשה (New deployment)</div><div>ניהול פריסות (Manage deployments)</div></div>
     <div class="m-dialog"><div class="m-row"><span class="mk" data-n="3">⚙️</span> בחירת סוג: <b>אפליקציית אינטרנט (Web app)</b></div><div>הפעלה בתור (Execute as): <b>אני (Me)</b></div><div>למי יש גישה (Who has access): <span class="m-btn mk" data-n="4">כל אחד (Anyone) ▾</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="5">פריסה (Deploy)</span></div></div>`),
   url: () => mock("Apps Script", `<div class="m-dialog"><b>הפריסה עודכנה ✓</b><div>אפליקציית אינטרנט (Web app)</div><div class="m-row"><span class="m-code mk" data-n="1" style="flex:1">https://script.google.com/macros/s/.../exec</span><span class="m-btn mk" data-n="2">העתקה</span></div></div>`),
+  testdep: () => mock("Apps Script", `<div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="1">פריסה (Deploy) ▾</span></div>
+    <div class="m-drop" style="margin-inline-start:auto;margin-inline-end:0"><div>פריסה חדשה (New deployment)</div><div>ניהול פריסות (Manage deployments)</div><div class="mk" data-n="2">בדיקת פריסות (Test deployments)</div></div>
+    <div class="m-dialog"><div>אפליקציית אינטרנט (Web app)</div><div class="m-row"><span class="m-code mk" data-n="3" style="flex:1">https://script.google.com/macros/s/.../dev</span><span class="m-btn">העתקה</span></div></div>`),
   manage: () => mock("Apps Script", `<div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="1">פריסה (Deploy) ▾</span></div>
     <div class="m-drop" style="margin-inline-start:auto;margin-inline-end:0"><div>פריסה חדשה (New deployment)</div><div class="mk" data-n="2">ניהול פריסות (Manage deployments)</div></div>
     <div class="m-dialog"><div class="m-row" style="justify-content:space-between"><b>הפריסה הפעילה</b><span class="mk" data-n="3">✏️</span></div><div>גרסה (Version): <span class="m-btn mk" data-n="4">גרסה חדשה (New version) ▾</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="5">פריסה (Deploy)</span></div></div>`),
   paste: () => mock("Apps Script · Index.html", `<div class="m-code">  &lt;div class="stage" id="stage"&gt;\n<span class="mk" data-n="1">&lt;!-- PET START --&gt;</span>\n<span style="background:#fde68a">&lt;svg ...&gt;  ← מוחקים מכאן...\n  ...\n&lt;/svg&gt;       ...ועד כאן, ומדביקים את הציור מג׳מיני</span>\n<span class="mk" data-n="2">&lt;!-- PET END --&gt;</span>\n  &lt;/div&gt;</div>`)
 };
+/* A clip from YouTube, from second a to second b, with Hebrew captions when the video has them. */
+const yt = (id, a, b) => `<div class="yt"><iframe src="https://www.youtube.com/embed/${id}?start=${a}&end=${b}&rel=0&cc_load_policy=1&cc_lang_pref=iw&hl=he" allow="autoplay; fullscreen; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="סרטון"></iframe></div>`;
 const road = list => `<div class="road">${list.map((x, i) => `<div><span class="rn">${i + 1}</span><b>${x[0]}</b><span>${x[1]}</span></div>`).join("")}</div>`;
 const TRIO = `<div class="trio"><div><span class="ico">🖥️</span><b>הדף</b><span>מה שרואים: החיה והכפתורים</span></div><i>⇄</i>
   <div><span class="ico">⚙️</span><b>השרת</b><span>מקבל בקשות: ״תאכיל את החיה״</span></div><i>⇄</i>
   <div><span class="ico">📊</span><b>הגיליון</b><span>הזיכרון: כמה היא שבעה, מי ביקר</span></div></div>`;
+/* The same three boxes, showing only the first n: for building the picture up on the slides. */
+const trioN = n => `<div class="trio"><div><span class="ico">🖥️</span><b>הדף</b><span>מה שרואים: החיה והכפתורים</span></div><i class="${n < 2 ? "off" : ""}">⇄</i>
+  <div class="${n < 2 ? "off" : ""}"><span class="ico">⚙️</span><b>השרת</b><span>מקבל בקשות: ״תאכיל את החיה״</span></div><i class="${n < 3 ? "off" : ""}">⇄</i>
+  <div class="${n < 3 ? "off" : ""}"><span class="ico">📊</span><b>הגיליון</b><span>הזיכרון: כמה היא שבעה, מי ביקר</span></div></div>`;
 const demoLink = () => ok(CFG.demo) ? `<a class="big-link" href="${esc(CFG.demo)}" target="_blank" rel="noopener">🐲 להאכיל את החיה של המורה</a>` : `<p class="missing">הקישור לחיה של המורה עוד לא הוגדר.</p>`;
 const templateLink = () => ok(CFG.template) ? `<a class="big-link" href="${esc(copyLink(CFG.template))}" target="_blank" rel="noopener">📋 ליצור עותק של החיה</a>` : `<p class="missing">הקישור לתבנית עוד לא הוגדר. מרימים יד.</p>`;
 
 /* ===== meeting 1: one action per step ===== */
 const M1 = {
   n:1, title:"מפגש 1: החיה שלי, באינטרנט",
-  stations:[["ג׳מיני",1],["העיצוב",2],["העותק",4],["באוויר",6],["הציור",8],["חבר",10]],
+  stations:[["מתחילים",0],["העיצוב",2],["העותק",4],["השרת",5],["באוויר",6],["חבר",8],["הציור",9],["הקישורים",10]],
   steps:[
     { title:"היום: חיה משלכם, באינטרנט",
       body:`<p>היום אתם בונים חיה וירטואלית שחיה באתר אמיתי. כל מי שיש לו את הקישור יכול לבקר אותה ולהאכיל אותה.</p>`,
@@ -233,12 +257,12 @@ const M1 = {
     { title:"כרטיס החיה",
       body:`<p>ממציאים את החיה שלכם. אין תשובות נכונות, רק החיה שלכם.</p>`,
       visual:() => cardForm(), mount:root => bindCard(root),
-      hints:["חיה שאין בעולם: מה קורה אם מחברים שתי חיות? חתול־דג? ענן עם רגליים?","דבר אחד מיוחד מספיק: קרן, משקפיים, שלוש עיניים.","האופי הוא מה שיהפוך אותה למצחיקה: עצלנית, דרמטית, ביישנית."] },
+      hints:["חיה שאין בעולם: מה קורה אם מחברים שתי חיות? חתול־דג? ענן עם רגליים?","דבר אחד מיוחד מספיק: קרן, משקפיים, שלוש עיניים.","מה שהיא רוצה הוא מה שיהפוך אותה למצחיקה: תשומת לב, שקט, עוד פיצה."] },
 
     { title:"ג׳מיני שואל אתכם",
       body:`<ol><li>מעתיקים את ההודעה, ומדביקים בג׳מיני (<kbd>Ctrl</kbd> + <kbd>V</kbd>).</li><li>עונים על השאלות שלו, אחת אחת.</li><li>תשובה טובה? מעדכנים את הכרטיס בשלב הקודם.</li></ol>`,
       visual:() => promptBox("מדביקים בג׳מיני", askPrompt()) + `<div class="vs"><div class="bad"><b>״תעשה לי חיה״</b>ג׳מיני ממציא חיה שאתם לא בחרתם.</div><div class="good"><b>כרטיס, ו״תשאל אותי קודם״</b>ג׳מיני עוזר לכם לדייק את החיה שלכם.</div></div>`,
-      note:"ג׳מיני הוא שותף לחשיבה, לא מי שמחליט. אם הוא מציע משהו שלא אהבתם, כותבים לו: ״לא, אני רוצה ש...״." },
+      note:"ג׳מיני לא מכיר את החיה שלכם. הוא יודע רק מה שכתבתם לו בצ׳אט הזה, ומה שלא אמרתם, הוא מנחש. הוא שותף לחשיבה, לא מי שמחליט: אם הוא מציע משהו שלא אהבתם, כותבים לו ״לא, אני רוצה ש...״." },
 
     { title:"מעתיקים את החיה",
       body:`<ol><li>לוחצים על הכפתור. נפתח גיליון של Google.</li><li>בשם כותבים <b>החיה של</b> ואת הכינוי שלכם.</li><li>לוחצים <b>יצירת עותק</b>.</li></ol>`,
@@ -247,42 +271,48 @@ const M1 = {
       stuck:[["כתוב שאין הרשאה","בודקים שאתם מחוברים עם החשבון של משרד החינוך. אם זה לא עוזר, מרימים יד."]] },
 
     { title:"מעירים את השרת",
-      body:`<ol><li>בגיליון: <b>תוספים</b>, ואז <b>Apps Script</b>. נפתח העורך של השרת.</li><li>למעלה בוחרים <b>setup</b>, ולוחצים <b>הפעלה</b>.</li><li>Google שואלת אם מותר: <b>בדיקת הרשאות</b>, בוחרים את החשבון, <b>מתקדם</b>, <b>מעבר אל החיה של...</b>, ו<b>אישור</b>.</li></ol>`,
+      body:`<ol><li>בגיליון: <b>תוספים</b>, ואז <b>Apps Script</b>. נפתח העורך של השרת.</li><li>למעלה בוחרים <b>setup</b>, ולוחצים <b>הפעלה</b>.</li><li>השרת שלכם רוצה לכתוב בגיליון שלכם, אז Google שואלת פעם אחת אם אתם מרשים: <b>בדיקת הרשאות</b>, בוחרים את החשבון, ו<b>אישור</b>.</li><li>אם Google כותבת שהאפליקציה לא אומתה: <b>מתקדם</b>, ואז <b>מעבר אל החיה של...</b>. זה בסדר, זו האפליקציה שלכם.</li></ol>`,
       visual:() => MOCK.ext() + MOCK.editor() + MOCK.perm(),
       expect:"בגיליון נוספו שתי לשוניות: pet (החיה) ו־log (מי ביקר).",
-      stuck:[["כתוב שהאדמין חסם את Apps Script","מרימים יד. בינתיים ממשיכים לשלב הציור עם ג׳מיני."],["Google אומרת שהאפליקציה לא מאומתת","זה בסדר: זו האפליקציה שלכם. לוחצים מתקדם, ואז מעבר אל..."]],
+      stuck:[["הכפתור ״הפעלה״ אפור","שומרים קודם: Ctrl + S."],["כתוב שהאדמין חסם את Apps Script","מרימים יד. בינתיים ממשיכים לשלב הציור עם ג׳מיני."],["Google אומרת שהאפליקציה לא מאומתת","זה בסדר: זו האפליקציה שלכם. לוחצים מתקדם, ואז מעבר אל..."]],
       note:"מה זה השרת? Code.gs: הקוד שמקבל בקשות מהדף, וכותב בגיליון. Index.html: הדף עצמו." },
 
     { title:"מעלים לאוויר",
       body:`<ol><li>בעורך: <b>פריסה</b>, ואז <b>פריסה חדשה</b>.</li><li>ליד ״בחירת סוג״ לוחצים ⚙️ ובוחרים <b>אפליקציית אינטרנט</b>.</li><li>בגישה בוחרים <b>כל אחד</b> (אם אין, את האפשרות הכי רחבה). לוחצים <b>פריסה</b>.</li><li>מעתיקים את הקישור שמסתיים ב־<code>/exec</code>, ופותחים אותו בכרטיסייה חדשה.</li></ol>`,
       visual:() => MOCK.deploy() + MOCK.url(),
-      expect:"החיה בלובי באתר שלכם! לוחצים להאכיל, והפס עולה.",
+      expect:"החיה בלובי באתר שלכם! לוחצים להאכיל, והפס עולה. עוד לא מאמינים למסך: בשלב הבא בודקים בגיליון.",
       stuck:[["ביקשו שוב הרשאות","זה רגיל בפעם הראשונה: מאשרים כמו בשלב הקודם."],["הדף ריק או כתוב שגיאה","בודקים שהקובץ נקרא Index ולא Index.html.html. אם לא, מרימים יד."]] },
 
     { title:"הגיליון הוא הזיכרון",
-      body:`<ol><li>באתר מאכילים את החיה פעם אחת.</li><li>חוזרים לגיליון. בלשונית <b>pet</b> המספר של <b>full</b> עלה, ובלשונית <b>log</b> יש שורה חדשה.</li><li>בלשונית <b>pet</b>, ליד <b>name</b>, כותבים את השם מהכרטיס.</li><li>מרעננים את האתר.</li></ol>`,
+      body:`<ol><li>באתר מאכילים את החיה פעם אחת.</li><li>חוזרים לגיליון. בלשונית <b>pet</b> המספר של <b>full</b> עלה, ובלשונית <b>log</b> יש שורה חדשה.</li><li>בלשונית <b>pet</b>, ליד <b>name</b>, כותבים את השם מהכרטיס.</li><li>מרעננים את האתר: השם החדש שם.</li><li>עוד ניסוי: בגיליון, ליד <b>full</b>, כותבים <b>5</b>, ומרעננים את האתר. מה החיה אומרת?</li></ol>`,
       visual:() => TRIO,
-      expect:"באתר מופיע השם החדש. זה הבקאנד: הדף שואל את השרת, והשרת קורא מהגיליון." },
+      expect:"החיה אומרת שהיא רעבה. לא הדף החליט את זה: הגיליון. הדף שואל את השרת, והשרת קורא מהגיליון. לכן לא מאמינים למסך, בודקים בגיליון." },
+
+    { title:"חבר מאכיל",
+      body:`<ol><li>שולחים את הקישור של האתר לחבר: במייל של משרד החינוך, או בצ׳אט של Google.</li><li>החבר פותח אותו במחשב שלו, כותב כינוי, ומאכיל.</li><li>אתם בודקים בלשונית <b>log</b> בגיליון.</li></ol>`,
+      visual:() => TRIO,
+      expect:"הכינוי של החבר מופיע באתר שלכם, וגם שורה חדשה בגיליון. אף אחד לא שלח לכם קובץ: המחשב שלו ביקש מהשרת שלכם, והשרת כתב בגיליון.",
+      stuck:[["אי אפשר לשלוח קישור במייל או בצ׳אט","מעתיקים את הקישור לקובץ שהמורה פתח לכיתה, או מרימים יד."],["החבר רואה בקשה להתחבר","בפריסה, בגישה, לא נבחר ״כל אחד״. מרימים יד."]] },
 
     { title:"ציור מג׳מיני",
       body:`<ol><li>מעתיקים את ההודעה ומדביקים בג׳מיני.</li><li>מעתיקים את הקוד שג׳מיני שולח (כפתור ההעתקה ליד הקוד).</li><li>בעורך פותחים את <b>Index.html</b>, מוחקים את ה־SVG שבין <code>PET START</code> ל־<code>PET END</code>, ומדביקים את הציור.</li><li>שומרים: <kbd>Ctrl</kbd> + <kbd>S</kbd>.</li></ol>`,
       visual:() => promptBox("מדביקים בג׳מיני", svgPrompt()) + MOCK.paste(),
-      hints:["לא אוהבים את הציור? כותבים לג׳מיני מה לשנות: ״תגדיל את העיניים״, ״תוסיף לה כובע״.","אפשר לשנות גם את האוכל והמשחק: למטה ב־Index.html, ב־LOOK, מחליפים את 🍎 ו־⚽."] },
+      note:"מחליפים רק את מה שבין שני הסימנים. כל השאר הוא החיבור לשרת, ואם הוא נמחק, החיה מפסיקה לעבוד.",
+      hints:["לא אוהבים את הציור? כותבים לג׳מיני מה לשנות: ״תגדיל את העיניים״, ״תוסיף לה כובע״.","אפשר לשנות גם את האוכל והמשחק: למטה ב־Index.html, ב־LOOK, מחליפים את 🍎 ו־⚽."],
+      stuck:[["הציור שבור או ריק","הדבקתם יותר או פחות מה־SVG. Ctrl + Z, ומדביקים שוב רק מ־&lt;svg ועד &lt;/svg&gt;."]] },
 
-    { title:"גרסה חדשה",
-      body:`<p>האתר לא משתנה לבד. אחרי כל שינוי מעלים גרסה חדשה:</p><ol><li><b>פריסה</b>, ואז <b>ניהול פריסות</b>.</li><li>לוחצים ✏️, ובגרסה בוחרים <b>גרסה חדשה</b>.</li><li><b>פריסה</b>, ומרעננים את האתר.</li></ol>`,
-      visual:() => MOCK.manage(),
-      expect:"החיה שלכם באתר, עם הציור מג׳מיני.",
-      stuck:[["שום דבר לא השתנה","שכחתם גרסה חדשה, או לא שמרתם עם Ctrl + S."],["הציור שבור או ריק","הדבקתם יותר או פחות מה־SVG. Ctrl + Z, ומדביקים שוב רק מ־<svg ועד </svg>."]] },
-
-    { title:"חבר מאכיל",
-      body:`<ol><li>שולחים את הקישור של האתר לחבר: במייל של משרד החינוך, או בצ׳אט של Google.</li><li>החבר פותח אותו במחשב שלו, כותב כינוי, ומאכיל.</li><li>אתם בודקים בלשונית <b>log</b> בגיליון.</li></ol>`,
-      visual:() => demoLink(),
-      expect:"הכינוי של החבר מופיע באתר שלכם, וגם שורה חדשה בגיליון. אף אחד לא שלח לכם קובץ: הכול עבר דרך השרת." },
+    { title:"שני קישורים: שלי ושל החברים",
+      body:`<p>שמרתם, ובאתר שום דבר לא השתנה? זה בכוונה. לאתר יש שני קישורים:</p>
+        <ul><li><b>שלי</b> (נגמר ב־<code>/dev</code>): מראה כל שינוי, מיד אחרי <kbd>Ctrl</kbd> + <kbd>S</kbd>. רק אתם יכולים לפתוח אותו.</li><li><b>של החברים</b> (נגמר ב־<code>/exec</code>): מתעדכן רק כשמעלים גרסה חדשה.</li></ul>
+        <ol><li><b>פריסה</b>, ואז <b>בדיקת פריסות</b>. מעתיקים את הקישור ופותחים אותו: הציור החדש שם.</li><li>מוכנים להראות לחברים? <b>פריסה</b>, <b>ניהול פריסות</b>, ✏️, ובגרסה בוחרים <b>גרסה חדשה</b>. לוחצים <b>פריסה</b>.</li><li>מרעננים את הקישור של החברים.</li></ol>`,
+      visual:() => MOCK.testdep() + MOCK.manage(),
+      expect:"בקישור שלכם רואים את הציור מיד. בקישור של החברים הוא מופיע רק אחרי גרסה חדשה. ככה חברים לא רואים את החיה באמצע העבודה.",
+      stuck:[["שיניתי, ואצל החברים שום דבר לא השתנה","לא העליתם גרסה חדשה, או לא שמרתם עם Ctrl + S."],["אין ״בדיקת פריסות״ בתפריט","מרימים יד. בינתיים מעלים גרסה חדשה אחרי כל שינוי."]] },
 
     { title:"שומרים ומסיימים",
       body:`<ol><li>בגיליון: <b>קובץ</b>, ואז <b>יצירת עותק</b>.</li><li>בשם כותבים <b>שמירה 1: החיה עובדת</b>.</li></ol><p>זה ״שמירת משחק״: אם משהו יישבר בשבוע הבא, חוזרים לכאן.</p>`,
-      expect:"בשבוע הבא החיה מתחילה לחיות: רעב, מצבי רוח, והיא מתגעגעת כשאתם לא שם." }
+      expect:"בשבוע הבא החיה מתחילה לחיות: רעב, מצבי רוח, והיא מתגעגעת כשאתם לא שם.",
+      note:`רוצים להבין איפה החיה גרה באמת? <a href="#lib1"><b>לדף של מפגש 1</b></a>: שלושה סרטונים קצרים וניסוי אחד. לא חובה.` }
   ],
   challenges:[
     ["food", "אוכל ומשחק משלה", "ב־LOOK שבתחתית Index.html: האוכל, המשחק, ומה היא אומרת."],
@@ -293,14 +323,45 @@ const M1 = {
 
 /* ===== teacher slides for meeting 1 (open #slides1; arrows to move, N for notes) ===== */
 const S1 = [
-  { html:`<h1>החיה שלכם, באינטרנט</h1><p class="sub">אפליקציות ומשחקים עם ג׳מיני · מפגש 1</p>`, notes:"0–2 דק׳. בלי לדבר הרבה: הכותרת, ומיד לשקופית הבאה." },
-  { html:`<h1>תאכילו את החיה שלי</h1><p class="sub">בדף של הקורס: ״להאכיל את החיה של המורה״</p>${demoLink()}`, notes:"2–6 דק׳. הם פותחים את הדף של הקורס ולוחצים על הכפתור. אצלך על המקרן: האתר של החיה שלך. הפסים עולים לבד כל כמה שניות, כי כולם מאכילים." },
-  { html:`<h1>רגע. איפה החיה גרה?</h1>${TRIO}`, notes:"6–9 דק׳. פותחים על המקרן את הגיליון של החיה שלך. מראים את הלשונית log מתמלאת. ״אף אחד לא שלח לי כלום, ובכל זאת אני יודע שהאכלתם. איך?״ הדף מבקש, השרת כותב, הגיליון זוכר." },
-  { html:`<h1>דף · שרת · גיליון</h1><ul><li><b>הדף</b>: מה שרואים</li><li><b>השרת</b>: מקבל בקשות, ומחליט</li><li><b>הגיליון</b>: הזיכרון</li></ul><p class="sub">ביחד: אפליקציה עם בקאנד</p>`, notes:"9–10 דק׳. משפט אחד לכל אחד. זה כל התיאור: את השאר הם יראו בעיניים היום." },
-  { html:`<h1>ג׳מיני: מדברים, לא מפקדים</h1><div class="vs"><div class="bad"><b>״תעשה לי חיה״</b>ג׳מיני ממציא משהו שלא בחרתם</div><div class="good"><b>כרטיס, ו״תשאל אותי קודם״</b>החיה שלכם, מדויקת</div></div>`, notes:"10–12 דק׳. מדגימים על המקרן: מדביקים את ההודעה מהשלב ״ג׳מיני שואל אתכם״, ועונים בקול על שאלה אחת שלו." },
-  { html:`<h1>היום אתם</h1><ol><li>כרטיס החיה, וג׳מיני שואל</li><li>עותק של החיה</li><li>מעירים את השרת, ומעלים לאוויר</li><li>ציור מג׳מיני, וגרסה חדשה</li><li>חבר מאכיל</li></ol>`, notes:"12–75 דק׳. כולם בדף של הקורס, ״להתחיל״, שלב אחרי שלב. מסתובבים. מי שתקוע: ״נתקעתי״ בתחתית השלב, אחר כך השכן, ואז אתה. הכי מסובך: הרשאות (שלב 6) וגרסה חדשה (שלב 10)." },
+  { html:`<h1>החיה שלכם, באינטרנט</h1><p class="sub">אפליקציות ומשחקים עם ג׳מיני · מפגש 1</p>`, notes:"0–1 דק׳. הכותרת, ומיד לשקופית הבאה." },
+  { html:`<h1>תאכילו את החיה שלי</h1>${demoLink()}`, notes:"1–5 דק׳. הם פותחים את הדף של הקורס ולוחצים ״להאכיל את החיה של המורה״. אצלך על המקרן: האתר של החיה שלך, והפסים עולים לבד. לפני השיעור: בגיליון של החיה שלך, full ו־joy על 20, אחרת אין מה לראות. להגיד: לחיצה אחת, ומחכים. השרת איטי כשכולם לוחצים יחד." },
+  { html:yt("kBXQZMmiA4s", 75, 146), notes:"5–6 דק׳. code.org, דקה ועשר, עם כתוביות בעברית. מחשב מבקש דף ממחשב אחר, רחוק, שנקרא שרת. אחרי הסרטון: ״כשפתחתם את הקישור של החיה שלי, זה מה שקרה.״ כדי להמשיך: לוחצים על החצים למעלה, כי אחרי לחיצה על הסרטון המקלדת שלו." },
+  { html:yt("kBXQZMmiA4s", 185, 218), notes:"6–7 דק׳. חצי דקה: כשממלאים משהו ושולחים, הדפדפן שולח את המידע לשרת. ״וכשלחצתם להאכיל, זה מה שקרה.״" },
+  { html:`<h1>רגע. איפה החיה גרה?</h1>`, notes:"7–10 דק׳. פותחים על המקרן את הגיליון של החיה שלך. מראים את הלשונית log מתמלאת. ״אף אחד לא שלח לי כלום, ובכל זאת אני יודע שהאכלתם. איך?״" },
+  { html:`<h1>דף</h1>${trioN(1)}`, notes:"10–12 דק׳, שלוש שקופיות. הדף: מה שרואים. במסעדה, זה הלקוח." },
+  { html:`<h1>דף · שרת</h1>${trioN(2)}`, notes:"השרת: מקבל בקשות ומחליט. במסעדה, זה המלצר." },
+  { html:`<h1>דף · שרת · גיליון</h1>${trioN(3)}<p class="sub">לקוח לא נכנס למטבח. הוא מבקש מהמלצר.</p>`, notes:"הגיליון: הזיכרון. במסעדה, המטבח. רק השרת נוגע בגיליון. לשאול: ״מי כתב עכשיו בגיליון שלי, אתם או השרת?״ ביחד קוראים לזה אפליקציה עם בקאנד." },
+  { html:`<h1>ג׳מיני: מדברים, לא מפקדים</h1><div class="vs"><div class="bad"><b>״תעשה לי חיה״</b>ג׳מיני ממציא משהו שלא בחרתם</div><div class="good"><b>כרטיס, ו״תשאל אותי קודם״</b>החיה שלכם, מדויקת</div></div>`, notes:"12–14 דק׳. מה שלא אמרתם לו, הוא מנחש, ולכן ״תעשה לי חיה״ נותן חיה שיש לכולם. הכרטיס הוא התוכנית: ככה עובדים גם אנשים שבונים עם בינה מלאכותית בתור מקצוע. מדגימים על המקרן: מדביקים את ההודעה מהשלב ״ג׳מיני שואל אתכם״, ועונים בקול על שאלה אחת שלו." },
+  { html:`<h1>היום אתם</h1><ol><li>כרטיס החיה, וג׳מיני שואל</li><li>עותק של החיה</li><li>מעירים את השרת, ומעלים לאוויר</li><li>חבר מאכיל</li><li>ציור מג׳מיני</li><li>שני קישורים: שלי ושל החברים</li></ol>`, notes:"14–75 דק׳. כולם בדף של הקורס, ״להתחיל״, שלב אחרי שלב. מסתובבים. מי שתקוע: ״נתקעתי״ בתחתית השלב, אחר כך השכן, ואז אתה. שלושה דברים שיקרו: (1) הכפתור ״הפעלה״ אפור: לא שמרו, Ctrl+S. (2) Google מבקשת הרשאה בפעם הראשונה: מאשרים. (3) ״שיניתי ולא קרה כלום״: הקישור הלא נכון, או שלא העלו גרסה חדשה (שלב 11)." },
   { html:`<h1>שומרים</h1><p class="sub">קובץ ← יצירת עותק ← ״שמירה 1: החיה עובדת״</p><p class="sub">בשבוע הבא: היא מתחילה לחיות</p>`, notes:"75–90 דק׳. שניים־שלושה מראים את החיה שלהם על המקרן. כולם שומרים עותק." }
 ];
+
+/* ===== the optional page of meeting 1: where does my pet live? ===== */
+const libPrompt = `בניתי אתר עם חיה וירטואלית ב-Google Apps Script. יש לי דף (Index.html), שרת (Code.gs) וגיליון.
+תסביר לי בלי קוד, כמו לבן 14, מה קורה מהרגע שחבר שלי לוחץ "להאכיל" ועד שהמספר בגיליון משתנה.
+אחר כך תשאל אותי 3 שאלות, אחת אחרי השנייה, כדי לבדוק שהבנתי. אל תגלה את התשובה לפני שעניתי.`;
+function renderLib(){
+  app.innerHTML = topBar("הדף של מפגש 1") + `<div class="wrap"><article class="card lib">
+    <div class="head"><span class="num">🏠</span><div><small>לא חובה · בערך רבע שעה</small><h1>איפה החיה שלי גרה?</h1></div></div>
+    <div class="txt">
+      <p>החיה שלכם לא גרה במחשב שלכם. היא גרה במחשב של Google, שנקרא <b>שרת</b>. בגלל זה חבר יכול לבקר אותה גם כשהמחשב שלכם כבוי.</p>
+      <p>כשמישהו פותח את הקישור, המחשב שלו מבקש מהשרת את הדף. כשהוא לוחץ להאכיל, המחשב שלו שולח לשרת בקשה.</p>
+      <p>השרת הוא היחיד שנוגע בגיליון. הדף רק מבקש. כמו במסעדה: הלקוח לא נכנס למטבח, הוא מבקש מהמלצר.</p>
+      <p>הגיליון הוא הזיכרון. מה שכתוב בו נכון, גם אם הדף מראה משהו אחר.</p>
+      <p>לכל אפליקציה שאתם מכירים יש את אותם שלושה חלקים: דף, שרת וזיכרון.</p>
+    </div>
+    ${TRIO}
+    <h2>שלושה סרטונים קצרים</h2>
+    <div class="clip">${yt("kBXQZMmiA4s", 75, 218)}<small>איך דפדפן מבקש דף משרת, ואיך הוא שולח לו מידע. 2:20 דקות, עם כתוביות בעברית.</small></div>
+    <div class="clip">${yt("5o8CwafCxnU", 238, 307)}<small>איך שם של אתר הופך לכתובת. דקה, עם כתוביות בעברית. הקישור הארוך של החיה שלכם הוא כתובת כזאת.</small></div>
+    <div class="clip">${yt("j_uf3eJtLkw", 0, 142)}<small>המלצר והמסעדה. 2:20 דקות, באנגלית.</small></div>
+    <h2>ניסוי על החיה שלכם</h2>
+    <div class="say"><ol><li>פותחים את האתר של החיה בטלפון, ומאכילים פעם אחת. אחר כך מאכילים פעם אחת מהמחשב.</li><li>בגיליון, בלשונית <b>log</b>: איזו שורה היא מהטלפון, ואיזו מהמחשב? איך אפשר לדעת?</li><li>בגיליון, ליד <b>joy</b>, כותבים <b>5</b>, ומרעננים את האתר. מה החיה אומרת? מי החליט את זה?</li></ol></div>
+    <h2>שאלה לג׳מיני</h2>
+    ${promptBox("מדביקים בג׳מיני", libPrompt)}
+  </article></div>`;
+  bindCopy(app);
+}
 
 /* ===== pages ===== */
 const topBar = mid => `<header class="tb"><a href="#home">MAKE · אפליקציות ומשחקים</a><div class="mid">${mid || ""}</div><span></span></header>`;
@@ -310,7 +371,7 @@ function renderHome(){
     <section class="hero"><div style="display:grid;gap:8px"><small>${step ? "ממשיכים מאיפה שעצרתם" : "המפגש הבא"}</small><h1>${M1.title}</h1><span style="color:var(--muted);font-weight:700">שלב ${step + 1} מתוך ${N}</span></div>
       <a class="btn go" href="#m1">${step ? "להמשיך" : "להתחיל"} ←</a></section>
     ${demoLink()}
-    <div class="tiles"><div class="tile soon"><b>מפגש 2: היא חיה</b><span>רעב, מצבי רוח, ופרצופים</span></div><div class="tile soon"><b>מפגש 3: הזמן עובר</b><span>היא מתגעגעת כשאתם לא שם</span></div><div class="tile soon"><b>מפגש 4: מבקרים</b><span>כל הכיתה מבקרת, בבת אחת</span></div></div>
+    <div class="tiles"><a class="tile" href="#lib1"><b>הדף של מפגש 1</b><span>איפה החיה שלי גרה? לא חובה</span></a><div class="tile soon"><b>מפגש 2: היא חיה</b><span>רעב, מצבי רוח, ופרצופים</span></div><div class="tile soon"><b>מפגש 3: הזמן עובר</b><span>היא מתגעגעת כשאתם לא שם</span></div><div class="tile soon"><b>מפגש 4: מבקרים</b><span>כל הכיתה מבקרת, בבת אחת</span></div></div>
     <p style="text-align:center"><a href="#slides1" style="color:var(--muted)">למורה: המצגת של מפגש 1</a></p>
   </div>`;
 }
@@ -344,12 +405,17 @@ let si = 0, notes = true;
 function renderSlides(){
   si = Math.max(0, Math.min(S1.length - 1, si));
   app.innerHTML = `<div class="sl"><div class="stage"><div>${S1[si].html}</div></div><div class="count">${si + 1} / ${S1.length}</div>
+    <div class="nav"><button id="sl-next" aria-label="השקופית הבאה">‹</button><button id="sl-prev" aria-label="השקופית הקודמת">›</button></div>
     <div class="notes" ${notes ? "" : "hidden"}><b>הערות:</b><span>${S1[si].notes}</span></div></div>`;
+  app.querySelector("#sl-next").addEventListener("click", () => { si++; renderSlides(); });
+  app.querySelector("#sl-prev").addEventListener("click", () => { si--; renderSlides(); });
+  try { window.focus(); } catch(e){}   // so the arrow keys work without clicking the page first
 }
 function route(){
   const h = location.hash;
   if (h === "#m1"){ ix = LS.get("m1step", 0); renderLesson(); }
   else if (h === "#slides1") renderSlides();
+  else if (h === "#lib1") renderLib();
   else renderHome();
 }
 document.addEventListener("keydown", e => {

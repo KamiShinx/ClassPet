@@ -157,4 +157,15 @@ Ben's 💬): `webapp-course/m1/VIDEO_PLAN.md`. Top ones: move "friend feeds" bef
 "mine", /exec "friends'") instead of "new version" as a chore; open "where does the pet live" with code.org
 kBXQZMmiA4s 1:15-2:26 + 3:05-3:38 (Hebrew captions); design card = shape + 2-3 colours + one special thing + what it
 wants; habit sentence "לא מאמינים למסך. בודקים בגיליון."
+**13 Oct, later: Ben said "can you make the changes?" → built into `hub/Index.html`** (not live until he pastes it and
+publishes a new version). Steps: card = 8 fields (name, shape, colours, one special thing, food, toy, what she wants,
+hungry line), prompt lines are "label: answer"; order now 8 Sheet → 9 friend feeds → 10 drawing → 11 "two links: mine
+(/dev, Deploy → Test deployments) and the friends' (/exec, new version)" → 12 save; habit sentence in steps 7-8; the
+"set full to 5" experiment; grey Run button and "if Google says unverified" in step 6; 8 stations. Slides: 11 (two
+code.org clip slides kBXQZMmiA4s 75-146 s and 185-218 s via a `yt()` helper, "where does she live", three build-up
+slides with `trioN(n)` + the restaurant line, Gemini, today, save); on-screen arrow buttons and `window.focus()` so
+keys work without a click. New optional page `#lib1` ("איפה החיה שלי גרה?": text, 3 clips, experiment, Gemini prompt),
+linked from the home tiles and the last step. Fixed: `<svg` text in a help item was being parsed as a tag. Local
+Playwright test passes (no JS errors, clips load, nothing behind the bottom bar). Still to verify live inside Google's
+frame: YouTube embeds, `window.focus()`, and "Test deployments" on a student account.
 

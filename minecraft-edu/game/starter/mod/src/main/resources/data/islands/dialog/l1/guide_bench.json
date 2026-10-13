@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "נועה, ראשת המשלחת",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "על שולחן הניסוי יש חמישה דברים: שתיל, ביצה, אבן, צמר ובול עץ. אילו מהם חיים? לא מנחשים. בודקים."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לוחצים קליק ימני על השעון, וחודש עובר. אחר כך רושמים בטבלה מה קרה לכל אחד."
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "הבנתי"
+    }
+  }
+}

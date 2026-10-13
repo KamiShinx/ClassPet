@@ -1,5 +1,5 @@
 # Twice a second while the sorting quest is open: look into the two chests.
-execute unless score #stage islands matches 1 run return 0
+execute unless score #stage islands matches 2 run return 0
 function islands:lesson/1/sort/one {id:"minecraft:oak_sapling",key:"sapling",gx:5,bx:7,slot:0}
 function islands:lesson/1/sort/one {id:"minecraft:poppy",key:"flower",gx:5,bx:7,slot:1}
 function islands:lesson/1/sort/one {id:"minecraft:cod_bucket",key:"fish",gx:5,bx:7,slot:2}
@@ -9,7 +9,7 @@ function islands:lesson/1/sort/one {id:"minecraft:bone",key:"bone",gx:7,bx:5,slo
 function islands:lesson/1/sort/one {id:"minecraft:feather",key:"feather",gx:7,bx:5,slot:6}
 function islands:lesson/1/sort/debate {id:"minecraft:oak_log",key:"log"}
 function islands:lesson/1/sort/debate {id:"minecraft:white_wool",key:"wool"}
-function islands:lesson/1/sort/debate {id:"minecraft:turtle_egg",key:"egg"}
+function islands:lesson/1/sort/debate {id:"minecraft:clay_ball",key:"egg"}
 scoreboard players set #sorted islands 0
 scoreboard players operation #sorted islands += #s_sapling islands
 scoreboard players operation #sorted islands += #s_flower islands

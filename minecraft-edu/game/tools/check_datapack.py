@@ -33,6 +33,8 @@ def load(name):
         return json.load(f)
 
 
+# what to put where a macro line has $(name), so the line can be checked: an id for id-like names, a number otherwise
+MACRO_SAMPLES = {"id": "minecraft:stone", "item": "minecraft:stone", "block": "minecraft:stone", "kind": "sheep", "en": "a cow", "he": "x"}
 TREE = load("commands.json")
 REG = load("registries.json")
 OWN = {}  # ids our own datapack defines: registry -> set("ns:path")
@@ -336,7 +338,8 @@ def scan_own(data):
             OWN_NS.add(ns)
         base = os.path.join(data, ns)
         for kind, reg in (("function", "function"), ("dialog", "dialog"), ("advancement", "advancement"),
-                          ("predicate", "predicate"), ("loot_table", "loot_table"), ("tags/function", "tag/function")):
+                          ("predicate", "predicate"), ("loot_table", "loot_table"), ("tags/function", "tag/function"),
+                          ("tags/block", "tag/block"), ("tags/item", "tag/item"), ("tags/entity_type", "tag/entity_type")):
             root = os.path.join(base, kind)
             if not os.path.isdir(root):
                 continue
@@ -424,7 +427,7 @@ def main(data):
                         lines += 1
                         if st.startswith("$"):
                             # a macro line: put a sample value where each $(name) stands (an id where the name says so)
-                            st = re.sub(r"\$\((\w+)\)", lambda m: "minecraft:stone" if m.group(1) in ("id", "item", "block") else "1", st[1:])
+                            st = re.sub(r"\$\((\w+)\)", lambda m: MACRO_SAMPLES.get(m.group(1), "1"), st[1:])
                         e = check_command(st)
                         if e:
                             errors.append("%s:%d %s\n    %s" % (rel, n, e, st[:160]))

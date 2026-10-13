@@ -3,7 +3,7 @@
   "title": { "text": "ברוכים הבאים לאי", "color": "green" },
   "body": [
     { "type": "minecraft:plain_message", "contents": { "text": "אנחנו משלחת מחקר, ואתם החוקרים." }, "width": 300 },
-    { "type": "minecraft:plain_message", "contents": { "text": "נועה, ראשת המשלחת, מחכה לכם בסוף המזח, איפה שהאי מתחיל. כדי לדבר איתה, עושים עליה קליק ימני." }, "width": 300 }
+    { "type": "minecraft:plain_message", "contents": { "text": "נועה, ראשת המשלחת, מחכה לכם בסוף המזח, איפה שהאי מתחיל. כדי לדבר איתה, לוחצים עליה קליק ימני." }, "width": 300 }
   ],
   "action": { "label": { "text": "יאללה" } }
 }

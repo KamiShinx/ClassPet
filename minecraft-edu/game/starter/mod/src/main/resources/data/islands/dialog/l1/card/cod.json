@@ -1,0 +1,106 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "כרטיס תצפית",
+    "color": "green"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "תייגתם: דג בקלה. ממלאים את הכרטיס, ולוחצים על ״לרשום במחברת״."
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "where",
+      "label": {
+        "text": "איפה מצאתם את בעל החיים?"
+      },
+      "width": 260,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "אחו"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "יער"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "מדבר"
+          }
+        },
+        {
+          "id": "4",
+          "display": {
+            "text": "הר"
+          }
+        },
+        {
+          "id": "5",
+          "display": {
+            "text": "אגם/ים"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "doing",
+      "label": {
+        "text": "מה עשה בעל החיים?"
+      },
+      "width": 260,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "אכל"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "הלך"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "עמד"
+          }
+        },
+        {
+          "id": "4",
+          "display": {
+            "text": "שחה"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "לרשום במחברת"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 112$(where)$(doing)"
+      }
+    }
+  ],
+  "columns": 1
+}

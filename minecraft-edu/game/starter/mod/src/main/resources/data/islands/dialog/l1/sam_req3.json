@@ -1,0 +1,107 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "Sam",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Show",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "תראו"
+            }
+          }
+        },
+        {
+          "text": " me a "
+        },
+        {
+          "text": "big",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "גדול"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "desert",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "מדבר"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "animal",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "בעל חיים"
+            }
+          }
+        },
+        {
+          "text": ". People can "
+        },
+        {
+          "text": "ride",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "לרכוב"
+            }
+          }
+        },
+        {
+          "text": " it."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "סם הולך לפניכם. הולכים אחריו, ומראים לו: קליק ימני על בעל החיים.",
+        "color": "gray"
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "OK!"
+    }
+  }
+}

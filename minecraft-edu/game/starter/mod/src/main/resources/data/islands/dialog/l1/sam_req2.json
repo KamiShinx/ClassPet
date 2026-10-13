@@ -1,0 +1,124 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "Sam",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Now "
+        },
+        {
+          "text": "show",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "תראו"
+            }
+          }
+        },
+        {
+          "text": " me an "
+        },
+        {
+          "text": "animal",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "בעל חיים"
+            }
+          }
+        },
+        {
+          "text": ". It "
+        },
+        {
+          "text": "lives",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "גר"
+            }
+          }
+        },
+        {
+          "text": " in the "
+        },
+        {
+          "text": "water",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "מים"
+            }
+          }
+        },
+        {
+          "text": ". It can "
+        },
+        {
+          "text": "swim",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "לשחות"
+            }
+          }
+        },
+        {
+          "text": ". It has no "
+        },
+        {
+          "text": "legs",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "רגליים"
+            }
+          }
+        },
+        {
+          "text": "."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "סם הולך לפניכם. הולכים אחריו, ומראים לו: קליק ימני על בעל החיים.",
+        "color": "gray"
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "OK!"
+    }
+  }
+}

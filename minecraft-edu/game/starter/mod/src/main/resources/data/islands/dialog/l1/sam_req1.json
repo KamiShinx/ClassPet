@@ -1,0 +1,138 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "Sam",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Please "
+        },
+        {
+          "text": "show",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "תראו"
+            }
+          }
+        },
+        {
+          "text": " me a "
+        },
+        {
+          "text": "small",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "קטן"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "white",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "לבן"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "animal",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "בעל חיים"
+            }
+          }
+        },
+        {
+          "text": ". It "
+        },
+        {
+          "text": "lives",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "גר"
+            }
+          }
+        },
+        {
+          "text": " on the "
+        },
+        {
+          "text": "farm",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "חווה"
+            }
+          }
+        },
+        {
+          "text": ". It gives us "
+        },
+        {
+          "text": "eggs",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "ביצים"
+            }
+          }
+        },
+        {
+          "text": "."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "סם הולך לפניכם. הולכים אחריו, ומראים לו: קליק ימני על בעל החיים.",
+        "color": "gray"
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "OK!"
+    }
+  }
+}

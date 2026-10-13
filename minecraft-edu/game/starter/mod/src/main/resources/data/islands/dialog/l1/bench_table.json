@@ -1,0 +1,175 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "טבלת הניסוי",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מה קרה לכל אחד אחרי חודש? בוחרים בכל שורה, ולוחצים על ״לבדוק״. אפשר לסגור, ולחזור לטבלה בקליק ימני על השעון."
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "sapling",
+      "label": {
+        "text": "שתיל"
+      },
+      "width": 240,
+      "options": [
+        {
+          "id": "3",
+          "display": {
+            "text": "אין שינוי"
+          },
+          "initial": true
+        },
+        {
+          "id": "1",
+          "display": {
+            "text": "גדילה"
+          }
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "בקיעה"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "egg",
+      "label": {
+        "text": "ביצה"
+      },
+      "width": 240,
+      "options": [
+        {
+          "id": "3",
+          "display": {
+            "text": "אין שינוי"
+          },
+          "initial": true
+        },
+        {
+          "id": "1",
+          "display": {
+            "text": "גדילה"
+          }
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "בקיעה"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "stone",
+      "label": {
+        "text": "אבן"
+      },
+      "width": 240,
+      "options": [
+        {
+          "id": "3",
+          "display": {
+            "text": "אין שינוי"
+          },
+          "initial": true
+        },
+        {
+          "id": "1",
+          "display": {
+            "text": "גדילה"
+          }
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "בקיעה"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "wool",
+      "label": {
+        "text": "צמר"
+      },
+      "width": 240,
+      "options": [
+        {
+          "id": "3",
+          "display": {
+            "text": "אין שינוי"
+          },
+          "initial": true
+        },
+        {
+          "id": "1",
+          "display": {
+            "text": "גדילה"
+          }
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "בקיעה"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "log",
+      "label": {
+        "text": "בול עץ"
+      },
+      "width": 240,
+      "options": [
+        {
+          "id": "3",
+          "display": {
+            "text": "אין שינוי"
+          },
+          "initial": true
+        },
+        {
+          "id": "1",
+          "display": {
+            "text": "גדילה"
+          }
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "בקיעה"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "לבדוק"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 2$(sapling)$(egg)$(stone)$(wool)$(log)"
+      }
+    }
+  ],
+  "columns": 1
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "נועה, ראשת המשלחת",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "סיימתם את שיעור 1. אפשר להמשיך לטייל על האי, או לסגור את המשחק."
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "הבנתי"
+    }
+  }
+}

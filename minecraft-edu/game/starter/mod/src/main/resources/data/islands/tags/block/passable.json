@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#minecraft:air",
+    "minecraft:water",
+    "#minecraft:replaceable",
+    "#minecraft:flowers",
+    "#minecraft:saplings",
+    "minecraft:snow",
+    "#minecraft:wool_carpets",
+    "#minecraft:crops"
+  ]
+}

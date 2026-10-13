@@ -68,3 +68,25 @@ itself. What was wrong and is fixed, so the cloud session doesn't repeat it:
   11-12 year old kids". Don't build it as planned; a replacement is being discussed with him. Sam, the notebook and the
   end screen as a real screen are not built either.
 - Hebrew: every kid-facing line goes through `course-context/hebrew_kids_checklist.md` (two fresh audits).
+
+**13 Oct, night (the PC session): lesson 1 is complete as a first playable version.** Ben's calls this evening:
+about 60 minutes of play per lesson; "build all the quests"; the characters must NOT trail behind the player ("they follow
+me in my ass, they are annoying"): they walk a **set route** and wait at each stop; every graph and note must look
+designed inside Minecraft; Sam speaks only English, with a way to see what a word means. The binoculars quest is
+replaced by a **census with a tag**.
+- Stages (score `#stage islands`): 0 talk to Noa, 1 census (tag 8 kinds; an observation card after each), 2 sorting,
+  3 test bench (a month passes; a table), 4 Sam (three animals in English), 5 summary, 6 done. All written by
+  `tools/gen_lesson1.py` (data at the top: ITEMS, ANIMALS, BENCH, NOA_ROUTE, SAM_ROUTE, REQ). Never edit the generated files.
+- **Mod, new:** `LessonEvents` passes a right-click on any entity to `islands:event/use_entity` (the entity has the tag
+  `islands_target`; set `#cancel islands` to 1 to stop the game's own reaction). `NotebookScreen` + `NotebookKey`: the N
+  key opens a drawn notebook (3 pages, a bar chart) that reads the scores. Test hooks: `#click_test islands` = 1 makes
+  the player really right-click the entity tagged `islands_click_test`; `#notebook_test islands` = 1..3 opens a page.
+- **Routes:** `function/path/*` + `lesson/1/path/*`; `#wp_noa` / `#wpmax_noa` / `#wp_sam` are the stop numbers.
+- **English with help:** `gloss("a {small|קטן} animal")` in the generator makes the word blue with a Hebrew hover text.
+- **Skins:** `tools/gen_skins.py` draws Noa and Sam (`assets/islands/textures/entity/`).
+- 26.2 facts found: `Items.WOOL.pick(DyeColor.WHITE)`; screens draw in `extractRenderState(GuiGraphicsExtractor, ...)`
+  with `g.fill / g.text / g.item / g.outline`; `KeyMapping(name, key, KeyMapping.Category.MISC)`.
+- Tested by a scripted play-through in the game (22 checks, with real clicks through the hook) and screenshots. NOT
+  played by hand from start to end. Known rough edges: characters walk on top of water; a "new recipe" toast appears
+  when the tag is given; big screen titles must stay under about 12 characters.
+- Text went through two audits (Hebrew and Sam's English) per `course-context/hebrew_kids_checklist.md`.

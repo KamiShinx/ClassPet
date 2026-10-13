@@ -81,7 +81,7 @@ echo  [2/4] Mod project OK
 echo.
 
 rem ---- 3. the course on top of the template, and the icon ----
-set "STARTER_VER=1"
+set "STARTER_VER=2"
 if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
 echo  [3/4] Adding the course ...
 if exist "%HERE%starter.zip" goto :starter_local
@@ -130,7 +130,7 @@ set "JAVA_HOME=%ROOT%\jdk"
 set "PATH=%ROOT%\jdk\bin;%PATH%"
 set "GRADLE_USER_HOME=%ROOT%\gradle-home"
 cd /d "%ROOT%\mod"
-call gradlew.bat runClient --no-configuration-cache
+call "%ROOT%\mod\gradlew.bat" runClient --no-configuration-cache
 if errorlevel 1 (echo  ERROR: the build or the game failed. Scroll up for the first red ERROR line. & goto :fail)
 
 echo.

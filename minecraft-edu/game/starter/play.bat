@@ -8,5 +8,5 @@ set "JAVA_HOME=%ROOT%\jdk"
 set "PATH=%ROOT%\jdk\bin;%PATH%"
 set "GRADLE_USER_HOME=%ROOT%\gradle-home"
 cd /d "%ROOT%\mod"
-call gradlew.bat runClient --offline
+call "%ROOT%\mod\gradlew.bat" runClient --offline
 pause

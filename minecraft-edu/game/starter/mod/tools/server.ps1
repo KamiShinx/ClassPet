@@ -55,7 +55,7 @@ function Start-Game([bool]$online) {
         # port taken forever). The shell can't pass environment variables, so cmd sets them itself.
         $w = { param($p) $p -replace '/', '\' }
         $psi.FileName = $env:ComSpec
-        $psi.Arguments = "/c set ""JAVA_HOME=$(& $w (Join-Path $root 'jdk'))"" && set ""GRADLE_USER_HOME=$(& $w (Join-Path $root 'gradle-home'))"" && set ""PATH=$(& $w (Join-Path $root 'jdk/bin'));%PATH%"" && gradlew.bat runClient $flag > ""$(& $w $log)"" 2>&1"
+        $psi.Arguments = "/c set ""JAVA_HOME=$(& $w (Join-Path $root 'jdk'))"" && set ""GRADLE_USER_HOME=$(& $w (Join-Path $root 'gradle-home'))"" && set ""PATH=$(& $w (Join-Path $root 'jdk/bin'));%PATH%"" && .\gradlew.bat runClient $flag > ""$(& $w $log)"" 2>&1"
         $psi.WorkingDirectory = (& $w $mod)
         $psi.UseShellExecute = $true
         $psi.WindowStyle = 'Hidden'
@@ -101,7 +101,7 @@ function Stop-Game {
         $w = { param($p) $p -replace '/', '\' }
         $psi = New-Object System.Diagnostics.ProcessStartInfo
         $psi.FileName = $env:ComSpec
-        $psi.Arguments = "/c set ""JAVA_HOME=$(& $w (Join-Path $root 'jdk'))"" && set ""GRADLE_USER_HOME=$(& $w (Join-Path $root 'gradle-home'))"" && gradlew.bat --stop"
+        $psi.Arguments = "/c set ""JAVA_HOME=$(& $w (Join-Path $root 'jdk'))"" && set ""GRADLE_USER_HOME=$(& $w (Join-Path $root 'gradle-home'))"" && .\gradlew.bat --stop"
         $psi.WorkingDirectory = (& $w $mod)
         $psi.UseShellExecute = $true
         $psi.WindowStyle = 'Hidden'

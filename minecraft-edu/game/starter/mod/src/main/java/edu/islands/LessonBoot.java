@@ -1,13 +1,12 @@
 package edu.islands;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.WorldDataConfiguration;
@@ -19,7 +18,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 
 /**
- * The first time the title screen appears, open the lesson the hub asked for: the existing world if the kid has
+ * The first time the title screen (or, on a new computer, the welcome screen) appears, open the lesson the hub asked for: the existing world if the kid has
  * already started this lesson, otherwise a new one (an endless sea; the datapack builds the island on top).
  * Without a lesson.txt (Minecraft started some other way) the title screen stays as it is.
  */
@@ -36,25 +35,30 @@ public final class LessonBoot {
 
     @SubscribeEvent
     public static void onScreenInit(ScreenEvent.Init.Post event) {
-        if (done || !(event.getScreen() instanceof TitleScreen)) return;
+        // The very first start on a computer shows Minecraft's accessibility welcome screen instead of the title screen.
+        boolean welcome = event.getScreen() instanceof AccessibilityOnboardingScreen;
+        if (done || !(welcome || event.getScreen() instanceof TitleScreen)) return;
         done = true;
         int lesson = Lesson.requested();
         if (lesson == 0) return;
         Minecraft mc = Minecraft.getInstance();
+        if (welcome) mc.options.onboardingAccessibilityFinished();   // answered once, never shown again
         // After the title screen has finished opening, not in the middle of it.
         mc.execute(() -> open(mc, lesson));
     }
 
     private static void open(Minecraft mc, int lesson) {
         String world = Lesson.worldName(lesson);
-        Runnable back = () -> mc.setScreen(new TitleScreen());
+        Runnable back = () -> mc.gui.setScreen(new TitleScreen());
         try {
             if (mc.getLevelSource().levelExists(world)) {
                 mc.createWorldOpenFlows().openWorld(world, back);
                 return;
             }
-            LevelSettings settings = new LevelSettings(world, GameType.SURVIVAL, false, Difficulty.PEACEFUL,
-                    ALLOW_COMMANDS, new GameRules(FeatureFlags.DEFAULT_FLAGS), WorldDataConfiguration.DEFAULT);
+            // 26.2: difficulty, hardcore and "difficulty locked" travel together; game rules are no longer passed here.
+            LevelSettings settings = new LevelSettings(world, GameType.SURVIVAL,
+                    new LevelSettings.DifficultySettings(Difficulty.PEACEFUL, false, false),
+                    ALLOW_COMMANDS, WorldDataConfiguration.DEFAULT);
             WorldOptions options = new WorldOptions(20261013L, false, false);
             mc.createWorldOpenFlows().createFreshLevel(world, settings, options,
                     registries -> registries.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(SEA).value().createWorldDimensions(),

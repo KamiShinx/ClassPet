@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<title>החיה שלי</title>
+<style>
+  /* ===== הצבעים והאוכל של החיה: משנים כאן ===== */
+  :root{
+    --pet: #7ed957;        /* הצבע של החיה */
+    --bg1: #fdf6e3;        /* הרקע, למעלה */
+    --bg2: #ffe0f0;        /* הרקע, למטה */
+    --ink: #2b2140;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);background:linear-gradient(var(--bg1),var(--bg2));display:grid;place-items:center;padding:16px}
+  .card{width:100%;max-width:440px;background:#fff;border-radius:28px;padding:22px;box-shadow:0 12px 40px rgba(43,33,64,.15);display:grid;gap:14px;text-align:center}
+  h1{margin:0;font-size:2rem}
+  .say{min-height:1.6em;font-size:1.15rem;font-weight:700}
+  .stage{position:relative;height:220px;display:grid;place-items:center}
+  .stage svg{width:200px;height:200px;animation:bob 2.4s ease-in-out infinite}
+  .stage.happy svg{animation:jump .5s ease-out}
+  @keyframes bob{50%{transform:translateY(-8px)}}
+  @keyframes jump{30%{transform:translateY(-34px) scale(1.06)}}
+  .float{position:absolute;font-size:2rem;animation:up 1.2s ease-out forwards;pointer-events:none}
+  @keyframes up{to{transform:translateY(-120px);opacity:0}}
+  .bar{display:grid;grid-template-columns:70px 1fr 40px;gap:8px;align-items:center;font-weight:700}
+  .bar div{height:16px;background:#eee;border-radius:9px;overflow:hidden}
+  .bar i{display:block;height:100%;width:50%;border-radius:9px;transition:width .6s}
+  .full i{background:#ff9f43}
+  .joy i{background:#ff5fa2}
+  .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  button{font:inherit;font-size:1.15rem;font-weight:800;border:0;border-radius:16px;padding:14px;cursor:pointer;color:#fff;background:#6c5ce7;box-shadow:0 5px 0 #4b3fb8}
+  button:active{transform:translateY(3px);box-shadow:0 2px 0 #4b3fb8}
+  button:disabled{opacity:.5;cursor:wait}
+  .who{display:flex;gap:8px;align-items:center;justify-content:center;font-size:.95rem}
+  .who input{font:inherit;padding:6px 10px;border:2px solid #ddd;border-radius:10px;width:140px}
+  .visits{font-size:.9rem;color:#6b6280;margin:0;padding:0;list-style:none}
+  .visits-h{font-size:.8rem;font-weight:800;color:#a39bb8;margin-bottom:-10px}
+</style>
+</head>
+<body>
+<main class="card">
+  <h1 id="name">...</h1>
+  <div class="say" id="say">רגע, היא מתעוררת...</div>
+
+  <div class="stage" id="stage">
+<!-- PET START: הציור של החיה. כאן מדביקים את ה-SVG מג׳מיני -->
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="100" cy="182" rx="58" ry="9" fill="rgba(0,0,0,.12)"/>
+  <path d="M40 120 C40 60 70 30 100 30 C130 30 160 60 160 120 C160 165 135 178 100 178 C65 178 40 165 40 120Z" fill="var(--pet)"/>
+  <ellipse cx="78" cy="100" rx="12" ry="15" fill="#fff"/><ellipse cx="122" cy="100" rx="12" ry="15" fill="#fff"/>
+  <circle cx="80" cy="104" r="7" fill="#2b2140"/><circle cx="120" cy="104" r="7" fill="#2b2140"/>
+  <circle cx="64" cy="128" r="9" fill="#ff8fb1" opacity=".6"/><circle cx="136" cy="128" r="9" fill="#ff8fb1" opacity=".6"/>
+  <path d="M86 132 Q100 146 114 132" stroke="#2b2140" stroke-width="5" fill="none" stroke-linecap="round"/>
+</svg>
+<!-- PET END -->
+  </div>
+
+  <div class="bar full"><span>שובע</span><div><i id="fullBar"></i></div><span id="fullNum">50</span></div>
+  <div class="bar joy"><span>שמחה</span><div><i id="joyBar"></i></div><span id="joyNum">50</span></div>
+
+  <div class="btns">
+    <button id="feedBtn">להאכיל <span class="food">🍎</span></button>
+    <button id="playBtn">לשחק <span class="toy">⚽</span></button>
+  </div>
+  <label class="who">הכינוי שלכם: <input id="who" maxlength="20" placeholder="למשל: נינג׳ה"></label>
+  <div class="visits-h" id="visitsH" hidden>ביקרו לאחרונה</div>
+  <ul class="visits" id="visits"></ul>
+</main>
+
+<script>
+  /* ===== האוכל, המשחק ומה שהחיה אומרת: משנים כאן ===== */
+  const LOOK = {
+    food: '🍎',
+    toy: '⚽',
+    hungry: 'אני רעבה!',
+    bored: 'משעמם לי...',
+    happy: 'אני הכי מאושרת בעולם!',
+    hello: 'היי! מה נשמע?'
+  };
+
+  /* ===== מכאן והלאה: הדף מדבר עם השרת ===== */
+  const $ = id => document.getElementById(id);
+  document.querySelectorAll('.food').forEach(e => e.textContent = LOOK.food);
+  document.querySelectorAll('.toy').forEach(e => e.textContent = LOOK.toy);
+  $('who').value = localStorage.getItem('who') || '';
+  $('who').addEventListener('input', () => localStorage.setItem('who', $('who').value));
+
+  // ציור החיה על המסך לפי מה שהשרת שלח
+  function show(pet) {
+    $('name').textContent = pet.name;
+    $('fullBar').style.width = pet.full + '%'; $('fullNum').textContent = pet.full;
+    $('joyBar').style.width = pet.joy + '%'; $('joyNum').textContent = pet.joy;
+    $('say').textContent = pet.full < 30 ? LOOK.hungry : pet.joy < 30 ? LOOK.bored : (pet.full > 80 && pet.joy > 80) ? LOOK.happy : LOOK.hello;
+    $('visitsH').hidden = !(pet.visits || []).length;
+    $('visits').replaceChildren(...(pet.visits || []).map(v => { const li = document.createElement('li'); li.textContent = v.who + ' ' + v.what; return li; }));
+  }
+
+  // שולח בקשה לשרת. בלי שרת (למשל בתצוגה של ג׳מיני) החיה חיה רק בדף, בלי לשמור.
+  const fake = { name: 'בלובי', full: 50, joy: 50, visits: [] };
+  function ask(fn, who) {
+    return new Promise((ok, fail) => {
+      if (window.google && google.script) google.script.run.withSuccessHandler(ok).withFailureHandler(fail)[fn](who);
+      else { if (fn === 'feed') fake.full = Math.min(100, fake.full + 15); if (fn === 'play') fake.joy = Math.min(100, fake.joy + 15);
+             if (fn !== 'getPet') fake.visits.unshift({ who: who || 'אורח', what: fn === 'feed' ? 'האכיל' : 'שיחק' }); ok(fake); }
+    });
+  }
+
+  function pop(emoji) {
+    const s = document.createElement('span'); s.className = 'float'; s.textContent = emoji;
+    s.style.left = (30 + Math.random() * 40) + '%'; $('stage').appendChild(s); setTimeout(() => s.remove(), 1300);
+    $('stage').classList.remove('happy'); void $('stage').offsetWidth; $('stage').classList.add('happy');
+  }
+
+  async function act(fn, emoji, btn) {
+    btn.disabled = true; const old = btn.innerHTML; btn.textContent = 'רגע...';
+    pop(emoji);
+    try { show(await ask(fn, $('who').value)); } catch (e) { $('say').textContent = 'אופס, השרת לא ענה. נסו שוב.'; }
+    btn.innerHTML = old; btn.disabled = false;
+  }
+  $('feedBtn').addEventListener('click', () => act('feed', LOOK.food, $('feedBtn')));
+  $('playBtn').addEventListener('click', () => act('play', LOOK.toy, $('playBtn')));
+
+  // כל 4 שניות: מה קורה עם החיה? (אולי מישהו אחר האכיל אותה)
+  function refresh() { ask('getPet').then(show).catch(() => {}); }
+  refresh(); setInterval(refresh, 4000);
+</script>
+</body>
+</html>

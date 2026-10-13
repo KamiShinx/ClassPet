@@ -134,3 +134,12 @@ JSON APIs, plus Docs/Forms automation). Deliver results as one REVIEW-style md (
 - No student account tested yet; Ben can get one later this week. Test card: `webapp-course/STUDENT_ACCOUNT_TEST.md`.
 - At the workplace the network is less blocked, and the kids COULD use GPT Pro on the workplace account, but **the
   course is written for Gemini on the Ministry accounts**; GPT Pro is only a fallback on a blocked day.
+
+**13 Oct: Phase 1 app = a VIRTUAL PET (Tamagotchi).** Ben rejected 7 utility/social ideas ("suck"); his rule: "it
+should just be fun and not too complicated". M1 hatch it (own pet on a real site, feeding saves, a friend feeds it),
+M2 moods + bars, M3 time passes (hunger while away), M4 the whole class visits at once (→ the lock).
+Built for meeting 1 (`webapp-course/`): `m1/pet/Code.gs` + `Index.html` (the starter: tabs pet/log, getPet/feed/
+play, LOOK + PET START/END for kids to restyle, works without a server in Gemini's preview), `hub/Code.gs` +
+`Index.html` (the kids' 12-step lesson in the same one-action style as the Minecraft hub, design card in
+localStorage, copy-prompt boxes, drawn click-path mocks with Hebrew+English UI names, slides at `?page=slides1`),
+`TEACHER_SETUP.md` (template, demo pet, hub; ~20 min on Ben's Gmail). Untested on a real Apps Script account.

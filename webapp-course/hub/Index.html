@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>MAKE · אפליקציות ומשחקים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap">
+<style>
+:root{
+  --bg:#F6F3FF; --surface:#FFFFFF; --sunk:#ECE7FB; --ink:#231B3A; --muted:#6B6385; --line:#DCD5F0;
+  --pri:#6C5CE7; --pri-ink:#FFFFFF; --pri-soft:#E8E4FF; --pri-dark:#4B3FB8;
+  --ok:#1E9E62; --ok-soft:#DDF5E8; --warn:#C27A00; --warn-soft:#FFF1D6; --hl:#FFC83D;
+  --font:"Rubik","Segoe UI",Arial,sans-serif; --mono:Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15121F; --surface:#1F1A2E; --sunk:#2A2440; --ink:#EEEAFB; --muted:#A79FC2; --line:#3A3352;
+  --pri:#8C7FFF; --pri-ink:#120E20; --pri-soft:#2C2550; --pri-dark:#6C5CE7; --ok:#4CD38E; --ok-soft:#173A29; --warn:#F2B33D; --warn-soft:#3A2D12; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55}
+h1,h2,h3{margin:0;line-height:1.2;font-weight:800}
+p{margin:0}
+a{color:var(--pri)}
+button{font:inherit;cursor:pointer;color:inherit}
+code,kbd,.mono{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
+kbd{background:var(--sunk);border:1px solid var(--line);border-bottom-width:3px;border-radius:5px;padding:0 .4em;font-size:.85em}
+.btn{display:inline-flex;align-items:center;gap:.4em;border:2px solid var(--line);background:var(--surface);color:var(--ink);padding:.5em 1.1em;border-radius:12px;font-weight:700;text-decoration:none;box-shadow:0 3px 0 var(--line)}
+.btn.go{background:var(--pri);border-color:var(--pri);color:var(--pri-ink);box-shadow:0 4px 0 var(--pri-dark)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn[disabled]{opacity:.4;cursor:default}
+/* top bar */
+.tb{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px}
+.tb a{text-decoration:none;color:var(--ink);font-weight:800}
+.tb .mid{text-align:center;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* home */
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 60px;display:grid;gap:18px}
+.hero{display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--surface);border:3px solid var(--pri);border-radius:18px;padding:22px 24px;box-shadow:0 6px 0 var(--pri-soft)}
+.hero small{color:var(--pri);font-weight:800}
+.hero h1{font-size:clamp(1.6rem,4vw,2.3rem)}
+.hero .go{font-size:1.3rem;padding:.6em 1.6em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.tile{display:grid;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink)}
+.tile b{font-size:1.15rem}.tile span{color:var(--muted)}
+.soon{opacity:.55}
+/* lesson */
+.lp-st{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:10px 16px}
+.lp-st button{display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 14px 5px 8px;font-weight:700;color:var(--muted)}
+.lp-st button span{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--sunk);font-size:.85rem}
+.lp-st button.done{color:var(--pri)}
+.lp-st button.done span,.lp-st button.cur span{background:var(--pri);color:var(--pri-ink)}
+.lp-st button.cur{color:var(--ink);border-color:var(--pri);background:var(--pri-soft)}
+.lp-st i{width:18px;height:3px;background:var(--line);border-radius:2px}
+.lp-main{padding:8px 16px 120px;display:grid;justify-items:center}
+.card{width:100%;max-width:980px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px clamp(16px,3vw,32px);display:grid;gap:18px;box-shadow:0 4px 0 var(--line)}
+.head{display:flex;gap:16px;align-items:center}
+.num{display:grid;place-items:center;flex:none;width:56px;height:56px;border-radius:16px;background:var(--pri);color:var(--pri-ink);font-size:1.8rem;font-weight:800}
+.head small{color:var(--muted);font-weight:700}
+.head h1{font-size:clamp(1.6rem,3.4vw,2.2rem)}
+.say{font-size:1.18rem;display:grid;gap:10px}
+.say ol,.say ul{margin:0;padding-inline-start:1.4em;display:grid;gap:8px}
+.say li::marker{font-weight:800;color:var(--pri)}
+.do{display:grid;gap:14px}
+.expect{background:var(--ok-soft);border-radius:12px;padding:12px 16px}
+.expect b{display:block;color:var(--ok);font-size:.9rem}
+.note{background:var(--warn-soft);border-radius:12px;padding:12px 16px}
+.help{border:2px dashed var(--line);border-radius:12px;padding:10px 16px}
+.help summary{cursor:pointer;font-weight:800;color:var(--pri)}
+.help ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.help li b{display:block}
+.foot{position:fixed;bottom:0;left:0;right:0;z-index:15;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px}
+.foot .go{font-size:1.25rem;padding:.5em 1.6em}
+.dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--sunk);border:1px solid var(--line)}
+.dots i.done{background:var(--pri);border-color:var(--pri)}
+.dots i.cur{background:var(--hl);border-color:var(--hl);transform:scale(1.25)}
+.chal{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:8px}
+.chal label{display:flex;gap:10px;align-items:flex-start}
+/* pieces inside steps */
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.road div{display:grid;gap:6px;justify-items:center;text-align:center;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:14px 10px}
+.road .rn{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--pri);color:var(--pri-ink);font-weight:800}
+.road b{font-size:1.1rem}.road span{color:var(--muted);font-size:.95rem}
+.trio{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;text-align:center}
+.trio div{background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:14px 10px;display:grid;gap:4px}
+.trio div b{font-size:1.15rem}.trio div span{color:var(--muted);font-size:.95rem}.trio .ico{font-size:2rem}
+.trio > i{font-style:normal;font-size:1.6rem;color:var(--pri)}
+.prompt{border:2px solid var(--pri);border-radius:14px;overflow:hidden}
+.prompt .ph{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--pri-soft);padding:8px 12px;font-weight:800}
+.prompt pre{margin:0;padding:12px 14px;white-space:pre-wrap;font-family:var(--font);font-size:1rem;line-height:1.6;max-height:320px;overflow:auto}
+.copied{color:var(--ok);font-weight:800}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vs div{border-radius:12px;padding:12px 14px;display:grid;gap:4px}
+.vs .bad{background:#FFE3E3;color:#5A1A1A}.vs .good{background:var(--ok-soft)}
+.form{display:grid;gap:12px}
+.form label{display:grid;gap:4px;font-weight:700}
+.form input,.form textarea{font:inherit;font-weight:400;padding:9px 12px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--pri)}
+.form small{color:var(--muted);font-weight:400}
+.big-link{display:flex;align-items:center;justify-content:center;gap:12px;max-width:520px;width:100%;margin-inline:auto;padding:16px 22px;border-radius:14px;background:var(--pri);color:var(--pri-ink);font-size:1.35rem;font-weight:800;text-decoration:none;box-shadow:0 5px 0 var(--pri-dark)}
+.missing{color:var(--warn);font-weight:700;text-align:center}
+/* mock screenshots: where to click, with numbered yellow marks */
+.mock{border:2px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;color:#202124;font-family:Arial,sans-serif;font-size:14px;max-width:760px;width:100%;margin-inline:auto;direction:rtl}
+.mock .bar{background:#f1f3f4;border-bottom:1px solid #dadce0;padding:6px 10px;display:flex;gap:6px;align-items:center;font-size:12px;color:#5f6368}
+.mock .bar i{width:10px;height:10px;border-radius:50%;background:#dadce0}
+.mock .in{padding:12px;display:grid;gap:10px}
+.mk{position:relative;outline:3px solid var(--hl);outline-offset:2px;border-radius:6px}
+.mk::after{content:attr(data-n);position:absolute;top:-12px;inset-inline-start:-12px;width:22px;height:22px;border-radius:50%;background:var(--hl);color:#231B3A;font-weight:800;font-size:13px;display:grid;place-items:center}
+.m-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.m-btn{border:1px solid #dadce0;border-radius:6px;padding:4px 10px;background:#fff}
+.m-blue{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.m-menu{display:flex;gap:14px;padding:4px 0;border-bottom:1px solid #eee}
+.m-drop{border:1px solid #dadce0;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.15);padding:4px 0;width:220px;background:#fff}
+.m-drop div{padding:6px 12px}
+.m-side{display:grid;gap:6px;border-inline-end:1px solid #eee;padding-inline-end:10px}
+.m-cols{display:grid;grid-template-columns:150px 1fr;gap:12px}
+.m-code{background:#f8f9fa;border:1px solid #eee;border-radius:6px;padding:8px;font-family:var(--mono);font-size:12px;direction:ltr;text-align:left;white-space:pre;overflow:auto}
+.m-dialog{border:1px solid #dadce0;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.18);padding:14px;display:grid;gap:10px;max-width:420px;margin-inline:auto}
+.m-input{border:1px solid #dadce0;border-radius:20px;padding:10px 14px;color:#80868b}
+/* slides */
+.sl{position:fixed;inset:0;background:var(--bg);display:grid;grid-template-rows:1fr auto}
+.sl .stage{display:grid;place-items:center;padding:40px;text-align:center}
+.sl .stage > div{display:grid;gap:26px;justify-items:center;max-width:1100px}
+.sl h1{font-size:clamp(2.4rem,6vw,4.6rem)}
+.sl .sub{font-size:clamp(1.3rem,2.6vw,2rem);color:var(--muted)}
+.sl ol,.sl ul{font-size:clamp(1.3rem,2.6vw,2rem);text-align:start;display:grid;gap:12px;margin:0}
+.sl .trio{font-size:1.3rem;min-width:min(1000px,90vw)}
+.sl .vs{font-size:1.3rem;min-width:min(1000px,90vw)}
+.sl .notes{background:var(--surface);border-top:2px solid var(--pri);padding:14px 20px;font-size:1.05rem;display:flex;gap:16px;align-items:center}
+.sl .notes[hidden]{display:none}
+.sl .count{position:fixed;top:12px;left:16px;color:var(--muted);font-weight:700}
+@media (max-width:640px){.trio{grid-template-columns:1fr}.trio > i{transform:rotate(90deg)}.vs{grid-template-columns:1fr}.lp-st i{display:none}.foot{grid-template-columns:1fr 1fr}.dots{display:none}.m-cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<textarea id="clip" aria-hidden="true" style="position:fixed;top:-200px;opacity:0"></textarea>
+<script>window.CFG = <?!= cfg ?>;</script>
+<script>
+"use strict";
+const CFG = window.CFG || {};
+const app = document.getElementById("app");
+const LS = { get(k, d){ try { const v = localStorage.getItem("mk." + k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } },
+             set(k, v){ try { localStorage.setItem("mk." + k, JSON.stringify(v)); } catch(e){} } };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const ok = u => u && /^https:\/\//.test(u);
+/* The template's link opens Google's "make a copy" screen directly. */
+const copyLink = u => ok(u) ? u.replace(/\/(edit|view)[^/]*$/, "").replace(/\/$/, "") + "/copy" : "";
+
+/* ===== copying text: the clipboard API, or the old way when the page sits inside Google's frame ===== */
+async function copyText(t){
+  try { await navigator.clipboard.writeText(t); return true; } catch(e){}
+  const c = document.getElementById("clip"); c.value = t; c.select();
+  try { return document.execCommand("copy"); } catch(e){ return false; }
+}
+function bindCopy(root){
+  root.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", async () => {
+    const box = b.closest(".prompt"), t = box ? box.querySelector("pre").textContent : b.dataset.copy;
+    const done = await copyText(t);
+    const old = b.textContent; b.textContent = done ? "הועתק ✓" : "סמנו והעתיקו ידנית"; setTimeout(() => b.textContent = old, 1800);
+  }));
+}
+const promptBox = (title, text) => `<div class="prompt"><div class="ph"><span>${title}</span><button class="btn go" data-copy>להעתיק</button></div><pre>${esc(text)}</pre></div>`;
+
+/* ===== the pet's design card: kept in this browser only ===== */
+const CARD = [
+  ["name", "איך קוראים לחיה?", "למשל: פופקורן"],
+  ["look", "איך היא נראית? צורה, צבע, ומשהו מיוחד", "למשל: כדור סגול עם קרן אחת וזנב של חתול"],
+  ["food", "מה היא הכי אוהבת לאכול?", "למשל: פיצה 🍕"],
+  ["toy", "במה היא אוהבת לשחק?", "למשל: כדור צמר 🧶"],
+  ["vibe", "מה האופי שלה, במשפט?", "למשל: עצלנית, אבל כשהיא רעבה היא דרמטית"],
+  ["hungry", "מה היא אומרת כשהיא רעבה?", "למשל: אני גוססת פה! פיצה!!!"]
+];
+const card = () => LS.get("card", {});
+const cardText = () => { const c = card(); return CARD.map(([k, q]) => q.replace(/\?.*$/, "?").replace(/,.*$/, "") + " " + (c[k] || "(עוד לא כתבתי)")).join("\n"); };
+const cardForm = () => `<div class="form">${CARD.map(([k, q, ph]) => `<label>${q}<input data-card="${k}" maxlength="120" placeholder="${esc(ph)}" value="${esc(card()[k] || "")}"></label>`).join("")}<small id="card-saved"></small></div>`;
+function bindCard(root){
+  root.querySelectorAll("[data-card]").forEach(i => i.addEventListener("input", () => { const c = card(); c[i.dataset.card] = i.value; LS.set("card", c); const s = root.querySelector("#card-saved"); if (s) s.textContent = "נשמר בדפדפן הזה"; }));
+}
+const askPrompt = () => `אני בונה אתר עם חיה וירטואלית. זה הכרטיס שלה:
+${cardText()}
+
+לפני שאתה עושה משהו: תשאל אותי 3 שאלות שיעזרו לי לדייק את החיה. אל תמציא בשבילי. תשאל אחת אחרי השנייה, ותחכה לתשובה שלי.`;
+const svgPrompt = () => `תצייר לי את החיה שלי כ־SVG, לפי הכרטיס:
+${cardText()}
+
+חשוב:
+- viewBox="0 0 200 200", רקע שקוף, בלי טקסט.
+- חיה חמודה, עם עיניים גדולות, באמצע הציור.
+- תשלח רק את קוד ה־SVG, מ־<svg ועד </svg>, בלי הסברים.`;
+
+/* ===== drawings of the screens: where to click (numbered yellow marks) ===== */
+const mock = (title, inner) => `<div class="mock" aria-hidden="true"><div class="bar"><i></i><i></i><i></i><span>${title}</span></div><div class="in">${inner}</div></div>`;
+const MOCK = {
+  gemini: () => mock("gemini.google.com", `<div class="m-cols"><div class="m-side"><span class="m-btn mk" data-n="1">+ צ׳אט חדש</span><span style="color:#5f6368">צ׳אטים קודמים</span></div>
+    <div style="display:grid;gap:40px;align-content:space-between;min-height:150px"><b style="font-size:20px">שלום, איך אפשר לעזור?</b><div class="m-input mk" data-n="2">כותבים או מדביקים כאן (Ctrl+V), ו־Enter</div></div></div>`),
+  copy: () => mock("Google Sheets", `<div class="m-dialog"><b>ליצור עותק של המסמך? (Copy document)</b><div>שם: <span class="m-btn mk" data-n="1">החיה של ___</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="2">יצירת עותק (Make a copy)</span></div></div>`),
+  ext: () => mock("Google Sheets", `<div class="m-menu"><span>קובץ</span><span>עריכה</span><span>תצוגה</span><span>הוספה</span><span>עיצוב</span><span>נתונים</span><span class="mk" data-n="1">תוספים (Extensions)</span><span>עזרה</span></div>
+    <div class="m-drop" style="margin-inline-start:260px"><div>תוספים</div><div class="mk" data-n="2">Apps Script</div></div>`),
+  editor: () => mock("Apps Script", `<div class="m-row" style="justify-content:space-between"><b>החיה של ___</b><span class="m-btn m-blue">פריסה (Deploy) ▾</span></div>
+    <div class="m-cols"><div class="m-side"><b>קבצים</b><span>Code.gs</span><span>Index.html</span></div>
+    <div style="display:grid;gap:8px"><div class="m-row"><span class="m-btn mk" data-n="2">▶ הפעלה (Run)</span><span class="m-btn mk" data-n="1">setup ▾</span></div><div class="m-code">function setup() {\n  ...\n}</div></div></div>`),
+  perm: () => mock("accounts.google.com", `<div class="m-dialog"><b>Google לא אימתה את האפליקציה הזו</b><div style="color:#5f6368">האפליקציה שלכם. זה בסדר.</div><div class="m-row"><span class="mk" data-n="1" style="color:#1a73e8">מתקדם (Advanced)</span></div><div class="mk" data-n="2" style="color:#1a73e8">מעבר אל החיה של ___ (לא בטוח)</div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="3">אישור (Allow)</span></div></div>`),
+  deploy: () => mock("Apps Script", `<div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="1">פריסה (Deploy) ▾</span></div>
+    <div class="m-drop" style="margin-inline-start:auto;margin-inline-end:0"><div class="mk" data-n="2">פריסה חדשה (New deployment)</div><div>ניהול פריסות (Manage deployments)</div></div>
+    <div class="m-dialog"><div class="m-row"><span class="mk" data-n="3">⚙️</span> בחירת סוג: <b>אפליקציית אינטרנט (Web app)</b></div><div>הפעלה בתור (Execute as): <b>אני (Me)</b></div><div>למי יש גישה (Who has access): <span class="m-btn mk" data-n="4">כל אחד (Anyone) ▾</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="5">פריסה (Deploy)</span></div></div>`),
+  url: () => mock("Apps Script", `<div class="m-dialog"><b>הפריסה עודכנה ✓</b><div>אפליקציית אינטרנט (Web app)</div><div class="m-row"><span class="m-code mk" data-n="1" style="flex:1">https://script.google.com/macros/s/.../exec</span><span class="m-btn mk" data-n="2">העתקה</span></div></div>`),
+  manage: () => mock("Apps Script", `<div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="1">פריסה (Deploy) ▾</span></div>
+    <div class="m-drop" style="margin-inline-start:auto;margin-inline-end:0"><div>פריסה חדשה (New deployment)</div><div class="mk" data-n="2">ניהול פריסות (Manage deployments)</div></div>
+    <div class="m-dialog"><div class="m-row" style="justify-content:space-between"><b>הפריסה הפעילה</b><span class="mk" data-n="3">✏️</span></div><div>גרסה (Version): <span class="m-btn mk" data-n="4">גרסה חדשה (New version) ▾</span></div><div class="m-row" style="justify-content:flex-end"><span class="m-btn m-blue mk" data-n="5">פריסה (Deploy)</span></div></div>`),
+  paste: () => mock("Apps Script · Index.html", `<div class="m-code">  &lt;div class="stage" id="stage"&gt;\n<span class="mk" data-n="1">&lt;!-- PET START --&gt;</span>\n<span style="background:#fde68a">&lt;svg ...&gt;  ← מוחקים מכאן...\n  ...\n&lt;/svg&gt;       ...ועד כאן, ומדביקים את הציור מג׳מיני</span>\n<span class="mk" data-n="2">&lt;!-- PET END --&gt;</span>\n  &lt;/div&gt;</div>`)
+};
+const road = list => `<div class="road">${list.map((x, i) => `<div><span class="rn">${i + 1}</span><b>${x[0]}</b><span>${x[1]}</span></div>`).join("")}</div>`;
+const TRIO = `<div class="trio"><div><span class="ico">🖥️</span><b>הדף</b><span>מה שרואים: החיה והכפתורים</span></div><i>⇄</i>
+  <div><span class="ico">⚙️</span><b>השרת</b><span>מקבל בקשות: ״תאכיל את החיה״</span></div><i>⇄</i>
+  <div><span class="ico">📊</span><b>הגיליון</b><span>הזיכרון: כמה היא שבעה, מי ביקר</span></div></div>`;
+const demoLink = () => ok(CFG.demo) ? `<a class="big-link" href="${esc(CFG.demo)}" target="_blank" rel="noopener">🐲 להאכיל את החיה של המורה</a>` : `<p class="missing">הקישור לחיה של המורה עוד לא הוגדר.</p>`;
+const templateLink = () => ok(CFG.template) ? `<a class="big-link" href="${esc(copyLink(CFG.template))}" target="_blank" rel="noopener">📋 ליצור עותק של החיה</a>` : `<p class="missing">הקישור לתבנית עוד לא הוגדר. מרימים יד.</p>`;
+
+/* ===== meeting 1: one action per step ===== */
+const M1 = {
+  n:1, title:"מפגש 1: החיה שלי, באינטרנט",
+  stations:[["ג׳מיני",1],["העיצוב",2],["העותק",4],["באוויר",6],["הציור",8],["חבר",10]],
+  steps:[
+    { title:"היום: חיה משלכם, באינטרנט",
+      body:`<p>היום אתם בונים חיה וירטואלית שחיה באתר אמיתי. כל מי שיש לו את הקישור יכול לבקר אותה ולהאכיל אותה.</p>`,
+      visual:() => road([["מעצבים","איך היא נראית, מה היא אוהבת"],["מדברים עם ג׳מיני","הוא שואל, אתם מחליטים"],["מעלים לאוויר","אתר אמיתי, עם שרת וזיכרון"],["חבר מאכיל","מהמחשב שלו, אצלכם בגיליון"]]) + TRIO },
+
+    { title:"נכנסים לג׳מיני",
+      body:`<ol><li>פותחים את <a href="https://gemini.google.com" target="_blank" rel="noopener"><b>gemini.google.com</b></a> בכרטיסייה חדשה.</li><li>מתחברים עם החשבון של משרד החינוך.</li><li>לוחצים <b>+ צ׳אט חדש</b>.</li></ol>`,
+      visual:() => MOCK.gemini(),
+      expect:"ג׳מיני פתוח, ומחכה לכם.",
+      stuck:[["כתוב שאין גישה לג׳מיני","בודקים שזה החשבון של משרד החינוך, ולא חשבון אחר. אם עדיין אין גישה, מרימים יד."]] },
+
+    { title:"כרטיס החיה",
+      body:`<p>ממציאים את החיה שלכם. אין תשובות נכונות, רק החיה שלכם.</p>`,
+      visual:() => cardForm(), mount:root => bindCard(root),
+      hints:["חיה שאין בעולם: מה קורה אם מחברים שתי חיות? חתול־דג? ענן עם רגליים?","דבר אחד מיוחד מספיק: קרן, משקפיים, שלוש עיניים.","האופי הוא מה שיהפוך אותה למצחיקה: עצלנית, דרמטית, ביישנית."] },
+
+    { title:"ג׳מיני שואל אתכם",
+      body:`<ol><li>מעתיקים את ההודעה, ומדביקים בג׳מיני (<kbd>Ctrl</kbd> + <kbd>V</kbd>).</li><li>עונים על השאלות שלו, אחת אחת.</li><li>תשובה טובה? מעדכנים את הכרטיס בשלב הקודם.</li></ol>`,
+      visual:() => promptBox("מדביקים בג׳מיני", askPrompt()) + `<div class="vs"><div class="bad"><b>״תעשה לי חיה״</b>ג׳מיני ממציא חיה שאתם לא בחרתם.</div><div class="good"><b>כרטיס, ו״תשאל אותי קודם״</b>ג׳מיני עוזר לכם לדייק את החיה שלכם.</div></div>`,
+      note:"ג׳מיני הוא שותף לחשיבה, לא מי שמחליט. אם הוא מציע משהו שלא אהבתם, כותבים לו: ״לא, אני רוצה ש...״." },
+
+    { title:"מעתיקים את החיה",
+      body:`<ol><li>לוחצים על הכפתור. נפתח גיליון של Google.</li><li>בשם כותבים <b>החיה של</b> ואת הכינוי שלכם.</li><li>לוחצים <b>יצירת עותק</b>.</li></ol>`,
+      visual:() => templateLink() + MOCK.copy(),
+      expect:"נפתח גיליון חדש, שלכם. בתחתית יש לשוניות.",
+      stuck:[["כתוב שאין הרשאה","בודקים שאתם מחוברים עם החשבון של משרד החינוך. אם זה לא עוזר, מרימים יד."]] },
+
+    { title:"מעירים את השרת",
+      body:`<ol><li>בגיליון: <b>תוספים</b>, ואז <b>Apps Script</b>. נפתח העורך של השרת.</li><li>למעלה בוחרים <b>setup</b>, ולוחצים <b>הפעלה</b>.</li><li>Google שואלת אם מותר: <b>בדיקת הרשאות</b>, בוחרים את החשבון, <b>מתקדם</b>, <b>מעבר אל החיה של...</b>, ו<b>אישור</b>.</li></ol>`,
+      visual:() => MOCK.ext() + MOCK.editor() + MOCK.perm(),
+      expect:"בגיליון נוספו שתי לשוניות: pet (החיה) ו־log (מי ביקר).",
+      stuck:[["כתוב שהאדמין חסם את Apps Script","מרימים יד. בינתיים ממשיכים לשלב הציור עם ג׳מיני."],["Google אומרת שהאפליקציה לא מאומתת","זה בסדר: זו האפליקציה שלכם. לוחצים מתקדם, ואז מעבר אל..."]],
+      note:"מה זה השרת? Code.gs: הקוד שמקבל בקשות מהדף, וכותב בגיליון. Index.html: הדף עצמו." },
+
+    { title:"מעלים לאוויר",
+      body:`<ol><li>בעורך: <b>פריסה</b>, ואז <b>פריסה חדשה</b>.</li><li>ליד ״בחירת סוג״ לוחצים ⚙️ ובוחרים <b>אפליקציית אינטרנט</b>.</li><li>בגישה בוחרים <b>כל אחד</b> (אם אין, את האפשרות הכי רחבה). לוחצים <b>פריסה</b>.</li><li>מעתיקים את הקישור שמסתיים ב־<code>/exec</code>, ופותחים אותו בכרטיסייה חדשה.</li></ol>`,
+      visual:() => MOCK.deploy() + MOCK.url(),
+      expect:"החיה בלובי באתר שלכם! לוחצים להאכיל, והפס עולה.",
+      stuck:[["ביקשו שוב הרשאות","זה רגיל בפעם הראשונה: מאשרים כמו בשלב הקודם."],["הדף ריק או כתוב שגיאה","בודקים שהקובץ נקרא Index ולא Index.html.html. אם לא, מרימים יד."]] },
+
+    { title:"הגיליון הוא הזיכרון",
+      body:`<ol><li>באתר מאכילים את החיה פעם אחת.</li><li>חוזרים לגיליון. בלשונית <b>pet</b> המספר של <b>full</b> עלה, ובלשונית <b>log</b> יש שורה חדשה.</li><li>בלשונית <b>pet</b>, ליד <b>name</b>, כותבים את השם מהכרטיס.</li><li>מרעננים את האתר.</li></ol>`,
+      visual:() => TRIO,
+      expect:"באתר מופיע השם החדש. זה הבקאנד: הדף שואל את השרת, והשרת קורא מהגיליון." },
+
+    { title:"ציור מג׳מיני",
+      body:`<ol><li>מעתיקים את ההודעה ומדביקים בג׳מיני.</li><li>מעתיקים את הקוד שג׳מיני שולח (כפתור ההעתקה ליד הקוד).</li><li>בעורך פותחים את <b>Index.html</b>, מוחקים את ה־SVG שבין <code>PET START</code> ל־<code>PET END</code>, ומדביקים את הציור.</li><li>שומרים: <kbd>Ctrl</kbd> + <kbd>S</kbd>.</li></ol>`,
+      visual:() => promptBox("מדביקים בג׳מיני", svgPrompt()) + MOCK.paste(),
+      hints:["לא אוהבים את הציור? כותבים לג׳מיני מה לשנות: ״תגדיל את העיניים״, ״תוסיף לה כובע״.","אפשר לשנות גם את האוכל והמשחק: למטה ב־Index.html, ב־LOOK, מחליפים את 🍎 ו־⚽."] },
+
+    { title:"גרסה חדשה",
+      body:`<p>האתר לא משתנה לבד. אחרי כל שינוי מעלים גרסה חדשה:</p><ol><li><b>פריסה</b>, ואז <b>ניהול פריסות</b>.</li><li>לוחצים ✏️, ובגרסה בוחרים <b>גרסה חדשה</b>.</li><li><b>פריסה</b>, ומרעננים את האתר.</li></ol>`,
+      visual:() => MOCK.manage(),
+      expect:"החיה שלכם באתר, עם הציור מג׳מיני.",
+      stuck:[["שום דבר לא השתנה","שכחתם גרסה חדשה, או לא שמרתם עם Ctrl + S."],["הציור שבור או ריק","הדבקתם יותר או פחות מה־SVG. Ctrl + Z, ומדביקים שוב רק מ־<svg ועד </svg>."]] },
+
+    { title:"חבר מאכיל",
+      body:`<ol><li>שולחים את הקישור של האתר לחבר: במייל של משרד החינוך, או בצ׳אט של Google.</li><li>החבר פותח אותו במחשב שלו, כותב כינוי, ומאכיל.</li><li>אתם בודקים בלשונית <b>log</b> בגיליון.</li></ol>`,
+      visual:() => demoLink(),
+      expect:"הכינוי של החבר מופיע באתר שלכם, וגם שורה חדשה בגיליון. אף אחד לא שלח לכם קובץ: הכול עבר דרך השרת." },
+
+    { title:"שומרים ומסיימים",
+      body:`<ol><li>בגיליון: <b>קובץ</b>, ואז <b>יצירת עותק</b>.</li><li>בשם כותבים <b>שמירה 1: החיה עובדת</b>.</li></ol><p>זה ״שמירת משחק״: אם משהו יישבר בשבוע הבא, חוזרים לכאן.</p>`,
+      expect:"בשבוע הבא החיה מתחילה לחיות: רעב, מצבי רוח, והיא מתגעגעת כשאתם לא שם." }
+  ],
+  challenges:[
+    ["food", "אוכל ומשחק משלה", "ב־LOOK שבתחתית Index.html: האוכל, המשחק, ומה היא אומרת."],
+    ["color", "צבעים משלה", "בראש Index.html: הצבע של החיה והרקע."],
+    ["pose", "ציור שני", "בקשו מג׳מיני ציור של החיה כשהיא שמחה."]
+  ]
+};
+
+/* ===== teacher slides for meeting 1 (open #slides1; arrows to move, N for notes) ===== */
+const S1 = [
+  { html:`<h1>החיה שלכם, באינטרנט</h1><p class="sub">אפליקציות ומשחקים עם ג׳מיני · מפגש 1</p>`, notes:"0–2 דק׳. בלי לדבר הרבה: הכותרת, ומיד לשקופית הבאה." },
+  { html:`<h1>תאכילו את החיה שלי</h1><p class="sub">בדף של הקורס: ״להאכיל את החיה של המורה״</p>${demoLink()}`, notes:"2–6 דק׳. הם פותחים את הדף של הקורס ולוחצים על הכפתור. אצלך על המקרן: האתר של החיה שלך. הפסים עולים לבד כל כמה שניות, כי כולם מאכילים." },
+  { html:`<h1>רגע. איפה החיה גרה?</h1>${TRIO}`, notes:"6–9 דק׳. פותחים על המקרן את הגיליון של החיה שלך. מראים את הלשונית log מתמלאת. ״אף אחד לא שלח לי כלום, ובכל זאת אני יודע שהאכלתם. איך?״ הדף מבקש, השרת כותב, הגיליון זוכר." },
+  { html:`<h1>דף · שרת · גיליון</h1><ul><li><b>הדף</b>: מה שרואים</li><li><b>השרת</b>: מקבל בקשות, ומחליט</li><li><b>הגיליון</b>: הזיכרון</li></ul><p class="sub">ביחד: אפליקציה עם בקאנד</p>`, notes:"9–10 דק׳. משפט אחד לכל אחד. זה כל התיאור: את השאר הם יראו בעיניים היום." },
+  { html:`<h1>ג׳מיני: מדברים, לא מפקדים</h1><div class="vs"><div class="bad"><b>״תעשה לי חיה״</b>ג׳מיני ממציא משהו שלא בחרתם</div><div class="good"><b>כרטיס, ו״תשאל אותי קודם״</b>החיה שלכם, מדויקת</div></div>`, notes:"10–12 דק׳. מדגימים על המקרן: מדביקים את ההודעה מהשלב ״ג׳מיני שואל אתכם״, ועונים בקול על שאלה אחת שלו." },
+  { html:`<h1>היום אתם</h1><ol><li>כרטיס החיה, וג׳מיני שואל</li><li>עותק של החיה</li><li>מעירים את השרת, ומעלים לאוויר</li><li>ציור מג׳מיני, וגרסה חדשה</li><li>חבר מאכיל</li></ol>`, notes:"12–75 דק׳. כולם בדף של הקורס, ״להתחיל״, שלב אחרי שלב. מסתובבים. מי שתקוע: ״נתקעתי״ בתחתית השלב, אחר כך השכן, ואז אתה. הכי מסובך: הרשאות (שלב 6) וגרסה חדשה (שלב 10)." },
+  { html:`<h1>שומרים</h1><p class="sub">קובץ ← יצירת עותק ← ״שמירה 1: החיה עובדת״</p><p class="sub">בשבוע הבא: היא מתחילה לחיות</p>`, notes:"75–90 דק׳. שניים־שלושה מראים את החיה שלהם על המקרן. כולם שומרים עותק." }
+];
+
+/* ===== pages ===== */
+const topBar = mid => `<header class="tb"><a href="#home">MAKE · אפליקציות ומשחקים</a><div class="mid">${mid || ""}</div><span></span></header>`;
+function renderHome(){
+  const step = LS.get("m1step", 0), N = M1.steps.length;
+  app.innerHTML = topBar("") + `<div class="wrap">
+    <section class="hero"><div style="display:grid;gap:8px"><small>${step ? "ממשיכים מאיפה שעצרתם" : "המפגש הבא"}</small><h1>${M1.title}</h1><span style="color:var(--muted);font-weight:700">שלב ${step + 1} מתוך ${N}</span></div>
+      <a class="btn go" href="#m1">${step ? "להמשיך" : "להתחיל"} ←</a></section>
+    ${demoLink()}
+    <div class="tiles"><div class="tile soon"><b>מפגש 2: היא חיה</b><span>רעב, מצבי רוח, ופרצופים</span></div><div class="tile soon"><b>מפגש 3: הזמן עובר</b><span>היא מתגעגעת כשאתם לא שם</span></div><div class="tile soon"><b>מפגש 4: מבקרים</b><span>כל הכיתה מבקרת, בבת אחת</span></div></div>
+    <p style="text-align:center"><a href="#slides1" style="color:var(--muted)">למורה: המצגת של מפגש 1</a></p>
+  </div>`;
+}
+let ix = 0;
+function renderLesson(){
+  const L = M1, N = L.steps.length; ix = Math.max(0, Math.min(N - 1, ix));
+  const s = L.steps[ix], last = ix === N - 1, ch = LS.get("m1chal", {});
+  let cur = -1; L.stations.forEach((x, i) => { if (ix >= x[1]) cur = i; });
+  const help = (s.hints || []).map((h, i) => `<li><b>רמז ${i + 1}</b>${h}</li>`).concat((s.stuck || []).map(([q, a]) => `<li><b>${q}</b>${a}</li>`));
+  app.innerHTML = topBar(L.title) + `<nav class="lp-st">${L.stations.map((x, i) => `<button data-go="${x[1]}" class="${i < cur ? "done" : i === cur ? "cur" : ""}"><span>${i + 1}</span>${x[0]}</button>`).join("<i></i>")}</nav>
+    <main class="lp-main"><article class="card" aria-live="polite">
+      <div class="head"><span class="num">${ix + 1}</span><div><small>שלב ${ix + 1} מתוך ${N}</small><h1>${s.title}</h1></div></div>
+      ${s.body ? `<div class="say">${s.body}</div>` : ""}
+      ${s.visual ? `<div class="do">${s.visual()}</div>` : ""}
+      ${s.expect ? `<div class="expect"><b>מה אמור לקרות</b>${s.expect}</div>` : ""}
+      ${s.note ? `<div class="note">${s.note}</div>` : ""}
+      ${help.length ? `<details class="help"><summary>נתקעתי</summary><ul>${help.join("")}</ul></details>` : ""}
+      ${last ? `<div class="chal"><h3>סיימתם? אתגרים</h3>${L.challenges.map(([id, t, d]) => `<label><input type="checkbox" data-ch="${id}" ${ch[id] ? "checked" : ""}><span><b>${t}</b><br>${d}</span></label>`).join("")}</div>` : ""}
+    </article></main>
+    <footer class="foot"><button class="btn" id="prev" ${ix === 0 ? "disabled" : ""}>→ חזרה</button><div class="dots">${L.steps.map((_, i) => `<i class="${i < ix ? "done" : i === ix ? "cur" : ""}"></i>`).join("")}</div>
+      ${last ? `<a class="btn go" href="#home">סיימתי ←</a>` : `<button class="btn go" id="next">הבא ←</button>`}</footer>`;
+  const go = i => { ix = i; LS.set("m1step", i); renderLesson(); window.scrollTo(0, 0); };
+  app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(+b.dataset.go)));
+  const p = app.querySelector("#prev"), n = app.querySelector("#next");
+  if (p) p.addEventListener("click", () => go(ix - 1)); if (n) n.addEventListener("click", () => go(ix + 1));
+  app.querySelectorAll("[data-ch]").forEach(c => c.addEventListener("change", () => { const v = LS.get("m1chal", {}); v[c.dataset.ch] = c.checked; LS.set("m1chal", v); }));
+  bindCopy(app);
+  if (s.mount) s.mount(app);
+}
+let si = 0, notes = true;
+function renderSlides(){
+  si = Math.max(0, Math.min(S1.length - 1, si));
+  app.innerHTML = `<div class="sl"><div class="stage"><div>${S1[si].html}</div></div><div class="count">${si + 1} / ${S1.length}</div>
+    <div class="notes" ${notes ? "" : "hidden"}><b>הערות:</b><span>${S1[si].notes}</span></div></div>`;
+}
+function route(){
+  const h = location.hash;
+  if (h === "#m1"){ ix = LS.get("m1step", 0); renderLesson(); }
+  else if (h === "#slides1") renderSlides();
+  else renderHome();
+}
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,textarea")) return;
+  if (location.hash === "#slides1"){
+    if (e.key === "ArrowLeft" || e.key === " "){ si++; renderSlides(); }
+    else if (e.key === "ArrowRight"){ si--; renderSlides(); }
+    else if (e.key === "n" || e.key === "N" || e.key === "מ"){ notes = !notes; renderSlides(); }
+    else if (e.key === "f" || e.key === "F" || e.key === "כ"){ if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else document.exitFullscreen(); }
+  } else if (location.hash === "#m1"){
+    if (e.key === "ArrowLeft" && ix < M1.steps.length - 1){ ix++; LS.set("m1step", ix); renderLesson(); }
+    if (e.key === "ArrowRight" && ix > 0){ ix--; LS.set("m1step", ix); renderLesson(); }
+  }
+});
+window.addEventListener("hashchange", route);
+/* Google shows this page inside a frame, so the link's #part doesn't reach it: ?page=slides1 does. */
+if (CFG.page && !location.hash) location.hash = "#" + CFG.page;
+route();
+</script>
+</body>
+</html>

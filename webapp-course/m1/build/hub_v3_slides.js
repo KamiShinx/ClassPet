@@ -52,14 +52,14 @@ const CHAT = [
   ["me", "את העיניים. הן ענקיות.", { big: true }],
   ["ai", "שאלה 3: מה היא אומרת כשהיא רעבה?"],
   ["me", "תן לי 3 אפשרויות."],
-  ["ai", "1. ״אני גוועת.״<br>2. ״פיצה. עכשיו.״<br>3. ״מישהו ראה את האוכל שלי?״"],
+  ["ai", "1. ״אני גוועת ברעב.״<br>2. ״פיצה. עכשיו.״<br>3. ״מישהו ראה את האוכל שלי?״"],
   ["me", "2, אבל שתצעק.", { say: "פיצה!!! עכשיו!!!" }]
 ];
 const POP = { c: "#9B6BFF", horn: true, bent: true, big: true, name: "פופקורן" };
 const SHAPES = [["עגולה", {}, "חמודה"], ["מרובעת", { sq: true }, "חזקה"], ["מחודדת", { tri: true }, "מסוכנת"]];
 const EXTRAS = [["קרן", { horn: true }], ["שלוש עיניים", { eyes3: true }], ["כדור צמר", { yarn: true }]];
 const WANTS = [["תשומת לב", "היי! מישהו?! אני פה!!!"], ["שקט", "אוכל. ואז שיעזבו אותי."], ["פיצה", "פיצה!!! עכשיו!!!"]];
-const PLAN = [["הציור של פופקורן", 0], ["כפתור: לדגדג 🤣", 1], ["כמה פעמים דגדגו אותה", 2], ["״פיצה!!! עכשיו!!!״", 0], ["כפתור: להאכיל 🍎", 1], ["כמה היא שבעה", 2], ["השם שלה", 2]];
+const PLAN = [["הציור של פופקורן", 0], ["כפתור: לדגדג 🤣", 1], ["כמה פעמים דגדגו אותה", 2], ["״פיצה!!! עכשיו!!!״", 0], ["כפתור: להאכיל 🍎", 1], ["השובע שלה", 2], ["השם שלה", 2]];
 let slideTimer = 0;
 
 const S1 = [
@@ -89,7 +89,7 @@ const S1 = [
   { html:`<div class="plan"><div class="pcol" data-c="0"><b>רואים</b><small>הדף</small></div><div class="pcol" data-c="1"><b>עושים</b><small>השרת</small></div><div class="pcol" data-c="2"><b>זוכרת</b><small>הגיליון</small></div></div><div class="chips big" id="pool">${PLAN.map((x, i) => `<button data-i="${i}">${x[0]}</button>`).join("")}</div><button class="btn go" id="names">ובאפליקציה?</button>`,
     mount: r => { r.querySelectorAll("#pool button").forEach(b => b.addEventListener("click", () => { const c = r.querySelector(`.pcol[data-c="${PLAN[+b.dataset.i][1]}"]`); b.classList.add("on"); c.appendChild(b); hop(b); }));
       r.querySelector("#names").addEventListener("click", () => r.querySelector(".plan").classList.add("named")); },
-    notes:"10–13 דק׳. ״זאת התוכנית של פופקורן. כל דבר בה הולך לאחד משלושה מקומות.״ על כל פתק שואלים את הכיתה לאן, ולוחצים עליו. ״כפתור: לדגדג״ הולך ל״עושים״: ״הכפתור עצמו נמצא על המסך. אבל כשלוחצים עליו, מישהו צריך לעשות משהו.״ בסוף ״ובאפליקציה?״: ״לשלושת המקומות האלה יש שמות. מה שרואים זה הדף. מי שעושה זה השרת. ומה שהיא זוכרת נמצא בגיליון. תכננתם חיה, ויצאה לכם תוכנית של אפליקציה.״" },
+    notes:"10–13 דק׳. ״זאת התוכנית של פופקורן. כל דבר בה שייך לאחד משלושה מקומות.״ על כל פתק שואלים את הכיתה לאן, ולוחצים עליו. ״כפתור: לדגדג״ שייך ל״עושים״: ״הכפתור עצמו נמצא על המסך. אבל כשלוחצים עליו, מישהו צריך לעשות משהו.״ בסוף ״ובאפליקציה?״: ״לשלושת המקומות האלה יש שמות. מה שרואים זה הדף. מי שעושה זה השרת. ומה שהיא זוכרת נמצא בגיליון. תכננתם חיה, ויצאה לכם תוכנית של אפליקציה.״" },
 
   { html:`<div class="dia"><div class="dc page"><b>הדף</b><div class="toybox sm">${toy({ c: "#8C7FFF", big: true })}</div><div class="dbar"><i></i></div><span class="dnum">50</span><small class="dsay"></small><button class="btn" data-a="feed">להאכיל 🍎</button></div>
       <div class="dc srv"><b>השרת</b><span class="ico">⚙️</span></div>
@@ -98,13 +98,13 @@ const S1 = [
     <div class="dctl"><button class="btn" data-a="refresh">רענון</button><button class="btn" data-a="close">סוגרים את הדף</button><button class="btn" data-a="friend">דף של חבר</button><button class="btn" data-a="kill">מכבים את השרת</button><div class="dc friend" hidden><b>הדף של חבר</b><span class="dnum"></span></div></div>
     <p class="sub">הדף מראה · השרת מחליט · הגיליון זוכר</p>`,
     mount: diaMount,
-    notes:"13–16 דק׳. ״ועכשיו נראה את שלושת המקומות האלה עובדים.״ לוחצים ״להאכיל״: ״הדף לא יודע כלום. הוא מבקש מהשרת, והשרת כותב בגיליון.״ ״רענון״: ״דף שוכח הכול. הוא שואל שוב, ומקבל את התשובה מהגיליון.״ ״סוגרים את הדף״: ״החיה מתה? לא. היא בגיליון.״ ״דף של חבר״: ״כל דף שייפתח, שלי, שלכם, של חבר, שואל את אותו שרת.״ ״מכבים את השרת״ ואז ״להאכיל״: ״בלי שרת, הדף הוא סתם ציור.״ ולסיום: ״כל אפליקציה שיש לכם בטלפון בנויה ככה. משהו שרואים, מישהו שמחליט, ומשהו שזוכר.״" },
+    notes:"13–16 דק׳. ״ועכשיו נראה איך שלושת המקומות האלה עובדים.״ לוחצים ״להאכיל״: ״הדף לא יודע כלום. הוא מבקש מהשרת, והשרת כותב בגיליון.״ ״רענון״: ״דף שוכח הכול. הוא שואל שוב, ומקבל את התשובה מהגיליון.״ ״סוגרים את הדף״: ״החיה מתה? לא. היא בגיליון.״ ״דף של חבר״: ״כל דף שייפתח, שלי, שלכם, של חבר, שואל את אותו שרת.״ ״מכבים את השרת״ ואז ״להאכיל״: ״בלי שרת, הדף הוא סתם ציור.״ ולסיום: ״כל אפליקציה שיש לכם בטלפון בנויה ככה. משהו שרואים, מישהו שמחליט, ומשהו שזוכר.״" },
 
   { html:`<div class="duo"><div class="who"><span class="ico">🎨</span><b>אתם</b><span class="bub" id="bub">תעשה לי חיה</span><div class="dctl"><button class="btn" data-a="vague">״תעשה לי חיה״</button><button class="btn go" data-a="plan">עם התוכנית</button></div></div><div class="who"><span class="ico">🤖</span><b>ג׳מיני</b><div class="toybox" id="guess"><span class="q">?</span></div></div></div><p class="sub">מה שלא אמרתם, הוא מנחש</p>`,
     mount: r => { const g = r.querySelector("#guess");
       r.querySelector("[data-a=vague]").addEventListener("click", async () => { r.querySelector("#bub").textContent = "תעשה לי חיה"; for (let i = 0; i < 9; i++){ g.innerHTML = toy(randomToy()); await sleep(110); } hop(g); });
       r.querySelector("[data-a=plan]").addEventListener("click", () => { r.querySelector("#bub").textContent = "פופקורן: עגולה, סגולה, קרן אחת עקומה, עיניים ענקיות"; g.innerHTML = toy(POP); hop(g); }); },
-    notes:"16–18 דק׳. ״תעשה לי חיה״ שלוש־ארבע פעמים, וכל פעם יוצאת חיה אחרת. ״אותה בקשה בדיוק. למה כל פעם יוצא משהו אחר? כי לא אמרתי לו כלום, אז הוא ניחש.״ ואז ״עם התוכנית״, כמה פעמים: תמיד פופקורן. ״בפיתוח עם AI אתם המעצבים, ואתם הבוס. ג׳מיני מקליד, ומהר מאוד. אבל כשהבוס שותק, המקליד ממציא. בגלל זה החלק הכי חשוב היום הוא התוכנית, ולא הקוד.״" },
+    notes:"16–18 דק׳. ״תעשה לי חיה״ שלוש־ארבע פעמים, וכל פעם יוצאת חיה אחרת. ״אותה בקשה בדיוק. למה כל פעם יוצא משהו אחר? כי לא אמרתי לו כלום, אז הוא ניחש.״ ואז ״עם התוכנית״, כמה פעמים: תמיד פופקורן. ״כשמפתחים בעזרת AI, אתם המעצבים, ואתם הבוס. ג׳מיני מקליד, ומהר מאוד. אבל כשהבוס שותק, המקליד ממציא. בגלל זה החלק הכי חשוב היום הוא התוכנית, ולא הקוד.״" },
 
   { html:`<div class="build"><div class="chat" id="chat"></div><div class="toybox" id="t5"></div></div><button class="btn go" id="more">הלאה</button>`,
     mount: r => { let n = 0; const o = {}, step = () => { if (n >= CHAT.length) return; const [who, text, change] = CHAT[n++]; const c = r.querySelector("#chat"); c.insertAdjacentHTML("beforeend", `<div class="msg ${who}">${text}</div>`); c.scrollTop = c.scrollHeight;

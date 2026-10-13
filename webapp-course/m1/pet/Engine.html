@@ -67,7 +67,7 @@ var server = (function () {
     strip("משהו נשבר בדף. מעתיקים את השורה הזאת לג׳מיני:", (e.message || "שגיאה") + (e.lineno ? "  (שורה " + e.lineno + ")" : ""));
   });
   window.addEventListener("load", function () {
-    if (typeof draw !== "function") strip("הקובץ Pet.html לא שלם: אין בו את הפונקציה draw. כנראה שג׳מיני נקטע באמצע. כותבים לו: ״נקטעת. תשלח שוב את הקובץ המלא, עד END Pet.״");
+    if (typeof draw !== "function") strip("הקובץ Pet.html לא שלם: אין בו את הפונקציה draw. כנראה שג׳מיני הפסיק באמצע. כותבים לו: ״הפסקת באמצע. תשלח שוב את הקובץ המלא, עד END Pet.״");
     load();
     setInterval(function () { if (!busy && !document.hidden) load(); }, 5000);   // כל 5 שניות: שואלים את השרת מה חדש
   });

@@ -126,3 +126,11 @@ leaderboard. Offered to rewrite REVIEW.md around this; awaiting his comments fir
 using [[reference-video-research-pipeline]] (run_all.py). P1 Learn Google Sheets web-app series; P2+P4 Mohammad
 Rameez Imdad AI-built business dashboards (adult ERP/CRM, not kid project ideas); P3 Laurence Svekis (doGet/doPost,
 JSON APIs, plus Docs/Forms automation). Deliver results as one REVIEW-style md ([[feedback-review-files-for-comments]]).
+
+**13 Oct: the course starts NEXT TUESDAY (20 Oct), not November.** Facts from Ben today:
+- Kids come to **Ben's workplace** and use its laptops and PCs (Ben controls the machines).
+- Ben teaches from his **personal Gmail** (no Ministry teacher account) → sharing kids' Ministry Sheets with him may be
+  blocked; test it.
+- No student account tested yet; Ben can get one later this week. Test card: `webapp-course/STUDENT_ACCOUNT_TEST.md`.
+- At the workplace the network is less blocked, and the kids COULD use GPT Pro on the workplace account, but **the
+  course is written for Gemini on the Ministry accounts**; GPT Pro is only a fallback on a blocked day.

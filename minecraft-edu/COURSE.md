@@ -302,7 +302,7 @@ row splits in two and the year doesn't change.
 For a map that looks good enough to sell, someone needs to build it by hand in Creative, using our blocks: you, your
 partner, or a hired builder. My recommendation: I build the test map by code now, and the pretty map comes later.
 
-💬 BEN:
+💬 BEN: (in chat, 13 Oct) a test map by code now; later my sister may build the real maps, she loves this.
 
 **C. A name.** I'm using "the islands" and "the expedition" as working names. If you have a name for the program,
 give it to me now: it goes into the hub, the mod and the maps.

@@ -2,7 +2,7 @@
 """Local test of meeting 1, version 3: the egg starter (with the offline fake server) and the hub (steps, prompts, slides)."""
 import io, json, sys, os
 from playwright.sync_api import sync_playwright
-REPO = r"C:\Users\Ben\code\ClassPet\webapp-course"
+REPO = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 rd = lambda p: io.open(p, encoding="utf-8").read()
 OUT = REPO + r"\m1\test-shots\v3" + "\\"; os.makedirs(OUT, exist_ok=True)
 def pet_page(pet_html=None):

@@ -2,7 +2,7 @@
 """Builds the new hub Index.html: keeps the shell (styles, pages, router), swaps the lesson data and slides, embeds the egg file."""
 import io, json, os, re
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = r"C:\Users\Ben\code\ClassPet\webapp-course"
+REPO = os.path.normpath(os.path.join(HERE, "..", ".."))
 HUB = REPO + r"\hub\Index.html"
 rd = lambda p: io.open(p, encoding="utf-8").read()
 src = rd(HUB).replace("\r\n", "\n")

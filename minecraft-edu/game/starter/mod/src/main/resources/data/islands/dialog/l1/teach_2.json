@@ -33,7 +33,7 @@
       "type": "minecraft:single_option",
       "key": "a",
       "label": {
-        "text": "האם צמחים זזים?"
+        "text": "האם צמחים זזים בכוחות עצמם?"
       },
       "width": 300,
       "options": [

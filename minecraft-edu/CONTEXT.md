@@ -107,5 +107,8 @@ the students of what the teacher taught" and "i need the game to be able to func
 - A scoreboard operation written `%%=` made one function fail to load without any visible error; `check_datapack.py` now
   validates operations.
 - Tested: scripted play-through (25 checks) and screenshots of the 4 notebook pages. NOT played by hand start to end.
-  **The new teaching and quiz text has NOT had its two Hebrew audits or a science check yet.** Lesson length not measured.
-- `STARTER_VER` is 7.
+  Lesson length not measured.
+- The teaching and quiz text then had two audits (Hebrew + science), 28 flags, 25 applied. Kept on purpose: the term
+  "תקשורת עם הסביבה" (the Ministry's), "אגם/ים" as the place name, the short "תקשורת" label in the notebook row.
+  Words: the sort boxes and the notebook say "לא חי"; "דומם" is used only for the stone.
+- `STARTER_VER` is 8.

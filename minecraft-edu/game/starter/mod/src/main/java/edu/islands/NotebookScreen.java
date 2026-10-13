@@ -43,7 +43,7 @@ public final class NotebookScreen extends Screen {
 
     // the characteristics of life, as the Ministry's content spec lists them, each with a line a kid can check against
     private static final String[] LIFE = {"נשימה", "הזנה", "הפרשה", "גדילה והתפתחות", "רבייה", "תנועה", "תקשורת עם הסביבה"};
-    private static final String[] LIFE_LINE = {"מכניסים אוויר לגוף, ומוציאים", "צריכים מזון כדי לחיות", "מוציאים מהגוף את מה שלא צריך",
+    private static final String[] LIFE_LINE = {"קולטים חמצן מהאוויר או מהמים", "צריכים מזון כדי לחיות", "מוציאים מהגוף חומרי פסולת",
             "גדלים, ומשתנים עם הזמן", "מעמידים צאצאים", "זזים. גם צמחים, רק לאט", "קולטים את הסביבה, ומגיבים"};
     private static final Item[] LIFE_ICONS = {Items.GLASS_BOTTLE, Items.APPLE, Items.BONE_MEAL, Items.OAK_SAPLING, Items.EGG, Items.FEATHER, Items.BELL};
     // Noa teaches them in the order of her route: this is the place of each one in that order (score #learn counts them)
@@ -154,7 +154,7 @@ public final class NotebookScreen extends Screen {
         int lx = left + W / 2 - 14, y = top + 64 + 3 * 30;
         g.fill(lx - 174, y, lx, y + 26, 0xFFE9F3EC);
         g.outline(lx - 174, y, 174, 26, GREEN);
-        rtl(g, "אין לו מאפייני חיים? הוא דומם.", lx - 6, y + 4, INK);
+        rtl(g, "אין לו מאפייני חיים? הוא לא חי.", lx - 6, y + 4, INK);
         rtl(g, "צמר ועץ: חומרים שמקורם ביצורים חיים.", lx - 6, y + 15, FADED);
     }
 
@@ -244,7 +244,7 @@ public final class NotebookScreen extends Screen {
                 row++;
             }
         }
-        rtl(g, "לשלושה אין תשובה אחת:", left + W / 2 - 20, top + H - 62, FADED);
+        rtl(g, "לשלושה ממצאים אין תשובה אחת:", left + W / 2 - 20, top + H - 62, FADED);
         rtl(g, "חי? דומם? מקורם ביצור חי?", left + W / 2 - 20, top + H - 51, FADED);
         rtl(g, "מיינתם " + sorted + " מתוך " + FIND_KEYS.length + " ממצאים", left + W - 12, top + H - 20, sorted >= FIND_KEYS.length ? GREEN : INK);
     }
@@ -264,7 +264,7 @@ public final class NotebookScreen extends Screen {
         rtl(g, "מה בדקנו", right - 4, y + 3, 0xFFFFFFFF);
         rtl(g, "אחרי חודש", right - 78, y + 3, 0xFFFFFFFF);
         g.fill(lLeft, y, lRight, y + 14, TEAL);
-        rtl(g, "חי או דומם?", lRight - 4, y + 3, 0xFFFFFFFF);
+        rtl(g, "חי או לא חי?", lRight - 4, y + 3, 0xFFFFFFFF);
         for (int i = 0; i < BENCH_NAMES.length; i++) {
             int ry = y + 14 + i * rowH;
             int shade = i % 2 == 0 ? 0xFFFFF7DD : PAPER_SHADE;
@@ -278,7 +278,7 @@ public final class NotebookScreen extends Screen {
         }
         g.outline(pageLeft, y, right - pageLeft, 14 + BENCH_NAMES.length * rowH, TEAL);
         g.outline(lLeft, y, lRight - lLeft, 14 + BENCH_NAMES.length * rowH, TEAL);
-        if (checked) wrapped(g, "גדילה והתפתחות הן מאפייני חיים. צמר ועץ הם חומרים שמקורם ביצורים חיים.", lRight, top + 38, lRight - lLeft, INK);
+        if (checked) wrapped(g, "גדילה והתפתחות הן אחד ממאפייני החיים. צמר ועץ הם חומרים שמקורם ביצורים חיים.", lRight, top + 38, lRight - lLeft, INK);
     }
 
     /** Right-aligned Hebrew that stays inside its page: a line wider than maxWidth continues on the next line. */

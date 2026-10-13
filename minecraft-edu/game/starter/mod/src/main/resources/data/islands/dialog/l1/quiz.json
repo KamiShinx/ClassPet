@@ -47,7 +47,7 @@
       "type": "minecraft:single_option",
       "key": "q2",
       "label": {
-        "text": "מה מאלה אינו מאפיין חיים?"
+        "text": "איזה מאלה אינו מאפיין חיים?"
       },
       "width": 300,
       "options": [

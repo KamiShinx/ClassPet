@@ -16,3 +16,10 @@ A new project, separate from the MAKE modding course (`minecraft-course/`), but 
 - **Curriculum:** the cloud box can't reach Ministry sites (pop/meyda/edu.gov.il blocked). Ben's PC session is
   downloading the grade 6 science + English curriculum, vocabulary lists and lesson plans into
   `minecraft-edu/curriculum/` with an `INDEX.md`. Next: read them and map topics to worlds/quests.
+
+**13 Oct, later.** The curriculum arrived (`curriculum/`, 198 files, Ben's PC session, commit 199e399). Read: the
+grade 6 science content spec for 2026-27 (120h; light OR sound; MITZAV 31.5.2027 weights: ecology 25%, materials 20%,
+living systems 20%, energy 15%, astronomy 10%, technology 10%) and English 2020 (end of grade 6 = A1, Band I Core II).
+English = one English-speaking villager in every world (Band I quests); everything else in Hebrew. Wrote
+`YEAR_MAP.md` (6 worlds + a shared kit: measuring tools, research notebook, English villager, teacher remote).
+Waiting for Ben's 💬 on: light/sound (rec. sound), first world (rec. the living island), meeting format.

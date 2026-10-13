@@ -240,3 +240,24 @@ pipeline"; "a kid sees the full code of an item, tests it, then makes their own 
 - L1 (6 steps): welcome, your code, world name, world card, into Minecraft, Drive. Gemini steps dropped from L1.
 - L2 (9 steps): today, page 2, lightning stick (card + test), change it, your item: name / picture / what it does
   (from an example), check in the game, save. English for both. Deck demo and "עכשיו אתם" follow the new steps.
+
+**13 Oct (class 2) and the plan from here.** The class got only ~30 of 90 minutes (kids came late, school reasons).
+Ben's decision: **next week (class 3) = about an hour of item building** in the hub (lesson 1 page quickly, then
+lesson 2: lightning stick → their own item → in the game → Drive), then the course moves on.
+State of the system at this point (all pushed on `claude/make-courses`):
+- Kids' hub rebuilt (11 Oct): top bar + Menu, one-action lesson steps with a station road, studio pieces and the
+  green game button inside the steps, item tabs (שם · ציור · מה הוא עושה · בודקים), automatic item codes,
+  lessons 1 (6 steps, first launch already has the ready lightning stick) and 2 (9 steps). Hebrew skill pass done.
+  English for both. Old lesson positions reset once (`mkmod.hubv` = 2).
+- Studio: three tabs, per-item ready check, 10 ready-made example powers (each with a price), ready items per
+  lesson (`STUDIO.mount(el, {ready|tag, parts})`), new trigger "כשלוחצים לחיצה ימנית על יצור" (`use_mob`, NeoForge
+  PlayerInteractEvent.EntityInteract, registered in Kit.register). Blocks confirmed working in the game on Ben's
+  laptop (lightning stick).
+- Game controls: "לסגור את מיינקראפט" uses `gradlew --stop` (killing java was flagged by Defender). Defender also
+  flagged the Win+R `irm|iex` update line → teacher updates with `C:\MAKE\update.bat` (newest commit); it also
+  drops the stick's .bat files in `C:\MAKE\stick-files`. Kids' laptops: `make-usb` on Ben's PC, then
+  `update-from-usb.bat` on each laptop (offline). Stick leaves out `design/` (Ben's test items).
+- Slides: lesson 2 deck matches the kid steps (demo, "עכשיו אתם"); lesson 1 deck ends with the kids' six steps.
+  Mobs' walk fixed (opposite limbs half a step apart).
+- Not built yet: lessons 3–4. Proposal waiting for Ben: L3 "מתי הוא עובד?" (אם: night/chance/Shift; ready item
+  night charm), L4 "המחיר" (ready item: a sword with no price; kids give it one). Creature modeller still pending.

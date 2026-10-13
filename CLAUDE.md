@@ -38,19 +38,16 @@ of where to paste, expected result). Build the COURSE before the hub.
 
 ## Course B: Minecraft modding course (`minecraft-course/`)
 
-8 kids aged 11–13, 20 weeks, Minecraft 26.2 / NeoForge, Hebrew kid text. **TOP PRIORITY (5 Oct).** Kids use **school
-laptops that stay at school** (no home install; lesson 1 = install while Ben talks). Read `LESSONS.md` first (current plan
-+ calls made 5 Oct, awaiting Ben's 💬), then `HANDOFF.md`, `04-creative-course-design.md`, `05-ministry-pedagogy-applied.md`.
-Antigravity (18+) replaced 5 Oct by the plain Gemini web app. **No Gems** (Google replaces them with 18+ "Skills" on 17 Nov 2026): the hub's "להעתיק לג׳מיני" button copies the course rules (GEM_TEXT in `hub/content.js`, also `starter/mod/tools/rules.txt`) plus the kid's code into any chat; kids paste Gemini's answer with the hub's paste button (no editor)
-(`LESSONS.md` §1). Cards on paper for now. Install works on Ben's laptop (`setup/install.bat`); starter project in
-`starter/` (ships as `setup/starter.zip`). **STATE (5 Oct, late): Ben said he's lost ("this course is for humans"). Lesson 2 is PAUSED.** First he reads
-`LESSON1_GUIDE.md` (plain-language: every piece explained, lesson 1 minute by minute, the Gem, what changes in the hub)
-and comments. Then rewrite lesson 1 in the hub in plain words (no paper folders, a real "how Gemini works" step, a
-"how a mod works" step, kids make the Gem themselves if he agrees), and only then lesson 2. Explain before building.
-The starter project, hub control panel and forgiving paste all work on his Windows laptop; lesson 2 worked too.
-The hub's **דרייב** button (5 Oct) downloads one `myworld DD-MM HH-MM.zip` (5 code files, pictures, worlds, hub notes) for
-the kid's Google Drive and loads it back on a reset or different laptop; not yet tested on Windows or a student Drive. Maven and Mojang are
-blocked from the cloud box, so every Java change needs Ben's Windows test.
+8 kids aged 11–13, 20 weeks, Minecraft 26.2 / NeoForge, Hebrew kid text. Kids use **school laptops that stay at
+school** (updated offline from a USB stick). **STATE (13 Oct):** class 2 got only 30 minutes; class 3 = about an hour
+of item building, then move on. The kids' hub (`hub/`) was rebuilt 11 Oct around one action per screen, with our own
+no-code studio (items, 16×16 painter, Hebrew logic blocks, ready-made examples) instead of Gemini writing code; Gemini
+is only a design partner and a reviewer of the kid's blocks. Read the latest entries of
+`course-context/project_make_minecraft_course.md` first (full history and decisions), then `UPDATE_LINE.md` (how Ben
+updates: `C:\MAKE\update.bat`) and `STUDIO_TEST.md`. Lessons 1–2 are built (hub steps + `hub/slides.js` deck);
+lessons 3–4 are proposed, not built. Maven and Mojang are blocked from the cloud box, so every Java change needs Ben's
+Windows test. Older files (`LESSONS.md`, `HANDOFF.md`, `04`/`05`, `LESSON1_GUIDE.md`) describe the earlier Gemini-writes-
+code plan: background only.
 
 **Lesson shape (Ben, 5 Oct, overrides `04`/`05` where they differ): "learn this, build this, bye", 90 minutes.** One idea,
 one thing built. No rituals: no "Gemini lies" log, no stamps, no weekly silent playtest, no log lines, no tip-card

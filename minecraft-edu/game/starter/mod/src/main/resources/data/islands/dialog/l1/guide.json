@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:multi_action",
+  "title": { "text": "נועה, ראש המשלחת", "color": "gold" },
+  "body": [
+    { "type": "minecraft:plain_message", "contents": { "text": "זה חלון בדיקה. כל כפתור כאן משנה משהו בעולם, ככה נבדוק שהכול עובד." }, "width": 300 }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "when",
+      "label": { "text": "שעה ביום" },
+      "width": 220,
+      "options": [
+        { "id": "10", "display": { "text": "בוקר" }, "initial": true },
+        { "id": "11", "display": { "text": "צהריים" } },
+        { "id": "12", "display": { "text": "לילה" } }
+      ]
+    },
+    {
+      "type": "minecraft:number_range",
+      "key": "n",
+      "label": { "text": "כמה תרנגולות לשחרר" },
+      "width": 220,
+      "start": 0,
+      "end": 5,
+      "step": 1,
+      "initial": 2
+    }
+  ],
+  "actions": [
+    { "label": { "text": "לשנות את השעה" }, "action": { "type": "minecraft:dynamic/run_command", "template": "trigger islands_act set $(when)" } },
+    { "label": { "text": "לשחרר תרנגולות" }, "action": { "type": "minecraft:dynamic/run_command", "template": "trigger islands_act set 2$(n)" } }
+  ],
+  "columns": 1
+}

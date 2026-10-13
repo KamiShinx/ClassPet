@@ -1,0 +1,93 @@
+<title>איי המדע</title>
+<style>
+  :root { --bg: #eef4ea; --card: #ffffff; --ink: #1d2a1f; --muted: #5d6b60; --green: #2f7d32; --green-d: #24602a; --sea: #2b6cb0; --warn: #b45309; --line: #d5e0d2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 18px/1.5 "Segoe UI", Arial, sans-serif; direction: rtl; }
+  header { background: var(--sea); color: #fff; padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+  header h1 { margin: 0; font-size: 24px; }
+  header .status { margin-inline-start: auto; font-size: 16px; opacity: .95; }
+  main { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+  .unit { color: var(--muted); font-size: 16px; margin: 4px 0 12px; }
+  .lessons { display: grid; gap: 12px; }
+  .lesson { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; }
+  .lesson .n { width: 44px; height: 44px; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 20px; flex: none; }
+  .lesson.soon .n { background: #9aa79c; }
+  .lesson h2 { margin: 0; font-size: 20px; }
+  .lesson p { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
+  .lesson .go { margin-inline-start: auto; display: flex; gap: 8px; flex: none; }
+  button { font: inherit; border: 0; border-radius: 10px; padding: 10px 18px; cursor: pointer; }
+  .play { background: var(--green); color: #fff; font-weight: 700; }
+  .play:hover { background: var(--green-d); }
+  .again { background: transparent; color: var(--muted); border: 1px solid var(--line); font-size: 15px; padding: 8px 12px; }
+  button:disabled { opacity: .45; cursor: default; }
+  .bar { display: flex; gap: 10px; margin: 18px 0 0; }
+  .close { background: #fff; border: 1px solid var(--line); }
+  .error { background: #fff7ed; border: 1px solid #fdba74; color: var(--warn); border-radius: 10px; padding: 12px; margin-top: 14px; white-space: pre-wrap; direction: ltr; text-align: left; font: 13px/1.4 Consolas, monospace; display: none; }
+  @media (max-width: 560px) { .lesson { flex-wrap: wrap; } .lesson .go { margin-inline-start: 58px; } }
+</style>
+
+<header>
+  <h1>איי המדע</h1>
+  <div class="status" id="status">מתחבר...</div>
+</header>
+
+<main>
+  <div class="unit">יחידה 1: האי החי</div>
+  <div class="lessons" id="lessons"></div>
+  <div class="bar"><button class="close" id="close">לסגור את מיינקראפט</button></div>
+  <div class="error" id="error"></div>
+</main>
+
+<script>
+// The lessons. "ready" = there is a map for it in the mod.
+const LESSONS = [
+  { n: 1, title: "נוחתים באי", text: "מי גר באי? חי או לא חי?", ready: true },
+  { n: 2, title: "מה כל בעל חיים צריך?", text: "מזון, מים, אוויר, טמפרטורה ומחסה", ready: false },
+  { n: 3, title: "מי גר איפה? סופרים", text: "סופרים בשני מקומות ובונים גרף", ready: false },
+];
+
+let phase = "idle", started = [];
+
+function post(action, lesson) {
+  const q = lesson ? "?lesson=" + lesson : "";
+  return fetch("/api/" + action + q, { method: "POST", headers: { "X-Islands": "1" } })
+    .then(r => r.json()).then(show).catch(() => {});
+}
+
+function render() {
+  const busy = phase === "building" || phase === "running";
+  document.getElementById("lessons").innerHTML = LESSONS.map(l => `
+    <div class="lesson ${l.ready ? "" : "soon"}">
+      <div class="n">${l.n}</div>
+      <div><h2>${l.title}</h2><p>${l.ready ? l.text : "בקרוב"}</p></div>
+      <div class="go">
+        ${l.ready && started.includes(l.n) ? `<button class="again" data-again="${l.n}" ${busy ? "disabled" : ""}>להתחיל מההתחלה</button>` : ""}
+        <button class="play" data-play="${l.n}" ${!l.ready || busy ? "disabled" : ""}>${started.includes(l.n) ? "להמשיך" : "שחק"}</button>
+      </div>
+    </div>`).join("");
+}
+
+function show(s) {
+  if (!s) return;
+  phase = s.phase || phase;
+  if (Array.isArray(s.started)) started = s.started;
+  document.getElementById("status").textContent = s.message || "";
+  const e = document.getElementById("error");
+  e.style.display = s.error ? "block" : "none";
+  e.textContent = s.error || "";
+  render();
+}
+
+document.addEventListener("click", ev => {
+  const p = ev.target.closest("[data-play]");
+  if (p) return post("play", p.dataset.play);
+  const a = ev.target.closest("[data-again]");
+  if (a && confirm("להתחיל את שיעור " + a.dataset.again + " מההתחלה? מה שעשיתם בו יימחק.")) return post("restart", a.dataset.again).then(poll);
+  if (ev.target.id === "close") post("stop");
+});
+
+function poll() { return fetch("/api/status").then(r => r.json()).then(show).catch(() => { document.getElementById("status").textContent = "השרת סגור. פותחים שוב את הסמל איי המדע."; }); }
+render();
+poll();
+setInterval(poll, 2000);
+</script>

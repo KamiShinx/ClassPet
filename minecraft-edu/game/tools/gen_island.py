@@ -27,7 +27,8 @@ PLACES = {
     "jetty_end": (0, None, 62),
     "jetty_start": (0, None, 46),
     "camp": (0, None, 30),
-    "guide": (3, None, 42),
+    "arrive": (0, None, 54),
+    "guide": (1, None, 47),
     "lake": (-30, None, 4),
     "mountain": (0, None, -32),
     "desert": (32, None, 6),
@@ -308,18 +309,21 @@ def main(base):
     # the places, as a function the lessons can read (storage islands:places)
     lines = []
     for name, (x, _, z) in PLACES.items():
-        y = (cols.get((x, z), SEA_TOP) + 1) if name not in ("jetty_end", "jetty_start", "guide") else SEA_TOP + 2
+        y = (cols.get((x, z), SEA_TOP) + 1) if name not in ("jetty_end", "jetty_start", "guide", "arrive") else SEA_TOP + 2
         lines.append(f"data modify storage islands:places {name} set value [{x}d,{y}d,{z}d]")
     write(base, "places", lines, "Named places of this map.")
-    jx, _, jz = PLACES["jetty_end"]
-    write(base, "spawn", [f"setworldspawn {jx} {SEA_TOP + 2} {jz}"], "Where new players appear: the end of the jetty.")
-    write(base, "goto_jetty", [f"tp @s {jx} {SEA_TOP + 2} {jz} facing {jx} {SEA_TOP + 2} 0"], "Puts the player (@s) at the end of the jetty, facing the island.")
+    # Players arrive on the jetty, a few steps from the guide, with the island filling the view.
+    jx, _, jz = PLACES["arrive"]
+    write(base, "spawn", [f"setworldspawn {jx} {SEA_TOP + 2} {jz}"], "Where new players appear: on the jetty, near the island.")
+    write(base, "goto_jetty", [f"tp @s {jx}.5 {SEA_TOP + 2} {jz}.5 facing {jx}.5 {SEA_TOP + 3} 0"], "Puts the player (@s) on the jetty, facing the guide and the island.")
+    # The guide stands ON the jetty's planks (a block we place ourselves), at the island end, facing the arriving players.
     gx, _, gz = PLACES["guide"]
-    gy = cols[(gx, gz)] + 1
+    gy = SEA_TOP + 2
+    gx, gz = f"{gx}.5", f"{gz}.5"
     write(base, "guide_spot", [
-        f'summon minecraft:villager {gx} {gy} {gz} {{NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,Rotation:[0f,0f],CustomName:{{text:"נועה, ראש המשלחת",color:"gold"}},CustomNameVisible:1b,Tags:["islands_npc","guide"]}}',
+        f'summon minecraft:mannequin {gx} {gy} {gz} {{profile:{{texture:"islands:entity/noa",model:"wide"}},immovable:1b,hide_description:1b,Invulnerable:1b,Silent:1b,Rotation:[0f,0f],CustomName:{{text:"נועה, ראשת המשלחת",color:"gold"}},CustomNameVisible:1b,Tags:["islands_npc","guide"]}}',
         f'summon minecraft:interaction {gx} {gy} {gz} {{width:1.2f,height:2.2f,response:1b,Tags:["islands_talk","talk_guide"]}}',
-    ], "The guide (Noa) and the spot you right-click to talk to her.")
+    ], "The guide (Noa, a mannequin with her own skin: tools/gen_noa_skin.py) and the spot you right-click to talk to her.")
     print("terrain", len(terrain), "commands; columns", len(cols))
 
 

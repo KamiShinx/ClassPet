@@ -81,7 +81,7 @@ echo  [2/4] Mod project OK
 echo.
 
 rem ---- 3. the course on top of the template, and the icon ----
-set "STARTER_VER=3"
+set "STARTER_VER=4"
 if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
 echo  [3/4] Adding the course ...
 if exist "%HERE%starter.zip" goto :starter_local

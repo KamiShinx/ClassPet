@@ -16,4 +16,6 @@ gamerule show_advancement_messages false
 gamerule command_block_output false
 gamerule send_command_feedback false
 weather clear
+# Adventure mode: kids explore and talk, they don't dig the island up.
+defaultgamemode adventure
 execute unless score #built islands matches 1 unless score #building islands matches 1 run function islands:island/start

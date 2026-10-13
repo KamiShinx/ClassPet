@@ -56,7 +56,7 @@ public final class LessonBoot {
                 return;
             }
             // 26.2: difficulty, hardcore and "difficulty locked" travel together; game rules are no longer passed here.
-            LevelSettings settings = new LevelSettings(world, GameType.SURVIVAL,
+            LevelSettings settings = new LevelSettings(world, GameType.ADVENTURE,
                     new LevelSettings.DifficultySettings(Difficulty.PEACEFUL, false, false),
                     ALLOW_COMMANDS, WorldDataConfiguration.DEFAULT);
             WorldOptions options = new WorldOptions(20261013L, false, false);

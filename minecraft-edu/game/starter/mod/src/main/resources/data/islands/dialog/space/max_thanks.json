@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "Max",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Thank you",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "תודה"
+            }
+          }
+        },
+        {
+          "text": "! "
+        },
+        {
+          "text": "Great job",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "כל הכבוד"
+            }
+          }
+        },
+        {
+          "text": "! Now go back to the "
+        },
+        {
+          "text": "commander",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "מפקדת"
+            }
+          }
+        },
+        {
+          "text": "."
+        }
+      ],
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "Bye!"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "בסיס ירח",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "נחתתם על הירח! מפקדת הבסיס מחכה לכם ליד החללית."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כדי לדבר איתה, לוחצים עליה קליק ימני."
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "לצאת מהחללית"
+    }
+  }
+}

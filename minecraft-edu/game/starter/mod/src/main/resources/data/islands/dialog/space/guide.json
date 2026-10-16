@@ -1,0 +1,50 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "רוני, מפקדת הבסיס",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "ברוכים הבאים לבסיס הירח. אני רוני, מפקדת הבסיס."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לירח אין אוויר, ולכן השמיים כאן שחורים, וגם ביום רואים כוכבים. היום נלמד איך כוכב נולד, חי ומת."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "נלך יחד בשביל הכוכבים. בכל תחנה יש דגם של שלב אחד בחיים של כוכב, ואשאל אתכם שאלה אחת."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כוח המשיכה כאן הוא רק שישית מכוח המשיכה בכדור הארץ, אז קופצים גבוה!",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "ללבוש חליפה ולצאת"
+      },
+      "action": {
+        "type": "minecraft:run_command",
+        "command": "trigger islands_act set 50"
+      }
+    }
+  ],
+  "columns": 1
+}

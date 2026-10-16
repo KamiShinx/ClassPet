@@ -24,12 +24,17 @@ public final class NotebookKey {
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         while (OPEN.consumeClick()) {
-            if (mc.player != null && mc.gui.screen() == null && mc.getSingleplayerServer() != null
-                    && Lesson.fromWorldName(mc.getSingleplayerServer().getWorldData().getLevelName()) != 0) {
-                mc.gui.setScreen(new NotebookScreen());
+            if (mc.player != null && mc.gui.screen() == null && mc.getSingleplayerServer() != null) {
+                int lesson = Lesson.fromWorldName(mc.getSingleplayerServer().getWorldData().getLevelName());
+                if (lesson == 20) mc.gui.setScreen(new StarLogScreen());      // the space demo has its own log
+                else if (lesson != 0) mc.gui.setScreen(new NotebookScreen());
             }
         }
-        // For scripted tests: the score "#notebook_test islands" opens the notebook on a page (1 to 4), once.
+        // For scripted tests: the score "#notebook_test islands" opens the notebook on a page (1 to 4), once; 9 opens the star log.
+        if (mc.player != null && mc.getSingleplayerServer() != null && LessonEvents.getScore(mc.getSingleplayerServer(), "#notebook_test") == 9) {
+            LessonEvents.setScore(mc.getSingleplayerServer(), "#notebook_test", 0);
+            mc.gui.setScreen(new StarLogScreen());
+        }
         if (mc.player != null && mc.getSingleplayerServer() != null) {
             int page = LessonEvents.getScore(mc.getSingleplayerServer(), "#notebook_test");
             if (page >= 1 && page <= 4) {

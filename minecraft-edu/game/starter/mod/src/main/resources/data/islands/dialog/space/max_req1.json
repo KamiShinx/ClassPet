@@ -1,0 +1,110 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "Max",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Show me a "
+        },
+        {
+          "text": "cloud",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "ענן"
+            }
+          }
+        },
+        {
+          "text": " of "
+        },
+        {
+          "text": "gas",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "גז"
+            }
+          }
+        },
+        {
+          "text": " and "
+        },
+        {
+          "text": "dust",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "אבק"
+            }
+          }
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Stars",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "כוכבים"
+            }
+          }
+        },
+        {
+          "text": " are "
+        },
+        {
+          "text": "born",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "נולדים"
+            }
+          }
+        },
+        {
+          "text": " there."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הולכים אל הדגם הנכון לאורך השביל, ולוחצים קליק ימני על הבלוק שמתחת למספר, מול הדגם.",
+        "color": "gray"
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "OK"
+    }
+  }
+}

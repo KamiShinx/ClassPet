@@ -44,6 +44,7 @@ const LESSONS = [
   { n: 1, title: "נוחתים באי", text: "מי גר באי? חי או לא חי?", ready: true },
   { n: 2, title: "מה כל בעל חיים צריך?", text: "מזון, מים, אוויר, טמפרטורה מתאימה ומחסה", ready: false },
   { n: 3, title: "מי גר איפה?", text: "סופרים את בעלי החיים בשני מקומות, ובונים גרף", ready: false },
+  { n: 20, badge: "🚀", title: "הדגמה: בסיס ירח", text: "איך כוכב נולד, חי ומת. עם קצת אנגלית", ready: true },
 ];
 
 let phase = "idle", started = [];
@@ -58,7 +59,7 @@ function render() {
   const busy = phase === "building" || phase === "running";
   document.getElementById("lessons").innerHTML = LESSONS.map(l => `
     <div class="lesson ${l.ready ? "" : "soon"}">
-      <div class="n">${l.n}</div>
+      <div class="n">${l.badge || l.n}</div>
       <div><h2>${l.title}</h2><p>${l.ready ? l.text : "בקרוב"}</p></div>
       <div class="go">
         ${l.ready && started.includes(l.n) ? `<button class="again" data-again="${l.n}" ${busy ? "disabled" : ""}>להתחיל מההתחלה</button>` : ""}

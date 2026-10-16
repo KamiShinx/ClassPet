@@ -175,6 +175,7 @@ w("function/event/use_entity.mcfunction", """
 execute if entity @e[tag=islands_target,tag=guide] run return run function islands:event/talk_guide
 execute if entity @e[tag=islands_target,tag=sam] run return run function islands:event/talk_sam
 execute if score #lesson islands matches 1 run function islands:lesson/1/use_entity
+execute if score #lesson islands matches 20 run function islands:lesson/20/use_entity
 """)
 w("function/event/talk_guide.mcfunction", """
 scoreboard players set #cancel islands 1
@@ -183,10 +184,12 @@ function islands:lesson/talk_guide
 w("function/event/talk_sam.mcfunction", """
 scoreboard players set #cancel islands 1
 execute if score #lesson islands matches 1 run function islands:lesson/1/talk_sam
+execute if score #lesson islands matches 20 run function islands:lesson/20/talk_max
 """)
 w("function/lesson/talk_guide.mcfunction", """
 # Someone talks to the guide (as the player). Each lesson has its own talk.
 execute if score #lesson islands matches 1 run function islands:lesson/1/talk_guide
+execute if score #lesson islands matches 20 run function islands:lesson/20/talk_guide
 """)
 wj("tags/block/passable.json", {"values": ["#minecraft:air", "minecraft:water", "#minecraft:replaceable", "#minecraft:flowers",
                                            "#minecraft:saplings", "minecraft:snow", "#minecraft:wool_carpets", "#minecraft:crops"]})

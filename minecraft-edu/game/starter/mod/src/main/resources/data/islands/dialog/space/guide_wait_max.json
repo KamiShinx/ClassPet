@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "רוני, מפקדת הבסיס",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מקס מחכה לעזרה שלכם, ליד המעבדה."
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "הבנתי"
+    }
+  }
+}

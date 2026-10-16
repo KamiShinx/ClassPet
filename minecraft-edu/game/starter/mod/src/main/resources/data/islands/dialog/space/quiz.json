@@ -1,0 +1,117 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "בוחן הבסיס",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "שלוש שאלות על מה שלמדתם היום. עונים לבד, בלי לנחש."
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "q1",
+      "label": {
+        "text": "איפה נולדים כוכבים?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "בחור שחור"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "בערפילית"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "בענק אדום"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "q2",
+      "label": {
+        "text": "מה יקרה לשמש בעוד בערך 5 מיליארד שנה?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "היא תהפוך לענק אדום"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "היא תהפוך לחור שחור"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "היא תתפוצץ בסופרנובה"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "q3",
+      "label": {
+        "text": "מה מחזיק את הגז של כוכב יחד?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "הרוח בחלל"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "האבק"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "כוח המשיכה"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "לסיים את הבוחן"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 6$(q1)$(q2)$(q3)"
+      }
+    }
+  ],
+  "columns": 1
+}

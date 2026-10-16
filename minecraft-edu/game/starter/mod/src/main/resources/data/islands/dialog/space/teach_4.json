@@ -1,0 +1,89 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "תחנה 5: ננס לבן",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כוכב כמו השמש מסיים את חייו בשקט. הוא משחרר לחלל את השכבות החיצוניות שלו, והן יוצרות ענן צבעוני."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "מה שנשאר במרכז הוא ננס לבן: כוכב קטן, בערך בגודל של כדור הארץ, שמתקרר לאט מאוד."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        {
+          "text": "באנגלית: ",
+          "color": "gray"
+        },
+        {
+          "text": "White dwarf",
+          "color": "aqua",
+          "bold": true
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הענן הצבעוני מסביב הוא השכבות שהכוכב שחרר.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "מה נשאר בסוף מכוכב כמו השמש?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "חור שחור"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "ננס לבן"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "כלום"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 54$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

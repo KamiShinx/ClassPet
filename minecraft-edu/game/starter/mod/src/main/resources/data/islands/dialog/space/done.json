@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "סיכום הסיור",
+    "color": "green"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "סיימתם את הסיור בבסיס הירח!"
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כוכב נולד בערפילית, הופך לפרוטוכוכב, וחי רוב חייו ככוכב בוגר. אחר כך הוא מתנפח לענק אדום."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כוכב כמו השמש מסתיים בננס לבן. כוכב ענק מתפוצץ בסופרנובה, ויכול להשאיר חור שחור."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הכול רשום ביומן הכוכבים: לוחצים על המקש N."
+      },
+      "width": 300
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "לסיים את הסיור"
+      },
+      "action": {
+        "type": "minecraft:run_command",
+        "command": "trigger islands_act set 51"
+      }
+    }
+  ],
+  "columns": 1
+}

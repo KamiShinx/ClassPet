@@ -1,0 +1,89 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "תחנה 6: חור שחור",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כוכב ענק הוא כוכב כבד הרבה יותר מהשמש. כוכב כזה מסיים את חייו בפיצוץ אדיר: סופרנובה."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "אחרי הפיצוץ יכול להישאר חור שחור: כוח המשיכה שלו חזק כל כך, שאפילו אור לא יכול לברוח ממנו."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        {
+          "text": "באנגלית: ",
+          "color": "gray"
+        },
+        {
+          "text": "Black hole",
+          "color": "aqua",
+          "bold": true
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "החמצן והפחמן שבגוף שלכם נוצרו בתוך כוכבים, ופוזרו בחלל כשהכוכבים מתו.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "למה חור שחור נקרא ״שחור״?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "כי הוא צבוע בשחור"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "כי הוא רחוק מאוד"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "כי אפילו אור לא יכול לברוח ממנו"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 55$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

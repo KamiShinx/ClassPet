@@ -3,3 +3,4 @@
 execute if entity @e[tag=islands_target,tag=guide] run return run function islands:event/talk_guide
 execute if entity @e[tag=islands_target,tag=sam] run return run function islands:event/talk_sam
 execute if score #lesson islands matches 1 run function islands:lesson/1/use_entity
+execute if score #lesson islands matches 20 run function islands:lesson/20/use_entity

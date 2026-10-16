@@ -1,0 +1,82 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "Max",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Show me the "
+        },
+        {
+          "text": "place",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "מקום"
+            }
+          }
+        },
+        {
+          "text": " where "
+        },
+        {
+          "text": "light",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "אור"
+            }
+          }
+        },
+        {
+          "text": " cannot "
+        },
+        {
+          "text": "escape",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "לברוח"
+            }
+          }
+        },
+        {
+          "text": "."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הולכים אל הדגם הנכון לאורך השביל, ולוחצים קליק ימני על הבלוק שמתחת למספר, מול הדגם.",
+        "color": "gray"
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "OK"
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "תחנה 4: ענק אדום",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כשהמימן במרכז נגמר, הכוכב מתנפח מאוד. השכבות החיצוניות שלו מתקררות, ולכן הוא נראה אדום."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "גם השמש תהפוך לענק אדום, בעוד בערך 5 מיליארד שנה."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        {
+          "text": "באנגלית: ",
+          "color": "gray"
+        },
+        {
+          "text": "Red giant",
+          "color": "aqua",
+          "bold": true
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "ענק אדום יכול להיות רחב פי מאה ויותר מהשמש.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "למה הענק האדום נראה אדום?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "הוא החם ביותר מכל הכוכבים"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "הוא עשוי מאבנים אדומות"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "השכבות החיצוניות שלו קרות יותר מהשכבות של השמש"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 53$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

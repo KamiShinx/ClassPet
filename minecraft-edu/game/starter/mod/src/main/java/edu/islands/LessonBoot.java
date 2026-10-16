@@ -31,6 +31,10 @@ public final class LessonBoot {
     private static final ResourceKey<WorldPreset> SEA =
             ResourceKey.create(Registries.WORLD_PRESET, Identifier.fromNamespaceAndPath(Islands.MOD_ID, "sea"));
 
+    /** Lesson 20 is the space demo: a moon plain under a black sky (tools/gen_space.py). */
+    private static final ResourceKey<WorldPreset> MOON =
+            ResourceKey.create(Registries.WORLD_PRESET, Identifier.fromNamespaceAndPath(Islands.MOD_ID, "moon"));
+
     private static boolean done = false;
 
     @SubscribeEvent
@@ -61,7 +65,7 @@ public final class LessonBoot {
                     ALLOW_COMMANDS, WorldDataConfiguration.DEFAULT);
             WorldOptions options = new WorldOptions(20261013L, false, false);
             mc.createWorldOpenFlows().createFreshLevel(world, settings, options,
-                    registries -> registries.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(SEA).value().createWorldDimensions(),
+                    registries -> registries.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(lesson == 20 ? MOON : SEA).value().createWorldDimensions(),
                     new TitleScreen());
         } catch (Exception e) {
             // Never leave the kid stuck: the normal title screen still works.

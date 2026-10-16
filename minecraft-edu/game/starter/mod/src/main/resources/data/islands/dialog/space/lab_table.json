@@ -1,0 +1,117 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "מה ראיתם במעבדה?",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "עברו מיליוני שנים. עונים לפי מה שראיתם. אפשר לסגור, להסתכל שוב, ולחזור בקליק ימני על השעון."
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "l1",
+      "label": {
+        "text": "מה קרה לכוכב הקטן?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "הוא התפוצץ"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "הוא נעלם"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "הוא עדיין זוהר"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "l2",
+      "label": {
+        "text": "מה קרה לכוכב הענק?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "הוא עדיין זוהר"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "הוא התפוצץ, ונשאר ממנו חור שחור"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "הוא הפך לכוכב קטן"
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:single_option",
+      "key": "l3",
+      "label": {
+        "text": "איזה כוכב חי יותר זמן?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "הכוכב הקטן"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "הכוכב הענק"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "שניהם חיים אותו זמן"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "לבדוק"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 7$(l1)$(l2)$(l3)"
+      }
+    }
+  ],
+  "columns": 1
+}

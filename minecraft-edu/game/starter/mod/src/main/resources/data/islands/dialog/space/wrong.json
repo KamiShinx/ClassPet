@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "רוני, מפקדת הבסיס",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא בדיוק. קוראים שוב מה שאמרתי, ומנסים עוד פעם."
+      },
+      "width": 300
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "לנסות שוב"
+      },
+      "action": {
+        "type": "minecraft:run_command",
+        "command": "trigger islands_act set 1"
+      }
+    }
+  ],
+  "columns": 1
+}

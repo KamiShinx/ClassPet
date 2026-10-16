@@ -3,5 +3,6 @@ execute unless score #built islands matches 1 run return run title @s actionbar 
 tag @s add islands_in
 gamemode adventure @s
 scoreboard players enable @s islands_act
-function islands:island/goto_jetty
+execute if score #lesson islands matches ..19 run function islands:island/goto_jetty
+execute if score #lesson islands matches 20 run function islands:space/goto_start
 function islands:lesson/arrive

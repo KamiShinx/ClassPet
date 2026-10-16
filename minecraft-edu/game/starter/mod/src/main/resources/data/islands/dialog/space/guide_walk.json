@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "רוני, מפקדת הבסיס",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "בואו אחריי לתחנה הבאה. כשמגיעים אליי, לוחצים עליי קליק ימני."
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "הבנתי"
+    }
+  }
+}

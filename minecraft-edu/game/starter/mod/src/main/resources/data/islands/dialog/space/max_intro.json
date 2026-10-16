@@ -1,0 +1,119 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "Max",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Hi! I am Max. I only "
+        },
+        {
+          "text": "speak",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "לדבר"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "English",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "אנגלית"
+            }
+          }
+        },
+        {
+          "text": "."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "I "
+        },
+        {
+          "text": "study",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "לחקור"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "stars",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "כוכבים"
+            }
+          }
+        },
+        {
+          "text": ". Can you "
+        },
+        {
+          "text": "help",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "לעזור"
+            }
+          }
+        },
+        {
+          "text": " me?"
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "OK!"
+      },
+      "action": {
+        "type": "minecraft:run_command",
+        "command": "trigger islands_act set 60"
+      }
+    }
+  ],
+  "columns": 1
+}

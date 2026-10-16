@@ -1,0 +1,89 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "תחנה 2: פרוטוכוכב",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הגוש הכתום הוא פרוטוכוכב: כוכב שעדיין לא סיים להיווצר. כוח המשיכה דוחס את הגז, והגוש מתחמם."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "כשהמרכז שלו מגיע לחום של מיליוני מעלות, מתחיל בו היתוך גרעיני (בתחנה הבאה נסביר מה זה), ונולד כוכב."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        {
+          "text": "באנגלית: ",
+          "color": "gray"
+        },
+        {
+          "text": "Protostar",
+          "color": "aqua",
+          "bold": true
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הדיסקה מסביב היא גז שעוד נופל אל הכוכב.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "מה דוחס את הגז ומחמם אותו?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "רוח שנושבת בחלל"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "האור של כוכבים אחרים"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "כוח המשיכה"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 51$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

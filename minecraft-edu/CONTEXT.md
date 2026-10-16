@@ -112,3 +112,23 @@ the students of what the teacher taught" and "i need the game to be able to func
   "תקשורת עם הסביבה" (the Ministry's), "אגם/ים" as the place name, the short "תקשורת" label in the notebook row.
   Words: the sort boxes and the notebook say "לא חי"; "דומם" is used only for the stone.
 - `STARTER_VER` is 8.
+
+**16 Oct (the PC session): a space demo, and a launcher for any Windows laptop.**
+- `setup/laptop.bat`: one file to put on a laptop. It asks 1 (lesson 1) or 2 (the space demo), downloads the latest
+  `install.bat` from GitHub and runs it with `ISLANDS_LESSON` set (install.bat now opens that lesson at the end; it
+  installs the first time and updates the starter when STARTER_VER changed). `play.bat 20` also opens the demo.
+- **Lesson 20 = the space demo** "בסיס ירח", the life cycle of a star (topic from a middle-school space syllabus,
+  session "astrophysics": stars, supernovae, black holes). Everything is written by `tools/gen_space.py`.
+  The same shape as lesson 1: a commander walks a path of 6 star models (nebula, protostar, adult star, red giant,
+  white dwarf, black hole) with one question each; a lab (small vs huge star, a clock, millions of years: the huge
+  one turns red, explodes, leaves a black hole; a table); Max speaks only English with Hebrew hovers (show him 3
+  models: right-click the block under the number); a 3-question quiz; the N key opens `StarLogScreen` (its own book).
+- **A world of its own:** `LessonBoot` creates lesson 20 with the preset `islands:moon` (flat moon plain). The
+  dimension type `islands:moon` uses 26.2 environment attributes: black sky and fog, stars at 0.6, the Sun at a fixed
+  angle, the vanilla Moon below the horizon, no clouds, fixed time. Gravity: `attribute @s minecraft:gravity base set
+  0.0133` (a sixth). `boot`, `join`, `tick`, `act`, `lesson/start|arrive|talk_guide`, `event/use_entity|talk_sam`
+  dispatch on `#lesson` (..19 = the islands, 20 = the moon).
+- Trigger ranges for lesson 20: 50/51 start/finish, 500-599 stop answers, 60 Max, 6111-6333 quiz, 7111-7333 lab.
+- 26.2: dyed items are collections: `Items.CONCRETE.pick(DyeColor.RED)`, `Items.STAINED_GLASS.pick(...)`.
+- Text: two audits (Hebrew, science, Max's English), 20 flags, all applied in some form. Tested by a scripted
+  play-through (every stage, wrong answers rejected) and screenshots. NOT played by hand. `STARTER_VER` is 9.

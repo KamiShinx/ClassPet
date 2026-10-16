@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "רוני, מפקדת הבסיס",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "ראיתם את כל שלבי החיים של כוכב. עכשיו ניסוי: במעבדה, בסוף השביל, יש שני כוכבים, כוכב קטן וכוכב ענק."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לוחצים קליק ימני על השעון, וכך מדלגים קדימה מיליוני שנים. מה יקרה לכל אחד מהם?"
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "ללכת למעבדה"
+    }
+  }
+}

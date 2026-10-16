@@ -1,0 +1,96 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "Max",
+    "color": "aqua"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        "",
+        {
+          "text": "Now show me a "
+        },
+        {
+          "text": "big",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "גדול"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "red",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "אדום"
+            }
+          }
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "star",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "כוכב"
+            }
+          }
+        },
+        {
+          "text": ". It is "
+        },
+        {
+          "text": "old",
+          "color": "aqua",
+          "underlined": true,
+          "hover_event": {
+            "action": "show_text",
+            "value": {
+              "text": "זקן"
+            }
+          }
+        },
+        {
+          "text": "."
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "הולכים אל הדגם הנכון לאורך השביל, ולוחצים קליק ימני על הבלוק שמתחת למספר, מול הדגם.",
+        "color": "gray"
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "לא מבינים מילה? מעבירים את העכבר מעל מילה כחולה, ורואים מה היא אומרת.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "action": {
+    "label": {
+      "text": "OK"
+    }
+  }
+}

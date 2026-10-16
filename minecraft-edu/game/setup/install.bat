@@ -81,7 +81,7 @@ echo  [2/4] Mod project OK
 echo.
 
 rem ---- 3. the course on top of the template, and the icon ----
-set "STARTER_VER=8"
+set "STARTER_VER=9"
 if exist "%ROOT%\mod\starter-v%STARTER_VER%.txt" goto :starter_ok
 echo  [3/4] Adding the course ...
 if exist "%HERE%starter.zip" goto :starter_local
@@ -122,10 +122,12 @@ mkdir "%ROOT%\gradle-home" 2>nul
 
 rem ---- 4. first start: downloads Minecraft and builds, then opens lesson 1. The long part. ----
 echo  [4/4] Downloading Minecraft and building the mod.
-echo        This is the long part. Minecraft opens lesson 1 by itself at the end.
+echo        This is the long part. Minecraft opens the lesson by itself at the end.
 echo.
 mkdir "%ROOT%\mod\run\islands" 2>nul
-> "%ROOT%\mod\run\islands\lesson.txt" echo 1
+rem ISLANDS_LESSON picks the lesson that opens at the end (laptop.bat sets it; 20 = the space demo)
+if not defined ISLANDS_LESSON set "ISLANDS_LESSON=1"
+> "%ROOT%\mod\run\islands\lesson.txt" echo %ISLANDS_LESSON%
 set "JAVA_HOME=%ROOT%\jdk"
 set "PATH=%ROOT%\jdk\bin;%PATH%"
 set "GRADLE_USER_HOME=%ROOT%\gradle-home"

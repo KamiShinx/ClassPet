@@ -1,0 +1,89 @@
+{
+  "type": "minecraft:multi_action",
+  "title": {
+    "text": "תחנה 3: כוכב בוגר",
+    "color": "gold"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "זה כוכב בוגר, כמו השמש שלנו. במרכז שלו המימן הופך להליום. זה נקרא היתוך גרעיני."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "ההיתוך משחרר אנרגיה עצומה: האור והחום שמגיעים אלינו. השמש נמצאת בשלב הזה כבר בערך 4.5 מיליארד שנה."
+      },
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": [
+        {
+          "text": "באנגלית: ",
+          "color": "gray"
+        },
+        {
+          "text": "Main sequence star",
+          "color": "aqua",
+          "bold": true
+        }
+      ],
+      "width": 300
+    },
+    {
+      "type": "minecraft:plain_message",
+      "contents": {
+        "text": "רוב הכוכבים בגלקסיה שלנו נמצאים בשלב הזה.",
+        "color": "gray"
+      },
+      "width": 300
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:single_option",
+      "key": "a",
+      "label": {
+        "text": "מאיפה מגיעים האור והחום של כוכב?"
+      },
+      "width": 300,
+      "options": [
+        {
+          "id": "1",
+          "display": {
+            "text": "מאש של עצים שבוערים בו"
+          },
+          "initial": true
+        },
+        {
+          "id": "2",
+          "display": {
+            "text": "מהיתוך גרעיני במרכז שלו"
+          }
+        },
+        {
+          "id": "3",
+          "display": {
+            "text": "מהאור של כוכבים אחרים"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "label": {
+        "text": "זאת התשובה שלי"
+      },
+      "action": {
+        "type": "minecraft:dynamic/run_command",
+        "template": "trigger islands_act set 52$(a)"
+      }
+    }
+  ],
+  "columns": 1
+}

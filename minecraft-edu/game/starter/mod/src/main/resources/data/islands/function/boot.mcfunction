@@ -18,4 +18,6 @@ gamerule send_command_feedback false
 weather clear
 # Adventure mode: kids explore and talk, they don't dig the island up.
 defaultgamemode adventure
-execute unless score #built islands matches 1 unless score #building islands matches 1 run function islands:island/start
+execute if score #lesson islands matches ..19 unless score #built islands matches 1 unless score #building islands matches 1 run function islands:island/start
+# lesson 20 is the space demo: a moon instead of an island (tools/gen_space.py)
+execute if score #lesson islands matches 20 unless score #built islands matches 1 unless score #building islands matches 1 run function islands:space/start

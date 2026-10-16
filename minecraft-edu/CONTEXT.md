@@ -131,4 +131,4 @@ the students of what the teacher taught" and "i need the game to be able to func
 - Trigger ranges for lesson 20: 50/51 start/finish, 500-599 stop answers, 60 Max, 6111-6333 quiz, 7111-7333 lab.
 - 26.2: dyed items are collections: `Items.CONCRETE.pick(DyeColor.RED)`, `Items.STAINED_GLASS.pick(...)`.
 - Text: two audits (Hebrew, science, Max's English), 20 flags, all applied in some form. Tested by a scripted
-  play-through (every stage, wrong answers rejected) and screenshots. NOT played by hand. `STARTER_VER` is 9.
+  play-through (every stage, wrong answers rejected) and screenshots. NOT played by hand. `STARTER_VER` is 10.

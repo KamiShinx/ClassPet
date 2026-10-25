@@ -303,7 +303,9 @@ const EXAMPLES = [
   { id:"lightning_stick", lesson:2, he:["מקל ברקים","מכים יצור, ונופל עליו ברק. אחר כך המקל נח."], en:["Lightning stick","Hit a creature and lightning strikes it. Then the stick rests."],
     lore:["הברק יודע את מי להכות.","The lightning knows whom to strike."], rarity:"rare",
     pic:{ pal:{ k:"#2b1d0e", w:"#8a5a2b", y:"#fed83d", Y:"#fff6b0" }, rows:["..........kkkk..","........kkyyyk..","........kyYyk...",".......kyyyk....","......kyyyyykk..",".......kkyyyk...","........kyyk....",".......kwkk.....","......kwk.......",".....kwk........","....kwk.........","...kwk..........","..kwk...........",".kwk............","kwk.............","kk.............."] },
-    prog:{ on:{ hit:[{a:"lightning",who:"target"},{a:"cooldown",s:3}] } } },
+    prog:{ on:{ hit:[{a:"lightning",who:"target"},{a:"cooldown",s:3}] } },
+    // Lesson 3: how it's made in a Crafting Table (copper, like a Lightning Rod).
+    recipe:{ g:["","minecraft:copper_ingot","","minecraft:copper_ingot","minecraft:stick","minecraft:copper_ingot","","minecraft:stick",""], n:1, any:false } },
   { id:"fire_sword", lesson:3, he:["חרב אש","מכים יצור, והוא עולה באש. כל מכה מורידה אוכל."], en:["Fire sword","Hit a creature and it catches fire. Every hit costs food."],
     prog:{ on:{ hit:[{a:"fire",who:"target",s:4},{a:"hunger",n:1}] } } },
   { id:"spring", lesson:3, he:["קפיץ","לחיצה ימנית, ואתם עפים למעלה."], en:["Spring","Right-click and you fly up."],

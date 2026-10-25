@@ -88,6 +88,15 @@ $want = [ordered]@{
   'item_bread' = 'item/bread'; 'item_compass_00' = 'item/compass_00'; 'item_cooked_beef' = 'item/cooked_beef'; 'item_diamond' = 'item/diamond'
   'item_emerald' = 'item/emerald'; 'item_fishing_rod' = 'item/fishing_rod'; 'item_iron_sword' = 'item/iron_sword'; 'item_mace' = 'item/mace'
   'item_netherite_sword' = 'item/netherite_sword'; 'item_trident' = 'item/trident'
+  # lesson 3 (crafting): the studio's ingredients, and the Torch in the recipe examples
+  'item_stick' = 'item/stick'; 'item_string' = 'item/string'; 'item_feather' = 'item/feather'; 'item_leather' = 'item/leather'
+  'item_paper' = 'item/paper'; 'item_flint' = 'item/flint'; 'item_bone' = 'item/bone'; 'item_coal' = 'item/coal'
+  'item_copper_ingot' = 'item/copper_ingot'; 'item_iron_ingot' = 'item/iron_ingot'; 'item_gold_ingot' = 'item/gold_ingot'; 'item_redstone' = 'item/redstone'
+  'item_lapis_lazuli' = 'item/lapis_lazuli'; 'item_amethyst_shard' = 'item/amethyst_shard'; 'item_netherite_ingot' = 'item/netherite_ingot'; 'item_apple' = 'item/apple'
+  'item_wheat' = 'item/wheat'; 'item_sugar' = 'item/sugar'; 'item_egg' = 'item/egg'; 'item_honeycomb' = 'item/honeycomb'
+  'item_slime_ball' = 'item/slime_ball'; 'item_gunpowder' = 'item/gunpowder'; 'item_rotten_flesh' = 'item/rotten_flesh'; 'item_spider_eye' = 'item/spider_eye'
+  'item_glowstone_dust' = 'item/glowstone_dust'; 'item_blaze_rod' = 'item/blaze_rod'; 'item_ghast_tear' = 'item/ghast_tear'; 'item_prismarine_shard' = 'item/prismarine_shard'
+  'item_phantom_membrane' = 'item/phantom_membrane'; 'item_echo_shard' = 'item/echo_shard'; 'item_nether_star' = 'item/nether_star'; 'block_glass' = 'block/glass'; 'block_torch' = 'block/torch'
 }
 try {
   Add-Type -AssemblyName System.IO.Compression.FileSystem

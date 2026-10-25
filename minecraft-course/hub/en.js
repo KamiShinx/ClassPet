@@ -157,7 +157,15 @@ const D = {
   "עוד אין ציור, אז במשחק יופיע ריבוע סגול ושחור.":"No picture yet, so the game shows a purple and black square.",
   "כשמיינקראפט נפתח: E, ואז הלשונית של העולם שלכם.":"When Minecraft opens: E, then your world's tab.",
   "עוד אין בלוקים. קודם בונים ב״מה הוא עושה?״, אחר כך משפרים עם ג׳מיני.":"No blocks yet. First build in \"What does it do?\", then improve with Gemini.",
-  "פותחים את הסטודיו":"Open the studio"
+  "פותחים את הסטודיו":"Open the studio",
+  // the recipe (lesson 3)
+  "איך מכינים אותו?":"How is it made?", "מה צריך:":"You need:", "עוד אין מתכון.":"No recipe yet.", "הסדר לא משנה":"Order doesn't matter",
+  " הסדר לא משנה":" Order doesn't matter", "כמה יוצאים":"How many come out", "לנקות את המתכון":"Clear the recipe", "משבצת ריקה":"Empty slot",
+  "חומרים פשוטים":"Simple materials", "מתכות ואבנים יקרות":"Metals and gems", "מהטבע ומהיצורים":"From nature and creatures", "נדירים":"Rare",
+  "החפצים שלכם":"Your items",
+  "עוד אין מתכון, אז אי אפשר להכין את החפץ. במשחק לוקחים אותו רק מהתפריט של E.":"No recipe yet, so the item can't be crafted. In the game you can only take it from the E menu.",
+  "חפץ לא יכול להיות חומר במתכון שלו. מחליפים אותו בחומר אחר.":"An item can't be a material in its own recipe. Swap it for another material.",
+  "במתכון יש חפץ שכבר לא קיים. מוחקים אותו מהמשבצת.":"The recipe has an item that no longer exists. Clear it from its slot."
 };
 const RX = [
   [/^שלב (\d+) מתוך (\d+)$/, "Step $1 of $2"], [/^(\d+) מתוך (\d+) שיעורים$/, "$1 of $2 lessons"],
@@ -174,6 +182,8 @@ const RX = [
   [/^נטען הציור הקיים של (.*)$/, "Loaded the existing picture of $1"], [/^יותר מדי ניסיונות\. מחכים (\d+) שניות\.$/, "Too many tries. Wait $1 seconds."],
   [/^כבר יש חפץ עם הקוד (\w+), שג׳מיני כתב בקובץ MyItems\.java\. בוחרים קוד אחר\.$/, "There's already an item with the code $1, which Gemini wrote in MyItems.java. Choose another code."],
   [/^יש שני חפצים עם הקוד (\w+)\.$/, "Two items have the code $1."],
+  [/^יוצאים: (\d+) × (.*)$/, (m, n, x) => "Makes: " + n + " × " + (x === "החפץ" ? "the item" : x)],
+  [/^לחפץ ״(.*)״ יש בדיוק אותו מתכון\..*$/, "The item \"$1\" has exactly the same recipe. Change one material, so the game knows what to make."],
   [/^ג׳מיני שלח קובץ בשם (\w+)\..*$/, "Gemini sent a file called $1. Your files are MyItems, MyEffects, MyMobs, MyRules, MyWorld. Ask it to put the code in one of them."]
 ];
 function tr(t){
@@ -252,8 +262,39 @@ const EN_L = {
         expect:"Next week: powers with \"if\". Only at night, only by chance, only with Shift." }
     ], challenges:{ card:["Page 2","What the item is for, its price, and where you get it."], tweak:["Lightning stick","I tried it in the game, and changed one thing in it."],
       item:["My item","The item in the game, with your name, line and picture."], power:["A power for my item","My item does something, from an example I changed."],
-      second:["A second item","In the studio (Menu, then Studio): another item from your world."], shade:["Shadow and shine","The picture has a dark colour for shadow and a light one for shine."] } }
+      second:["A second item","In the studio (Menu, then Studio): another item from your world."], shade:["Shadow and shine","The picture has a dark colour for shadow and a light one for shine."] } },
+  3: { unit:"Unit 2 · The first items", title:"Lesson 3: How is the item made?",
+    stations:[["Recipes",1],["Lightning stick",2],["My recipe",3],["In the game",4],["Drive",5]],
+    groups:{ stick:"Lightning stick", mine:"My item" },
+    steps:[
+      { title:"Today: a recipe for your item",
+        body:`<p>In Minecraft almost every item is made in a Crafting Table, from materials. Today you invent a recipe for your item: what it's made of, and in what shape.</p>`,
+        visual:()=>H.road([["Recipes","How Minecraft does it"],["Lightning stick","A ready recipe: craft it in the game"],["My recipe","What your item is made of"],["In the game","Craft it in a Crafting Table"]]),
+        note:"Your world is gone? The computer was probably reset, or it's a different one. At the top: <b>Menu</b>, then <b>Drive</b>, and bring your world back from there." },
+      { title:"Three Minecraft recipes",
+        body:`<p>Every recipe says two things: what you need, and how to arrange it in the slots.</p>`,
+        visual:()=>H.RECIPES3("en"),
+        hints:["Why does a Golden Apple cost so much? What does it do?","What do the materials of a Diamond Sword tell you about it?","An item you use a lot, like a Torch, should be cheap. What about your item?"] },
+      { title:"Lightning stick: a ready recipe", tab:"Craft it",
+        body:`<p>This is the lightning stick's recipe: 3 Copper Ingot and 2 Stick, in this shape.</p>`,
+        visual:()=>H.studioIn({ ready:"lightning_stick", parts:["recipeview"] }) + `<h2 class="lp-sub">Craft it in the game</h2>` + H.gameBtn()
+          + `<ol class="ingame"><li><b>Singleplayer</b>, then your world.</li><li>Press <kbd>E</kbd>, type <b>crafting</b> in the search, and put a Crafting Table on the ground.</li><li>Find the materials in the search too: 3 Copper Ingot and 2 Stick.</li><li>Right-click the Crafting Table, and arrange the materials like the recipe.</li></ol>`,
+        expect:"The lightning stick appears in the square on the right. Take it.",
+        stuck:[["Nothing appears in the square on the right","Check that the materials are arranged exactly like the recipe. Every slot matters."],["Minecraft was already open","A recipe goes into the game only when it opens again. Close Minecraft, and press the green button again."],["A red box appeared: the game didn't build","Raise your hand and call the teacher."]] },
+      { title:"Your item's recipe", tab:"The recipe",
+        body:`<ol><li>Pick a material from the list, and click a slot: the material goes in.</li><li>Choose how many items one recipe makes: 1, 2, 4 or 8.</li></ol>`,
+        hints:["What is the item made of in your world? Pick materials that fit it. The lightning stick you crafted has Copper Ingot, like Minecraft's Lightning Rod.","A strong item needs rare materials. Nether Star and Diamond are expensive, Stick and Cobblestone are cheap.","Your own items can be materials too. They're at the end of the list.","Right-click a slot to empty it."] },
+      { title:"Craft your item in the game", tab:"Check in the game",
+        body:`<ol><li>Minecraft open? Close it.</li><li>Press the green button.</li><li>In the game, take the materials from the <kbd>E</kbd> menu, and arrange them in a Crafting Table like the recipe.</li></ol>`,
+        expect:"Your item appears in the square on the right, as many as you chose.",
+        stuck:[["I got a Minecraft item instead of mine","Minecraft already has a recipe like that. Swap one material in your recipe, and check again."],["Nothing appears in the square on the right","Check that the shape is exactly like in the studio. Or tick \"Order doesn't matter\" in the studio."],["I changed something and the game doesn't show it","A change goes in only when the game opens again. Close Minecraft, and press the green button again."],["A red box appeared: the game didn't build","Raise your hand and call the teacher."]] },
+      { title:"Save and finish",
+        body:`<ul><li>Show whoever sits next to you only the recipe, and ask: what does the item do?</li><li>Close Minecraft.</li><li>Save your world in Drive:</li></ul>` }
+    ], challenges:{ stick:["Lightning stick","I crafted it in a Crafting Table."], recipe:["A recipe for my item","The materials fit the item and its price."],
+      craft:["In the game","I crafted my item in a Crafting Table."], guess:["A recipe that tells about the item","Whoever sits next to me guessed what the item does, only from the recipe."],
+      chain:["An item from an item","One of my items is a material in another one's recipe."], any:["Order doesn't matter","I made a recipe that works in any order."] } }
 };
+
 
 /* ---------- swap the words in a part of the page ---------- */
 function translate(root){

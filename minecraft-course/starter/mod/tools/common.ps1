@@ -25,6 +25,7 @@ function Invoke-Prepare([string]$mod) {
     }
     # Items made in the studio (design/world.json, copied into the mod's resources).
     $studio = Join-Path $assets 'studio/world.json'
+    $w = $null
     if (Test-Path $studio) {
         try { $w = [IO.File]::ReadAllText($studio, [Text.Encoding]::UTF8) | ConvertFrom-Json } catch { $w = $null }
         foreach ($it in @($w.items)) {
@@ -53,7 +54,62 @@ function Invoke-Prepare([string]$mod) {
             [IO.File]::WriteAllText($model, $flat, $utf8)
         }
     }
+
+    # Recipes made in the studio: how each item is made in a Crafting Table. Written fresh before every Play.
+    $recipeDir = Join-Path $mod 'src/main/resources/data/myworld/recipe'
+    New-Item -ItemType Directory -Force $recipeDir | Out-Null
+    Get-ChildItem $recipeDir -Filter 'studio_*.json' -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+    if ($w) {
+        foreach ($it in @($w.items)) {
+            $id = [string]$it.id
+            if ($id -notmatch '^[a-z][a-z0-9_]{0,39}$' -or -not $it.recipe) { continue }
+            try { $r = ConvertTo-StudioRecipe $it.recipe $id @($items) } catch { $r = $null }
+            if ($r) { [IO.File]::WriteAllText((Join-Path $recipeDir "studio_$id.json"), $r, $utf8) }
+        }
+    }
     return $items.Count
+}
+
+# One studio recipe -> the text of a Minecraft recipe file, or $null if it can't be made (then the item simply has no
+# recipe; the game still builds). Shaped recipes lose the empty rows and columns around them, like Minecraft's own,
+# so the shape works anywhere in the grid. $known = every item code in the mod (an ingredient may be the kid's item).
+function ConvertTo-StudioRecipe($r, [string]$id, $known) {
+    $g = @($r.g)
+    if ($g.Count -ne 9) { return $null }
+    $cells = @()
+    foreach ($c in $g) {
+        $c = [string]$c
+        if (-not $c) { $cells += ''; continue }
+        if ($c -cnotmatch '^(minecraft|myworld):[a-z0-9_]{1,40}$' -or $c -eq "myworld:$id") { return $null }
+        if ($c.StartsWith('myworld:') -and -not ($known -contains $c.Substring(8))) { return $null }
+        $cells += $c
+    }
+    $used = @($cells | Where-Object { $_ })
+    if ($used.Count -eq 0) { return $null }
+    $n = 1; [void][int]::TryParse([string]$r.n, [ref]$n); $n = [Math]::Max(1, [Math]::Min(64, $n))
+    $result = [ordered]@{ id = "myworld:$id"; count = $n }
+    if ($r.any -eq $true) {
+        $obj = [ordered]@{ type = 'minecraft:crafting_shapeless'; category = 'misc'; ingredients = $used; result = $result }
+    } else {
+        $rows = @(0, 1, 2 | Where-Object { $y = $_; @($cells[($y * 3)..($y * 3 + 2)] | Where-Object { $_ }).Count -gt 0 })
+        $cols = @(0, 1, 2 | Where-Object { $x = $_; @($cells[$x], $cells[$x + 3], $cells[$x + 6] | Where-Object { $_ }).Count -gt 0 })
+        $keys = [ordered]@{}
+        $pattern = @()
+        foreach ($y in $rows[0]..$rows[-1]) {
+            $line = ''
+            foreach ($x in $cols[0]..$cols[-1]) {
+                $c = $cells[$y * 3 + $x]
+                if (-not $c) { $line += ' '; continue }
+                $k = $null
+                foreach ($e in $keys.GetEnumerator()) { if ($e.Value -eq $c) { $k = $e.Key } }
+                if (-not $k) { $k = [string]'ABCDEFGHI'[$keys.Count]; $keys[$k] = $c }
+                $line += $k
+            }
+            $pattern += $line
+        }
+        $obj = [ordered]@{ type = 'minecraft:crafting_shaped'; category = 'misc'; key = $keys; pattern = $pattern; result = $result }
+    }
+    return ($obj | ConvertTo-Json -Depth 5)
 }
 
 # Weak models often forget imports. For common names used in the kid's files, add the import if it's missing.

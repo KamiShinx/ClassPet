@@ -380,6 +380,17 @@ a.dbtn{text-decoration:none}
 .pal figure{margin:0;display:grid;gap:10px;justify-items:center;background:var(--surface);border:3px solid var(--ink);border-radius:8px;padding:16px;box-shadow:0 5px 0 var(--ink)}
 .pal figcaption{font-family:var(--display);font-size:1.6em;color:var(--grass)}
 .its{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;width:100%}
+.crafts{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;width:100%}
+.crafts figure{margin:0;display:grid;gap:8px;justify-items:center}
+.crafts figcaption{display:grid;text-align:center;font-weight:700}
+.crafts figcaption b{font-size:1.1rem}
+.craft{display:flex;align-items:center;gap:10px;background:#C6C6C6;border:3px solid;border-color:#fff #555 #555 #fff;border-radius:4px;padding:10px}
+.craft .cg{display:grid;grid-template-columns:repeat(3,44px);gap:3px}
+.craft .cs{width:44px;height:44px;box-sizing:border-box;background:#8B8B8B;border:3px solid;border-color:#373737 #fff #fff #373737;padding:5px;position:relative;display:block}
+.craft .co{width:54px;height:54px;padding:6px}
+.craft .co b{position:absolute;bottom:0;right:4px;color:#fff;font-family:var(--display);font-weight:400;text-shadow:2px 2px 0 #3f3f3f}
+.craft .ca{font-size:1.6rem;color:#8B8B8B}
+.craft .mc.nomc img{visibility:hidden}
 .its figure{margin:0;display:grid;gap:6px;justify-items:center;width:clamp(76px,10cqw,128px);align-content:start}
 .mc{display:block;position:relative}
 .mc img{display:block;width:100%;height:auto;image-rendering:pixelated}
@@ -612,7 +623,7 @@ const UNITS = [
   { n:2, name:"החפצים הראשונים", sub:"מהכרטיס אל תוך המשחק", color:"#2B6A99", icon:"2",
     lessons:[
       {n:2, title:"החפץ הראשון שלי", build:"חפץ משלכם, עם שם, ציור וכוח, בתוך המשחק", open:true},
-      {n:3, title:"מה החפץ עושה?", build:"כוח לחפץ, מבלוקים בסטודיו"},
+      {n:3, title:"איך מכינים את החפץ?", build:"מתכון לחפץ שלכם: ממה מכינים אותו ב־Crafting Table", open:true},
       {n:4, title:"חפץ עם מחיר", build:"חפץ חזק שיש לו חיסרון"},
       {n:5, title:"אפקט שמשנה את המשחק", build:"אוכל או שיקוי עם אפקט חדש"} ] },
   { n:3, name:"המקום והיצור הראשון", sub:"עולם שיש בו חוקים", color:"#8A5A2B", icon:"3",
@@ -1035,6 +1046,81 @@ const L2 = {
   ]
 };
 
+/* ===== lesson 3: how the item is made (crafting). A kid asked for it; Ben, 24 Oct: "how you create an item and what
+   you need for it". The recipe lives in the studio (it.recipe); tools/common.ps1 makes the game's recipe file. ===== */
+/* A Minecraft recipe as in the game: 9 slots (picture names, "" = empty), the arrow, and what comes out. */
+const craftPic = (g, out, n) => `<div class="craft" dir="ltr"><div class="cg">${g.map(t => `<span class="cs">${t ? mcPic(t, "", "") : ""}</span>`).join("")}</div><span class="ca">➜</span><span class="cs co">${mcPic(out, "", "")}${n > 1 ? `<b>${n}</b>` : ""}</span></div>`;
+const RECIPES3 = lang => { const E = lang === "en";
+  return `<div class="crafts">
+  <figure>${craftPic(["","item_coal","","","item_stick","","","",""], "block_torch", 4)}<figcaption><b>Torch</b>${E ? "Cheap: one recipe makes 4." : "זול: מתכון אחד נותן 4."}</figcaption></figure>
+  <figure>${craftPic(["","item_diamond","","","item_diamond","","","item_stick",""], "item_diamond_sword", 1)}<figcaption><b>Diamond Sword</b>${E ? "In the shape of a sword." : "בצורה של חרב."}</figcaption></figure>
+  <figure>${craftPic(["item_gold_ingot","item_gold_ingot","item_gold_ingot","item_gold_ingot","item_apple","item_gold_ingot","item_gold_ingot","item_gold_ingot","item_gold_ingot"], "item_golden_apple", 1)}<figcaption><b>Golden Apple</b>${E ? "Expensive: 8 Gold Ingot for one apple." : "יקר: 8 Gold Ingot בשביל תפוח אחד."}</figcaption></figure>
+</div>`; };
+const L3 = {
+  n:3, unit:"יחידה 2 · החפצים הראשונים", title:"שיעור 3: איך מכינים את החפץ?",
+  stations:[["מתכונים",1],["מקל ברקים",2],["המתכון שלי",3],["במשחק",4],["דרייב",5]],
+  groups:{ stick:"מקל ברקים", mine:"החפץ שלי" },
+  steps:[
+    { title:"היום: מתכון לחפץ שלכם",
+      body:`<p>במיינקראפט כמעט כל חפץ מכינים ב־Crafting Table, מחומרים. היום ממציאים לחפץ שלכם מתכון: ממה מכינים אותו, ובאיזו צורה.</p>`,
+      visual:()=>road([["מתכונים","איך מיינקראפט עושה את זה"],["מקל ברקים","מתכון מוכן: מכינים אותו במשחק"],["המתכון שלי","ממה מכינים את החפץ שלכם"],["במשחק","מכינים אותו ב־Crafting Table"]]),
+      note:"העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. למעלה: <b>תפריט</b>, ואז <b>דרייב</b>, ומחזירים משם את העולם." },
+
+    { title:"שלושה מתכונים של מיינקראפט",
+      body:`<p>כל מתכון אומר שני דברים: מה צריך, ואיך מסדרים את זה במשבצות.</p>`,
+      visual:()=>RECIPES3(),
+      hints:[
+        "למה Golden Apple עולה כל כך הרבה? מה הוא עושה?",
+        "מה החומרים של Diamond Sword מספרים עליה?",
+        "חפץ שמשתמשים בו הרבה, כמו Torch, צריך להיות זול. ומה עם החפץ שלכם?"
+      ] },
+
+    { title:"מקל ברקים: מתכון מוכן", group:"stick", tab:"מכינים אותו",
+      body:`<p>זה המתכון של מקל הברקים: 3 Copper Ingot ו־2 Stick, בצורה הזאת.</p>`,
+      visual:()=>studioIn({ ready:"lightning_stick", parts:["recipeview"] }) + `<h2 class="lp-sub">מכינים אותו במשחק</h2>` + gameBtn()
+        + `<ol class="ingame"><li><b>Singleplayer</b>, ואז העולם שלכם.</li><li>לוחצים <kbd>E</kbd>, בחיפוש כותבים <b>crafting</b>, ומניחים Crafting Table על הרצפה.</li><li>גם את החומרים מוצאים בחיפוש: 3 Copper Ingot ו־2 Stick.</li><li>לוחצים לחיצה ימנית על ה־Crafting Table, ומסדרים את החומרים כמו במתכון.</li></ol>`,
+      expect:"מקל הברקים מופיע בריבוע מימין. לוקחים אותו.",
+      stuck:[
+        ["לא מופיע כלום בריבוע מימין","בודקים שהחומרים מסודרים בדיוק כמו במתכון. כל משבצת חשובה."],
+        ["מיינקראפט היה פתוח מקודם","מתכון נכנס למשחק רק כשהמשחק נפתח מחדש. סוגרים את מיינקראפט, ולוחצים שוב על הכפתור הירוק."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
+      ] },
+
+    { title:"המתכון של החפץ שלכם", group:"mine", tab:"המתכון",
+      body:`<ol><li>בוחרים חומר מהרשימה, ולוחצים על משבצת: החומר נכנס אליה.</li><li>בוחרים כמה חפצים יוצאים מכל מתכון: 1, 2, 4 או 8.</li></ol>`,
+      visual:()=>studioIn({ tag:"l2", parts:["recipe"] }),
+      hints:[
+        "ממה החפץ עשוי בעולם שלכם? בוחרים חומרים שמתאימים לו. במקל הברקים שהכנתם יש Copper Ingot, כמו ב־Lightning Rod של מיינקראפט.",
+        "חפץ חזק צריך חומרים נדירים. Nether Star ו־Diamond יקרים, Stick ו־Cobblestone זולים.",
+        "גם החפצים שלכם יכולים להיות חומרים. הם בסוף הרשימה.",
+        "לוחצים לחיצה ימנית על משבצת כדי לרוקן אותה."
+      ] },
+
+    { title:"מכינים את החפץ במשחק", group:"mine", tab:"בודקים במשחק",
+      body:`<ol><li>מיינקראפט פתוח? סוגרים אותו.</li><li>לוחצים על הכפתור הירוק.</li><li>במשחק לוקחים את החומרים מהתפריט של <kbd>E</kbd>, ומסדרים אותם ב־Crafting Table כמו במתכון.</li></ol>`,
+      visual:()=>studioIn({ tag:"l2", parts:["recipeview"] }) + gameBtn(),
+      expect:"החפץ שלכם מופיע בריבוע מימין, בכמות שבחרתם.",
+      stuck:[
+        ["יצא חפץ של מיינקראפט במקום החפץ שלי","למיינקראפט כבר יש מתכון כזה. מחליפים במתכון חומר אחד, ובודקים שוב."],
+        ["לא מופיע כלום בריבוע מימין","בודקים שהצורה בדיוק כמו בסטודיו. או מסמנים בסטודיו ״הסדר לא משנה״."],
+        ["שיניתי, ובמשחק לא רואים","שינוי נכנס רק כשהמשחק נפתח מחדש. סוגרים את מיינקראפט, ולוחצים שוב על הכפתור הירוק."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
+      ] },
+
+    { title:"שומרים ומסיימים",
+      body:`<ul><li>מראים למי שיושב לידכם רק את המתכון, ושואלים: מה החפץ עושה?</li><li>סוגרים את מיינקראפט.</li><li>שומרים את העולם בדרייב:</li></ul>`,
+      visual:()=>driveBox() }
+  ],
+  challenges:[
+    {id:"stick", lvl:"חובה", t:"מקל ברקים", d:"הכנתי אותו ב־Crafting Table."},
+    {id:"recipe", lvl:"חובה", t:"מתכון לחפץ שלי", d:"החומרים מתאימים לחפץ ולמחיר שלו."},
+    {id:"craft", lvl:"חובה", t:"במשחק", d:"הכנתי את החפץ שלי ב־Crafting Table."},
+    {id:"guess", lvl:"אתגר", t:"מתכון שמספר על החפץ", d:"מי שיושב לידי ניחש מה החפץ עושה, רק מהמתכון."},
+    {id:"chain", lvl:"אתגר", t:"חפץ מחפץ", d:"במתכון של חפץ אחד יש חפץ אחר שלי."},
+    {id:"any", lvl:"אתגר", t:"הסדר לא משנה", d:"הכנתי מתכון שעובד בכל סדר."}
+  ]
+};
+
 const GEM_TEXT = `RULES FOR THIS CHAT. Follow them for every answer in this chat.
 You are the Mod Helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Answer in simple, short Hebrew. If the kid writes to you in English, answer in simple English. Code, file names and paths stay in English.
 
@@ -1087,9 +1173,9 @@ const TEACHER_CHECK = [
 function applyReveal(root, set){
   root.querySelectorAll("[data-sil]").forEach(b => { if (set.has(+b.dataset.sil)) { b.classList.add("shown"); b.querySelector(".nm").textContent = MOBS[+b.dataset.sil].name; } });
 }
-const LESSONS = { 1: L1, 2: L2 };
+const LESSONS = { 1: L1, 2: L2, 3: L3 };
 const DECKS = { 1: SLIDES };
 window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
   gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK,
-  LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES, studioIn, gameBtn, driveBox, road, MC_MENU };
+  LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES, studioIn, gameBtn, driveBox, road, MC_MENU, RECIPES3 };
 })();

@@ -62,9 +62,78 @@ function drawPx(cv, px, scale){
 const thumb = (it, size) => `<canvas class="st-th" width="16" height="16" data-px="${esc(JSON.stringify(it.px || []))}" style="width:${size}px;height:${size}px"></canvas>`;
 function paintThumbs(root){ root.querySelectorAll("canvas[data-px]").forEach(c => { try { drawPx(c, JSON.parse(c.dataset.px)); } catch(e){} }); }
 
+/* ---------- recipes: how the item is made in a Crafting Table ----------
+   it.recipe = { g: 9 slots, left to right and top to bottom ("" = empty, else "minecraft:stick" or "myworld:item_2"),
+   n: how many items one crafting makes, any: true when the order in the grid doesn't matter }.
+   tools/common.ps1 writes it as a Minecraft recipe file before every Play, so a broken recipe can never break the build.
+   Ingredients keep their English Minecraft names, as in the game. Pictures: hub\mc_<tex>.png (setup/update-hub.ps1). */
+const ING = [
+  ["חומרים פשוטים", [["stick","Stick"],["oak_planks","Oak Planks","block"],["oak_log","Oak Log","block"],["cobblestone","Cobblestone","block"],["sand","Sand","block"],["glass","Glass","block"],["string","String"],["feather","Feather"],["leather","Leather"],["paper","Paper"],["flint","Flint"],["bone","Bone"]]],
+  ["מתכות ואבנים יקרות", [["coal","Coal"],["copper_ingot","Copper Ingot"],["iron_ingot","Iron Ingot"],["gold_ingot","Gold Ingot"],["redstone","Redstone Dust"],["lapis_lazuli","Lapis Lazuli"],["amethyst_shard","Amethyst Shard"],["emerald","Emerald"],["diamond","Diamond"],["netherite_ingot","Netherite Ingot"]]],
+  ["מהטבע ומהיצורים", [["apple","Apple"],["wheat","Wheat"],["sugar","Sugar"],["egg","Egg"],["honeycomb","Honeycomb"],["slime_ball","Slimeball"],["gunpowder","Gunpowder"],["rotten_flesh","Rotten Flesh"],["spider_eye","Spider Eye"]]],
+  ["נדירים", [["glowstone_dust","Glowstone Dust"],["blaze_rod","Blaze Rod"],["ender_pearl","Ender Pearl"],["ghast_tear","Ghast Tear"],["prismarine_shard","Prismarine Shard"],["phantom_membrane","Phantom Membrane"],["obsidian","Obsidian","block"],["echo_shard","Echo Shard"],["nether_star","Nether Star"]]]
+];
+const ING_BY = {}; ING.forEach(([, list]) => list.forEach(([id, name, kind]) => { ING_BY["minecraft:" + id] = { name, tex: (kind || "item") + "_" + id }; }));
+const ING_RX = /^(minecraft|myworld):[a-z0-9_]{1,40}$/;
+const emptyRecipe = () => ({ g: Array(9).fill(""), n: 1, any: false });
+const ownOf = code => code.startsWith("myworld:") ? S.world.items.find(x => x.id === code.slice(8)) : null;
+const ingName = code => { const v = ING_BY[code]; if (v) return v.name; const o = ownOf(code); return o ? (o.name || "בלי שם") : code.replace(/^.*:/, ""); };
+/* One ingredient's picture: the game's own texture, or the kid's drawing for their own items. */
+function ingPic(code){
+  const v = ING_BY[code];
+  if (v) return `<span class="rc-pic"><img src="mc_${v.tex}.png" alt="" onerror="this.nextElementSibling.hidden=false;this.remove()"><em hidden>${esc(v.name.slice(0, 3))}</em></span>`;
+  const o = ownOf(code);
+  return o ? `<span class="rc-pic">${thumb(o, 32)}</span>` : `<span class="rc-pic"><em>?</em></span>`;
+}
+/* What you need for one crafting, counted: "2 × Diamond, 1 × Stick". */
+function needList(r){
+  const n = {}; (r && r.g || []).forEach(c => { if (c) n[c] = (n[c] || 0) + 1; });
+  return Object.keys(n).map(c => [n[c], c]);
+}
+function recipeLint(it){
+  const r = it.recipe, out = [];
+  if (!r || !r.g.some(Boolean)) return ["עוד אין מתכון, אז אי אפשר להכין את החפץ. במשחק לוקחים אותו רק מהתפריט של E."];
+  if (r.g.includes("myworld:" + it.id)) out.push("חפץ לא יכול להיות חומר במתכון שלו. מחליפים אותו בחומר אחר.");
+  r.g.forEach(c => { if (c.startsWith("myworld:") && !ownOf(c)) out.push("במתכון יש חפץ שכבר לא קיים. מוחקים אותו מהמשבצת."); });
+  const same = S.world.items.find(x => x !== it && x.recipe && !!x.recipe.any === !!r.any && JSON.stringify(x.recipe.g) === JSON.stringify(r.g));
+  if (same) out.push("לחפץ ״" + (same.name || same.id) + "״ יש בדיוק אותו מתכון. מחליפים חומר אחד, כדי שהמשחק ידע מה להכין.");
+  return [...new Set(out)];
+}
+/* The Crafting Table as in the game: the 3 × 3 grid, an arrow, and the item that comes out. ro = look only. */
+function recipeHTML(it, ro){
+  const r = it.recipe || emptyRecipe(), need = needList(r);
+  const grid = r.g.map((c, i) => `<button class="rc-slot${c ? " full" : ""}" ${ro ? "disabled" : `data-slot="${i}"`} aria-label="${c ? esc(ingName(c)) : "משבצת ריקה"}">${c ? ingPic(c) : ""}</button>`).join("");
+  const out = `<div class="rc-slot rc-res">${(it.px || []).some(Boolean) ? thumb(it, 40) : ""}${r.n > 1 ? `<b>${r.n}</b>` : ""}</div>`;
+  let h = `<div class="rc${ro ? " ro" : ""}"><div class="rc-table"><div class="rc-grid">${grid}</div><span class="rc-arrow" aria-hidden="true">➜</span>${out}</div>
+    <div class="rc-need">${need.length ? `<b>מה צריך:</b> ${need.map(([n, c]) => `<span>${n} × ${esc(ingName(c))}</span>`).join("")}<span class="rc-gets">יוצאים: ${r.n} × ${esc(it.name || "החפץ")}</span>` : `<b>עוד אין מתכון.</b>`}${r.any ? `<small>הסדר לא משנה</small>` : ""}</div>`;
+  if (!ro){
+    const mine = S.world.items.filter(x => x !== it && ID_RX.test(x.id || ""));
+    h += `<div class="st-row"><span>כמה יוצאים</span><div class="chs">${[1,2,4,8].map(n => `<button data-rcn="${n}" class="${r.n === n ? "on" : ""}">${n}</button>`).join("")}</div>
+        <label class="rc-any"><input type="checkbox" id="rc-any" ${r.any ? "checked" : ""}> הסדר לא משנה</label><button class="btn ghost" id="rc-clear">לנקות את המתכון</button></div>
+      <ul class="st-lint rc-lint">${recipeLint(it).map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      <div class="rc-pal"><div class="rc-tools"><button class="rc-ing${S.ing === "" ? " on" : ""}" data-ing="" title="מחק"><span class="rc-pic rc-erase">✕</span><small>מחק</small></button></div>
+        ${ING.map(([t, list]) => `<div class="rc-grp"><b>${t}</b><div>${list.map(([id, name]) => `<button class="rc-ing${S.ing === "minecraft:" + id ? " on" : ""}" data-ing="minecraft:${id}" title="${esc(name)}">${ingPic("minecraft:" + id)}<small>${esc(name)}</small></button>`).join("")}</div></div>`).join("")}
+        ${mine.length ? `<div class="rc-grp"><b>החפצים שלכם</b><div>${mine.map(x => `<button class="rc-ing${S.ing === "myworld:" + x.id ? " on" : ""}" data-ing="myworld:${x.id}" title="${esc(x.name || x.id)}">${ingPic("myworld:" + x.id)}<small>${esc(x.name || "בלי שם")}</small></button>`).join("")}</div></div>` : ""}</div>`;
+  }
+  return h + `</div>`;
+}
+function bindRecipe(app, it){
+  const box = app.querySelector(".rc:not(.ro)"); if (!box) return;
+  const redo = () => { const r = it.recipe; if (r && !r.g.some(Boolean) && r.n === 1 && !r.any) delete it.recipe; save(); box.outerHTML = recipeHTML(it); paintThumbs(app); bindRecipe(app, it); };
+  const rec = () => { if (!it.recipe) it.recipe = emptyRecipe(); return it.recipe; };
+  box.querySelectorAll("[data-ing]").forEach(b => b.addEventListener("click", () => { S.ing = b.dataset.ing; box.querySelectorAll("[data-ing]").forEach(x => x.classList.toggle("on", x === b)); }));
+  box.querySelectorAll("[data-slot]").forEach(b => {
+    b.addEventListener("click", () => { const r = rec(), i = +b.dataset.slot; r.g[i] = (S.ing === undefined || S.ing === r.g[i]) ? "" : S.ing; redo(); });
+    b.addEventListener("contextmenu", e => { e.preventDefault(); if (!it.recipe) return; it.recipe.g[+b.dataset.slot] = ""; redo(); });
+  });
+  box.querySelectorAll("[data-rcn]").forEach(b => b.addEventListener("click", () => { rec().n = +b.dataset.rcn; redo(); }));
+  const any = box.querySelector("#rc-any"); if (any) any.addEventListener("change", () => { rec().any = any.checked; redo(); });
+  const cl = box.querySelector("#rc-clear"); if (cl) cl.addEventListener("click", () => { delete it.recipe; redo(); });
+}
+
 /* ---------- the page ---------- */
-/* One item at a time, in three tabs: how it looks, what it does, and Gemini. */
-const PANES = [["look","הציור והשם"],["power","מה הוא עושה?"],["gem","ג׳מיני"]];
+/* One item at a time, in tabs: how it looks, what it does, how it's made, and Gemini. */
+const PANES = [["look","הציור והשם"],["power","מה הוא עושה?"],["craft","איך מכינים אותו?"],["gem","ג׳מיני"]];
 function render(app){
   host = null;
   if (window.STUDIO_BLOCKS) window.STUDIO_BLOCKS.unmount();
@@ -90,7 +159,7 @@ function render(app){
 }
 function editor(it){
   return `<nav class="st-panes">${PANES.map(([k, t]) => `<button data-pane="${k}" class="${S.pane === k ? "on" : ""}">${t}</button>`).join("")}</nav>
-  <div class="st-pane">${S.pane === "power" ? powerPane(it) : S.pane === "gem" ? gemPane(it) : lookPane(it)}</div>
+  <div class="st-pane">${S.pane === "power" ? powerPane(it) : S.pane === "gem" ? gemPane(it) : S.pane === "craft" ? recipeHTML(it) : lookPane(it)}</div>
   <div class="st-foot"><div class="st-check" id="st-check">${checkHTML(it)}</div>
     <button class="btn go" id="st-play">לנסות במשחק</button><button class="btn ghost st-del" id="st-del">למחוק</button>
     <div class="st-status" id="st-status" role="status"></div></div>`;
@@ -131,8 +200,12 @@ async function ensureReady(exId){
   let i = items.findIndex(t => t.id === x.id);
   if (i < 0){
     const it = { id: x.id, name: (E ? x.en : x.he)[0], lore: x.lore ? x.lore[E ? 1 : 0] : "", stack: 1, rarity: x.rarity || "common", px: picOf(x.pic) };
+    if (x.recipe) it.recipe = JSON.parse(JSON.stringify(x.recipe));
     B.loadInto(it, x.prog); items.push(it); i = items.length - 1;
     savePicture(it); clearTimeout(saveT); await doSave();
+  } else if (x.recipe && !items[i].recipe){
+    // Made before it had a recipe (lessons 1-2): it gets the ready recipe the first time a lesson shows it.
+    items[i].recipe = JSON.parse(JSON.stringify(x.recipe)); clearTimeout(saveT); await doSave();
   }
   return i;
 }
@@ -166,6 +239,8 @@ function partHTML(p, it){
   if (p === "paint") return `<div class="st-grid">${paintHTML()}<div class="st-fields">${previewHTML(it)}<small class="st-hint">לחיצה ימנית מוחקת. קו מתאר כהה, ושניים עד ארבעה צבעים.</small></div></div>`;
   if (p === "card") return cardHTML(it);
   if (p === "power") return powerPane(it, host && host.opts.ready);
+  if (p === "recipe") return recipeHTML(it);
+  if (p === "recipeview") return recipeHTML(it, true);
   if (p === "check") return `<div class="st-check" id="st-check">${checkHTML(it)}</div>`;
   return "";
 }
@@ -177,7 +252,7 @@ async function mountPart(el, opts){
   if (i >= 0){ if (S.sel !== i) S.undo = []; S.sel = i; }
   host = { el, opts };
   const it = S.world.items[S.sel];
-  const edits = opts.parts.some(p => p === "fields" || p === "paint" || p === "power" || p === "world");
+  const edits = opts.parts.some(p => p === "fields" || p === "paint" || p === "power" || p === "world" || p === "recipe");
   el.innerHTML = `<div class="studio st-embed">${opts.parts.map(p => partHTML(p, it)).join("")}${edits ? `<div class="st-status" id="st-status" role="status"></div>` : ""}</div>`;
   bind(el); paintThumbs(el); paintStatus();
   if (it) paintPreview(el, it);
@@ -310,6 +385,7 @@ function bind(app){
     const box = app.querySelector("#st-sugg"); box.innerHTML = suggestion(); bindSuggestion(app);
   });
   bindSuggestion(app);
+  bindRecipe(app, it);
 }
 function paintPreview(app, it){
   const n = app.querySelector("#pv-n"), l = app.querySelector("#pv-l"), c = app.querySelector("#pv-c");
@@ -382,7 +458,7 @@ function blockList(){
   return B.DEFS.map(d => "- [" + cat[d[4]] + "] " + d[1].replace(/%\d/g, "___")).join("\n");
 }
 function geminiText(it){
-  const w = { world: S.world.world, items: S.world.items.map(x => ({ id:x.id, name:x.name, lore:x.lore, stack:x.stack, rarity:x.rarity, job:x.job, price:x.price, where:x.where, power: x.power ? x.power.on : "none yet", picture: (x.px || []).some(Boolean) ? "drawn" : "none yet" })) };
+  const w = { world: S.world.world, items: S.world.items.map(x => ({ id:x.id, name:x.name, lore:x.lore, stack:x.stack, rarity:x.rarity, job:x.job, price:x.price, where:x.where, power: x.power ? x.power.on : "none yet", recipe: x.recipe ? needList(x.recipe).map(([n, c]) => n + " x " + ingName(c)).join(", ") + " -> " + x.recipe.n : "none yet", picture: (x.px || []).some(Boolean) ? "drawn" : "none yet" })) };
   return RULES.replace("@@BLOCKS@@", blockList()) + "\n\n===== העולם שלי =====\n" + JSON.stringify(w, null, 1) + "\n\n===== החפץ שאני עובד עליו =====\n" + (it.id || it.name || "") + "\n\n===== מה אני רוצה =====\n";
 }
 const FIELDS = { id:"קוד", name:"שם", lore:"משפט", stack:"בערימה", rarity:"נדירות", job:"בשביל מה", price:"מחיר", where:"איפה משיגים" };
@@ -553,6 +629,37 @@ const CSS = `
 .st-embed .st-status.bad{color:var(--red);font-size:1rem}
 @media (max-width:900px){.studio .st-cardv{grid-template-columns:1fr}}
 .st-loading{color:var(--muted)}
+/* the Crafting Table */
+.studio .rc{display:grid;gap:14px;justify-items:start}
+.studio .rc-table{direction:ltr;display:flex;align-items:center;gap:18px;background:#C6C6C6;border:3px solid;border-color:#fff #555 #555 #fff;border-radius:4px;padding:14px 18px}
+.studio .rc-grid{display:grid;grid-template-columns:repeat(3,58px);gap:4px}
+.studio .rc-slot{width:58px;height:58px;box-sizing:border-box;background:#8B8B8B;border:3px solid;border-color:#373737 #fff #fff #373737;padding:6px;display:grid;place-items:center;position:relative;font:inherit;cursor:pointer}
+.studio .rc-slot:not([disabled]):hover{background:#a3a3a3}
+.studio .rc-slot[disabled]{cursor:default;color:inherit}
+.studio .rc-res{width:72px;height:72px;padding:8px;cursor:default}
+.studio .rc-res b{position:absolute;bottom:2px;right:5px;color:#fff;font-family:var(--display);font-weight:400;font-size:1.1rem;text-shadow:2px 2px 0 #3f3f3f}
+.studio .rc-res .st-th{width:100%!important;height:100%!important;border:0;background:transparent}
+.studio .rc-arrow{font-size:2rem;color:#8B8B8B}
+.studio .rc-pic{display:grid;place-items:center;width:100%;height:100%}
+.studio .rc-pic img{width:100%;height:100%;image-rendering:pixelated}
+.studio .rc-pic em{font-style:normal;font-size:.7rem;font-weight:800;color:#222;direction:ltr}
+.studio .rc-pic .st-th{width:100%!important;height:100%!important;border:0;background:transparent}
+.studio .rc-need{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:baseline;font-weight:700}
+.studio .rc-need span{unicode-bidi:plaintext}
+.studio .rc-need .rc-gets{color:var(--grass)}
+.studio .rc-need small{color:var(--muted)}
+.studio .rc-any{display:flex;gap:6px;align-items:center;font-weight:700}
+.studio .rc-pal{display:grid;gap:10px;width:100%}
+.studio .rc-grp{display:grid;gap:4px}
+.studio .rc-grp > b{font-size:.95rem;color:var(--muted)}
+.studio .rc-grp > div,.studio .rc-tools{display:flex;flex-wrap:wrap;gap:6px}
+.studio .rc-ing{display:grid;justify-items:center;gap:2px;width:76px;padding:5px 3px;font:inherit;border:2px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer}
+.studio .rc-ing:hover{border-color:var(--grass)}
+.studio .rc-ing.on{border-color:var(--grass);background:var(--grass-soft);outline:2px solid var(--grass)}
+.studio .rc-ing .rc-pic{width:32px;height:32px}
+.studio .rc-ing small{font-size:.72rem;line-height:1.15;text-align:center;unicode-bidi:plaintext;overflow:hidden;max-width:100%}
+.studio .rc-erase{font-size:1.4rem;color:var(--red)}
+.studio .rc-lint:empty{display:none}
 @media (max-width:900px){.studio .st-main,.studio .st-grid,.studio .st-gcards,.st-embed .st-grid-f{grid-template-columns:1fr}}
 `;
 window.STUDIO = { render, CSS, addReady, mount: mountPart, flush, check: () => S.world ? S.world.items.map(it => ({ name: it.name, id: it.id, hard: check(it).hard })) : [], item: tag => S.world && S.world.items.find(t => t.tag === tag || t.id === tag), reset: () => { S.loaded = false; S.sel = -1; S.sugg = null; S.pane = ""; } };

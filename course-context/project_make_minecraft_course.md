@@ -261,3 +261,20 @@ State of the system at this point (all pushed on `claude/make-courses`):
   Mobs' walk fixed (opposite limbs half a step apart).
 - Not built yet: lessons 3–4. Proposal waiting for Ben: L3 "מתי הוא עובד?" (אם: night/chance/Shift; ready item
   night charm), L4 "המחיר" (ready item: a sword with no price; kids give it one). Creature modeller still pending.
+
+**25 Oct: lesson 3 = crafting (built; Ben's answer L151 via Ephemeris, 24 Oct: "crafting, a kid asked for it: how you
+create an item and what you need for it"). L152 (lesson 4 "the price") and L153 (creature modeller) were closed as stale.**
+- Studio: a new tab "איך מכינים אותו?" and a lesson piece (`STUDIO.mount(el, {tag|ready, parts:["recipe"|"recipeview"]})`):
+  a Crafting Table 3x3 grid, 40 vanilla ingredients in 4 groups plus the kid's own items, "how many come out" (1/2/4/8),
+  "order doesn't matter" (shapeless), a "what you need" line, and checks (no recipe, item in its own recipe, two items
+  with the same recipe). Stored as `it.recipe = {g: 9 slots, n, any}` in design/world.json.
+- `tools/common.ps1` Invoke-Prepare writes `data/myworld/recipe/studio_<id>.json` (shaped, trimmed like Minecraft's, or
+  shapeless) before every Play; a broken recipe is skipped and never breaks the build. No Java change.
+- The lightning stick has a ready recipe (copper ingots and sticks; added the first time lesson 3 shows it).
+- Lesson 3 (6 steps, Hebrew + English): today / three real recipes (Torch, Diamond Sword, Golden Apple) / craft the
+  lightning stick / your item's recipe / craft it in the game / save, and show a neighbour only the recipe. Two Sonnet
+  Hebrew audits applied.
+- update-hub.ps1 copies 33 more textures (ingredients, Torch). STARTER_VER 10.
+- Tested on Ben's PC (test copy D:/code/make-test): the recipe tab saves, the recipe files are right, and Minecraft
+  26.2 loaded a world with 1589 recipes and no recipe errors. Crafting by hand inside the game was NOT tested.
+- To reach the kids: Ben runs C:/MAKE/update.bat, then make-usb, then update-from-usb.bat on each laptop.

@@ -292,3 +292,8 @@ create an item and what you need for it"). L152 (lesson 4 "the price") and L153 
   picture in a recipe grid shows the item's name instead of an empty square (kids' page and slides). `update-hub.ps1`
   re-runs itself once when it has just downloaded a newer version of itself, so one double-click gets a new lesson's pictures.
 - Why the grids were empty on Ben's work PC: its first update ran the old updater, which didn't know the new pictures.
+- Same evening, from Ben trying it on his work PC: the recipe step showed a recipe for a blank item (no lesson 2 item
+  there), and he wanted to pick what comes out. Now: an item with no name or picture gets its name and drawing pieces
+  first in the recipe step (plus a "restore from Drive" line); the result square shows the item's name when it has no
+  picture, under "מה יוצא"; a row "המתכון של:" picks which of the kid's items the recipe is for (or drop one of your
+  items on the result square), and step 5 follows that pick. Two Sonnet audits on the new lines.

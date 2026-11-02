@@ -103,8 +103,9 @@ function recipeLint(it){
 function recipeHTML(it, ro){
   const r = it.recipe || emptyRecipe(), need = needList(r);
   const grid = r.g.map((c, i) => `<button class="rc-slot${c ? " full" : ""}" ${ro ? "disabled" : `data-slot="${i}"`} aria-label="${c ? esc(ingName(c)) : "משבצת ריקה"}">${c ? ingPic(c) : ""}</button>`).join("");
-  const out = `<div class="rc-slot rc-res">${(it.px || []).some(Boolean) ? thumb(it, 40) : ""}${r.n > 1 ? `<b>${r.n}</b>` : ""}</div>`;
-  let h = `<div class="rc${ro ? " ro" : ""}"><div class="rc-table"><div class="rc-grid">${grid}</div><span class="rc-arrow" aria-hidden="true">➜</span>${out}</div>
+  const out = `<div class="rc-outw"><small>מה יוצא</small><div class="rc-slot rc-res">${(it.px || []).some(Boolean) ? thumb(it, 40) : `<span class="rc-onm">${esc(it.name || "?")}</span>`}${r.n > 1 ? `<b>${r.n}</b>` : ""}</div></div>`;
+  const whoRow = ro ? "" : `<div class="rc-who"><span>המתכון של:</span>${S.world.items.filter(x => ID_RX.test(x.id || "")).map(x => `<button data-rcw="${esc(x.id)}" class="${x === it ? "on" : ""}">${thumb(x, 20)}<span>${esc(x.name || "בלי שם")}</span></button>`).join("")}</div>`;
+  let h = `<div class="rc${ro ? " ro" : ""}">${whoRow}<div class="rc-table"><div class="rc-grid">${grid}</div><span class="rc-arrow" aria-hidden="true">➜</span>${out}</div>
     <div class="rc-need">${need.length ? `<b>מה צריך:</b> ${need.map(([n, c]) => `<span>${n} × ${esc(ingName(c))}</span>`).join("")}<span class="rc-gets">יוצאים: ${r.n} × ${esc(it.name || "החפץ")}</span>` : `<b>עוד אין מתכון.</b>`}${r.any ? `<small>הסדר לא משנה</small>` : ""}</div>`;
   if (!ro){
     const mine = S.world.items.filter(x => x !== it && ID_RX.test(x.id || ""));
@@ -127,8 +128,20 @@ function bindRecipe(app, it){
     b.addEventListener("contextmenu", e => { e.preventDefault(); if (!it.recipe) return; it.recipe.g[+b.dataset.slot] = ""; redo(); });
   });
   box.querySelectorAll("[data-rcn]").forEach(b => b.addEventListener("click", () => { rec().n = +b.dataset.rcn; redo(); }));
+  // Pick what comes out: a chip in "המתכון של", or one of the kid's items dropped on the result slot.
+  box.querySelectorAll("[data-rcw]").forEach(b => b.addEventListener("click", () => recipeFor(app, b.dataset.rcw)));
+  const res = box.querySelector(".rc-res");
+  if (res) res.addEventListener("click", () => { if (S.ing && S.ing.startsWith("myworld:")){ const id = S.ing.slice(8); S.ing = undefined; recipeFor(app, id); } });
   const any = box.querySelector("#rc-any"); if (any) any.addEventListener("change", () => { rec().any = any.checked; redo(); });
   const cl = box.querySelector("#rc-clear"); if (cl) cl.addEventListener("click", () => { delete it.recipe; redo(); });
+}
+
+// Show the recipe of another of the kid's items, here and in the next lesson step.
+function recipeFor(app, id){
+  const j = S.world.items.findIndex(x => x.id === id); if (j < 0) return;
+  S.sel = j; S.rcSel = id; S.undo = [];
+  if (host && document.body.contains(host.el)){ host.opts = { tag: host.opts.tag, ready: host.opts.ready, parts: host.opts.origParts || host.opts.parts }; mountPart(host.el, host.opts); }
+  else render(app);
 }
 
 /* ---------- the page ---------- */
@@ -242,6 +255,7 @@ function partHTML(p, it){
   if (p === "recipe") return recipeHTML(it);
   if (p === "recipeview") return recipeHTML(it, true);
   if (p === "check") return `<div class="st-check" id="st-check">${checkHTML(it)}</div>`;
+  if (p === "first") return `<p class="st-first"><b>לחפץ שלכם עוד אין שם או ציור.</b><span>קודם נותנים לו שם ומציירים אותו. אחר כך בונים לו מתכון.</span><span>עבדתם בשבוע שעבר על מחשב אחר? תפריט ← ״דרייב״, ומביאים משם את העולם שלכם.</span></p>`;
   return "";
 }
 async function mountPart(el, opts){
@@ -249,9 +263,15 @@ async function mountPart(el, opts){
   if (!S.loaded){ el.innerHTML = `<p class="st-loading">טוען...</p>`; await load(); }
   let i = -1;
   if (opts.ready) i = await ensureReady(opts.ready); else if (opts.tag) i = ensureTagged(opts.tag);
+  // A lesson's recipe steps follow the item the kid picked in "המתכון של".
+  if (opts.parts.some(p => p === "recipe" || p === "recipeview") && S.rcSel){ const j = S.world.items.findIndex(x => x.id === S.rcSel); if (j >= 0) i = j; }
   if (i >= 0){ if (S.sel !== i) S.undo = []; S.sel = i; }
-  host = { el, opts };
   const it = S.world.items[S.sel];
+  // A recipe for an item with no name or picture is a recipe for nothing: this step shows its name and drawing first.
+  // Decided once per step, so the pieces don't vanish while the kid is still drawing.
+  if (it && !opts.first && opts.parts.includes("recipe") && (!(it.name || "").trim() || !(it.px || []).some(Boolean)))
+    opts = Object.assign({}, opts, { first: true, origParts: opts.parts, parts: ["first", "fields", "paint"].concat(opts.parts) });
+  host = { el, opts };
   const edits = opts.parts.some(p => p === "fields" || p === "paint" || p === "power" || p === "world" || p === "recipe");
   el.innerHTML = `<div class="studio st-embed">${opts.parts.map(p => partHTML(p, it)).join("")}${edits ? `<div class="st-status" id="st-status" role="status"></div>` : ""}</div>`;
   bind(el); paintThumbs(el); paintStatus();
@@ -637,6 +657,16 @@ const CSS = `
 .studio .rc-slot:not([disabled]):hover{background:#a3a3a3}
 .studio .rc-slot[disabled]{cursor:default;color:inherit}
 .studio .rc-res{width:72px;height:72px;padding:8px;cursor:default}
+.studio .rc-outw{display:grid;justify-items:center;gap:3px}
+.studio .rc-res{cursor:pointer}
+.studio .rc-who{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.studio .rc-who>span{font-weight:700}
+.studio .rc-who button{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border:2px solid var(--line);border-radius:999px;background:var(--surface);color:inherit;font:inherit;cursor:pointer}
+.studio .rc-who button.on{border-color:var(--grass);background:var(--grass-soft,#1f3a1c);font-weight:700}
+.studio .rc-who .st-th{width:20px!important;height:20px!important}
+.studio .rc-outw>small{font-weight:700;color:#3f3f3f;font-size:.8rem}
+.studio .rc-onm{display:grid;place-items:center;height:100%;font-size:.75rem;font-weight:700;color:#1d1d1d;text-align:center;line-height:1.1;word-break:break-word}
+.st-first{display:grid;gap:4px;margin:0;padding:12px 14px;border-radius:8px;background:var(--gold-soft,#3a3214);border:2px solid var(--gold,#F2C200)}
 .studio .rc-res b{position:absolute;bottom:2px;right:5px;color:#fff;font-family:var(--display);font-weight:400;font-size:1.1rem;text-shadow:2px 2px 0 #3f3f3f}
 .studio .rc-res .st-th{width:100%!important;height:100%!important;border:0;background:transparent}
 .studio .rc-arrow{font-size:2rem;color:#8B8B8B}

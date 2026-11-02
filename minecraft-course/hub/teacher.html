@@ -15,11 +15,18 @@ const app = document.getElementById("app");
 
 /* ===== TEACHER AREA ===== */
 // The next lesson to teach. Change NEXT when a lesson is done.
-const NEXT = 2;
+const NEXT = 3;
 const PLAN = {
   1: [["0–15","מתקינים מהדיסק",""],["15–20","מה נעשה בקורס",""],["20–32","Diagon Alley, ומה למדנו",""],["32–65","מה עולם צריך?",""],["65–80","דף 1",""],["80–90","מיינקראפט נפתח",""]],
   2: [["0–5","מיינקראפט בתלת־ממד","קוביות שנשברות, יצורים, יום ולילה, השער"],["5–22","עולמות","בונים יחד את העולם של הכיתה"],["22–40","חפצים","Mojang, תפקיד, מחיר, נדירות, והחפץ של הכיתה"],
-      ["40–52","דף 2","כרטיס וציור 16 על 16, עם שעון"],["52–60","הדגמה","החפץ של הכיתה, מהדף למשחק"],["60–85","הם בונים","מקל ברקים, ואז החפץ שלהם בסטודיו"],["85–90","דרייב, ו״מה הוא עושה?״",""]]
+      ["40–52","דף 2","כרטיס וציור 16 על 16, עם שעון"],["52–60","הדגמה","החפץ של הכיתה, מהדף למשחק"],["60–85","הם בונים","מקל ברקים, ואז החפץ שלהם בסטודיו"],["85–90","דרייב, ו״מה הוא עושה?״",""]],
+  3: [["0–4","פתיחה","ה־Crafting Table"],["4–16","מתכונים","מה יוצא, הצורה, זול ויקר, הסדר"],["16–27","המתכון של הכיתה","בונים יחד, ומתקנים את ״חרב הכול״"],
+      ["27–35","הדגמה","מקל הברקים, מהדף ל־Crafting Table"],["35–75","הם בונים","מתכון לחפץ שלהם, ומכינים אותו במשחק"],["75–90","רק מהמתכון, ודרייב",""]]
+};
+// What to check before each lesson, besides the hub, the pictures, YouTube and the projector.
+const CHECK = {
+  2: [["דף 2 מודפס, אחד לכל ילד, וטושים",'<a href="print.html" target="_blank">דפים להדפסה</a>'],["הסטודיו עובד אצלך: חפץ ניסיון נכנס למשחק","להדגמה בדקה 52. אם המשחק לא נפתח: ״לסגור את מיינקראפט״ ואז שוב ״שחק״."]],
+  3: [["המחשבים של הילדים עודכנו מהדיסק","מריצים את update-from-usb.bat מהדיסק על כל מחשב. בלי זה אין להם את שיעור 3."],["מקל הברקים יוצא אצלך מה־Crafting Table","להדגמה בדקה 27: שיעור 3, שלב 3. אם הוא לא יוצא: ״לסגור את מיינקראפט״, ושוב ״לפתוח את מיינקראפט״."]]
 };
 const PART_COL = ["#3B8735","#2B6A99","#C98A0C","#8932B8","#B23A27","#169C9C","#56645A"];
 function deckPictures(n){ const set = new Set(); (H.DECKS[n] || []).forEach(s => (s.html.match(/mc_[a-z0-9_]+\.png/g) || []).forEach(x => set.add(x))); return [...set]; }
@@ -40,8 +47,7 @@ function renderTeacher(){
       <div class="ck" id="ck-pics"><i></i><div><b>התמונות של מיינקראפט</b><small>בודקים…</small></div></div>
       <div class="ck" id="ck-yt"><i></i><div><b>יוטיוב פתוח ברשת של בית הספר</b><small>בודקים…</small></div></div>
       <div class="ck man"><i></i><div><b>המקרן</b><small><kbd>Win</kbd> + <kbd>P</kbd> ← <b>Extend</b>: ההערות אצלך, השקופית על המקרן (״פתיחת חלון למקרן״). אם המקרן רק משכפל את המסך: ״מסך מלא כאן״ (או <kbd>F</kbd>), ואז הכיתה רואה רק את השקופית, ואת ההערות לא.</small></div></div>
-      <div class="ck man"><i></i><div><b>דף 2 מודפס, אחד לכל ילד, וטושים</b><small><a href="print.html" target="_blank">דפים להדפסה</a></small></div></div>
-      <div class="ck man"><i></i><div><b>הסטודיו עובד אצלך: חפץ ניסיון נכנס למשחק</b><small>להדגמה בדקה 52. אם המשחק לא נפתח: ״לסגור את מיינקראפט״ ואז שוב ״שחק״.</small></div></div>
+      ${(CHECK[NEXT] || []).map(([b, s]) => `<div class="ck man"><i></i><div><b>${b}</b><small>${s}</small></div></div>`).join("")}
     </div></section>
 
     <section class="tsec"><h2>כל השיעורים</h2><div class="lessons">
@@ -50,7 +56,7 @@ function renderTeacher(){
 
     <section class="tsec"><h2>לוח הכיתה</h2>
       <p>מה שהכיתה כתבה בשקופיות: העולם של הכיתה והחפץ של הכיתה. נשמר במחשב הזה, ומופיע בכל שקופית שמשתמשת בו.</p>
-      <div class="bview">${[["idea","העולם"],["like","כמו"],["except","חוץ מזה ש"],["rule","החוק"],["conseq","ולכן"],["mystery","התעלומה"],["iname","החפץ"],["ilore","המשפט"],["iprice","המחיר"]].map(([k, t]) => `<div><small>${t}</small><span>${esc(board[k] || "—")}</span></div>`).join("")}</div>
+      <div class="bview">${[["idea","העולם"],["like","כמו"],["except","חוץ מזה ש"],["rule","החוק"],["conseq","ולכן"],["mystery","התעלומה"],["iname","החפץ"],["ilore","המשפט"],["iprice","המחיר"],["rwhy","המתכון: למה החומרים"],["rfix","המתכון החדש של החרב"]].map(([k, t]) => `<div><small>${t}</small><span>${esc(board[k] || "—")}</span></div>`).join("")}</div>
       <div><button class="btn ghost" id="bclear">לנקות את הלוח (לכיתה חדשה)</button></div>
     </section>
 
@@ -202,7 +208,7 @@ function resetSlide(){
 /* Full screen on the laptop itself: when the projector only mirrors the laptop's screen, this is what the class sees.
    Everything on the slide is clickable here. Arrows change slides, Esc goes back to the notes. */
 function openFs(){
-  fs = document.createElement("div"); fs.className = "fsv";
+  fs = document.createElement("div"); fs.className = "fsv"; fs.dir = "rtl"; fs.lang = "he";
   document.body.appendChild(fs); renderFs();
   try { fs.requestFullscreen().catch(() => {}); } catch(e){}
 }

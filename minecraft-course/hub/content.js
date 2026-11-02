@@ -391,6 +391,9 @@ a.dbtn{text-decoration:none}
 .craft .co b{position:absolute;bottom:0;right:4px;color:#fff;font-family:var(--display);font-weight:400;text-shadow:2px 2px 0 #3f3f3f}
 .craft .ca{font-size:1.6rem;color:#8B8B8B}
 .craft .mc.nomc img{visibility:hidden}
+.craft .mc .nm{display:none}
+.craft .mc.nomc{height:100%}
+.craft .mc.nomc .nm{position:absolute;inset:0;display:grid;place-items:center;font-size:.6rem;line-height:1.05;font-weight:700;color:#1d1d1d;text-align:center;word-break:break-word}
 .its figure{margin:0;display:grid;gap:6px;justify-items:center;width:clamp(76px,10cqw,128px);align-content:start}
 .mc{display:block;position:relative}
 .mc img{display:block;width:100%;height:auto;image-rendering:pixelated}
@@ -1049,7 +1052,8 @@ const L2 = {
 /* ===== lesson 3: how the item is made (crafting). A kid asked for it; Ben, 24 Oct: "how you create an item and what
    you need for it". The recipe lives in the studio (it.recipe); tools/common.ps1 makes the game's recipe file. ===== */
 /* A Minecraft recipe as in the game: 9 slots (picture names, "" = empty), the arrow, and what comes out. */
-const craftPic = (g, out, n) => `<div class="craft" dir="ltr"><div class="cg">${g.map(t => `<span class="cs">${t ? mcPic(t, "", "") : ""}</span>`).join("")}</div><span class="ca">➜</span><span class="cs co">${mcPic(out, "", "")}${n > 1 ? `<b>${n}</b>` : ""}</span></div>`;
+const mcName = t => t.replace(/^(item|block)_/, "").split("_").map(w => w[0].toUpperCase() + w.slice(1)).join(" ");
+const craftPic = (g, out, n) => `<div class="craft" dir="ltr"><div class="cg">${g.map(t => `<span class="cs">${t ? mcPic(t, `<small class="nm">${mcName(t)}</small>`, "") : ""}</span>`).join("")}</div><span class="ca">➜</span><span class="cs co">${mcPic(out, `<small class="nm">${mcName(out)}</small>`, "")}${n > 1 ? `<b>${n}</b>` : ""}</span></div>`;
 const RECIPES3 = lang => { const E = lang === "en";
   return `<div class="crafts">
   <figure>${craftPic(["","item_coal","","","item_stick","","","",""], "block_torch", 4)}<figcaption><b>Torch</b>${E ? "Cheap: one recipe makes 4." : "זול: מתכון אחד נותן 4."}</figcaption></figure>

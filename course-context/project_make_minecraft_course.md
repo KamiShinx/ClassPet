@@ -278,3 +278,17 @@ create an item and what you need for it"). L152 (lesson 4 "the price") and L153 
 - Tested on Ben's PC (test copy D:/code/make-test): the recipe tab saves, the recipe files are right, and Minecraft
   26.2 loaded a world with 1589 recipes and no recipe errors. Crafting by hand inside the game was NOT tested.
 - To reach the kids: Ben runs C:/MAKE/update.bat, then make-usb, then update-from-usb.bat on each laptop.
+
+**2 Nov: lesson 3 tested end to end, and the teacher side built (class on 3 Nov).**
+- Full test on Ben's PC (test copy): the real updater, lesson 3 in Hebrew and English, a studio recipe edit, Play, and
+  crafting in Minecraft. Crafters (same matching as the Crafting Table) made all four studio recipes, a shifted grid still
+  crafts, a wrong shape doesn't, and counts are right.
+- Teacher deck for lesson 3 (`slides.js`, DECK3, 12 slides): the Crafting Table, "what comes out?" (bread, bow, pickaxe,
+  compass), shape, cheap vs. expensive (vote), when order doesn't matter, the class recipe built together on the class
+  board (`board.rcp`, `board.rn`, `board.rwhy`), "fix the recipe" for the over-powered sword, demo, work time, troubleshooting,
+  and "only from the recipe". `teacher.html`: NEXT = 3, a 90-minute plan, and per-lesson checks (`CHECK`). Two Sonnet
+  Hebrew audits applied. All 12 slides fit at 1366x768.
+- Fixes: the full-screen view (F) is now right-to-left (it was left-to-right for every lesson). A missing Minecraft
+  picture in a recipe grid shows the item's name instead of an empty square (kids' page and slides). `update-hub.ps1`
+  re-runs itself once when it has just downloaded a newer version of itself, so one double-click gets a new lesson's pictures.
+- Why the grids were empty on Ben's work PC: its first update ran the old updater, which didn't know the new pictures.

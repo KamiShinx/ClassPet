@@ -216,6 +216,16 @@ function applyBoard(root, board){
     el.querySelector(".ci-l").textContent = board.ilore || "";
     drawPx(el.querySelector("canvas"), board.px);
   });
+  root.querySelectorAll('[data-c="rcp"]').forEach(el => { const g = board.rcp || [];
+    el.querySelectorAll(".cg .cs[data-s]").forEach(s => { const t = g[+s.dataset.s] || "";
+      if (s.dataset.t !== t){ s.dataset.t = t; s.classList.remove("nomc"); if (t) s.setAttribute("data-mcw", ""); else s.removeAttribute("data-mcw"); s.innerHTML = t ? `${img(t)}<small class="nm">${nm(t)}</small>` : ""; } });
+    el.querySelectorAll(".pi").forEach(p => p.classList.toggle("on", rbrush(board) === p.dataset.t));
+    const n = board.rn || "1"; el.querySelector(".rn").textContent = +n > 1 ? n : "";
+    drawPx(el.querySelector(".co canvas"), board.px);
+    const cnt = {}; g.forEach(t => { if (t) cnt[t] = (cnt[t] || 0) + 1; });
+    const ks = Object.keys(cnt);
+    el.querySelector(".need").innerHTML = ks.length ? "מה צריך: " + ks.map(t => `<span dir="ltr">${cnt[t]} × ${nm(t)}</span>`).join("") : "בוחרים חומר, ולוחצים על משבצת.";
+  });
   root.querySelectorAll("canvas.pxc").forEach(c => drawPx(c, board.px));
 }
 function drawPx(cv, px){
@@ -289,6 +299,14 @@ function bind(root, ctx, board, changed){
     g.addEventListener("pointermove", e => { if (down) paintAt(e); });
     g.addEventListener("pointerup", () => { down = false; });
     g.addEventListener("contextmenu", e => e.preventDefault());
+  });
+  root.querySelectorAll('[data-c="rcp"]').forEach(el => {
+    el.querySelectorAll(".pi").forEach(p => p.addEventListener("click", () => { board.rbrush = p.dataset.t; changed("board"); }));
+    el.querySelectorAll(".cg .cs[data-s]").forEach(s => {
+      const set = t => { const g = (board.rcp || Array(9).fill("")).slice(); g[+s.dataset.s] = t; board.rcp = g; changed("board"); };
+      s.addEventListener("click", () => { const t = rbrush(board), cur = (board.rcp || [])[+s.dataset.s] || ""; set(cur === t ? "" : t); });
+      s.addEventListener("contextmenu", e => { e.preventDefault(); set(""); });
+    });
   });
 }
 // Where an auto-spinning block is right now, so grabbing it doesn't make it jump.
@@ -554,6 +572,36 @@ body.aud .dyes{visibility:hidden}
 .fsv{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;grid-template-rows:1fr auto}
 .fsv .stage{min-height:0;overflow:auto}
 .fsv .fsbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 14px;background:var(--surface);border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+/* lesson 3: the Crafting Table grid, and the class recipe */
+.cr{display:inline-flex;align-items:center;gap:clamp(6px,1.2cqw,14px);background:#C6C6C6;border:3px solid;border-color:#fff #555 #555 #fff;border-radius:4px;padding:clamp(6px,1.2cqw,14px);--c:clamp(34px,5.4cqw,64px)}
+.cr .cg{display:grid;grid-template-columns:repeat(3,var(--c));gap:3px}
+.cr .cs{width:var(--c);height:var(--c);box-sizing:border-box;background:#8B8B8B;border:3px solid;border-color:#373737 #fff #fff #373737;padding:clamp(3px,.6cqw,7px);position:relative;display:grid;place-items:center;font:inherit;color:inherit}
+.cr .cs img{width:100%;height:100%;image-rendering:pixelated;display:block}
+.cr .co{width:calc(var(--c)*1.25);height:calc(var(--c)*1.25)}
+.cr .co b{position:absolute;bottom:0;right:4px;color:#fff;font-family:var(--display);font-weight:400;font-size:clamp(1rem,2cqw,1.6rem);text-shadow:2px 2px 0 #3f3f3f}
+.cr .co.q{font-family:var(--display);font-size:clamp(1.4rem,3cqw,2.4rem);color:#3f3f3f}
+.cr .ca{font-size:clamp(1.2rem,2.6cqw,2.2rem);color:#8B8B8B}
+.cr .nm,.rcb .nm{display:none;font-size:clamp(.55rem,.95cqw,.75rem);line-height:1.05;color:#1d1d1d;text-align:center;font-weight:700;word-break:break-word}
+.cr .nomc img,.rcb .nomc img{display:none}
+.cr .nomc .nm,.rcb .nomc .nm{display:block}
+.cr .co canvas{width:100%;height:100%;image-rendering:pixelated}
+.slide figure.crf{margin:0;display:grid;gap:8px;justify-items:center}
+.slide figure.crf.sm .cr{--c:clamp(20px,2.5cqw,36px)}
+.slide figure.crf figcaption{font-weight:700;font-size:clamp(1rem,2cqw,1.5rem);text-align:center}
+.slide figure.crf figcaption small{display:block;font-weight:400;color:var(--muted)}
+.fls.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.fl .fa .cr{--c:clamp(18px,2.5cqw,40px);padding:clamp(4px,.7cqw,9px);gap:clamp(3px,.6cqw,8px)}
+.fl .fa .cr .ca{font-size:clamp(.9rem,1.6cqw,1.4rem)}
+.fl .fb .ico{width:clamp(56px,9cqw,110px);height:auto;image-rendering:pixelated;justify-self:center}
+.rcb{display:grid;gap:clamp(8px,1.4cqw,16px);justify-items:center}
+.rcb .cs{cursor:pointer}
+.rcb .pal{display:grid;grid-template-columns:repeat(9,auto);gap:4px;justify-content:center}
+.rcb .pi{width:clamp(28px,3.6cqw,48px);aspect-ratio:1;box-sizing:border-box;background:#8B8B8B;border:3px solid;border-color:#373737 #fff #fff #373737;padding:4px;cursor:pointer;display:grid;place-items:center;font:inherit}
+.rcb .pi img{width:100%;height:100%;image-rendering:pixelated}
+.rcb .pi.on{outline:4px solid var(--gold,#F2C200);outline-offset:1px}
+.rcb .pi.er{font-size:1.4rem;color:#fff;font-weight:700}
+.rcb .need{font-weight:700;font-size:clamp(.95rem,1.8cqw,1.35rem);text-align:center}
+.rcb .need span{display:inline-block;margin:0 .35em}
 @media (prefers-reduced-motion:reduce){.cube3 .rig,.mob3 .rig{animation:none}}
 `;
 
@@ -584,6 +632,39 @@ const IT = {
 };
 const hbItems = keys => keys.map(k => IT[k]);
 const stackOf = (tex, n, cols, w) => `<div class="g" style="grid-template-columns:repeat(${cols},1fr);width:${w}">${img(tex).repeat(n)}</div>`;
+
+/* ---------- lesson 3: Crafting Table recipes ---------- */
+// The English name under a missing picture: "item_gold_ingot" -> "Gold Ingot".
+const nm = t => t.replace(/^(item|block)_/, "").replace(/_00$/, "").replace(/_front$/, "").split("_").map(w => w[0].toUpperCase() + w.slice(1)).join(" ");
+const cslot = t => t ? `<span class="cs" data-mcw>${img(t)}<small class="nm">${nm(t)}</small></span>` : `<span class="cs"></span>`;
+// One recipe: the 3x3 grid, an arrow, and what comes out ("?" hides it).
+function craft3(g, out, n){
+  const res = out === "?" ? `<span class="cs co q">?</span>`
+    : `<span class="cs co" data-mcw>${img(out)}<small class="nm">${nm(out)}</small>${n > 1 ? `<b>${n}</b>` : ""}</span>`;
+  return `<div class="cr" dir="ltr"><div class="cg">${g.map(cslot).join("")}</div><span class="ca">➜</span>${res}</div>`;
+}
+const R3 = {
+  torch:["","item_coal","","","item_stick","","","",""],
+  sword:["","item_diamond","","","item_diamond","","","item_stick",""],
+  apple:["item_gold_ingot","item_gold_ingot","item_gold_ingot","item_gold_ingot","item_apple","item_gold_ingot","item_gold_ingot","item_gold_ingot","item_gold_ingot"],
+  bread:["","","","item_wheat","item_wheat","item_wheat","","",""],
+  bow:["","item_stick","item_string","item_stick","","item_string","","item_stick","item_string"],
+  pick:["item_iron_ingot","item_iron_ingot","item_iron_ingot","","item_stick","","","item_stick",""],
+  compass:["","item_iron_ingot","","item_iron_ingot","item_redstone","item_iron_ingot","","item_iron_ingot",""],
+  tnt:["item_gunpowder","block_sand","item_gunpowder","block_sand","item_gunpowder","block_sand","item_gunpowder","block_sand","item_gunpowder"],
+  stick:["","item_copper_ingot","","item_copper_ingot","item_stick","item_copper_ingot","","item_stick",""],
+  dirt:["","","","","block_dirt","","","",""]
+};
+const guess3 = (id, g, out, name) => flip(id, craft3(g, "?"), `${img(out, "ico")}<b>${name}</b>`);
+// The class recipe: pick a material, click a slot. It lives on the class board, next to the class item.
+const RCP_PAL = ["item_stick","block_oak_planks","block_cobblestone","item_string","item_bone","item_coal","item_copper_ingot","item_iron_ingot","item_gold_ingot",
+  "item_redstone","item_diamond","item_emerald","item_slime_ball","item_glowstone_dust","item_blaze_rod","item_ender_pearl","item_nether_star"];
+// The class item's name and line, without its picture: the recipe's result slot shows the picture.
+const classTip = () => `<div class="ci" data-c="ci"><div class="tip"><b class="ci-n"></b><span class="ci-l"></span></div></div>`;
+const rbrush = board => board.rbrush === undefined ? RCP_PAL[0] : board.rbrush;
+const rcpBoard = () => `<div class="rcb" data-c="rcp"><div class="cr" dir="ltr"><div class="cg">${[0,1,2,3,4,5,6,7,8].map(i => `<button class="cs" data-s="${i}" aria-label="משבצת ${i + 1}"></button>`).join("")}</div><span class="ca">➜</span><span class="cs co"><canvas width="16" height="16"></canvas><b class="rn"></b></span></div>
+  <div class="pal">${RCP_PAL.map(t => `<button class="pi" data-t="${t}" data-mcw title="${nm(t)}">${img(t)}<small class="nm">${nm(t)}</small></button>`).join("")}<button class="pi er" data-t="" title="מחיקה">×</button></div>
+  <div class="need"></div></div>`;
 
 /* ======================================================================================
    LESSON 2 DECK: Minecraft in 3D, worlds, items, page 2, into the game
@@ -708,6 +789,65 @@ const DECK2 = [
 ];
 
 H.DECKS[2] = DECK2;
+
+/* ======================================================================================
+   LESSON 3 DECK: the Crafting Table, what a recipe tells, the class recipe, into the game
+   ====================================================================================== */
+const DECK3 = [
+  { label:"פתיחה", html:`<div class="eye">שיעור 3 · מודים למיינקראפט</div><div class="row3">${cube("o1","table",{label:false})}</div><h1>איך מכינים את החפץ?</h1><p class="sub">היום לכל חפץ יש מתכון.</p>`,
+    notes:"0–2 דק׳. בשבוע שעבר כל אחד המציא חפץ, והחפץ נכנס למשחק. אבל איך משיגים אותו במשחק? היום: ממה מכינים אותו. אחד מכם ביקש את זה בשבוע שעבר. גוררים את ה־Crafting Table כדי לסובב אותו." },
+
+  { label:"Crafting Table", html:`<h2>שולחן אחד, תשע משבצות</h2><div class="duo"><div class="row3">${cube("t1","table")}</div><div class="row3">${craft3(R3.torch, "block_torch", 4)}</div></div>
+    <p class="sub reveal-line" data-c="rv" data-id="t2">מסדרים חומרים במשבצות, ובריבוע מימין יוצא חפץ חדש.</p>`,
+    notes:"2–4 דק׳. בשביל מי שלא שיחק: ב־Crafting Table יש שלוש שורות של שלוש משבצות. שמים בהן חומרים, ובריבוע מימין מופיע חפץ חדש. כאן: Coal מעל Stick, ויוצאים 4 Torch. לוחצים על השורה למטה כדי שתופיע. שואלים: מי כבר הכין משהו ב־Crafting Table? מה?" },
+
+  { label:"מה יוצא?", html:`<h2>מה יוצא מהמתכון?</h2><div class="fls g4">${guess3("g1", R3.bread, "item_bread", "Bread")}${guess3("g2", R3.bow, "item_bow", "Bow")}${guess3("g3", R3.pick, "item_iron_pickaxe", "Iron Pickaxe")}${guess3("g4", R3.compass, "item_compass_00", "Compass")}</div>`,
+    notes:"4–9 דק׳. משחק ניחושים. מצביעים על מתכון ושואלים: מה יוצא? רק אחרי שענו, לוחצים והכרטיס מתהפך. רמזים למי שצריך: שלוש Wheat בשורה (לחם). Stick ו־String (קשת). Iron Ingot למעלה ו־Stick בעמודה האמצעית (מכוש). Iron Ingot מסביב ל־Redstone (מצפן). אחרי כל כרטיס שואלים: איך ידעתם? מהחומרים, ומהצורה." },
+
+  { label:"הצורה", html:`<h2>לפעמים המתכון נראה כמו החפץ</h2><div class="row3"><figure class="crf">${craft3(R3.sword, "item_diamond_sword", 1)}<figcaption>Diamond Sword</figcaption></figure><figure class="crf">${craft3(R3.pick, "item_iron_pickaxe", 1)}<figcaption>Iron Pickaxe</figcaption></figure></div>
+    <p class="sub reveal-line" data-c="rv" data-id="s1">להב ארוך עם ידית. ראש רחב עם ידית.</p>`,
+    notes:"9–11 דק׳. החרב: שני Diamond אחד מעל השני, ו־Stick למטה. זה נראה כמו חרב. המכוש: שלושה Iron Ingot למעלה, ושני Stick מתחתיהם בעמודה האמצעית. שואלים: למה Mojang סידרו את זה ככה? (ככה קל לזכור.) לוחצים על השורה למטה. גם במתכון שלכם אפשר לסדר את החומרים בצורה של החפץ." },
+
+  { label:"זול ויקר", html:`<h2>מה שומרים לרגע חשוב?</h2><div class="row3"><figure class="crf sm">${craft3(R3.torch, "block_torch", 4)}<figcaption>Torch<small>Coal ו־Stick. מתכון אחד נותן 4.</small></figcaption></figure><figure class="crf sm">${craft3(R3.apple, "item_golden_apple", 1)}<figcaption>Golden Apple<small>8 Gold Ingot בשביל תפוח אחד.</small></figcaption></figure></div>
+    ${vote("v1",[{l:"א",t:"Torch"},{l:"ב",t:"Golden Apple"}])}`,
+    notes:"11–14 דק׳. Torch: Coal ו־Stick, יש מהם בכל מקום, ומתכון אחד נותן 4. Golden Apple: 8 Gold Ingot בשביל תפוח אחד. הצבעה בהרמת יד (לוחצים פעם אחת על כל יד שמורמת, ולחיצה ימנית מורידה). אחר כך: למה? מה שקשה להכין, לא מבזבזים. בשבוע שעבר דיברנו על המחיר של חפץ. גם המתכון הוא מחיר: כמה צריך לעבוד כדי להשיג אותו. חפץ חזק, מתכון יקר. חפץ שמשתמשים בו כל הזמן, מתכון זול, ואולי יוצאים כמה בבת אחת." },
+
+  { label:"הסדר", html:`<h2>מתי הסדר לא משנה?</h2><div class="fls">${flip("o1","<b>חרב</b><small>הסדר משנה?</small>","כן.<small>אחרת זאת לא חרב.</small>")}${flip("o2","<b>אבקה, או שיקוי</b><small>הסדר משנה?</small>","לא.<small>מערבבים, וזהו.</small>")}${flip("o3","<b>TNT</b><small>הסדר משנה?</small>","כן.<small>Gunpowder בצורת X, ו־Sand ביניהם.</small>")}</div>
+    <p class="sub reveal-line" data-c="rv" data-id="o4">בסטודיו אפשר לסמן ״הסדר לא משנה״.</p>`,
+    notes:"14–16 דק׳. יש מתכונים שבהם הצורה חשובה, ויש מתכונים שבהם רק החומרים חשובים, ושמים אותם איפה שרוצים. שואלים על כל כרטיס, ורק אז הופכים. לוחצים על השורה למטה: בסטודיו מסמנים ״הסדר לא משנה״ כשהחפץ הוא תערובת, ולא כלי." },
+
+  { label:"המתכון של הכיתה", html:`<div class="duo"><div style="display:grid;gap:12px;justify-items:center">${classTip()}${rcpBoard()}</div>
+    <div class="board"><span class="tag">המתכון של החפץ שלנו</span><span>כמה יוצאים: ${chips("rn",["1","2","4","8"])}</span><span>למה דווקא החומרים האלה? ${field("rwhy","מה הם מספרים על החפץ?")}</span></div></div>`,
+    notes:"16–24 דק׳. החפץ של הכיתה מהשבוע שעבר (השם והציור שמורים בלוח). עכשיו הכיתה בונה לו מתכון: בוחרים חומר בשורה למטה, ולוחצים על משבצת. לחיצה נוספת על אותה משבצת, או לחיצה ימנית, מוחקת. שואלים: ממה הוא עשוי בעולם שלנו? אם הוא חזק, כמה הוא צריך לעלות? המתכון יכול להיראות כמו החפץ? בסוף: כמה יוצאים, ולמה דווקא החומרים האלה. כותבים בשורה הירוקה." },
+
+  { label:"תקנו את המתכון", html:`<div class="duo"><div style="display:grid;gap:14px;justify-items:center">${tooltip("חרב הכול",["הורגת כל דבר במכה אחת."],"epic")}${craft3(R3.dirt, "item_netherite_sword", 1)}</div><div><h2>מתכון הוגן?</h2>${vote("v2",[{l:"כן",t:"מעולה, זה זול!"},{l:"לא",t:"זה הורס את המשחק"}])}</div></div>
+    <div class="board"><span class="tag">המתכון החדש של החרב</span><span>${field("rfix","ממה צריך להכין אותה?")}</span></div>`,
+    notes:"24–27 דק׳. חרב הכול, מקובייה אחת של Dirt. הצבעה. למי שאמר כן: ומה קורה אחרי חמש דקות? לכולם יש אחת, ואף אחד לא שומר אותה לרגע חשוב. חפץ חזק צריך מתכון יקר. מתקנים יחד: ממה צריך להכין אותה? (Nether Star? Diamond, ועוד משהו נדיר?) כותבים בשורה הירוקה." },
+
+  { label:"הדגמה", html:`<h2>מהדף ל־Crafting Table</h2><div class="steps">
+      <div><span class="ico k">Minecraft</span><b>פותחים את הדף</b>Minecraft בתפריט Start, ובוחרים שיעור 3</div>
+      <div><span class="ico k">▶</span><b>לפתוח את מיינקראפט</b>ונכנסים לעולם שלכם</div>
+      <div>${img("block_crafting_table_front","ico")}<b>לוחצים E וכותבים crafting</b>ושמים את השולחן על הרצפה</div>
+      <div><span class="ico k">E</span><b>מוצאים את החומרים של המתכון</b>בחיפוש, באנגלית</div>
+      <div><span class="ico k">החפץ שלי</span><b>המתכון שלכם</b>בסטודיו, ואז סוגרים ופותחים את המשחק</div></div>
+      <div class="row3"><figure class="crf sm">${craft3(R3.stick, "?")}<figcaption>מקל ברקים</figcaption></figure></div>`,
+    notes:"27–35 דק׳. מדגימים על המקרן, בדף של הילדים. 1. פותחים Minecraft מתפריט Start, מקלידים את הקוד, ולוחצים ״להתחיל״ בשיעור 3. 2. שלב 3, ״מקל ברקים״: מראים את המתכון שלו. 3. ״לפתוח את מיינקראפט״, ונכנסים לעולם. 4. לוחצים E, כותבים crafting בחיפוש, ומניחים Crafting Table על הרצפה. באותו חיפוש לוקחים 3 Copper Ingot ו־2 Stick. 5. לחיצה ימנית על השולחן, מסדרים כמו במתכון, ולוקחים את מקל הברקים. 6. בחזרה לדף, שלב 4: מראים איך בוחרים חומר ולוחצים על משבצת, ואיך בוחרים כמה יוצאים. חשוב להגיד: מתכון חדש נכנס למשחק רק אחרי שסוגרים את מיינקראפט ופותחים שוב." },
+
+  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><div class="duo"><ol class="big"><li>שיעור 3 בדף: ״להתחיל״</li><li>מכינים את מקל הברקים</li><li>מתכון לחפץ שלכם</li><li>מכינים אותו במשחק</li><li>שומרים בדרייב</li></ol><div>${timer("t1",40*60)}</div></div>`,
+    notes:"35–75 דק׳. מפעילים את השעון ומסתובבים בכיתה. לכל ילד שאלה אחת: ״למה דווקא החומרים האלה?״ מי שתקוע: קודם ״נתקעתי״ בתחתית השלב, אחר כך מי שיושב לידו. מי שסיים מוקדם: האתגרים בשלב האחרון בדף. מתכון שמספר על החפץ, חפץ שהוא חומר במתכון של חפץ אחר שלהם, ומתכון שהסדר בו לא משנה." },
+
+  { label:"משהו לא עבד?", html:`<h2>משהו לא עבד?</h2><div class="rules">
+      <div><b>החפץ לא יוצא</b>מסדרים בדיוק כמו במתכון. ומתכון חדש נכנס רק כשהמשחק נפתח מחדש.</div>
+      <div><b>יש משהו כתוב באדום מתחת למתכון</b>קוראים מה כתוב שם. חסר חומר? מוסיפים. לעוד חפץ יש אותו מתכון? משנים אחד מהם.</div>
+      <div><b>לא מוצאים חומר</b>לוחצים E, וכותבים את השם באנגלית בחיפוש.</div>
+      <div><b>המשחק לא נפתח</b>תפריט ← ״לסגור את מיינקראפט״, ושוב ״לפתוח את מיינקראפט״.</div></div>`,
+    notes:"משאירים את השקופית הזאת על המסך בזמן העבודה, אם לא צריך את השעון." },
+
+  { label:"סיום", html:`<div class="row3">${craft3(R3.stick, "?")}</div><h1>רק מהמתכון</h1><p class="sub">מראים למי שיושב לידכם רק את המתכון, והוא מנחש מה החפץ עושה.</p>`,
+    notes:"75–90 דק׳. משחק: כל אחד מראה למי שיושב לידו רק את המתכון, בלי השם, והוא מנחש מה החפץ עושה. שניים או שלושה מראים על המקרן, והכיתה מנחשת. אחר כך כולם שומרים את העולם בדרייב, וסוגרים את מיינקראפט." }
+];
+
+H.DECKS[3] = DECK3;
 window.STAGE = { apply, bind, tick, CSS, fmt };
 const baseInject = H.injectStyle;
 H.injectStyle = doc => { baseInject(doc); const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); };

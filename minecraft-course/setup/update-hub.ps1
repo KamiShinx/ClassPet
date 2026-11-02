@@ -12,6 +12,8 @@ if (-not $s) {
   try { $s = (Invoke-RestMethod 'https://api.github.com/repos/KamiShinx/ClassPet/commits/claude/make-courses' -Headers @{ 'User-Agent' = 'make-course' }).sha }
   catch { Write-Host "Can't reach GitHub ($($_.Exception.Message)). Check the internet and try again." -ForegroundColor Red; return }
 }
+# This updater as it is now, to tell below whether the download brought a newer one.
+$selfOld = if ($PSCommandPath -and (Test-Path $PSCommandPath)) { [IO.File]::ReadAllBytes($PSCommandPath) } else { $null }
 if (-not $makeRoot) { $makeRoot = 'C:\MAKE' }          # tests set $makeRoot / $mcSearch first
 $hub = Join-Path $makeRoot 'hub'
 if (-not (Test-Path $hub)) { Write-Host "$hub not found. Run install.bat first." -ForegroundColor Red; return }
@@ -55,6 +57,14 @@ if (Test-Path $tools) {
   $sf = Join-Path $makeRoot 'stick-files'; New-Item -ItemType Directory -Force $sf | Out-Null
   foreach ($n in 'make-usb.bat', 'install-from-usb.bat', 'update-from-usb.bat') { [IO.File]::WriteAllBytes((Join-Path $sf $n), $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/$n")) }
   Write-Host "Course tools updated (the kid's own files are untouched)." -ForegroundColor Green
+  # A newer updater came down (new pictures for a new lesson, say): run it once now, so one double-click is enough.
+  $new = $get['tools\update-hub.ps1']
+  if ($selfOld -and -not $env:MAKE_UPDATED_ONCE -and [Convert]::ToBase64String($selfOld) -ne [Convert]::ToBase64String($new)) {
+    $env:MAKE_UPDATED_ONCE = '1'
+    Write-Host "The updater itself is new. Running the new one once more ..." -ForegroundColor Cyan
+    & (Join-Path $tools 'update-hub.ps1') $s
+    return
+  }
 }
 
 # ---------- 2. Minecraft pictures for the slides, from the installed game ----------

@@ -20,6 +20,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -29,6 +30,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -122,9 +124,17 @@ public final class Kit {
         return o.has(key) && o.get(key).isJsonPrimitive() ? o.get(key).getAsString() : "";
     }
 
+    /** The studio's recipes go straight into the recipe book (the green book), so the kid finds them there too. */
+    static void giveRecipes(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        player.awardRecipes(player.level().getServer().getRecipeManager().getRecipes().stream()
+                .filter(r -> r.id().identifier().getNamespace().equals(MyWorld.MOD_ID)).toList());
+    }
+
     static void register(IEventBus modEventBus) {
         loadStudio();
         NeoForge.EVENT_BUS.addListener(StudioPower::onEntityInteract);   // right-click on a creature with a studio item
+        NeoForge.EVENT_BUS.addListener(Kit::giveRecipes);
         ITEMS.register(modEventBus);
         EFFECTS.register(modEventBus);
         TABS.register(modEventBus);

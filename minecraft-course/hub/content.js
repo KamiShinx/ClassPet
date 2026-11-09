@@ -1144,13 +1144,14 @@ const NEW4 = lang => { const E = lang === "en";
 const DIM4 = lang => { const E = lang === "en";
   const box = (he, en, hd, ed) => `<div class="nw4" style="--k:#C0904A"><b>${E ? en : he}</b><span>${E ? ed : hd}</span></div>`;
   return `<div class="nw4s">
-  ${box("השכבות","The layers","מה למעלה, מה מתחת, ומה הכי עמוק.","What's on top, what's under it, and what's deepest.")}
-  ${box("שלוש קוביות","Three blocks","הצבע, השם, ומה נופל מהן כששוברים אותן.","Their colour, name, and what drops when you break them.")}
+  ${box("התחושה","The feeling","מה מרגישים כשנכנסים? במשפט אחד.","What do you feel when you walk in? In one sentence.")}
+  ${box("השכבות","The layers","מה למעלה, מה מתחת, ומה הכי עמוק. לכל שכבה יש סיבה.","What's on top, what's under it, and what's deepest. Every layer has a reason.")}
+  ${box("שלוש קוביות","Three blocks","הצבע, השם, ומה מיוחד בכל אחת: מה יוצא ממנה כשכורים אותה.","Their colour, name, and what's special about each: what it drops.")}
   ${box("המינרל הנדיר","The rare ore","מה הוא, כמה עמוק הוא, וכמה הוא נדיר.","What it is, how deep it is, and how rare.")}
   ${box("השמיים","The sky","הצבע של השמיים ושל הערפל. יש שם יום?","The colour of the sky and the fog. Is there a day?")}
-  ${box("כוח המשיכה","Gravity","חלש, רגיל או חזק.","Weak, normal or strong.")}
-  ${box("מה צומח שם","What grows there","עצים, צמחים, פטריות.","Trees, plants, mushrooms.")}
-  ${box("מבנה אחד","One structure","מה האוצר בו, ומה מסוכן בו.","What treasure it has, and what's dangerous in it.")}
+  ${box("החוקים","The rules","כוח המשיכה, ודבר אחד שאי אפשר לעשות שם.","Gravity, and one thing you can't do there.")}
+  ${box("מה צומח, ומה מזהיר","What grows, and what warns","צמחים, ומה שאומר לשחקן ״זהירות״ בלי מילים.","Plants, and what tells the player “careful” without words.")}
+  ${box("מבנה אחד","One structure","האוצר, הסכנה, ומה קרה לאלה שבנו אותו.","The treasure, the danger, and what happened to those who built it.")}
   ${box("איך נכנסים","How you get in","מה צריך לעשות או להשיג כדי להגיע.","What you have to do or get to reach it.")}
 </div>`; };
 const L4 = {
@@ -1167,7 +1168,7 @@ const L4 = {
       body:`<p>ממלאים את הדף ״הממד שלי״. לא חייבים למלא הכול: עדיף מעט ומעניין.</p>`,
       visual:()=>DIM4(),
       hints:[
-        "מתחילים מהשם וממשפט אחד: מה מרגישים כשנכנסים לממד?",
+        "מתחילים מהתחושה: מה מרגישים כשנכנסים? כל השאר צריך להתאים לה.",
         "מה שהכי קשה להשיג הוא הכי שווה. איפה המינרל הנדיר שלכם מתחבא?",
         "אין לכם דף? מבקשים מהמורה."
       ] },

@@ -43,8 +43,10 @@
   .blk3 i { display: block; width: 13mm; height: 13mm; border: .8mm solid #111; border-radius: 1.5mm; }
   .blk3 .line { height: 7mm; }
   .sw.sm i { width: 13mm; height: 13mm; }
-  .opts { display: flex; gap: 3mm; flex-wrap: wrap; margin-top: 2mm; font-size: 4.2mm; font-weight: 700; }
+  .opts { display: flex; gap: 2.5mm; flex-wrap: wrap; margin-top: 2mm; font-size: 3.9mm; font-weight: 700; }
   .opts span { border: .6mm solid #111; border-radius: 6mm; padding: 1mm 3mm; }
+  .opts small { align-self: center; }
+  .line.sm { height: 8mm; }
   @media print {
     html { background: #fff; }
     .bar { display: none; }
@@ -89,13 +91,13 @@
   <div class="head"><h1>הממד שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
   <div class="row">
     <div class="box"><b>השם של הממד</b><div class="line"></div></div>
-    <div class="box"><b>הממד במשפט אחד</b><small>מה מרגישים כשנכנסים אליו?</small><div class="line"></div></div>
+    <div class="box"><b>התחושה, במשפט אחד</b><small>מה מרגישים כשנכנסים לממד?</small><div class="line"></div></div>
   </div>
   <div class="row">
-    <div class="box" style="flex:0 0 50mm"><b>השכבות</b><small>מציירים: מה למעלה, מה מתחת, ומה הכי עמוק</small><div class="slice"><span>למעלה</span><span>מתחת</span><span>הכי עמוק</span></div></div>
+    <div class="box" style="flex:0 0 50mm"><b>השכבות</b><small>מה למעלה, מה מתחת, ומה הכי עמוק. לכל שכבה סיבה.</small><div class="slice"><span>למעלה</span><span>מתחת</span><span>הכי עמוק</span></div></div>
     <div class="col">
-      <div class="box"><b>שלוש קוביות משלו</b><small>צובעים, ונותנים לכל אחת שם</small>
-        <div class="blk3"><div><i></i><div class="line"></div><small>נופל ממנה:</small><div class="line"></div></div><div><i></i><div class="line"></div><small>נופל ממנה:</small><div class="line"></div></div><div><i></i><div class="line"></div><small>נופל ממנה:</small><div class="line"></div></div></div></div>
+      <div class="box"><b>שלוש קוביות משלו</b><small>צובעים, נותנים שם, ומה מיוחד בה</small>
+        <div class="blk3"><div><i></i><div class="line"></div><small>מה יוצא ממנה?</small><div class="line"></div></div><div><i></i><div class="line"></div><small>מה יוצא ממנה?</small><div class="line"></div></div><div><i></i><div class="line"></div><small>מה יוצא ממנה?</small><div class="line"></div></div></div></div>
       <div class="box"><b>המינרל הנדיר</b><small>מה הוא? כמה עמוק הוא?</small><div class="line"></div>
         <div class="opts"><span>נדיר מאוד</span><span>נדיר</span><span>יש הרבה</span></div></div>
     </div>
@@ -103,13 +105,13 @@
   <div class="row">
     <div class="box"><b>השמיים והערפל</b><small>צובעים, ומקיפים בעיגול אחד</small><div class="sw sm"><i></i><i></i></div>
       <div class="opts"><span>יום ולילה</span><span>תמיד יום</span><span>תמיד לילה</span></div></div>
-    <div class="box"><b>כוח המשיכה</b><small>מקיפים בעיגול אחד</small><div class="opts"><span>חלש: קופצים גבוה</span><span>רגיל</span><span>חזק: הכול כבד</span></div></div>
+    <div class="box"><b>החוקים</b><div class="opts"><small>כוח המשיכה:</small><span>חלש</span><span>רגיל</span><span>חזק</span></div><small>דבר אחד שאי אפשר לעשות שם:</small><div class="line"></div></div>
   </div>
   <div class="row grow">
-    <div class="box"><b>מה צומח שם?</b><small>עצים, צמחים, פטריות...</small><div class="line"></div><div class="line"></div></div>
-    <div class="box"><b>מבנה אחד</b><small>מה האוצר בו, ומה מסוכן בו?</small><div class="line"></div><div class="line"></div></div>
+    <div class="box"><b>מה צומח? ומה מזהיר?</b><small>צמחים, ומה אומר ״זהירות״ בלי מילים</small><div class="line"></div><div class="line"></div></div>
+    <div class="box"><b>מבנה אחד</b><small>האוצר, הסכנה, ומה קרה לבונים?</small><div class="line"></div><div class="line"></div></div>
+    <div class="box"><b>איך נכנסים?</b><small>מה צריך כדי להגיע? הכניסה עולה משהו.</small><div class="line"></div><div class="line"></div></div>
   </div>
-  <div class="box"><b>איך נכנסים?</b><small>מה צריך לעשות או להשיג כדי להגיע? הכניסה עולה משהו.</small><div class="line"></div></div>
 </section>
 <script>
   document.getElementById("px").innerHTML = "<i></i>".repeat(256);

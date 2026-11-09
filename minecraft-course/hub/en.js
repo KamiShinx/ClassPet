@@ -309,7 +309,7 @@ const EN_L = {
       { title:"On paper: my dimension",
         body:`<p>Fill in the page “My dimension”. You don't have to fill in everything: a little and interesting is better.</p>`,
         visual:()=>H.DIM4("en"),
-        hints:["Start with the name and one sentence: what do you feel when you walk in?","What's hardest to get is worth the most. Where does your rare ore hide?","No page? Ask the teacher."] },
+        hints:["Start with the feeling: what do you feel when you walk in? Everything else should fit it.","What's hardest to get is worth the most. Where does your rare ore hide?","No page? Ask the teacher."] },
       { title:"What's new in the studio",
         body:`<p>In the studio, in the “What does it do?” tab, there are now many more blocks:</p>`,
         visual:()=>H.NEW4("en"),

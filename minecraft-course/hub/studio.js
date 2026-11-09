@@ -74,6 +74,24 @@ const ING = [
   ["נדירים", [["glowstone_dust","Glowstone Dust"],["blaze_rod","Blaze Rod"],["ender_pearl","Ender Pearl"],["ghast_tear","Ghast Tear"],["prismarine_shard","Prismarine Shard"],["phantom_membrane","Phantom Membrane"],["obsidian","Obsidian","block"],["echo_shard","Echo Shard"],["nether_star","Nether Star"]]]
 ];
 const ING_BY = {}; ING.forEach(([, list]) => list.forEach(([id, name, kind]) => { ING_BY["minecraft:" + id] = { name, tex: (kind || "item") + "_" + id }; }));
+/* Every Minecraft item: hub\mc_items.json = [id, English name, Hebrew name, picture number or -1, 1 if it's a block], and
+   all the pictures in one sheet, mc_items.png (16 x 16 each, 40 to a row). setup/update-hub.ps1 reads both out of the
+   installed game. Until they load (or on a computer without them) the menu is the short list above. */
+let MC = null, mcHook = null;
+const MC_ROW = 40;
+const FOOD = new Set(("apple golden_apple enchanted_golden_apple melon_slice sweet_berries glow_berries chorus_fruit carrot golden_carrot potato baked_potato "
+  + "poisonous_potato beetroot beetroot_soup dried_kelp beef cooked_beef porkchop cooked_porkchop mutton cooked_mutton chicken cooked_chicken rabbit "
+  + "cooked_rabbit cod cooked_cod salmon cooked_salmon tropical_fish pufferfish bread cookie cake pumpkin_pie mushroom_stew rabbit_stew suspicious_stew "
+  + "honey_bottle milk_bucket rotten_flesh spider_eye").split(" "));
+const TOOL_RX = /(_sword|_pickaxe|_axe|_shovel|_hoe|_helmet|_chestplate|_leggings|_boots|_spear|_horse_armor|_nautilus_armor|_harness|bundle|_bucket|arrow|potion)$|^(bow|crossbow|trident|mace|shield|fishing_rod|shears|flint_and_steel|brush|spyglass|compass|recovery_compass|clock|elytra|wolf_armor|turtle_helmet|carrot_on_a_stick|warped_fungus_on_a_stick|lead|name_tag|saddle|totem_of_undying|wind_charge|fire_charge|snowball|ender_eye|bucket|map|filled_map|writable_book|written_book|goat_horn|firework_rocket|experience_bottle|trial_key|ominous_trial_key)$/;
+const mcCat = (id, block) => /_spawn_egg$/.test(id) ? "egg" : FOOD.has(id) ? "food" : TOOL_RX.test(id) ? "tool" : block ? "block" : "mat";
+const ING_TABS = [["fav","נפוצים"],["mat","חומרים"],["food","אוכל"],["tool","כלים, נשק ושריון"],["block","קוביות"],["egg","ביצי זימון"]];
+fetch("mc_items.json").then(r => r.ok ? r.json() : null).then(list => {
+  if (!Array.isArray(list) || !list.length) return;
+  MC = list.map(([id, en, he, pic, block]) => ({ id, en: String(en || id), he: String(he || ""), pic: +pic, cat: mcCat(id, !!block) }));
+  MC.forEach(m => { const k = "minecraft:" + m.id; ING_BY[k] = Object.assign(ING_BY[k] || { name: m.en }, { he: m.he, pic: m.pic }); });
+  if (mcHook) mcHook();
+}).catch(() => {});
 const ING_RX = /^(minecraft|myworld):[a-z0-9_]{1,40}$/;
 const emptyRecipe = () => ({ g: Array(9).fill(""), n: 1, any: false });
 const ownOf = code => code.startsWith("myworld:") ? S.world.items.find(x => x.id === code.slice(8)) : null;
@@ -81,10 +99,27 @@ const ingName = code => { const v = ING_BY[code]; if (v) return v.name; const o 
 /* One ingredient's picture: the game's own texture, or the kid's drawing for their own items. */
 function ingPic(code){
   const v = ING_BY[code];
-  if (v) return `<span class="rc-pic"><img src="mc_${v.tex}.png" alt="" onerror="this.nextElementSibling.hidden=false;this.remove()"><em hidden>${esc(v.name.slice(0, 3))}</em></span>`;
+  if (v && v.pic >= 0) return `<span class="rc-pic"><i class="mcs" style="--c:${v.pic % MC_ROW};--r:${Math.floor(v.pic / MC_ROW)}"></i></span>`;
+  if (v && v.tex) return `<span class="rc-pic"><img src="mc_${v.tex}.png" alt="" onerror="this.nextElementSibling.hidden=false;this.remove()"><em hidden>${esc(v.name.slice(0, 3))}</em></span>`;
+  if (v) return `<span class="rc-pic"><em>${esc(v.name.slice(0, 3))}</em></span>`;
   const o = ownOf(code);
   return o ? `<span class="rc-pic">${thumb(o, 32)}</span>` : `<span class="rc-pic"><em>?</em></span>`;
 }
+/* The ingredient menu: a search box, tabs like the game's Creative menu, and the items of the tab or the search. */
+const ingBtn = code => { const v = ING_BY[code];
+  return `<button class="rc-ing${S.ing === code ? " on" : ""}" data-ing="${code}" title="${esc(ingName(code) + (v && v.he ? " · " + v.he : ""))}">${ingPic(code)}<small>${esc(ingName(code))}</small></button>`; };
+function ingList(){
+  const q = (S.ingQ || "").trim().toLowerCase();
+  if (q && MC){
+    const qi = q.replace(/\s+/g, "_"), hits = MC.filter(m => m.id.includes(qi) || m.en.toLowerCase().includes(q) || m.he.includes(q));
+    return hits.length ? hits.slice(0, 300).map(m => ingBtn("minecraft:" + m.id)).join("") : `<p class="rc-none">לא מצאנו את זה. אפשר לחפש באנגלית או בעברית.</p>`;
+  }
+  const tab = MC ? (S.ingTab || "fav") : "fav";
+  if (tab === "fav") return ING.map(([t, list]) => `<div class="rc-grp"><b>${t}</b><div>${list.map(([id]) => ingBtn("minecraft:" + id)).join("")}</div></div>`).join("");
+  return MC.filter(m => m.cat === tab).map(m => ingBtn("minecraft:" + m.id)).join("");
+}
+const ingTabs = () => MC ? ING_TABS.map(([k, t]) => `<button data-tab="${k}" class="${!S.ingQ && (S.ingTab || "fav") === k ? "on" : ""}">${t}</button>`).join("") : "";
+
 /* What you need for one crafting, counted: "2 × Diamond, 1 × Stick". */
 function needList(r){
   const n = {}; (r && r.g || []).forEach(c => { if (c) n[c] = (n[c] || 0) + 1; });
@@ -112,8 +147,10 @@ function recipeHTML(it, ro){
     h += `<div class="st-row"><span>כמה יוצאים</span><div class="chs">${[1,2,4,8].map(n => `<button data-rcn="${n}" class="${r.n === n ? "on" : ""}">${n}</button>`).join("")}</div>
         <label class="rc-any"><input type="checkbox" id="rc-any" ${r.any ? "checked" : ""}> הסדר לא משנה</label><button class="btn ghost" id="rc-clear">לנקות את המתכון</button></div>
       <ul class="st-lint rc-lint">${recipeLint(it).map(t => `<li>${esc(t)}</li>`).join("")}</ul>
-      <div class="rc-pal"><div class="rc-tools"><button class="rc-ing${S.ing === "" ? " on" : ""}" data-ing="" title="מחק"><span class="rc-pic rc-erase">✕</span><small>מחק</small></button></div>
-        ${ING.map(([t, list]) => `<div class="rc-grp"><b>${t}</b><div>${list.map(([id, name]) => `<button class="rc-ing${S.ing === "minecraft:" + id ? " on" : ""}" data-ing="minecraft:${id}" title="${esc(name)}">${ingPic("minecraft:" + id)}<small>${esc(name)}</small></button>`).join("")}</div></div>`).join("")}
+      <div class="rc-pal"><div class="rc-tools"><button class="rc-ing${S.ing === "" ? " on" : ""}" data-ing="" title="מחק"><span class="rc-pic rc-erase">✕</span><small>מחק</small></button>
+          <input type="search" class="rc-q" placeholder="חיפוש: diamond, יהלום..." value="${esc(S.ingQ || "")}" ${MC ? "" : "hidden"}></div>
+        <div class="rc-tabs">${ingTabs()}</div>
+        <div class="rc-list">${ingList()}</div>
         ${mine.length ? `<div class="rc-grp"><b>החפצים שלכם</b><div>${mine.map(x => `<button class="rc-ing${S.ing === "myworld:" + x.id ? " on" : ""}" data-ing="myworld:${x.id}" title="${esc(x.name || x.id)}">${ingPic("myworld:" + x.id)}<small>${esc(x.name || "בלי שם")}</small></button>`).join("")}</div></div>` : ""}</div>`;
   }
   return h + `</div>`;
@@ -122,7 +159,19 @@ function bindRecipe(app, it){
   const box = app.querySelector(".rc:not(.ro)"); if (!box) return;
   const redo = () => { const r = it.recipe; if (r && !r.g.some(Boolean) && r.n === 1 && !r.any) delete it.recipe; save(); box.outerHTML = recipeHTML(it); paintThumbs(app); bindRecipe(app, it); };
   const rec = () => { if (!it.recipe) it.recipe = emptyRecipe(); return it.recipe; };
-  box.querySelectorAll("[data-ing]").forEach(b => b.addEventListener("click", () => { S.ing = b.dataset.ing; box.querySelectorAll("[data-ing]").forEach(x => x.classList.toggle("on", x === b)); }));
+  // The menu: one listener for all its buttons, because the search and the tabs swap the list under it.
+  const pal = box.querySelector(".rc-pal");
+  const relist = () => { pal.querySelector(".rc-tabs").innerHTML = ingTabs(); pal.querySelector(".rc-list").innerHTML = ingList(); };
+  pal.addEventListener("click", e => {
+    const b = e.target.closest("[data-ing]");
+    if (b){ S.ing = b.dataset.ing; pal.querySelectorAll("[data-ing].on").forEach(x => x.classList.remove("on")); b.classList.add("on"); return; }
+    const t = e.target.closest("[data-tab]");
+    if (t){ S.ingTab = t.dataset.tab; S.ingQ = ""; pal.querySelector(".rc-q").value = ""; relist(); pal.querySelector(".rc-list").scrollTop = 0; }
+  });
+  const q = pal.querySelector(".rc-q");
+  q.addEventListener("input", () => { S.ingQ = q.value; relist(); });
+  // The full list arrives a moment after the page: then show it, unless the kid is already typing.
+  mcHook = () => { if (!document.body.contains(box) || document.activeElement === q) return; box.outerHTML = recipeHTML(it); paintThumbs(app); bindRecipe(app, it); };
   box.querySelectorAll("[data-slot]").forEach(b => {
     b.addEventListener("click", () => { const r = rec(), i = +b.dataset.slot; r.g[i] = (S.ing === undefined || S.ing === r.g[i]) ? "" : S.ing; redo(); });
     b.addEventListener("contextmenu", e => { e.preventDefault(); if (!it.recipe) return; it.recipe.g[+b.dataset.slot] = ""; redo(); });
@@ -441,7 +490,7 @@ const BLOCK_RULES = `RULES FOR THIS CHAT. Follow them for every answer in this c
 A kid (11-13, Israel) built a power for a Minecraft item from logic blocks in our course's studio. There is no code: the blocks run inside the game. Below are the kid's blocks as readable lines and as a program (JSON). Answer in short, simple Hebrew (simple English if the kid writes in English).
 
 YOUR JOB, in this order:
-1. LOGIC REVIEW. Under "===== מה אני רוצה שהחפץ יעשה =====" the kid wrote, in their own words, what the item should do. Check whether the blocks really do that. Find logic mistakes and explain each one in one simple sentence, the way a teacher would: a block under the wrong "when", "the creature" outside "hit" and "use_mob" (there is no creature there), steps in the wrong order, a missing or wrong condition, a price that comes before the power so it never pays, a repeat that does too much. If the kid wrote nothing, say what the blocks do in plain words and ask if that's what they meant. The studio's own checks are under "===== בדיקות של הסטודיו =====".
+1. LOGIC REVIEW. Under "===== מה אני רוצה שהחפץ יעשה =====" the kid wrote, in their own words, what the item should do. Check whether the blocks really do that. Find logic mistakes and explain each one in one simple sentence, the way a teacher would: a block under the wrong "when", "the creature" where there is none (it exists only in "hit", "use_mob", "kill", "hurt" and where a projectile hits), steps in the wrong order, a missing or wrong condition, a price that comes before the power so it never pays, a repeat that does too much. If the kid wrote nothing, say what the blocks do in plain words and ask if that's what they meant. The studio's own checks are under "===== בדיקות של הסטודיו =====".
 2. GAME DESIGN. One sentence on what is good, then up to two improvements: is there a price? Is it too strong or too weak? Does the player get a clear sign that something happened?
 3. Then send ONE fixed version as a block, and list in Hebrew, line by line, what you changed and why:
 \`\`\`blocks
@@ -450,22 +499,10 @@ YOUR JOB, in this order:
 Keep the kid's idea. Change as little as needed. Never invent a new story or name: those belong to the kid.
 
 THE PROGRAM FORMAT (the only things that exist)
-{"on":{"use":[steps],"hit":[steps],"use_mob":[steps],"hold":[steps]}}   use = right-click with the item (in the air or on a block), hit = hitting a creature, use_mob = right-clicking a creature, hold = every second in the hand
-Steps:
-{"a":"effect","e":EFFECT,"who":"me"|"target","s":seconds 1-120,"l":strength 1-5}
-{"a":"heal","who":...,"n":hearts 1-20}   {"a":"damage","who":...,"n":hearts 1-25}   {"a":"fire","who":...,"s":seconds 1-30}
-{"a":"lightning","who":...}   {"a":"explode","who":...,"p":power 1-6,"brk":true|false}   {"a":"launch","who":...,"p":1-5}   {"a":"push","who":...,"p":1-5}
-{"a":"tp","n":blocks forward 1-30}   {"a":"spawn","m":MOB,"who":...,"n":1-5}   {"a":"sound","snd":SOUND}   {"a":"msg","t":"text up to 80 characters"}
-Price: {"a":"cooldown","s":seconds 1-120}   {"a":"consume"}   {"a":"hunger","n":food 1-20}
-{"if":COND,"then":[steps],"else":[steps]}   {"repeat":1-10,"do":[steps]}
-COND: {"c":"night"} {"c":"day"} {"c":"rain"} {"c":"sneak"} {"c":"chance","p":1-100} {"c":"health","n":hearts} {"c":"target","m":MOB} {"c":"dim","d":"overworld"|"nether"|"end"} {"and":[COND,COND]} {"or":[COND,COND]} {"not":COND}
-"target" (the creature that was hit or right-clicked) exists only inside "hit" and "use_mob".
-EFFECT: @@E@@
-MOB: @@M@@
-SOUND: @@S@@`;
+@@FORMAT@@`;
 function blocksText(it){
-  const B = window.STUDIO_BLOCKS, L = B.LISTS;
-  const rules = BLOCK_RULES.replace("@@E@@", L.E.map(x => x[2]).join(", ")).replace("@@M@@", L.M.map(x => x[2]).join(", ")).replace("@@S@@", L.SND.map(x => x[2]).join(", "));
+  const B = window.STUDIO_BLOCKS;
+  const rules = BLOCK_RULES.replace("@@FORMAT@@", B.format());
   return rules + "\n\n===== החפץ =====\n" + (it.name || "") + (it.lore ? " (" + it.lore + ")" : "") + (it.job ? "\nבשביל מה: " + it.job : "") + (it.price ? "\nהמחיר שתכננתי: " + it.price : "")
     + "\n\n===== מה אני רוצה שהחפץ יעשה =====\n" + (it.intent || "(לא כתבתי)")
     + "\n\n===== הבלוקים שלי =====\n" + B.readable(it.power).join("\n") + "\n\n===== התוכנית (JSON) =====\n" + JSON.stringify(it.power)
@@ -474,7 +511,7 @@ function blocksText(it){
 }
 function blockList(){
   const B = window.STUDIO_BLOCKS; if (!B) return "";
-  const cat = { when:"מתי", do:"עושים", price:"מחיר", if:"אם וחזרה", q:"שאלות" };
+  const cat = {}; B.CATS.forEach(([k, he]) => { cat[k] = he; });
   return B.DEFS.map(d => "- [" + cat[d[4]] + "] " + d[1].replace(/%\d/g, "___")).join("\n");
 }
 function geminiText(it){
@@ -689,6 +726,19 @@ const CSS = `
 .studio .rc-ing .rc-pic{width:32px;height:32px}
 .studio .rc-ing small{font-size:.72rem;line-height:1.15;text-align:center;unicode-bidi:plaintext;overflow:hidden;max-width:100%}
 .studio .rc-erase{font-size:1.4rem;color:var(--red)}
+.studio .rc-tools{align-items:center}
+.studio .rc-q{flex:1;min-width:180px;font:inherit;font-size:1rem;padding:8px 12px;border:2px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink)}
+.studio .rc-q:focus{outline:none;border-color:var(--grass)}
+.studio .rc-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.studio .rc-tabs:empty{display:none}
+.studio .rc-tabs button{font:inherit;font-size:.9rem;font-weight:700;padding:.25em .8em;border:2px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer}
+.studio .rc-tabs button.on{border-color:var(--grass);background:var(--grass-soft)}
+.studio .rc-list{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;max-height:360px;overflow:auto;padding:2px}
+.studio .rc-list > .rc-grp{flex-basis:100%}
+.studio .rc-none{margin:6px 2px;color:var(--muted)}
+.studio .mcs{--s:32px;display:block;width:var(--s);height:var(--s);background:url(mc_items.png) no-repeat;background-size:calc(var(--s) * 40) auto;
+  background-position:calc(var(--c) * var(--s) * -1) calc(var(--r) * var(--s) * -1);image-rendering:pixelated}
+.studio .rc-slot .mcs{--s:40px}
 .studio .rc-lint:empty{display:none}
 @media (max-width:900px){.studio .st-main,.studio .st-grid,.studio .st-gcards,.st-embed .st-grid-f{grid-template-columns:1fr}}
 `;

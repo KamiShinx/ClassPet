@@ -71,7 +71,7 @@ const D = {
   // home timeline
   "מתחילים":"Getting started", "מיינקראפט עובד, העולם שלי על נייר":"Minecraft works, my world on paper", "התקנה והעולם שלי":"Install and my world",
   "החפצים הראשונים":"The first items", "מהכרטיס אל תוך המשחק":"From the card into the game", "החפץ הראשון שלי":"My first item",
-  "חפץ בתלת־ממד":"A 3D item", "חפץ עם מחיר":"An item with a price", "אפקט שמשנה את המשחק":"An effect that changes the game",
+  "חפץ בתלת־ממד":"A 3D item", "חפץ עם מחיר":"An item with a price", "כוחות חדשים":"New powers", "חפץ שיורה, משנה את העולם או מעביר לממד אחר":"An item that shoots, changes the world or takes you to another dimension", "אפקט שמשנה את המשחק":"An effect that changes the game",
   "המקום והיצור הראשון":"The place and the first creature", "עולם שיש בו חוקים":"A world with rules", "המקום שלי":"My place", "חוק של העולם":"A world rule",
   "היצור הראשון":"The first creature", "הכול מתחבר":"It all connects", "תערוכה 1":"Showcase 1", "כולם משחקים בעולם של כולם":"Everyone plays everyone's world",
   "יצור החתימה":"The signature creature", "היצור שרק אתם יכולתם להמציא":"The creature only you could invent", "מעצבים יצור":"Designing a creature",
@@ -160,7 +160,9 @@ const D = {
   "פותחים את הסטודיו":"Open the studio",
   // the recipe (lesson 3)
   "איך מכינים אותו?":"How is it made?", "מה צריך:":"You need:", "עוד אין מתכון.":"No recipe yet.", "הסדר לא משנה":"Order doesn't matter",
-  " הסדר לא משנה":" Order doesn't matter", "כמה יוצאים":"How many come out", "לנקות את המתכון":"Clear the recipe", "מה יוצא":"What comes out", "המתכון של:":"Recipe for:",
+  " הסדר לא משנה":" Order doesn't matter", "כמה יוצאים":"How many come out", "לנקות את המתכון":"Clear the recipe", "מה יוצא":"What comes out", "המתכון של:":"Recipe for:", "נפוצים":"Common", "חומרים":"Materials", "אוכל":"Food", "כלים, נשק ושריון":"Tools, weapons and armor",
+  "קוביות":"Blocks", "ביצי זימון":"Spawn eggs", "חיפוש: diamond, יהלום...":"Search: diamond, sword...",
+  "לא מצאנו את זה. אפשר לחפש באנגלית או בעברית.":"Nothing found. Search in English or Hebrew.",
   "לחפץ שלכם עוד אין שם או ציור.":"Your item has no name or picture yet.",
   "קודם נותנים לו שם ומציירים אותו. אחר כך בונים לו מתכון.":"First give it a name and draw it. Then build its recipe.",
   "עבדתם בשבוע שעבר על מחשב אחר? תפריט ← ״דרייב״, ומביאים משם את העולם שלכם.":"Worked on another computer last week? Menu → “Drive”, and bring your world back from there.", "משבצת ריקה":"Empty slot",
@@ -295,7 +297,40 @@ const EN_L = {
         body:`<ul><li>Show whoever sits next to you only the recipe, and ask: what does the item do?</li><li>Close Minecraft.</li><li>Save your world in Drive:</li></ul>` }
     ], challenges:{ stick:["Lightning stick","I crafted it in a Crafting Table."], recipe:["A recipe for my item","The materials fit the item and its price."],
       craft:["In the game","I crafted my item in a Crafting Table."], guess:["A recipe that tells about the item","Whoever sits next to me guessed what the item does, only from the recipe."],
-      chain:["An item from an item","One of my items is a material in another one's recipe."], any:["Order doesn't matter","I made a recipe that works in any order."] } }
+      chain:["An item from an item","One of my items is a material in another one's recipe."], any:["Order doesn't matter","I made a recipe that works in any order."] } },
+  4: { unit:"Unit 2 · The first items", title:"Lesson 4: New powers",
+    stations:[["What's new",1],["Snow wand",2],["The new item",3],["In the game",5],["Drive",6]],
+    groups:{ snow:"Snow wand", mine:"My new item" },
+    steps:[
+      { title:"Today: new powers",
+        body:`<p>Last lesson you asked for more blocks: projectiles, other dimensions, and things that change the world. Now they're in the studio. Today you invent a new item, with a new power.</p>`,
+        visual:()=>H.road([["What's new","The new blocks in the studio"],["Snow wand","A ready item that shoots a snowball"],["The new item","Name, picture and power"],["In the game","Check that the power works"]]),
+        note:"Your world is gone? The computer was probably reset, or it's a different one. At the top: <b>Menu</b>, then <b>Drive</b>, and bring your world back from there." },
+      { title:"What's new in the studio",
+        body:`<p>In the studio, in the “What does it do?” tab, there are now many more blocks:</p>`,
+        visual:()=>H.NEW4("en"),
+        hints:["“The spot” is where you aim. If a projectile hit something, the spot is where it hit.","“Wait” holds up only the blocks under it. That's how you shoot three arrows, one after the other.","A strong power needs a price. XP levels are a price too."] },
+      { title:"Snow wand: a ready item", tab:"Try it",
+        body:`<p>Right-click, and the wand shoots a snowball. Where the ball hits, snow falls, and a creature it hits freezes.</p>`,
+        visual:()=>H.studioIn({ ready:"snow_wand", parts:["power"] }) + `<h2 class="lp-sub">Try it in the game</h2>` + H.gameBtn()
+          + `<ol class="ingame"><li><b>Singleplayer</b>, then your world.</li><li>Press <kbd>E</kbd>, pick your world's tab, and take the snow wand.</li><li>Aim at a creature or at the ground, and right-click.</li></ol>`,
+        expect:"A snowball flies. Where it hits there are snowflakes and a layer of snow, and a creature it hit freezes for three seconds.",
+        stuck:[["There's no snow wand in the tab","A new item goes into the game only when it opens again. Close Minecraft, and press the green button again."],["I clicked and nothing happened","The wand rests two seconds after every shot. Wait a moment, and try again."],["A red box appeared: the game didn't build","Raise your hand and call the teacher."]] },
+      { title:"The new item: name and picture", tab:"Name and picture",
+        body:`<ol><li>Give the item a name, and a line that shows under the name.</li><li>Draw it.</li></ol>`,
+        hints:["What will the item do in your world? The name can hint at it.","Start with a dark outline, then fill it in.","Right-click erases."] },
+      { title:"The new item: its power", tab:"The power",
+        body:`<ol><li>Drag a block from “When”, and put new blocks inside it: a projectile, the world, or another dimension.</li><li>Add a price.</li><li>You can also start from an example, and change it.</li></ol>`,
+        hints:["Ideas: a bow that shoots fireballs. A staff that brings a storm. A key that takes you to the Nether and back.","Inside “Shoot”, put what happens when the projectile hits: an explosion, lightning, or blocks.","A key that takes you home: “If I'm in the Nether”, and inside it “Go to the Overworld”."] },
+      { title:"Check it in the game", tab:"Check in the game",
+        body:`<ol><li>Minecraft open? Close it.</li><li>Press the green button.</li><li>In the game, take the item from the <kbd>E</kbd> menu, and check the power.</li></ol>`,
+        expect:"The item does exactly what the blocks say. If not, go back to the step before, change it, and check again.",
+        stuck:[["Nothing happens","Check that the blocks are inside a “When” block. A block on its own does nothing."],["A block on “the creature” does nothing","There's a creature only when you hit one, right-click one, kill one, when it hurts you, or where a projectile hits."],["I went to the Nether and can't get back","Add to the item: “If I'm in the Nether”, and inside it “Go to the Overworld”. Then close and open the game, and use the item."],["I changed something and the game doesn't show it","A change goes in only when the game opens again. Close Minecraft, and press the green button again."],["A red box appeared: the game didn't build","Raise your hand and call the teacher."]] },
+      { title:"Save and finish",
+        body:`<ul><li>Show whoever sits next to you the power in the game, and they guess which blocks are in it.</li><li>Close Minecraft.</li><li>Save your world in Drive:</li></ul>` }
+    ], challenges:{ snow:["Snow wand","I shot it in the game, and a creature froze."], new:["A new item","It has a name, a picture, and a power with a new block: a projectile, the world or a dimension."],
+      works:["In the game","The power works in the game, like in the blocks."], wait:["One after the other","A power with “Repeat” and “Wait”."],
+      trip:["There and back","An item that takes you to another dimension, and brings you home."], when:["A new “when”","A power that starts when you kill a creature, when something hurts you, or when you break a block."] } }
 };
 
 

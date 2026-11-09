@@ -133,7 +133,7 @@ public final class Kit {
 
     static void register(IEventBus modEventBus) {
         loadStudio();
-        NeoForge.EVENT_BUS.addListener(StudioPower::onEntityInteract);   // right-click on a creature with a studio item
+        StudioPower.register();   // the studio blocks' game events: right-click a creature, kill, hurt, projectile hits, waits
         NeoForge.EVENT_BUS.addListener(Kit::giveRecipes);
         ITEMS.register(modEventBus);
         EFFECTS.register(modEventBus);

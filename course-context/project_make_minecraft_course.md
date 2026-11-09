@@ -297,3 +297,31 @@ create an item and what you need for it"). L152 (lesson 4 "the price") and L153 
   first in the recipe step (plus a "restore from Drive" line); the result square shows the item's name when it has no
   picture, under "מה יוצא"; a row "המתכון של:" picks which of the kid's items the recipe is for (or drop one of your
   items on the result square), and step 5 follows that pick. Two Sonnet audits on the new lines.
+
+**9 Nov: class 3 feedback built, and lesson 4 = "new powers" (class on 10 Nov).**
+- Class 3 (3 Nov) went well: "It works and they love it." The class laptops are offline (the school network is blocked), so
+  updates reach them only from the USB stick (make-usb, then update-from-usb.bat).
+- Feedback 1, every ingredient: `update-hub.ps1` now reads every item out of the installed game (1522 items) into
+  `hub/mc_items.json` (id, English name, Hebrew name from the game's he_il, picture number, block or not) and one picture
+  sheet `hub/mc_items.png`. The recipe menu has a search box (English or Hebrew), tabs like the Creative menu (common,
+  materials, food, tools/weapons/armour, blocks, spawn eggs) and every item. Without the files it falls back to the old list.
+- Feedback 2, "programming is stale", take everything from MCreator's procedure blocks; kids asked for projectiles,
+  other dimensions and world effects. New blocks (`hub/blocks.js`, `StudioPower.java`):
+  when: right-click a block, break a block (a game event, so it works in Creative), kill a creature, something hurts me;
+  me & creatures: "the creatures around me" for every effect block, remove effects, freeze, pull, jump to the spot, ride,
+  get an item, get XP; projectiles: shoot (with "when it hits" blocks inside, run where it hit, "the creature" = what it
+  hit), rain of projectiles; the world: lightning/explosion/summon at "the spot", put a block, build a ball/round
+  wall/round floor, break blocks, particles, weather, time (both through the game's own commands), go to the
+  Overworld/Nether/End (onto a safe ledge or the End platform); price: costs XP levels; wait N seconds (holds up the
+  blocks under it, also inside "if" and "repeat"); questions: thunder, effect, in water, on fire, in the air, the block
+  under me, height, biome, the creature's hearts. "The spot" = where you aim (40 blocks), the clicked/broken block,
+  or where a projectile hit. The Gemini rules now get the program format from blocks.js itself.
+- Tested in the real game (test copy D:/code/make-test): every trigger, shoot + hit blocks, repeat with wait (3 arrows),
+  rain, dig, fill, weather, time, give, XP, spawn, conditions, Nether/End/home travel. Fix found there: a round floor now
+  replaces the ground.
+- Lesson 4 (7 steps, Hebrew + English): what's new, the snow wand (ready item), a new item's name and picture, its power
+  (6 new examples), check in the game, save. Teacher deck DECK4 (12 slides), PLAN[4], CHECK[4], NEXT = 4. Two Sonnet
+  Hebrew audits. Also: the lesson's bottom bar sits above the block editor (it covered "next"), a comma at the start of a
+  Hebrew block label stays in place, and a wide program zooms out to fit when it loads.
+- 3D (Blockbench) is not built: the laptops are offline, so it needs the desktop Blockbench on the stick and a model
+  import path in the studio first.

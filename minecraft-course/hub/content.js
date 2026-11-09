@@ -381,6 +381,10 @@ a.dbtn{text-decoration:none}
 .pal figcaption{font-family:var(--display);font-size:1.6em;color:var(--grass)}
 .its{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;width:100%}
 .crafts{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;width:100%}
+.nw4s{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;width:100%}
+.nw4{display:grid;gap:4px;align-content:start;padding:12px 14px;border-radius:10px;border:2px solid var(--line);border-inline-start:8px solid var(--k);background:var(--surface)}
+.nw4 b{font-size:1.15rem;color:var(--k)}
+.nw4 span{line-height:1.45}
 .crafts figure{margin:0;display:grid;gap:8px;justify-items:center}
 .crafts figcaption{display:grid;text-align:center;font-weight:700}
 .crafts figcaption b{font-size:1.1rem}
@@ -583,7 +587,7 @@ a.dbtn{text-decoration:none}
 .lp-help ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
 .lp-help li b{display:block}
 .lp-card .chal{border-top:1px solid var(--line);padding-top:16px}
-.lp-foot{position:fixed;bottom:0;left:0;right:0;z-index:15;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px}
+.lp-foot{position:fixed;bottom:0;left:0;right:0;z-index:75;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px}
 .lp-next{font-size:1.25rem;padding:.5em 1.6em}
 .lp-dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
 .lp-dots i{width:12px;height:12px;border-radius:50%;background:var(--sunk);border:1px solid var(--line)}
@@ -627,7 +631,7 @@ const UNITS = [
     lessons:[
       {n:2, title:"החפץ הראשון שלי", build:"חפץ משלכם, עם שם, ציור וכוח, בתוך המשחק", open:true},
       {n:3, title:"איך מכינים את החפץ?", build:"מתכון לחפץ שלכם: ממה מכינים אותו ב־Crafting Table", open:true},
-      {n:4, title:"חפץ עם מחיר", build:"חפץ חזק שיש לו חיסרון"},
+      {n:4, title:"כוחות חדשים", build:"חפץ שיורה, משנה את העולם או מעביר לממד אחר", open:true},
       {n:5, title:"אפקט שמשנה את המשחק", build:"אוכל או שיקוי עם אפקט חדש"} ] },
   { n:3, name:"המקום והיצור הראשון", sub:"עולם שיש בו חוקים", color:"#8A5A2B", icon:"3",
     lessons:[
@@ -1125,6 +1129,88 @@ const L3 = {
   ]
 };
 
+/* ===== lesson 4: new powers. Class 3's feedback (3 Nov): the blocks were too few; a kid asked for projectiles, another for
+   other dimensions and world effects. The studio now has MCreator-style blocks for all of these (blocks.js, StudioPower.java). ===== */
+const NEW4 = lang => { const E = lang === "en";
+  const card = (k, he, en, hd, ed) => `<div class="nw4" style="--k:${k}"><b>${E ? en : he}</b><span>${E ? ed : hd}</span></div>`;
+  return `<div class="nw4s">
+  ${card("#D0603E","קליעים","Projectiles","לירות חץ, כדור שלג או כדור אש. ובתוך הבלוק: מה קורה כשהוא פוגע.","Shoot an arrow, a snowball or a fireball. Inside the block: what happens when it hits.")}
+  ${card("#3AA587","העולם","The world","ברק, פיצוץ, קוביות, חלקיקים, מזג האוויר והשעה ביום.","Lightning, explosions, blocks, particles, the weather and the time of day.")}
+  ${card("#9A6BD0","ממדים","Dimensions","לעבור ל־Nether, ל־End, ובחזרה ל־Overworld.","Go to the Nether, to the End, and back to the Overworld.")}
+  ${card("#C0904A","״מתי״ חדשים","New “when”s","כשלוחצים על קובייה, כששוברים קובייה, כשהורגים יצור, וכשמשהו פוגע בכם.","When you right-click a block, break a block, kill a creature, or something hurts you.")}
+  ${card("#B566C0","לחכות","Wait","הבלוקים שמתחת ל״לחכות״ מחכים כמה שניות, ורק אז קורים.","The blocks under “Wait” wait a few seconds, and only then happen.")}
+  ${card("#4A8FC8","הנקודה","The spot","המקום שמכוונים אליו. אחרי ירייה: המקום שבו הקליע פגע.","Where you aim. After a shot: where the projectile hit.")}
+</div>`; };
+const L4 = {
+  n:4, unit:"יחידה 2 · החפצים הראשונים", title:"שיעור 4: כוחות חדשים",
+  stations:[["מה חדש",1],["שרביט שלג",2],["החפץ החדש",3],["במשחק",5],["דרייב",6]],
+  groups:{ snow:"שרביט שלג", mine:"החפץ החדש שלי" },
+  steps:[
+    { title:"היום: כוחות חדשים",
+      body:`<p>בשיעור הקודם ביקשתם עוד בלוקים: קליעים, ממדים אחרים, ודברים שמשנים את העולם. עכשיו יש אותם בסטודיו. היום ממציאים חפץ חדש, עם כוח חדש.</p>`,
+      visual:()=>road([["מה חדש","הבלוקים החדשים בסטודיו"],["שרביט שלג","חפץ מוכן שיורה כדור שלג"],["החפץ החדש","שם, ציור וכוח"],["במשחק","בודקים שהכוח עובד"]]),
+      note:"העולם שלכם נעלם? כנראה המחשב התאפס, או שזה מחשב אחר. למעלה: <b>תפריט</b>, ואז <b>דרייב</b>, ומחזירים משם את העולם." },
+
+    { title:"מה חדש בסטודיו",
+      body:`<p>בסטודיו, בלשונית ״מה הוא עושה?״, יש עכשיו עוד הרבה בלוקים:</p>`,
+      visual:()=>NEW4(),
+      hints:[
+        "״הנקודה״ היא המקום שמכוונים אליו. אם קליע פגע במשהו, הנקודה היא המקום שבו הוא פגע.",
+        "״לחכות״ עוצר רק את הבלוקים שמתחתיו. ככה אפשר לירות שלושה חצים, אחד אחרי השני.",
+        "כוח חזק צריך מחיר. גם רמות XP הן מחיר."
+      ] },
+
+    { title:"שרביט שלג: חפץ מוכן", group:"snow", tab:"מנסים אותו",
+      body:`<p>לוחצים לחיצה ימנית, והשרביט יורה כדור שלג. איפה שהכדור פוגע יורד שלג, ויצור שהכדור פוגע בו קופא.</p>`,
+      visual:()=>studioIn({ ready:"snow_wand", parts:["power"] }) + `<h2 class="lp-sub">מנסים אותו במשחק</h2>` + gameBtn()
+        + `<ol class="ingame"><li><b>Singleplayer</b>, ואז העולם שלכם.</li><li>לוחצים <kbd>E</kbd>, בוחרים את הלשונית של העולם שלכם, ולוקחים את שרביט השלג.</li><li>מכוונים ליצור או לאדמה, ולוחצים לחיצה ימנית.</li></ol>`,
+      expect:"כדור שלג עף. במקום שבו הוא פוגע יש פתיתי שלג ושכבת שלג, ויצור שנפגע קופא לשלוש שניות.",
+      stuck:[
+        ["אין שרביט שלג בלשונית","חפץ חדש נכנס למשחק רק כשהמשחק נפתח מחדש. סוגרים את מיינקראפט, ולוחצים שוב על הכפתור הירוק."],
+        ["לחצתי, ושום דבר לא קרה","השרביט נח שתי שניות אחרי כל ירייה. מחכים רגע, ומנסים שוב."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
+      ] },
+
+    { title:"החפץ החדש: שם וציור", group:"mine", tab:"שם וציור",
+      body:`<ol><li>נותנים לחפץ שם, ומשפט שמופיע מתחת לשם.</li><li>מציירים אותו.</li></ol>`,
+      visual:()=>studioIn({ tag:"l4", parts:["fields","paint"] }),
+      hints:["מה החפץ יעשה בעולם שלכם? השם יכול לרמוז על זה.","מתחילים בקו מתאר כהה, ואז ממלאים.","לחיצה ימנית מוחקת."] },
+
+    { title:"החפץ החדש: הכוח", group:"mine", tab:"הכוח",
+      body:`<ol><li>גוררים בלוק מ״מתי״, ובתוכו שמים בלוקים חדשים: קליע, העולם, או ממד אחר.</li><li>מוסיפים מחיר.</li><li>אפשר גם להתחיל מדוגמה, ולשנות אותה.</li></ol>`,
+      visual:()=>studioIn({ tag:"l4", parts:["power"] }),
+      hints:[
+        "רעיונות: קשת שיורה כדורי אש. מטה שמביא סופה. מפתח שמעביר ל־Nether ובחזרה.",
+        "בתוך ״לירות״ שמים את מה שקורה כשהקליע פוגע: פיצוץ, ברק, או קוביות.",
+        "מפתח שמחזיר הביתה: ״אם אני ב־Nether״, ובתוכו ״לעבור לממד Overworld״."
+      ] },
+
+    { title:"בודקים במשחק", group:"mine", tab:"בודקים במשחק",
+      body:`<ol><li>מיינקראפט פתוח? סוגרים אותו.</li><li>לוחצים על הכפתור הירוק.</li><li>במשחק לוקחים את החפץ מהתפריט של <kbd>E</kbd>, ובודקים את הכוח.</li></ol>`,
+      visual:()=>studioIn({ tag:"l4", parts:["card","check"] }) + gameBtn(),
+      expect:"החפץ עושה בדיוק מה שהבלוקים אומרים. ואם לא, חוזרים לשלב הקודם, משנים, ובודקים שוב.",
+      stuck:[
+        ["שום דבר לא קורה","בודקים שהבלוקים נמצאים בתוך בלוק של ״מתי״. בלוק שעומד לבד לא עושה כלום."],
+        ["בלוק של ״היצור״ לא עושה כלום","יש יצור רק כשמכים יצור, כשלוחצים עליו, כשהורגים אותו, כשהוא פוגע בכם, או בתוך ״לירות״."],
+        ["עברתי ל־Nether, ואין לי איך לחזור","מוסיפים לחפץ: ״אם אני ב־Nether״, ובתוכו ״לעבור לממד Overworld״. אחר כך סוגרים ופותחים את המשחק, ומשתמשים בחפץ."],
+        ["שיניתי, ובמשחק לא רואים","שינוי נכנס רק כשהמשחק נפתח מחדש. סוגרים את מיינקראפט, ולוחצים שוב על הכפתור הירוק."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
+      ] },
+
+    { title:"שומרים ומסיימים",
+      body:`<ul><li>מראים למי שיושב לידכם את הכוח במשחק, והוא מנחש אילו בלוקים יש בו.</li><li>סוגרים את מיינקראפט.</li><li>שומרים את העולם בדרייב:</li></ul>`,
+      visual:()=>driveBox() }
+  ],
+  challenges:[
+    {id:"snow", lvl:"חובה", t:"שרביט שלג", d:"יריתי בו במשחק, ויצור קפא."},
+    {id:"new", lvl:"חובה", t:"חפץ חדש", d:"יש לו שם, ציור, וכוח עם בלוק חדש: קליע, העולם או ממד."},
+    {id:"works", lvl:"חובה", t:"במשחק", d:"הכוח עובד במשחק, כמו בבלוקים."},
+    {id:"wait", lvl:"אתגר", t:"אחד אחרי השני", d:"כוח עם ״לחזור״ ו״לחכות״."},
+    {id:"trip", lvl:"אתגר", t:"הלוך וחזור", d:"חפץ שמעביר לממד אחר, ומחזיר הביתה."},
+    {id:"when", lvl:"אתגר", t:"״מתי״ חדש", d:"כוח שמתחיל כשהורגים יצור, כשמשהו פוגע בי, או כששוברים קובייה."}
+  ]
+};
+
 const GEM_TEXT = `RULES FOR THIS CHAT. Follow them for every answer in this chat.
 You are the Mod Helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Answer in simple, short Hebrew. If the kid writes to you in English, answer in simple English. Code, file names and paths stay in English.
 
@@ -1177,9 +1263,9 @@ const TEACHER_CHECK = [
 function applyReveal(root, set){
   root.querySelectorAll("[data-sil]").forEach(b => { if (set.has(+b.dataset.sil)) { b.classList.add("shown"); b.querySelector(".nm").textContent = MOBS[+b.dataset.sil].name; } });
 }
-const LESSONS = { 1: L1, 2: L2, 3: L3 };
+const LESSONS = { 1: L1, 2: L2, 3: L3, 4: L4 };
 const DECKS = { 1: SLIDES };
 window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
   gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK,
-  LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES, studioIn, gameBtn, driveBox, road, MC_MENU, RECIPES3 };
+  LESSONS, DECKS, SCENES, sceneSVG, swatches, mobFace, mcPic, FACES, studioIn, gameBtn, driveBox, road, MC_MENU, RECIPES3, NEW4 };
 })();

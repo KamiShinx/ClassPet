@@ -108,8 +108,85 @@ $want = [ordered]@{
   'item_glowstone_dust' = 'item/glowstone_dust'; 'item_blaze_rod' = 'item/blaze_rod'; 'item_ghast_tear' = 'item/ghast_tear'; 'item_prismarine_shard' = 'item/prismarine_shard'
   'item_phantom_membrane' = 'item/phantom_membrane'; 'item_echo_shard' = 'item/echo_shard'; 'item_nether_star' = 'item/nether_star'; 'block_glass' = 'block/glass'; 'block_torch' = 'block/torch'
 }
+# ---------- 3. every Minecraft item, for the studio's ingredient menu ----------
+# hub\mc_items.json = [[id, English name, Hebrew name, picture number, 1 if it's a block], ...] and hub\mc_items.png =
+# all the pictures in one sheet, 16 x 16 each, 40 to a row. Read out of the installed game, so they match it exactly.
+function Write-McCatalog($zip, $assets, $hubDir) {
+  $text = { param($p) $e = $zip.GetEntry($p); if (-not $e) { return $null }; $r = New-Object IO.StreamReader($e.Open(), [Text.Encoding]::UTF8); $t = $r.ReadToEnd(); $r.Dispose(); $t }
+  $json = { param($p) $t = & $text $p; if ($t) { $t | ConvertFrom-Json } else { $null } }
+  $en = & $json 'assets/minecraft/lang/en_us.json'
+  $he = $null
+  if ($assets) {   # Hebrew names: in the game's downloaded assets, not in the jar
+    foreach ($ix in Get-ChildItem (Join-Path $assets 'indexes') -Filter *.json -ErrorAction SilentlyContinue) {
+      $o = (Get-Content $ix.FullName -Raw | ConvertFrom-Json).objects.'minecraft/lang/he_il.json'
+      if ($o) { $f = Join-Path $assets "objects\$($o.hash.Substring(0,2))\$($o.hash)"; if (Test-Path $f) { $he = [IO.File]::ReadAllText($f, [Text.Encoding]::UTF8) | ConvertFrom-Json; break } }
+    }
+  }
+  # Operator-only things a kid can't use in a recipe.
+  $skip = '^(air|command_block|chain_command_block|repeating_command_block|command_block_minecart|structure_block|structure_void|jigsaw|barrier|light|debug_stick|knowledge_book|test_block|test_instance_block|petrified_oak_slab)$'
+  # The first model an item shows (items/<id>.json can switch between models; any one is fine for a picture).
+  $firstModel = $null
+  $firstModel = { param($n)
+    if ($null -eq $n) { return $null }
+    if ($n -is [array]) { foreach ($x in $n) { $m = & $firstModel $x; if ($m) { return $m } }; return $null }
+    if ($n -isnot [pscustomobject]) { return $null }
+    if ($n.type -eq 'minecraft:model' -and $n.model -is [string]) { return $n.model }
+    if ($n.type -eq 'minecraft:special' -and $n.base -is [string]) { return $n.base }
+    foreach ($k in 'fallback', 'model', 'models', 'cases', 'entries', 'on_true', 'on_false') { if ($n.PSObject.Properties[$k]) { $m = & $firstModel $n.$k; if ($m) { return $m } } }
+    return $null }
+  $tint = @{ oak_leaves = '#48b518'; jungle_leaves = '#48b518'; acacia_leaves = '#48b518'; dark_oak_leaves = '#48b518'; mangrove_leaves = '#48b518'
+    spruce_leaves = '#619961'; birch_leaves = '#80a755'; short_grass = '#79c05a'; tall_grass = '#79c05a'; fern = '#79c05a'; large_fern = '#79c05a'
+    vine = '#48b518'; lily_pad = '#208030'; grass_block = '#79c05a'; bush = '#79c05a' }
+  $ids = $zip.Entries | Where-Object { $_.FullName -match '^assets/minecraft/items/([a-z0-9_]+)\.json$' } | ForEach-Object { $Matches[1] } | Where-Object { $_ -notmatch $skip } | Sort-Object
+  $cols = 40; $rows = [Math]::Ceiling($ids.Count / $cols)
+  $sheet = New-Object Drawing.Bitmap ($cols * 16), ($rows * 16), ([Drawing.Imaging.PixelFormat]::Format32bppArgb)
+  $g = [Drawing.Graphics]::FromImage($sheet); $g.InterpolationMode = 'NearestNeighbor'; $g.PixelOffsetMode = 'Half'; $g.CompositingMode = 'SourceOver'
+  $models = @{}; $list = New-Object Collections.ArrayList; $n = 0
+  foreach ($id in $ids) {
+    $name = $en."item.minecraft.$id"; if (-not $name) { $name = $en."block.minecraft.$id" }; if (-not $name) { $name = $id }
+    $hn = ''; if ($he) { $hn = $he."item.minecraft.$id"; if (-not $hn) { $hn = $he."block.minecraft.$id" }; if (-not $hn) { $hn = '' } }
+    $model = & $firstModel ((& $json "assets/minecraft/items/$id.json").model)
+    $isBlock = [int]($model -like 'minecraft:block/*' -or $model -like 'block/*')
+    # The model's textures, parents first, then pick the one that best shows the thing.
+    $tex = @{}; $layers = @(); $m = $model; $guard = 0
+    while ($m -and $guard++ -lt 8) {
+      $p = ($m -replace '^minecraft:', '')
+      if (-not $models.ContainsKey($p)) { $models[$p] = & $json "assets/minecraft/models/$p.json" }
+      $mj = $models[$p]; if (-not $mj) { break }
+      if ($mj.textures) { foreach ($t in $mj.textures.PSObject.Properties) { if (-not $tex.ContainsKey($t.Name)) { $tex[$t.Name] = if ($t.Value -is [string]) { $t.Value } else { [string]$t.Value.sprite } } } }
+      $m = $mj.parent
+    }
+    $res = { param($v) $k = 0; while ($v -and $v.StartsWith('#') -and $k++ -lt 6) { $v = $tex[$v.Substring(1)] }; $v }
+    if ($tex.ContainsKey('layer0')) { foreach ($i in 0..4) { if ($tex.ContainsKey("layer$i")) { $layers += (& $res $tex["layer$i"]) } } }
+    else { foreach ($k in 'all', 'front', 'side', 'texture', 'cross', 'plant', 'end', 'top', 'particle') { if ($tex.ContainsKey($k)) { $v = & $res $tex[$k]; if ($v) { $layers = @($v); break } } } }
+    if (-not $layers.Count -and $tex.Count) { foreach ($v in $tex.Values) { $v = & $res $v; if ($v) { $layers = @($v); break } } }
+    $pic = -1; $x = ($n % $cols) * 16; $y = [Math]::Floor($n / $cols) * 16; $drawn = $false
+    foreach ($l in $layers) {
+      $e = $zip.GetEntry("assets/minecraft/textures/$(($l -replace '^minecraft:', '')).png"); if (-not $e) { continue }
+      $s = $e.Open(); $ms = New-Object IO.MemoryStream; $s.CopyTo($ms); $s.Dispose()
+      try { $img = [Drawing.Image]::FromStream($ms) } catch { continue }
+      $w = $img.Width   # animated textures are a tall strip: the first square is the picture
+      if ($tint.ContainsKey($id) -and -not $drawn) {
+        $c = [Drawing.ColorTranslator]::FromHtml($tint[$id])
+        $cm = New-Object Drawing.Imaging.ColorMatrix; $cm.Matrix00 = $c.R / 255; $cm.Matrix11 = $c.G / 255; $cm.Matrix22 = $c.B / 255
+        $ia = New-Object Drawing.Imaging.ImageAttributes; $ia.SetColorMatrix($cm)
+        $g.DrawImage($img, (New-Object Drawing.Rectangle $x, $y, 16, 16), 0, 0, $w, $w, [Drawing.GraphicsUnit]::Pixel, $ia)
+      } else {
+        $g.DrawImage($img, (New-Object Drawing.Rectangle $x, $y, 16, 16), (New-Object Drawing.Rectangle 0, 0, $w, $w), [Drawing.GraphicsUnit]::Pixel)
+      }
+      $img.Dispose(); $ms.Dispose(); $drawn = $true
+    }
+    if ($drawn) { $pic = $n }
+    [void]$list.Add(@($id, [string]$name, [string]$hn, $pic, $isBlock)); $n++
+  }
+  $g.Dispose()
+  $sheet.Save((Join-Path $hubDir 'mc_items.png'), [Drawing.Imaging.ImageFormat]::Png); $sheet.Dispose()
+  [IO.File]::WriteAllText((Join-Path $hubDir 'mc_items.json'), (ConvertTo-Json -Compress -Depth 3 -InputObject $list.ToArray()), (New-Object Text.UTF8Encoding($false)))
+  return @($list.Count, @($list | Where-Object { $_[3] -lt 0 }).Count)
+}
+
 try {
-  Add-Type -AssemblyName System.IO.Compression.FileSystem
+  Add-Type -AssemblyName System.IO.Compression.FileSystem, System.Drawing
   if (-not $mcSearch) { $mcSearch = @((Join-Path $makeRoot 'gradle-home'), (Join-Path $makeRoot 'mod\build')) }
   Write-Host 'Looking for the Minecraft pictures in the installed game ...'
   $jars = Get-ChildItem $mcSearch -Recurse -Filter *.jar -ErrorAction SilentlyContinue | Where-Object { $_.Length -gt 3MB } | Sort-Object Length -Descending
@@ -128,6 +205,11 @@ try {
       if (-not $e) { $missing += $name; continue }
       $in = $e.Open(); $out = [IO.File]::Create((Join-Path $hub "mc_$name.png")); $in.CopyTo($out); $out.Dispose(); $in.Dispose()
     }
+    try {
+      $idx = Get-ChildItem (Join-Path $makeRoot 'gradle-home') -Recurse -Directory -Filter indexes -ErrorAction SilentlyContinue | Select-Object -First 1
+      $r = Write-McCatalog $zip $(if ($idx) { $idx.Parent.FullName }) $hub
+      Write-Host "All Minecraft items for the recipe menu: $($r[0]), $($r[1]) without a picture" -ForegroundColor Green
+    } catch { Write-Host "The recipe menu keeps its short list ($($_.Exception.Message)). Tell Claude." -ForegroundColor Yellow }
     $zip.Dispose()
     Write-Host "Minecraft pictures: $($want.Count - $missing.Count) of $($want.Count) copied to $hub" -ForegroundColor Green
     if ($missing.Count) { Write-Host "  Missing (a drawing shows instead). Tell Claude: $($missing -join ', ')" -ForegroundColor Yellow }

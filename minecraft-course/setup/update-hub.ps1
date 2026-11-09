@@ -107,6 +107,10 @@ $want = [ordered]@{
   'item_slime_ball' = 'item/slime_ball'; 'item_gunpowder' = 'item/gunpowder'; 'item_rotten_flesh' = 'item/rotten_flesh'; 'item_spider_eye' = 'item/spider_eye'
   'item_glowstone_dust' = 'item/glowstone_dust'; 'item_blaze_rod' = 'item/blaze_rod'; 'item_ghast_tear' = 'item/ghast_tear'; 'item_prismarine_shard' = 'item/prismarine_shard'
   'item_phantom_membrane' = 'item/phantom_membrane'; 'item_echo_shard' = 'item/echo_shard'; 'item_nether_star' = 'item/nether_star'; 'block_glass' = 'block/glass'; 'block_torch' = 'block/torch'
+  # lesson 4 (a dimension of your own): the layers, the rare ore, plants, structures, the way in
+  'block_bedrock' = 'block/bedrock'; 'block_ancient_debris_side' = 'block/ancient_debris_side'; 'block_crimson_stem' = 'block/crimson_stem'
+  'block_warped_stem' = 'block/warped_stem'; 'block_chorus_plant' = 'block/chorus_plant'; 'block_nether_bricks' = 'block/nether_bricks'
+  'block_gilded_blackstone' = 'block/gilded_blackstone'; 'block_purpur_block' = 'block/purpur_block'; 'item_ender_eye' = 'item/ender_eye'
 }
 # ---------- 3. every Minecraft item, for the studio's ingredient menu ----------
 # hub\mc_items.json = [[id, English name, Hebrew name, picture number, 1 if it's a block], ...] and hub\mc_items.png =

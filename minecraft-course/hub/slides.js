@@ -593,6 +593,13 @@ body.aud .dyes{visibility:hidden}
 .code4{display:grid;gap:6px;justify-items:start;padding:clamp(12px,2cqw,22px);border-radius:12px;background:#1d2420;border:2px solid #3B8735;font-weight:700;font-size:clamp(14px,1.8cqw,22px);text-align:start}
 .code4 > div{margin-inline-start:calc(var(--d) * 1.6em);padding:4px 10px;border-radius:8px;background:#2B6A99;color:#fff}
 .code4 > div:first-child{background:#A0722F}
+.sl4{margin:0;display:grid;gap:6px;justify-items:center}
+.sl4 .scene{width:clamp(130px,20cqw,240px)}
+.sl4 figcaption{font-weight:700}
+.ar4{font-size:clamp(2rem,5cqw,4rem);align-self:center}
+.sky4{display:flex;gap:8px;justify-content:center}
+.slide img.big4{width:clamp(64px,11cqw,130px);height:auto;image-rendering:pixelated}
+.sky4 i{display:block;width:clamp(48px,8cqw,100px);aspect-ratio:1;border-radius:8px;border:2px solid #fff3}
 .fl .fa .cr{--c:clamp(18px,2.5cqw,40px);padding:clamp(4px,.7cqw,9px);gap:clamp(3px,.6cqw,8px)}
 .fl .fa .cr .ca{font-size:clamp(.9rem,1.6cqw,1.4rem)}
 .fl .fb .ico{width:clamp(56px,9cqw,110px);height:auto;image-rendering:pixelated;justify-self:center}
@@ -855,43 +862,65 @@ H.DECKS[3] = DECK3;
 /* ===== lesson 4: new powers. The kids asked for projectiles, other dimensions and world effects (3 Nov). ===== */
 const code4 = (lines) => `<div class="code4">${lines.map(([d, t]) => `<div style="--d:${d}">${t}</div>`).join("")}</div>`;
 const SNOW4 = code4([[0,"כשלוחצים לחיצה ימנית עם החפץ"],[1,"לירות כדור שלג במהירות 3, וכשזה פוגע:"],[2,"חלקיקים: פתיתי שלג בנקודה"],[2,"לשים Snow בנקודה"],[2,"להקפיא את היצור ל־3 שניות"],[1,"החפץ נח 2 שניות"]]);
+// A slice of a dimension, top to bottom: the sky, the layers, what's deepest.
+const SL4 = { G:"block_grass_block_side", d:"block_dirt", s:"block_stone", D:"block_deepslate", O:"block_diamond_ore", B:"block_bedrock",
+  n:"block_netherrack", g:"block_glowstone", L:"block_lava_still", A:"block_ancient_debris_side", e:"block_end_stone" };
+const slice4 = (rows, air, name) => `<figure class="sl4"><div class="scene" style="--cols:${rows[0].length};--air:${air}">${rows.join("").split("").map(ch => SL4[ch] ? `<i style="background-image:url(${T(SL4[ch])})"></i>` : `<i></i>`).join("")}</div><figcaption>${name}</figcaption></figure>`;
+const OW4 = slice4(["      ","      ","GGGGGG","dddddd","ssssss","ssOsss","DDDDDD","BBBBBB"], "#7EC0EE", "Overworld");
+const NE4 = slice4(["BBBBBB","nnnnnn","  g   ","      ","nn  nn","LLLLLL","nnAnnn","BBBBBB"], "#3A0E0E", "Nether");
+const EN4 = slice4(["      ","      ","  ee  "," eeee ","  ee  ","      ","      ","      "], "#0B0B14", "End");
+const sky4 = (a, b) => `<span class="sky4"><i style="background:${a}"></i><i style="background:${b}"></i></span>`;
 const DECK4 = [
-  { label:"פתיחה", html:`<div class="eye">שיעור 4 · מודים למיינקראפט</div><h1>כוחות חדשים</h1><p class="sub">ביקשתם קליעים, ממדים, ודברים שמשנים את העולם. עכשיו יש.</p>`,
-    notes:"0–3 דק׳. בשבוע שעבר אמרתם שאין מספיק בלוקים. מישהו ביקש לירות, ומישהו ביקש לעבור לממדים אחרים. עכשיו יש בסטודיו עשרות בלוקים חדשים. היום כל אחד ממציא חפץ חדש, עם כוח שאי אפשר היה לבנות בשבוע שעבר." },
+  { label:"פתיחה", html:`<div class="eye">שיעור 4 · מודים למיינקראפט</div><div class="row3">${NE4}</div><h1>ממד משלכם</h1><p class="sub">איך בונים עולם שלם, מהקוביות ועד השמיים?</p>`,
+    notes:"0–2 דק׳. ה־Nether וה־End הם ממדים: עולמות אחרים בתוך מיינקראפט, עם קוביות, שמיים וחוקים משלהם. היום כל אחד ממציא ממד משלו. קודם מדברים על איך Mojang בנו את הממדים שלהם, אחר כך כל אחד ממלא דף, ובסוף בונים במשחק חפץ שמביא קצת מהממד." },
 
-  { label:"מה חדש", html:`<h2>מה יש עכשיו בסטודיו?</h2><div class="fls g4">${flip("n1","<b>קליעים</b>","חץ, כדור שלג, כדור אש<small>ומה קורה כשהוא פוגע</small>")}${flip("n2","<b>העולם</b>","ברק, קוביות, מזג אוויר<small>והשעה ביום</small>")}${flip("n3","<b>ממדים</b>","Nether ו־End<small>ובחזרה הביתה</small>")}${flip("n4","<b>זמן</b>","לחכות<small>ואז להמשיך</small>")}</div>`,
-    notes:"3–7 דק׳. על כל כרטיס שואלים: מה הייתם בונים עם זה? רק אחרי שענו, הופכים. בסטודיו כל קבוצה היא צבע בתפריט: ״קליעים״, ״העולם״, ובתוך ״לי וליצורים״ יש ״לעבור לממד״." },
+  { label:"זוכרים?", html:`<h2>זוכרים? מה עולם צריך</h2><div class="rules"><div><span class="n">1</span><b>רעיון אחד חזק</b>כמה מילים.</div><div><span class="n">2</span><b>מזהים אותו בשנייה</b>צבעים, ודבר שרואים רק שם.</div><div><span class="n">3</span><b>משהו שונה</b>כמו... חוץ מזה ש...</div><div><span class="n">4</span><b>חוק משלו</b>שמשנה מה עושים שם.</div></div><p class="sub reveal-line" data-c="rv" data-id="r1">היום: איך בונים מזה ממד שלם.</p>`,
+    notes:"2–3 דק׳. לפני שמראים, שואלים: מה למדנו בשיעור הראשון על מה שעולם צריך? נותנים להם לענות, ואז מראים את הארבעה. לוחצים על השורה: היום ממשיכים מזה." },
 
-  { label:"מתי?", html:`<h2>עוד ארבעה ״מתי״</h2><div class="fls g4">${flip("w1","<b>כשלוחצים על קובייה</b>","<small>למשל:</small>הקובייה הופכת לזהב")}${flip("w2","<b>כששוברים קובייה</b>","<small>למשל:</small>גם הקוביות מסביב נשברות")}${flip("w3","<b>כשהורגים יצור</b>","<small>למשל:</small>יוצאים ממנו לבבות")}${flip("w4","<b>כשמשהו פוגע בי</b>","<small>למשל:</small>מי שפגע עף אחורה")}</div>`,
-    notes:"7–11 דק׳. עד עכשיו היו ארבעה ״מתי״: לחיצה ימנית, מכה ביצור, לחיצה על יצור, וכל שנייה. עכשיו יש עוד ארבעה. על כל כרטיס שואלים: מה הייתם עושים כאן? רק אחרי שענו, הופכים." },
+  { label:"שכבות", html:`<h2>מה יש מתחת לרגליים?</h2><div class="row3">${OW4}${NE4}${EN4}</div><p class="sub reveal-line" data-c="rv" data-id="l1">כל ממד בנוי משכבות: מה למעלה, מה מתחת, ומה הכי עמוק.</p>`,
+    notes:"3–5 דק׳. שואלים על כל ממד: מה תמצאו אם תחפרו ישר למטה? ב־Overworld: דשא, אדמה, אבן, ובעומק Deepslate ויהלומים. ב־Nether: תקרה של Bedrock, Netherrack, וים של לבה. ב־End: אי אחד באוויר, ומתחתיו כלום. לוחצים על השורה. בדף שלכם יש קופסה לשכבות: מציירים אותן." },
+
+  { label:"מה נדיר?", html:`<h2>למה Netherite הכי חזק?</h2><div class="row3"><figure class="crf">${img("block_ancient_debris_side","big4")}<figcaption>Ancient Debris</figcaption></figure><span class="ar4">➜</span><figure class="crf">${img("item_netherite_ingot","big4")}<figcaption>Netherite Ingot</figcaption></figure></div>
+    <div class="fls">${flip("d1","<b>איפה הוא?</b>","עמוק ב־Nether<small>מתחת לים הלבה</small>")}${flip("d2","<b>כמה יש ממנו?</b>","מעט מאוד<small>צריך לחפש הרבה</small>")}${flip("d3","<b>אז מה הוא שווה?</b>","הכי הרבה<small>החפצים הכי חזקים במשחק</small>")}</div>`,
+    notes:"5–7 דק׳. Ancient Debris נמצא רק ב־Nether, עמוק, מתחת לים הלבה, ויש ממנו מעט מאוד. ממנו מכינים Netherite, והחפצים מ־Netherite הם הכי חזקים במשחק. שואלים על כל כרטיס, ורק אז הופכים. ואז: למה Mojang לא שמו אותו ליד הבית? (כי מה שקל להשיג, לא שווה הרבה.) גם יהלומים נמצאים עמוק. בדף: מה הכי נדיר בממד שלכם, ואיפה הוא מתחבא?" },
+
+  { label:"הצבע", html:`<h2>איזה ממד מפחיד יותר?</h2>${vote("v1",[{l:"א",t:sky4("#3A0E0E","#FF7A1A")},{l:"ב",t:sky4("#9FD8FF","#FFFFFF")}])}<p class="sub reveal-line" data-c="rv" data-id="c1">צבע השמיים והערפל הוא הדבר הראשון שרואים כשנכנסים, והוא קובע איך מרגישים.</p>`,
+    notes:"7–9 דק׳. הצבעה בהרמת יד. אחר כך: ה־Nether, ערפל אדום וחשוך, ומרגישים חום וסכנה. ה־End, שחור, ומרגישים לבד. ה־Overworld, כחול, ומרגישים בבית. בדף: איזה צבע יש לשמיים שלכם, ואיזה לערפל? ויש שם בכלל יום?" },
+
+  { label:"מה מרגישים?", html:`<h2>מה מרגישים ברגליים?</h2><div class="fls">${flip("f1","<b>כוח משיכה חלש</b>","קופצים גבוה<small>ונופלים לאט</small>")}${flip("f2","<b>רצפה של קרח</b>","קשה לעצור<small>כל צעד מחליק</small>")}${flip("f3","<b>אין קרקע מתחת</b>","נופלים לתוך כלום<small>כמו ב־End</small>")}</div>`,
+    notes:"9–11 דק׳. ממד הוא לא רק איך שהוא נראה, אלא גם איך מרגישים בו. על כל כרטיס שואלים: מה זה משנה במשחק? רק אחרי שענו, הופכים. בדף: כוח המשיכה אצלכם חלש, רגיל או חזק?" },
+
+  { label:"מה צומח?", html:`<h2>גם הצמחים מספרים איפה אנחנו</h2><div class="row3"><figure class="crf">${img("block_crimson_stem","big4")}<figcaption>Crimson<small>Nether</small></figcaption></figure><figure class="crf">${img("block_warped_stem","big4")}<figcaption>Warped<small>Nether</small></figcaption></figure><figure class="crf">${img("block_chorus_plant","big4")}<figcaption>Chorus<small>End</small></figcaption></figure></div>`,
+    notes:"11–12 דק׳. ב־Nether אין עצים רגילים: יש פטריות ענקיות, אדומות וכחולות. ב־End צומח Chorus, צמח סגול שאוכלים ממנו ונשלחים למקום אחר. מספיק לראות צמח אחד, ויודעים איפה אנחנו. בדף: מה צומח אצלכם?" },
+
+  { label:"מבנה", html:`<h2>מקום ששווה להגיע אליו</h2><div class="fls">${flip("s1",`${img("block_nether_bricks","ico")}<b>Nether Fortress</b>`,"Blaze Rod<small>אבל יש שם Blazes</small>")}${flip("s2",`${img("block_gilded_blackstone","ico")}<b>Bastion</b>`,"הרבה זהב<small>אבל יש שם Piglins</small>")}${flip("s3",`${img("block_purpur_block","ico")}<b>End City</b>`,"Elytra<small>אבל יש שם Shulkers</small>")}</div><p class="sub reveal-line" data-c="rv" data-id="s4">בכל מבנה טוב יש אוצר, ויש סכנה.</p>`,
+    notes:"12–14 דק׳. שואלים על כל מבנה: מה האוצר? ומה השומר? רק אחרי שענו, הופכים. לוחצים על השורה. בלי אוצר, אין סיבה להיכנס. בלי סכנה, זה סתם ארגז. בדף: מבנה אחד בממד שלכם, מה האוצר ומה הסכנה." },
+
+  { label:"הדלת", html:`<h2>איך נכנסים?</h2><div class="row3"><figure class="crf">${img("block_obsidian","big4")}<figcaption>Nether<small>שער מ־Obsidian. צריך מכוש יהלום.</small></figcaption></figure><figure class="crf">${img("item_ender_eye","big4")}<figcaption>End<small>12 Eyes of Ender. צריך Blazes ו־Endermen.</small></figcaption></figure></div><p class="sub reveal-line" data-c="rv" data-id="d4">הכניסה עולה משהו. ככה מרגישים שהגעתם למקום מיוחד.</p>`,
+    notes:"14–15 דק׳. ל־Nether נכנסים דרך שער מ־Obsidian, ובשביל לכרות Obsidian צריך מכוש יהלום. ל־End צריך 12 Eyes of Ender, ובשבילם צריך להילחם ב־Blazes וב־Endermen. שואלים: מה היה קורה אם היה אפשר להיכנס בלי כלום? (זה לא היה מרגיש מיוחד.) בדף: איך נכנסים לממד שלכם, ומה זה עולה?" },
+
+  { label:"אז ממד צריך", html:`<h2>אז ממד צריך</h2><div class="rules"><div><span class="n">1</span><b>שכבות</b>מה למעלה, ומה מתחת</div><div><span class="n">2</span><b>משהו נדיר</b>עמוק, וקשה להשיג</div><div><span class="n">3</span><b>צבע</b>שמיים וערפל</div><div><span class="n">4</span><b>הרגשה</b>כוח משיכה, רצפה</div><div><span class="n">5</span><b>מה צומח</b></div><div><span class="n">6</span><b>מבנה</b>אוצר וסכנה</div><div><span class="n">7</span><b>דלת</b>שעולה משהו</div></div><p class="sub">את כל אלה ממלאים בדף.</p>`,
+    notes:"15–16 דק׳. עוברים עליהם בקצרה. את כל אלה ממלאים בדף ״הממד שלי״." },
+
+  { label:"הדף: הממד שלי", html:`<h2>הדף: הממד שלי</h2><div class="duo"><ol class="big"><li>שם, ומשפט אחד</li><li>מציירים את השכבות</li><li>שלוש קוביות, ומינרל נדיר</li><li>שמיים, כוח משיכה, צמחים</li><li>מבנה אחד, ואיך נכנסים</li></ol><div>${timer("t0",13*60)}</div></div><p class="sub">לא חייבים למלא הכול. עדיף מעט ומעניין.</p>`,
+    notes:"16–30 דק׳. מחלקים את הדף ״הממד שלי״ וטושים, ומפעילים את השעון. מסתובבים ושואלים כל אחד שאלה אחת: ״מה הכי נדיר אצלך, ולמה?״ או ״איך נכנסים, ומה זה עולה?״ מי שסיים מוקדם: מציירים את המבנה. בסוף: הדף נשאר אצלם, נשתמש בו שוב." },
+
+  { label:"מה חדש", html:`<h2>מה יש עכשיו בסטודיו?</h2><div class="fls g4">${flip("n1","<b>קליעים</b>","חץ, כדור שלג, כדור אש<small>ומה קורה כשהוא פוגע</small>")}${flip("n2","<b>העולם</b>","קוביות, מזג אוויר<small>והשעה ביום</small>")}${flip("n3","<b>ממדים</b>","Nether ו־End<small>ובחזרה הביתה</small>")}${flip("n4","<b>הרגשה</b>","קפיצה, ריחוף<small>ונפילה איטית</small>")}</div>`,
+    notes:"30–33 דק׳. בשבוע שעבר ביקשתם עוד בלוקים. עכשיו יש בסטודיו עשרות בלוקים חדשים. על כל כרטיס שואלים: מה מהדף שלכם אפשר לבנות עם זה? רק אחרי שענו, הופכים." },
 
   { label:"קליע", html:`<h2>מה קורה כשהקליע פוגע?</h2><div class="duo">${SNOW4}<div><p class="sub">שרביט שלג</p><p class="sub reveal-line" data-c="rv" data-id="k1">מה שבתוך ״לירות״ קורה רק כשהכדור פוגע, ובמקום שבו הוא פוגע.</p></div></div>`,
-    notes:"11–16 דק׳. זה שרביט השלג, החפץ המוכן של היום. קוראים יחד מלמעלה למטה. שואלים: מה קורה מיד כשלוחצים? (יורים, והשרביט נח.) ומה קורה אחר כך? (כשהכדור פוגע: שלג, ויצור קופא.) למה ״להקפיא את היצור״ נמצא בתוך ״לירות״, ולא מתחתיו? (כי ״היצור״ הוא מי שהכדור פגע בו. מתחת ל״לירות״ אין יצור.) לוחצים על השורה כדי שתופיע." },
+    notes:"33–36 דק׳. זה שרביט השלג, החפץ המוכן של היום. קוראים יחד מלמעלה למטה. שואלים: מה קורה מיד כשלוחצים? (יורים, והשרביט נח.) ומה קורה אחר כך? (כשהכדור פוגע: שלג, ויצור קופא.) לוחצים על השורה." },
 
-  { label:"איפה?", html:`<h2>איפה זה קורה?</h2><div class="fls">${flip("p1","<b>אני</b>","לידי, עליי, מתחתיי")}${flip("p2","<b>היצור</b>","מי שהכיתי<small>או מי שהקליע פגע בו</small>")}${flip("p3","<b>הנקודה</b>","המקום שמכוונים אליו<small>או המקום שבו הקליע פגע</small>")}</div>`,
-    notes:"16–19 דק׳. ברק, פיצוץ, קוביות וחלקיקים: בכל אחד בוחרים איפה. ״הנקודה״ זה הדבר החדש. בלי קליע: המקום שמכוונים אליו, עד 40 קוביות. בתוך ״לירות״: המקום שבו הקליע פגע. ב״כשלוחצים על קובייה״: הקובייה שלחצו עליה." },
-
-  { label:"לחכות", html:`<h2>שלושה חצים: מה ההבדל?</h2><div class="duo">${code4([[0,"לחזור 3 פעמים"],[1,"לירות חץ במהירות 4"]])}${code4([[0,"לחזור 3 פעמים"],[1,"לירות חץ במהירות 4"],[1,"לחכות 0.5 שניות"]])}</div>
-    <p class="sub reveal-line" data-c="rv" data-id="t1">בלי ״לחכות״ שלושת החצים יוצאים ביחד. עם ״לחכות״: אחד, ועוד אחד, ועוד אחד.</p>`,
-    notes:"19–23 דק׳. שואלים: מה ההבדל בין שתי התוכניות? נותנים לנחש, ורק אז לוחצים על השורה. המחשב עושה הכול מהר מאוד. אם רוצים שמשהו יקרה אחרי משהו אחר, צריך לבקש ממנו לחכות. ״לחכות״ עוצר רק את הבלוקים שמתחתיו." },
-
-  { label:"כוח ומחיר", html:`<div class="duo"><div style="display:grid;gap:14px;justify-items:center">${tooltip("מטה הסופה",["לילה, סופת ברקים, וחמישה Zombie."],"epic")}</div><div><h2>בלי מחיר. הוגן?</h2>${vote("v1",[{l:"כן",t:"מגניב!"},{l:"לא",t:"זה הורס את המשחק"}])}</div></div>
-    <div class="board"><span class="tag">המחיר של המטה</span><span>${field("price4","מה הוא יעלה?")}</span></div>`,
-    notes:"23–28 דק׳. מטה הסופה, בלי שום מחיר. הצבעה. למי שאמר כן: ומה קורה כשמשתמשים בו כל דקה? כוח חזק צריך מחיר. יש עכשיו מחיר חדש: רמות XP. מתקנים יחד, וכותבים בשורה הירוקה. (״החפץ נח 60 שניות״? ״המחיר: 5 רמות XP״? שניהם?)" },
-
-  { label:"החפץ של הכיתה", html:`<h2>כוח חדש לחפץ של הכיתה</h2><div class="board"><span class="tag">החפץ של הכיתה</span><span>מתי? ${chips("cw4",["לחיצה ימנית","מכים יצור","הורגים יצור","משהו פוגע בי"])}</span><span>מה קורה? ${field("cdo4","קליע? העולם? ממד?")}</span><span>מחיר: ${field("cprice4","מה הוא עולה?")}</span></div>`,
-    notes:"28–36 דק׳. ממציאים יחד כוח חדש לחפץ של הכיתה, עם בלוק חדש אחד לפחות. קודם ״מתי״, אחר כך מה קורה, ובסוף המחיר. שואלים: מה השחקן רואה כשזה קורה? (חלקיקים? צליל?)" },
-
-  { label:"הדגמה", html:`<h2>מהדף למשחק</h2><div class="steps">
+  { label:"הדגמה", html:`<h2>מהדף לבקבוק</h2><div class="steps">
       <div><span class="ico k">Minecraft</span><b>פותחים את הדף</b>Minecraft בתפריט Start, ובוחרים שיעור 4</div>
-      <div><span class="ico k">❄</span><b>שרביט שלג</b>שלב 3: הבלוקים שלו</div>
-      <div><span class="ico k">▶</span><b>לפתוח את מיינקראפט</b>לוקחים אותו מ־E, ויורים</div>
-      <div><span class="ico k">+</span><b>חפץ חדש</b>שם, ציור, ובלוקים חדשים</div>
+      <div><span class="ico k">❄</span><b>שרביט שלג</b>שלב 4: לוקחים אותו מ־E, ויורים</div>
+      <div><span class="ico k">+</span><b>בקבוק הממד</b>שם, משפט וציור</div>
+      <div><span class="ico k">▶</span><b>הכוח</b>רצפה, שמיים, חלקיקים, כוח משיכה</div>
       <div><span class="ico k">E</span><b>בודקים במשחק</b>סוגרים ופותחים את המשחק</div></div>`,
-    notes:"36–44 דק׳. מדגימים על המקרן, בדף של הילדים. 1. פותחים Minecraft מתפריט Start, מקלידים את הקוד, ולוחצים ״להתחיל״ בשיעור 4. 2. שלב 3: מראים את הבלוקים של שרביט השלג. 3. ״לפתוח את מיינקראפט״, לוקחים את השרביט מ־E, ויורים על האדמה ועל יצור. 4. בחזרה לדף, שלבים 4 ו־5: מראים איך גוררים ״לירות״, ואיך שמים בתוכו בלוק של ״העולם״. חשוב להגיד: חפץ חדש נכנס למשחק רק אחרי שסוגרים את מיינקראפט ופותחים שוב." },
+    notes:"36–44 דק׳. מדגימים על המקרן, בדף של הילדים. 1. פותחים Minecraft מתפריט Start, מקלידים את הקוד, ולוחצים ״להתחיל״ בשיעור 4. 2. שלב 4: ״לפתוח את מיינקראפט״, לוקחים את שרביט השלג מ־E, ויורים. 3. בחזרה לדף, שלבים 5 ו־6: נותנים שם לבקבוק, ומראים את הדוגמה ״בקבוק הממד״: רצפה של End Stone, חלקיקים של פורטל, חצות, קפיצה גבוהה ונפילה איטית. שואלים: איך הייתם משנים אותה כדי שתתאים לדף שלכם? חשוב להגיד: חפץ חדש נכנס למשחק רק אחרי שסוגרים את מיינקראפט ופותחים שוב." },
 
-  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><div class="duo"><ol class="big"><li>שיעור 4 בדף: ״להתחיל״</li><li>יורים בשרביט השלג</li><li>חפץ חדש: שם וציור</li><li>כוח עם בלוקים חדשים</li><li>בודקים במשחק, ושומרים בדרייב</li></ol><div>${timer("t1",36*60)}</div></div>`,
-    notes:"44–80 דק׳. מפעילים את השעון ומסתובבים בכיתה. שואלים כל ילד שאלה אחת: ״מה המחיר של הכוח?״ מי שתקוע: קודם ״נתקעתי״ בתחתית השלב, אחר כך מי שיושב לידו. מי שסיים מוקדם: האתגרים בשלב האחרון בדף. ״לחזור״ עם ״לחכות״, הלוך וחזור לממד אחר, ו״מתי״ חדש." },
+  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><div class="duo"><ol class="big"><li>שיעור 4 בדף: ״להתחיל״</li><li>יורים בשרביט השלג</li><li>בקבוק הממד: שם וציור</li><li>הכוח: הממד מהדף</li><li>בודקים במשחק, ושומרים בדרייב</li></ol><div>${timer("t1",38*60)}</div></div>`,
+    notes:"44–82 דק׳. מפעילים את השעון ומסתובבים בכיתה. לכל ילד שאלה אחת: ״מה בבקבוק מגיע מהדף שלך?״ מי שתקוע: קודם ״נתקעתי״ בתחתית השלב, אחר כך מי שיושב לידו. מי שסיים מוקדם: האתגרים בשלב האחרון בדף. הלוך וחזור לממד אחר, ו״לחזור״ עם ״לחכות״." },
 
   { label:"משהו לא עבד?", html:`<h2>משהו לא עבד?</h2><div class="rules">
       <div><b>שום דבר לא קורה</b>הבלוקים צריכים להיות בתוך בלוק של ״מתי״. ושינוי בחפץ נכנס למשחק רק כשפותחים את המשחק מחדש.</div>
@@ -900,8 +929,8 @@ const DECK4 = [
       <div><b>המשחק לא נפתח</b>תפריט ← ״לסגור את מיינקראפט״, ושוב ״לפתוח את מיינקראפט״.</div></div>`,
     notes:"משאירים את השקופית הזאת על המסך בזמן העבודה, אם לא צריך את השעון." },
 
-  { label:"סיום", html:`<h1>מי מנחש?</h1><p class="sub">מראים את הכוח במשחק. הכיתה מנחשת אילו בלוקים יש בו.</p>`,
-    notes:"80–90 דק׳. שניים או שלושה מראים את החפץ החדש על המקרן, והכיתה מנחשת: מה ה״מתי״? מה קורה? מה המחיר? אחר כך כולם שומרים את העולם בדרייב, וסוגרים את מיינקראפט." }
+  { label:"סיום", html:`<h1>איזה ממד זה?</h1><p class="sub">משתמשים בבקבוק על המקרן. הכיתה מנחשת מה כתוב בדף.</p>`,
+    notes:"82–90 דק׳. שניים או שלושה משתמשים בבקבוק שלהם על המקרן, והכיתה מנחשת: איך הממד נראה? מה נדיר שם? איך נכנסים? אחר כך מראים את הדף, ובודקים מי צדק. כולם שומרים את הדף ואת העולם בדרייב, וסוגרים את מיינקראפט." }
 ];
 H.DECKS[4] = DECK4;
 window.STAGE = { apply, bind, tick, CSS, fmt };

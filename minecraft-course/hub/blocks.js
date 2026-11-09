@@ -444,6 +444,8 @@ const EXAMPLES = [
     lore:["החורף בא איתו.","Winter comes with it."], rarity:"uncommon",
     pic:{ pal:{ k:"#1d2b3a", w:"#8a5a2b", s:"#7cc4f0", S:"#ffffff" }, rows:["...........S....","........S..S..S.",".........S.s.S..","........SSsSsSS.",".........S.s.S..","........S..S..S.","...........S....","........kwk.....",".......kwk......","......kwk.......",".....kwk........","....kwk.........","...kwk..........","..kwk...........",".kwk............","kk.............."] },
     prog:{ on:{ use:[{a:"shoot",pr:"snowball",v:3,hit:[{a:"particles",pt:"snowflake",who:"spot",n:30},{a:"setblock",b:"snow",who:"spot"},{a:"freeze",who:"target",s:3}]},{a:"cooldown",s:2}] } } },
+  { id:"dimension_bottle", lesson:4, he:["בקבוק הממד","לחיצה ימנית: הרצפה סביבכם הופכת לממד אחר, נהיה לילה, ואתם קופצים גבוה ונופלים לאט."], en:["Dimension bottle","Right-click: the floor around you turns into another dimension, night falls, and you jump high and fall slowly."],
+    prog:{ on:{ use:[{a:"fill",sh:"floor",b:"end_stone",r:4,who:"me"},{a:"particles",pt:"portal",who:"me",n:60},{a:"time",tm:"midnight"},{a:"effect",e:"jump_boost",who:"me",s:30,l:2},{a:"effect",e:"slow_falling",who:"me",s:30,l:1},{a:"sound",snd:"block.portal.travel"},{a:"cooldown",s:30}] } } },
   { id:"storm_staff", lesson:4, he:["מטה הסופה","לחיצה ימנית: סופת ברקים, ושלושה ברקים בנקודה שמכוונים אליה."], en:["Storm staff","Right-click: a thunderstorm, and three lightning bolts where you aim."],
     prog:{ on:{ use:[{a:"weather",w:"thunder"},{repeat:3,do:[{a:"lightning",who:"spot"},{wait:1}]},{a:"cooldown",s:30}] } } },
   { id:"portal_key", lesson:4, he:["מפתח הממדים","לחיצה ימנית: עוברים ל־Nether. ב־Nether: חוזרים הביתה."], en:["Dimension key","Right-click: go to the Nether. In the Nether: go back home."],

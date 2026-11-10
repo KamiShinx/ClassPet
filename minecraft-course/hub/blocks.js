@@ -52,12 +52,12 @@ try {
   all.filter(e => e[4] && !have.has(e[0]) && !no.test(e[0]))
     .sort((a, b) => String(a[1]).localeCompare(String(b[1]))).forEach(e => { const n = String(e[1] || nice(e[0])); BLOCKS.push([n, n, e[0]]); });
 } catch (e) {}
-// Kids pick a block by its picture: each choice in the menu is a small image, the block's picture and its name (Hebrew when the game has one).
+// Kids pick a block by its picture: each choice in the menu is a small image, the block's picture and its English name.
 const SHEET = new Image(); SHEET.src = "mc_items.png";
 const BIMG = {};
 function blockImg(b){
-  const he = !en(), key = (he ? "he:" : "en:") + b[2]; if (BIMG[key]) return BIMG[key];
-  const p = BPIC[b[2]], name = he ? (b[2] === "air" ? b[0] : (p && p.he) || b[0]) : b[1], k = 2, h = 22;
+  const he = false, key = b[2]; if (BIMG[key]) return BIMG[key];   // names stay English, as in the game (Ben, 10 Nov)
+  const p = BPIC[b[2]], name = b[1], k = 2, h = 22;
   const c = document.createElement("canvas"), g = c.getContext("2d"), font = "600 13px Rubik, Arial, sans-serif";
   g.font = font; const w = Math.ceil(28 + g.measureText(name).width + 4);
   c.width = w * k; c.height = h * k; g.scale(k, k); g.imageSmoothingEnabled = false;

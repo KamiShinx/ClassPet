@@ -41,6 +41,33 @@ const BLOCKS = ["air","stone","cobblestone","dirt","grass_block","sand","gravel"
   "water","lava","fire","soul_fire","cobweb","tnt","gold_block","diamond_block","emerald_block","iron_block","glowstone","sea_lantern","slime_block","honey_block","magma_block",
   "netherrack","soul_sand","end_stone","purpur_block","sponge","hay_block","torch","pumpkin","jack_o_lantern","bookshelf","amethyst_block","sculk","moss_block","mud","bedrock"]
   .map(id => [id === "air" ? "כלום (אוויר)" : nice(id), id === "air" ? "Nothing (air)" : nice(id), id]);
+// After the usual ones: every other block in the game, from mc_items.json (update-hub.ps1 makes it from the game jar).
+// Read before the editor opens, so a saved program with any block loads as it was. Left out: beds, portals, spawners.
+const BLOCKS0 = BLOCKS.slice(), BPIC = {};
+try {
+  const x = new XMLHttpRequest(); x.open("GET", "mc_items.json", false); x.send();
+  const have = new Set(BLOCKS.map(b => b[2])), no = /command_block|structure_|jigsaw|barrier|^light$|nether_portal|end_portal$|end_gateway|spawner|^vault$|piston_head|^test_|_bed$/;
+  const all = x.status === 200 ? JSON.parse(x.responseText) : [];
+  all.forEach(e => { BPIC[e[0]] = { pic: +e[3], he: String(e[2] || "") }; });
+  all.filter(e => e[4] && !have.has(e[0]) && !no.test(e[0]))
+    .sort((a, b) => String(a[1]).localeCompare(String(b[1]))).forEach(e => { const n = String(e[1] || nice(e[0])); BLOCKS.push([n, n, e[0]]); });
+} catch (e) {}
+// Kids pick a block by its picture: each choice in the menu is a small image, the block's picture and its name (Hebrew when the game has one).
+const SHEET = new Image(); SHEET.src = "mc_items.png";
+const BIMG = {};
+function blockImg(b){
+  const he = !en(), key = (he ? "he:" : "en:") + b[2]; if (BIMG[key]) return BIMG[key];
+  const p = BPIC[b[2]], name = he ? (b[2] === "air" ? b[0] : (p && p.he) || b[0]) : b[1], k = 2, h = 22;
+  const c = document.createElement("canvas"), g = c.getContext("2d"), font = "600 13px Rubik, Arial, sans-serif";
+  g.font = font; const w = Math.ceil(28 + g.measureText(name).width + 4);
+  c.width = w * k; c.height = h * k; g.scale(k, k); g.imageSmoothingEnabled = false;
+  if (p && p.pic >= 0) g.drawImage(SHEET, (p.pic % 40) * 16, Math.floor(p.pic / 40) * 16, 16, 16, he ? w - 20 : 2, 2, 18, 18);
+  g.font = font; g.fillStyle = "#fff"; g.textBaseline = "middle"; g.textAlign = he ? "right" : "left";
+  g.fillText(name, he ? w - 26 : 26, h / 2 + 1);
+  return (BIMG[key] = { src: c.toDataURL(), width: w, height: h, alt: name });
+}
+const blockOpts = () => SHEET.complete && SHEET.naturalWidth ? BLOCKS.map(b => [blockImg(b), b[2]]) : opts(BLOCKS)();
+const ddB = { type:"field_dropdown", name:"B", options: blockOpts };
 const ITEMS = ["diamond","emerald","gold_ingot","iron_ingot","netherite_ingot","golden_apple","enchanted_golden_apple","cooked_beef","bread","cookie","cake","apple","arrow",
   "ender_pearl","snowball","egg","tnt","torch","totem_of_undying","experience_bottle","firework_rocket","wind_charge","fire_charge","diamond_sword","bow","shield","elytra",
   "trident","oak_planks","cobblestone","water_bucket","lava_bucket","saddle","name_tag","bone","string","feather"].map(id => [nice(id), nice(id), id]);
@@ -102,8 +129,8 @@ const DEFS = [
   ["a_explode","פיצוץ %1 בעוצמה %2, הורס קוביות %3","Explosion %1, power %2, breaks blocks %3",
     [{type:"field_dropdown",name:"WHO",options:opts(where3(["לידי","ליד היצור","בנקודה"],["next to me","next to the creature","at the spot"]))},num("P",2,1,6),{type:"field_checkbox",name:"BREAK",checked:false}],"world"],
   ["a_spawn","לזמן %1 %2, כמות: %3","Summon %1 %2, how many: %3",[dd("M", MOBS),{type:"field_dropdown",name:"WHO",options:opts(where3(["לידי","ליד היצור","בנקודה"],["next to me","next to the creature","at the spot"]))},num("N",1,1,5)],"world"],
-  ["a_setblock","לשים %1 %2","Put %1 %2",[dd("B", BLOCKS),{type:"field_dropdown",name:"WHO",options:opts(where3(["מתחתיי","איפה שהיצור עומד","בנקודה"],["under me","where the creature stands","at the spot"]))}],"world"],
-  ["a_fill","לבנות %1 מ־%2 בגודל %3, %4","Build a %1 of %2, size %3, %4",[dd("SH", SHAPES),dd("B", BLOCKS),num("R",2,1,5),{type:"field_dropdown",name:"WHO",options:opts(where3(["סביבי","סביב היצור","סביב הנקודה"],["around me","around the creature","around the spot"]))}],"world"],
+  ["a_setblock","לשים %1 %2","Put %1 %2",[ddB,{type:"field_dropdown",name:"WHO",options:opts(where3(["מתחתיי","איפה שהיצור עומד","בנקודה"],["under me","where the creature stands","at the spot"]))}],"world"],
+  ["a_fill","לבנות %1 מ־%2 בגודל %3, %4","Build a %1 of %2, size %3, %4",[dd("SH", SHAPES),ddB,num("R",2,1,5),{type:"field_dropdown",name:"WHO",options:opts(where3(["סביבי","סביב היצור","סביב הנקודה"],["around me","around the creature","around the spot"]))}],"world"],
   ["a_dig","לשבור קוביות %1 בגודל %2","Break blocks %1, size %2",[{type:"field_dropdown",name:"WHO",options:opts(where3(["סביבי","סביב היצור","סביב הנקודה"],["around me","around the creature","around the spot"]))},num("R",1,1,3)],"world"],
   ["a_particles","חלקיקים: %1 %2, כמות: %3","Particles: %1 %2, how many: %3",[dd("PT", PARTS),{type:"field_dropdown",name:"WHO",options:opts(where3(["סביבי","סביב היצור","בנקודה"],["around me","around the creature","at the spot"]))},num("N",20,1,100)],"world"],
   ["a_weather","מזג האוויר: %1","Weather: %1",[dd("W", WEATHER)],"world"],
@@ -128,7 +155,7 @@ const DEFS = [
   ["q_target","היצור הוא %1","the creature is %1",[dd("M", MOBS)],"q"],
   ["q_effect","יש לי %1","I have %1",[dd("E", EFFECTS)],"q"],
   ["q_water","אני במים","I'm in water",[],"q"], ["q_burning","יש עליי אש","I'm on fire",[],"q"], ["q_air","אני באוויר","I'm in the air",[],"q"],
-  ["q_on","מתחתיי יש %1","there's %1 under me",[dd("B", BLOCKS)],"q"],
+  ["q_on","מתחתיי יש %1","there's %1 under me",[ddB],"q"],
   ["q_high","אני בגובה מעל %1","I'm higher than %1",[num("N",100,-60,320)],"q"],
   ["q_dim","אני ב־%1","I'm in the %1",[dd("D", DIMS)],"q"],
   ["q_biome","אני ב־%1","I'm in %1",[dd("BI", BIOMES)],"q"],
@@ -348,7 +375,7 @@ COND: {"c":"night"} {"c":"day"} {"c":"rain"} {"c":"thunder"} {"c":"sneak"} {"c":
 EFFECT: ${ids(EFFECTS)}
 MOB: ${ids(MOBS)}
 SOUND: ${ids(SOUNDS)}
-BLOCK: ${ids(BLOCKS)}
+BLOCK: ${ids(BLOCKS0)} (or any other Minecraft block id)
 ITEM: ${ids(ITEMS)}
 PROJECTILE: ${ids(PROJ)}
 PARTICLE: ${ids(PARTS)}

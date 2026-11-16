@@ -23,6 +23,7 @@ const RX = [
   [/^יותר מדי ניסיונות\. מחכים (\d+) שניות\.$/, "Слишком много попыток. Подожди $1 сек."],
   [/^יוצאים: (\d+) × (.*)$/, (m, n, x) => "Получается: " + n + " × " + (x === "החפץ" ? "предмет" : x)],
   [/^לחפץ ״(.*)״ יש בדיוק אותו מתכון\..*$/, "У предмета «$1» точно такой же рецепт. Поменяй один материал, чтобы игра знала, что делать."],
+  [/^([A-Za-z0-9' ]+) · [א-ת].*$/, "$1"],   // a recipe item's tooltip, "Stick · מקל": the game's English name is enough
   [/^הקוד נכנס לקובץ (\w+\.java)$/, "Код попал в файл $1"], [/^נטען הציור הקיים של (.*)$/, "Загружен рисунок предмета $1"]
 ];
 function tr(t){
@@ -59,9 +60,27 @@ function challenges(n, list){
     lvl: c.lvl === "חובה" ? "обязательно" : "задание" }));
 }
 
+/* ---------- the Drive steps: links and bold words cut these sentences into pieces, so the whole line is swapped.
+   Drive and Windows may be in Hebrew on the school computers: the buttons keep their Hebrew names, with the Russian. ---------- */
+const DRV = "<a href=\"https://drive.google.com\" target=\"_blank\" rel=\"noopener\">Drive</a>";
+const HEB = (he, r) => `<b>«<bdi>${he}</bdi>»</b> (${r})`;
+const LI = {
+  "פותחים את הדרייב, עם החשבון של משרד החינוך.": `Открой ${DRV} через аккаунт Министерства образования.`,
+  "לוחצים + חדש, ואז העלאת קובץ, ובוחרים מתיקיית הורדות את הקובץ myworld.":
+    `Нажми ${HEB("+ חדש", "Создать")}, потом ${HEB("העלאת קובץ", "Загрузить файл")} и выбери в папке ${HEB("הורדות", "Загрузки")} файл <b>myworld</b>.`,
+  "בדרייב לוחצים על קובץ myworld האחרון עם הכפתור הימני, ואז הורדה.":
+    `В Drive нажми правой кнопкой мыши на последний файл <b>myworld</b>, потом ${HEB("הורדה", "Скачать")}.`
+};
+function swapLines(root){
+  const lis = root.tagName === "LI" ? [root] : [...root.querySelectorAll("li")];
+  lis.forEach(li => { const r = LI[li.textContent.replace(/\s+/g, " ").trim()];
+    if (r) li.innerHTML = `<span lang="ru" dir="ltr" style="display:block;text-align:left">${r}</span>`; });
+}
+
 /* ---------- swap the words in a part of the page ---------- */
 function translate(root){
   if (!root) return;
+  if (root.querySelectorAll) swapLines(root);
   const w = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
   nodes.forEach(n => { const t = tr(n.nodeValue); if (t !== null) n.nodeValue = t; });

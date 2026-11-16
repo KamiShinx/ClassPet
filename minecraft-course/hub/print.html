@@ -4,7 +4,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>דפים להדפסה · מודים למיינקראפט</title>
 <style>
-  /* A4 pages for markers: the world card (lesson 1), the item card with a 16x16 grid (lesson 2), my dimension (lesson 4). */
+  /* A4 pages for markers: the world card (lesson 1), the item card with a 16x16 grid (lesson 2), my dimension (lesson 4),
+     my dimension's recipe and the build guide (lesson 5), and both of those with the Russian help. */
   @page { size: A4 portrait; margin: 10mm; }
   * { box-sizing: border-box; }
   html { background: #e9ece6; }
@@ -47,6 +48,39 @@
   .opts span { border: .6mm solid #111; border-radius: 6mm; padding: 1mm 3mm; }
   .opts small { align-self: center; }
   .line.sm { height: 8mm; }
+  /* lesson 5: the dimension's recipe and the build guide, in Hebrew and with the Russian help */
+  .lead5 { font-size: 3.6mm; color: #444; margin-top: -2mm; } .page[data-set~="l5"] { gap: 2.4mm; } .page[data-set~="l5"] .box { padding: 2.2mm 3.5mm; } .page[data-set~="l5"] .box b { font-size: 4.8mm; }
+  .shp5 { display: flex; gap: 1.6mm; flex-wrap: nowrap; margin-top: 1mm; }
+  .shp5 figure { margin: 0; display: grid; justify-items: center; gap: .3mm; font-size: 2.8mm; font-weight: 700; border: .5mm solid #111; border-radius: 2mm; padding: .8mm 1mm; }
+  .shp5 svg { width: 12mm; height: 7.5mm; fill: #888; }
+  .blk5 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 1.5mm; }
+  .blk5 .g { display: grid; grid-template-columns: repeat(16, 2.2mm); grid-template-rows: repeat(16, 2.2mm); border: .6mm solid #111; width: max-content; direction: ltr; margin-bottom: 1mm; }
+  .blk5 .g i { border: .15mm solid #aaa; }
+  .blk5 .opts { font-size: 3.2mm; gap: 1.5mm; margin-top: 1mm; }
+  .blk5 .line.sm { height: 5mm; flex: 1; } .f5 { display: flex; gap: 1.5mm; align-items: flex-end; width: 100%; } .sky5 { display: flex; gap: 3mm; align-items: center; } .sky5 .sw { margin-top: 0; } .page[data-set~="l5"] .opts { font-size: 3.2mm; gap: 1.4mm; margin-top: 1mm; } .page[data-set~="l5"] .opts span { padding: .5mm 2mm; } .blk5 > div { display: grid; justify-items: start; } .blk5 small { font-size: 3.2mm; }
+  .lay5 { display: grid; grid-template-columns: auto 1fr; gap: 0 2mm; align-items: end; font-size: 3.8mm; font-weight: 700; margin-top: 1mm; }
+  .lay5 .line.sm { height: 5.5mm; }
+  .chk5 { display: flex; flex-wrap: wrap; gap: 1.5mm 4mm; margin-top: 1.5mm; font-size: 3.8mm; }
+  .chk5 span::before { content: ""; display: inline-block; width: 3.4mm; height: 3.4mm; border: .5mm solid #111; margin-inline-end: 1.5mm; vertical-align: -.6mm; }
+  .pl5 { font-size: 3.4mm; gap: 1.2mm 3.5mm; }
+  .pl5 small { color: #555; font-size: 2.9mm; }
+  .steps5 { margin: 0; padding: 0; list-style: none; display: grid; gap: 2.4mm; counter-reset: s; }
+  .steps5 li { display: flex; gap: 3mm; align-items: flex-start; font-size: 4mm; line-height: 1.35; counter-increment: s; }
+  .steps5 li > i { flex: none; width: 6mm; height: 6mm; border: .7mm solid #111; border-radius: 1mm; margin-top: .4mm; }
+  .steps5 li b { font-size: 4.5mm; }
+  .steps5 li b::before { content: counter(s) ". "; }
+  .warn5 { background: #fff6d6; }
+  .warn5 ul { margin: 1mm 0 0; padding-inline-start: 5mm; font-size: 3.8mm; line-height: 1.35; }
+  .he5 { font-family: Arial, "Noto Sans Hebrew", sans-serif; font-size: 3.6mm; color: #333; }
+  .box b .he5 { font-weight: 400; margin-inline-start: 2mm; }
+  .ltr5 { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+  .ru5 .shp5 figure { font-size: 2.6mm; }
+  .ru5 .box > small, .ru5 .lead5 { font-size: 3.3mm; line-height: 1.25; }
+  .ru5 { font-family: Arial, "Segoe UI", sans-serif; }
+  /* print one set: body[data-only] hides the other pages */
+  body[data-only] .page { display: none; }
+  body[data-only="l5he"] .page[data-set~="he"][data-set~="l5"], body[data-only="l5ru"] .page[data-set~="ru"][data-set~="l5"] { display: flex; }
+  body[data-only="old"] .page:not([data-set]) { display: flex; }
   @media print {
     html { background: #fff; }
     .bar { display: none; }
@@ -54,7 +88,7 @@
     .page:last-child { break-after: auto; }
   }
 </style>
-<div class="bar"><span>שלושה דפים: כרטיס העולם (שיעור 1), כרטיס החפץ (שיעור 2), והממד שלי (שיעור 4). מדפיסים על A4, בלי הקטנה.</span><button onclick="print()">להדפיס</button></div>
+<div class="bar"><span>דפים 1–3: כרטיס העולם (שיעור 1), כרטיס החפץ (שיעור 2), הממד שלי (שיעור 4). דפים 4–5: המתכון של הממד ומדריך הבנייה (שיעור 5), ודפים 6–7: אותם דפים ברוסית, לילדים שעלו מרוסיה ומאוקראינה. מדפיסים על A4, בלי הקטנה.</span><span><button onclick="only('l5he')">שיעור 5</button> <button onclick="only('l5ru')">שיעור 5 ברוסית</button> <button onclick="only('old')">דפים 1–3</button> <button onclick="only('')">הכול</button></span></div>
 
 <section class="page">
   <div class="head"><h1>כרטיס העולם שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
@@ -113,7 +147,113 @@
     <div class="box"><b>איך נכנסים?</b><small>מה צריך כדי להגיע? הכניסה עולה משהו.</small><div class="line"></div><div class="line"></div></div>
   </div>
 </section>
+<section class="page" data-set="l5 he">
+  <div class="head"><h1>המתכון של הממד שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
+  <small class="lead5">מעתיקים מהדף ״הממד שלי״ ובוחרים. בחצי השני של השיעור בונים בדיוק את זה בסטודיו.</small>
+  <div class="box"><b>1. הקוביות שלי</b><small>מציירים כל קובייה, נותנים לה שם, מקיפים כמה היא מאירה, וכותבים מה יוצא ממנה כששוברים אותה</small>
+    <div class="blk5"><div><div class="g"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="f5"><small>שם:</small><div class="line sm"></div></div><div class="opts"><small>אור:</small><span>לא</span><span>קצת</span><span>חזק</span></div><div class="f5"><small>יוצא ממנה:</small><div class="line sm"></div></div></div><div><div class="g"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="f5"><small>שם:</small><div class="line sm"></div></div><div class="opts"><small>אור:</small><span>לא</span><span>קצת</span><span>חזק</span></div><div class="f5"><small>יוצא ממנה:</small><div class="line sm"></div></div></div><div><div class="g"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="f5"><small>שם:</small><div class="line sm"></div></div><div class="opts"><small>אור:</small><span>לא</span><span>קצת</span><span>חזק</span></div><div class="f5"><small>יוצא ממנה:</small><div class="line sm"></div></div></div></div></div>
+  <div class="row">
+    <div class="box" style="flex:0 0 52mm"><b>2. השם של הממד</b><div class="line"></div></div>
+    <div class="box"><b>3. הצורה של האדמה</b><small>מקיפים בעיגול אחת</small><div class="shp5"><figure><svg viewBox="0 0 64 40"><path d="M0 26h64v14H0z"/></svg><figcaption>שטוח</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M0 30q8-10 16-4t16-2 16-8 16 4v20H0z"/></svg><figcaption>גבעות וים</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M0 38l10-24 8 14 12-26 10 20 8-10 16 26z"/></svg><figcaption>הרים ענקיים</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M4 18h18l-4 8h-10zM34 10h24l-6 9h-12zM24 32h16l-3 6h-10z"/></svg><figcaption>איים באוויר</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M0 0h64v10q-10 6-20 2t-24 4-20-4zM0 40h64v-10q-12-6-24-2t-22 0-18 4z"/></svg><figcaption>מערה ענקית</figcaption></figure></div></div>
+  </div>
+  <div class="row">
+    <div class="box"><b>4. השכבות</b><small>בוחרים קובייה לכל שכבה: שלכם או של מיינקראפט</small>
+      <div class="lay5"><span>למעלה</span><div class="line sm"></div><span>מתחת</span><div class="line sm"></div><span>הכי עמוק</span><div class="line sm"></div></div>
+      <div class="opts"><small>הים:</small><span>מים</span><span>לבה</span><span>בלי ים</span></div></div>
+    <div class="box"><b>5. המינרל הנדיר</b><small>איזו קובייה?</small><div class="line sm"></div>
+      <div class="opts"><small>כמה:</small><span>נדיר מאוד</span><span>נדיר</span><span>יש הרבה</span></div>
+      <div class="opts"><small>איפה:</small><span>עמוק למטה</span><span>באמצע</span><span>קרוב למעלה</span></div></div>
+  </div>
+  <div class="row">
+    <div class="box"><b>6. השמיים</b><small>צובעים: שמיים, ערפל</small><div class="sky5"><div class="sw sm"><i></i><i></i></div>
+      <div class="opts"><small>זמן:</small><span>יום ולילה</span><span>תמיד יום</span><span>תמיד לילה</span></div></div></div>
+    <div class="box"><b>7. החוקים</b><div class="opts"><small>כוח המשיכה:</small><span>חלש</span><span>רגיל</span><span>חזק</span></div>
+      <div class="chk5"><span>מים מתאדים</span><span>המיטה מתפוצצת</span></div></div>
+  </div>
+  <div class="box"><b>8. מה צומח?</b><small>מסמנים. עצים ופרחים צומחים רק על Grass Block או Dirt.</small>
+    <div class="chk5 pl5"><span>דשא <small>(Grass Block / Dirt)</small></span><span>פרחים <small>(Grass Block / Dirt)</small></span><span>עצי אלון <small>(Grass Block / Dirt)</small></span><span>עצי ליבנה <small>(Grass Block / Dirt)</small></span><span>עצי דובדבן <small>(Grass Block / Dirt)</small></span><span>עצי אשוח <small>(Grass Block / Dirt)</small></span><span>פטריות <small>(בחושך)</small></span><span>יער אדום <small>(Crimson Nylium)</small></span><span>יער כחול <small>(Warped Nylium)</small></span><span>Chorus <small>(End Stone)</small></span><span>קקטוסים <small>(Sand)</small></span><span>גבישים <small>(באדמה)</small></span><span>אזוב זוהר <small>(במערות)</small></span></div></div>
+  <div class="box grow"><b>9. הדלת לממד</b><small>נותנים לה שם, ובוחרים כמה עולה להיכנס. הדרך הביתה בחינם.</small>
+    <div class="row"><div><small>השם:</small><div class="line sm"></div></div><div><div class="opts"><small>המחיר:</small><span>רמות XP</span><span>הדלת נעלמת</span><span>רק בלילה</span><span>אחר: _______</span></div></div></div></div>
+</section>
+<section class="page" data-set="l5 he">
+  <div class="head"><h1>מדריך הבנייה: הממד שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
+  <small class="lead5">45 דקות. המתכון לידכם, והשלבים בדף של שיעור 5. מסמנים כל שלב שסיימתם.</small>
+  <ol class="steps5">
+    <li><i></i><div><b>פותחים</b> את <span class="ltr5" dir="ltr">Minecraft</span> בתפריט Start, מקלידים את הקוד, ובשיעור 5 לוחצים ״להתחיל״. העולם נעלם? לוחצים על תפריט, ואז על דרייב.</div></li>
+    <li><i></i><div><b>הקוביות שלי</b> (שלב 3)<br>מציירים כל קובייה מהמתכון, נותנים שם, ובוחרים אור ומה יוצא ממנה.</div></li>
+    <li><i></i><div><b>הממד שלי</b> (שלב 4)<br>לפי המתכון, מלמעלה למטה: שם, צורה, שכבות, ים, מינרל, שמיים, זמן, חוקים, צמחים. הקוביות שציירתם מופיעות ראשונות בתפריט.</div></li>
+    <li><i></i><div><b>הדלת</b> (שלב 5)<br>מסתכלים על הבלוקים שלה: בבית היא לוקחת אתכם לממד, ובממד מחזירה אתכם הביתה.</div></li>
+    <li><i></i><div><b>נכנסים</b> (שלב 6)<br>סוגרים את מיינקראפט ולוחצים על הכפתור הירוק. בוחרים Singleplayer, ואז את העולם שלכם. בפעם הראשונה לוחצים <span class="ltr5" dir="ltr">I Know What I'm Doing!</span>. אחר כך לוחצים <span class="ltr5" dir="ltr">E</span>, לוקחים את הדלת, ולוחצים לחיצה ימנית.</div></li>
+    <li><i></i><div><b>בודקים מול המתכון</b><br>השם מופיע? הצבעים של השמיים? חופרים קצת: השכבות נכונות? המינרל מתחבא איפה שבחרתם? כוח המשיכה? הצמחים?</div></li>
+    <li><i></i><div><b>הכניסה עולה משהו</b> (שלב 7)<br>שם וציור לדלת, ומחיר מהמתכון.</div></li>
+    <li><i></i><div><b>5 דקות לסוף</b><br>מבקשים ממישהו אחר להיכנס לממד שלכם ולהגיד מה הוא מרגיש שם. אחר כך שומרים בדרייב.</div></li>
+  </ol>
+  <div class="box warn5"><b>לא לשכוח</b>
+    <ul>
+      <li>שיניתם משהו? סוגרים את מיינקראפט ופותחים מחדש. בלי זה לא רואים את השינוי.</li>
+      <li>שינוי בצורה, בשכבות, בים, במינרל או בצמחים בונה את הממד מחדש, ומה שבניתם שם נמחק. את השמיים, הזמן והחוקים אפשר לשנות בלי לאבד כלום.</li>
+      <li>חשוך מדי? ״תמיד יום״, או קובייה שמאירה.</li>
+      <li>כדי להחליף בין <span class="ltr5" dir="ltr">Creative</span> ל־<span class="ltr5" dir="ltr">Survival</span>: לוחצים <span class="ltr5" dir="ltr">Esc</span>, ואז על הכפתור בפינה.</li>
+      <li>מסגרת אדומה, או שמשהו לא עובד? קודם לוחצים ״נתקעתי״ בדף, אחר כך שואלים את מי שיושב לידכם, ואז מרימים יד.</li>
+    </ul></div>
+  <div class="box grow"><b>סיימתם? אתגרים</b>
+    <div class="chk5"><span>מצאתי את המינרל הנדיר בממד</span><span>שיחקתי בממד ב־Survival</span><span>לדלת שלי יש תנאי, לא רק מחיר</span><span>שמתי קובייה מאירה בממד חשוך</span></div></div>
+</section>
+<section class="page ru5" data-set="l5 ru" lang="ru" dir="ltr">
+  <div class="head"><h1>Рецепт моего измерения</h1><span class="no">Имя и фамилия <i></i></span></div>
+  <small class="lead5">Перепиши с листа «Моё измерение» и выбери свои варианты. Во второй половине урока ты построишь именно это в студии.</small>
+  <div class="box"><b>1. Мои блоки <small class="he5" lang="he" dir="rtl">הַקֻּבִּיּוֹת שֶׁלִּי</small></b><small>Нарисуй каждый блок, дай ему название, обведи, насколько он светится, и напиши, что из него выпадает, когда его ломают.</small>
+    <div class="blk5"><div><div class="g"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="f5"><small>Название:</small><div class="line sm"></div></div><div class="opts"><small>Свет:</small><span>Нет</span><span>Слабый</span><span>Яркий</span></div><div class="f5"><small>Выпадает:</small><div class="line sm"></div></div></div><div><div class="g"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="f5"><small>Название:</small><div class="line sm"></div></div><div class="opts"><small>Свет:</small><span>Нет</span><span>Слабый</span><span>Яркий</span></div><div class="f5"><small>Выпадает:</small><div class="line sm"></div></div></div><div><div class="g"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="f5"><small>Название:</small><div class="line sm"></div></div><div class="opts"><small>Свет:</small><span>Нет</span><span>Слабый</span><span>Яркий</span></div><div class="f5"><small>Выпадает:</small><div class="line sm"></div></div></div></div></div>
+  <div class="row">
+    <div class="box" style="flex:0 0 46mm"><b>2. Название <small class="he5" lang="he" dir="rtl">הַשֵּׁם שֶׁל הַמֵּמַד</small></b><div class="line"></div></div>
+    <div class="box"><b>3. Форма земли <small class="he5" lang="he" dir="rtl">הַצּוּרָה שֶׁל הָאֲדָמָה</small></b><small>Обведи одну</small><div class="shp5"><figure><svg viewBox="0 0 64 40"><path d="M0 26h64v14H0z"/></svg><figcaption>Плоская</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M0 30q8-10 16-4t16-2 16-8 16 4v20H0z"/></svg><figcaption>Холмы и море</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M0 38l10-24 8 14 12-26 10 20 8-10 16 26z"/></svg><figcaption>Огромные горы</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M4 18h18l-4 8h-10zM34 10h24l-6 9h-12zM24 32h16l-3 6h-10z"/></svg><figcaption>Острова в небе</figcaption></figure><figure><svg viewBox="0 0 64 40"><path d="M0 0h64v10q-10 6-20 2t-24 4-20-4zM0 40h64v-10q-12-6-24-2t-22 0-18 4z"/></svg><figcaption>Огромная пещера</figcaption></figure></div></div>
+  </div>
+  <div class="row">
+    <div class="box"><b>4. Слои <small class="he5" lang="he" dir="rtl">הַשְּׁכָבוֹת</small></b><small>Блок для каждого слоя: свой или из Minecraft</small>
+      <div class="lay5"><span>Сверху</span><div class="line sm"></div><span>Под ним</span><div class="line sm"></div><span>Глубже всего</span><div class="line sm"></div></div>
+      <div class="opts"><small>Море:</small><span>Вода</span><span>Лава</span><span>Без моря</span></div></div>
+    <div class="box"><b>5. Редкая руда <small class="he5" lang="he" dir="rtl">הַמִּינֵרָל הַנָּדִיר</small></b><small>Какой блок?</small><div class="line sm"></div>
+      <div class="opts"><small>Как часто:</small><span>Очень редко</span><span>Редко</span><span>Часто</span></div>
+      <div class="opts"><small>Где:</small><span>Глубоко</span><span>Посередине</span><span>У поверхности</span></div></div>
+  </div>
+  <div class="row">
+    <div class="box"><b>6. Небо <small class="he5" lang="he" dir="rtl">הַשָּׁמַיִם</small></b><small>Раскрась: небо, туман</small><div class="sky5"><div class="sw sm"><i></i><i></i></div>
+      <div class="opts"><small>Время:</small><span>День и ночь</span><span>Всегда день</span><span>Всегда ночь</span></div></div></div>
+    <div class="box"><b>7. Правила <small class="he5" lang="he" dir="rtl">הַחֻקִּים</small></b><div class="opts"><small>Гравитация:</small><span>Слабая</span><span>Обычная</span><span>Сильная</span></div>
+      <div class="chk5"><span>Вода испаряется</span><span>Кровать взрывается</span></div></div>
+  </div>
+  <div class="box"><b>8. Что растёт? <small class="he5" lang="he" dir="rtl">מָה צוֹמֵחַ?</small></b><small>Отметь. Деревья и цветы растут только на Grass Block или Dirt.</small>
+    <div class="chk5 pl5"><span>Трава <small>(Grass Block / Dirt)</small></span><span>Цветы <small>(Grass Block / Dirt)</small></span><span>Дубы <small>(Grass Block / Dirt)</small></span><span>Берёзы <small>(Grass Block / Dirt)</small></span><span>Вишнёвые деревья <small>(Grass Block / Dirt)</small></span><span>Ели <small>(Grass Block / Dirt)</small></span><span>Грибы <small>(в темноте)</small></span><span>Красный лес <small>(Crimson Nylium)</small></span><span>Синий лес <small>(Warped Nylium)</small></span><span>Chorus <small>(End Stone)</small></span><span>Кактусы <small>(Sand)</small></span><span>Кристаллы <small>(под землёй)</small></span><span>Светящийся мох <small>(в пещерах)</small></span></div></div>
+  <div class="box grow"><b>9. Дверь в измерение <small class="he5" lang="he" dir="rtl">הַדֶּלֶת לַמֵּמַד</small></b><small>Дай ей название и выбери цену за вход. Дорога домой бесплатная.</small>
+    <div class="row"><div><small>Название:</small><div class="line sm"></div></div><div><div class="opts"><small>Цена:</small><span>Уровни XP</span><span>Дверь исчезает</span><span>Только ночью</span><span>Другое: _______</span></div></div></div></div>
+</section>
+<section class="page ru5" data-set="l5 ru" lang="ru" dir="ltr">
+  <div class="head"><h1>Как строить: моё измерение</h1><span class="no">Имя и фамилия <i></i></span></div>
+  <small class="lead5">45 минут. Рецепт лежит рядом, а шаги есть на странице урока 5. Отмечай каждый сделанный шаг.</small>
+  <ol class="steps5">
+    <li><i></i><div><b>Открываем</b> <span class="he5" lang="he" dir="rtl">פּוֹתְחִים</span><br>Найди Minecraft в меню «Пуск», набери свой код, а в уроке 5 нажми «Начать». Мир пропал? Открой меню, а потом Drive.</div></li>
+    <li><i></i><div><b>Мои блоки</b> <span class="he5" lang="he" dir="rtl">הַקֻּבִּיּוֹת שֶׁלִּי</span> (шаг 3)<br>Нарисуй каждый блок из рецепта, дай ему название, выбери, насколько он светится, и что из него выпадает.</div></li>
+    <li><i></i><div><b>Моё измерение</b> <span class="he5" lang="he" dir="rtl">הַמֵּמַד שֶׁלִּי</span> (шаг 4)<br>По рецепту, сверху вниз: название, форма, слои, море, руда, небо и время, правила, растения. Твои блоки появятся в меню первыми.</div></li>
+    <li><i></i><div><b>Дверь</b> <span class="he5" lang="he" dir="rtl">הַדֶּלֶת</span> (шаг 5)<br>Посмотри на её блоки: в обычном мире она переносит в измерение, а в измерении возвращает домой.</div></li>
+    <li><i></i><div><b>Входим</b> <span class="he5" lang="he" dir="rtl">נִכְנָסִים</span> (шаг 6)<br>Закрой Minecraft и нажми зелёную кнопку. Выбери Singleplayer и свой мир. В первый раз нажми I Know What I'm Doing! Потом нажми E, возьми дверь и нажми правую кнопку мыши.</div></li>
+    <li><i></i><div><b>Сверяем с рецептом</b> <span class="he5" lang="he" dir="rtl">בּוֹדְקִים</span><br>Название появилось? Цвет неба? Покопай немного: слои правильные? Руда прячется там, где ты выбрал(а)? Гравитация? Растения?</div></li>
+    <li><i></i><div><b>Вход платный</b> <span class="he5" lang="he" dir="rtl">הַמְּחִיר</span> (шаг 7)<br>Дай двери название и рисунок и поставь цену из рецепта.</div></li>
+    <li><i></i><div><b>5 минут до конца</b><br>Попроси кого-нибудь зайти в твоё измерение и сказать, что он там чувствует. Потом сохрани мир в Drive.</div></li>
+  </ol>
+  <div class="box warn5"><b>Не забудь <small class="he5" lang="he" dir="rtl">לֹא לִשְׁכֹּחַ</small></b>
+    <ul>
+      <li>Что-то поменял(а)? Закрой Minecraft и открой заново. Без этого изменений не видно.</li>
+      <li>Если поменять форму, слои, море, руду или растения, измерение строится заново, и всё, что ты там построил(а), пропадает. Небо, время и правила можно менять, ничего не теряя.</li>
+      <li>Слишком темно? Выбери «Всегда день» или поставь светящийся блок.</li>
+      <li>Как переключиться между Creative и Survival: нажми Esc, потом кнопку в углу.</li>
+      <li>Красная рамка или что-то не работает? Сначала нажми «Я застрял(а)» на странице, потом спроси того, кто сидит рядом, а потом подними руку.</li>
+    </ul></div>
+  <div class="box grow"><b>Готово? Задания <small class="he5" lang="he" dir="rtl">אֶתְגָּרִים</small></b>
+    <div class="chk5"><span>Я нашёл (нашла) редкую руду в измерении</span><span>Я играл(а) в измерении в Survival</span><span>У двери есть условие, а не только цена</span><span>В тёмном измерении у меня есть светящийся блок</span></div></div>
+</section>
 <script>
+  // Print one set of pages: only("l5he"), only("l5ru"), only("old"), or only("") for all of them.
+  function only(set){ if (set) document.body.dataset.only = set; else delete document.body.dataset.only; print(); }
   document.getElementById("px").innerHTML = "<i></i>".repeat(256);
   document.getElementById("wg").innerHTML = "<i></i>".repeat(26 * 10);
 </script>

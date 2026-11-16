@@ -348,3 +348,10 @@ create an item and what you need for it"). L152 (lesson 4 "the price") and L153 
 - Updaters copy the new files (MyDimension, ModeButton, MyPortal, ru.js, niqqud.js). Fixed: a block change made just
   before leaving the block editor was lost.
 - Open for Ben: ממד vs מימד (one reviewer: kids may read ממ"ד); kept ממד to match lesson 4 and the printed sheet.
+- 16 Nov later, Ben: lesson 5 = 45 min of lesson with paper + 45 min of building with a printed build guide. New A4
+  pages in `hub/print.html` (buttons print one set): "המתכון של הממד שלי" (in the studio's order: blocks, name, shape,
+  layers+sea, ore, sky+time, rules, plants, the door's price) and "מדריך הבנייה" (8 steps matching the hub steps, "לא
+  לשכוח", challenges); both again in Russian with the Hebrew word in niqqud by each heading. Deck: 15 slides (new: real
+  layers, sky and feeling, what grows where, the recipe sheet with a 14-min timer, the build guide); plan 0–45 lesson,
+  45–85 build, 85–90 guests. Hub lesson 5 has a paper step 2. Reviewed again (Hebrew x2 incl. niqqud, Russian x2).
+  PDFs in Ben's Drive: "MAKE מיינקראפט - שיעור 5 - המתכון ומדריך הבנייה (להדפסה).pdf" and "... - ברוסית (להדפסה).pdf".

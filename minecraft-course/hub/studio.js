@@ -266,11 +266,11 @@ const SHAPES = [["flat","שטוח","M0 26h64v14H0z"],["hills","גבעות וים
 const SEAS = [["water","מים"],["lava","לבה"],["none","בלי ים"]];
 const TIMES5 = [["cycle","יום ולילה"],["day","תמיד יום"],["night","תמיד לילה"]];
 const GRAVS = [["low","חלש"],["normal","רגיל​"],["high","חזק"]];   // ​: not the rarity "רגיל" in the translations
-const RARES = [["very","נדיר מאוד"],["rare","נדיר"],["lots","יש הרבה"]];
+const RARES = [["very","נדיר מאוד"],["rare","נדיר\u200B"],["lots","יש הרבה"]];   // \u200B: not the item rarity "נדיר" in the translations
 const DEPTHS = [["deep","עמוק למטה"],["middle","באמצע"],["top","קרוב למעלה"]];
 const SKIES = [["#78a7ff","#c0d8ff"],["#3a0e0e","#ff7a1a"],["#000000","#181318"],["#2a0b3d","#8a4dff"],["#0b3d1a","#8cff66"],["#ff8a3d","#ffd6a0"],["#0a1a3a","#4ad0ff"],["#f2f2f2","#ffffff"]];
 /* What can grow, and what it grows on: Minecraft's own plants keep their own rules. */
-const PLANTS = [["grass","דשא","short_grass","על Grass Block"],["flowers","פרחים","poppy","על Grass Block"],["oak","עצי אלון","oak_sapling","על Grass Block או Dirt"],
+const PLANTS = [["grass","דשא","short_grass","על Grass Block או Dirt"],["flowers","פרחים","poppy","על Grass Block או Dirt"],["oak","עצי אלון","oak_sapling","על Grass Block או Dirt"],
   ["birch","עצי ליבנה","birch_sapling","על Grass Block או Dirt"],["cherry","עצי דובדבן","cherry_sapling","על Grass Block או Dirt"],["spruce","עצי אשוח","spruce_sapling","על Grass Block או Dirt"],
   ["mushrooms","פטריות","red_mushroom","רק בחושך"],["crimson","יער אדום","crimson_fungus","על Crimson Nylium"],["warped","יער כחול","warped_fungus","על Warped Nylium"],
   ["chorus","Chorus","chorus_flower","על End Stone"],["cactus","קקטוסים","cactus","על Sand"],["amethyst","גבישים","amethyst_cluster","בתוך האדמה"],["lichen","אזוב זוהר","glow_lichen","על קירות במערות"]];

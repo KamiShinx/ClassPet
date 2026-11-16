@@ -278,7 +278,25 @@ const D = {
   "הממד, בחתך":"The dimension, cut open",
   "כבר יש חפץ או קובייה עם הקוד הזה. בוחרים קוד אחר.":"There's already an item or block with this code. Choose another code.",
   "יותר מדי קוביות: עד 30.":"Too many blocks: up to 30.",
-  "השם ארוך מדי: עד 40 אותיות.":"The name is too long: up to 40 letters."
+  "השם ארוך מדי: עד 40 אותיות.":"The name is too long: up to 40 letters.",
+  // the home page and the course map
+  "להתחיל ←":"Start →", "להמשיך ←":"Continue →", "העולם שלי":"My world", "איך מכינים את החפץ?":"How do you make the item?",
+  "שם לעולם, ומיינקראפט שנפתח בכפתור אחד":"A name for the world, and Minecraft that opens with one button",
+  "חפץ משלכם, עם שם, ציור וכוח, בתוך המשחק":"Your own item, with a name, a picture and a power, in the game",
+  "מתכון לחפץ שלכם: ממה מכינים אותו ב־Crafting Table":"A recipe for your item: what you make it from at the Crafting Table",
+  "מודל מקוביות, ציור ותנועה, בסטודיו":"A model of cubes, a picture and movement, in the studio",
+  "נדיר​":"Rare",   // the ore's rarity in the dimension tab (studio.js marks it apart from the item rarity)
+  "הדרך של השיעור":"The lesson path", "לוח ציור 16 על 16":"16 by 16 drawing board", "צבע":"Colour", "צבע משלכם":"Your own colour",
+  // the world card (lesson 1)
+  "כרטיס העולם שלי":"My world card", "העולם שלי בשש מילים או פחות":"My world in six words or less",
+  "זה כמו ___ במיינקראפט הרגיל, חוץ מזה ש___":"It's like ___ in normal Minecraft, except that ___",
+  "דבר אחד שרואים רק בעולם שלי":"One thing you only see in my world", "חוק אחד שיש רק בעולם שלי":"One rule that only my world has",
+  "שלושה צבעים של העולם שלי":"Three colours of my world",
+  "למשל: פיראטים בשמיים על איים מרחפים":"For example: sky pirates on floating islands",
+  "למשל: כמו ה־End, חוץ מזה שיש בו ספינות":"For example: like the End, except that it has ships",
+  "למשל: ספינות עם מפרשים מעננים":"For example: ships with sails made of clouds",
+  "למשל: מי שנופל מאי לא מת, הוא נוחת על האי שמתחת":"For example: if you fall off an island you don't die, you land on the island below",
+  "התחרטתם? ב״גרסאות״ לוחצים להחזיר ליד ״לפני שהחזרתם גרסה״.":"Changed your mind? In \"Versions\", press \"Bring back\" next to \"before you brought back a version\"."
 };
 const RX = [
   [/^שלב (\d+) מתוך (\d+)$/, "Step $1 of $2"], [/^(\d+) מתוך (\d+) שיעורים$/, "$1 of $2 lessons"],
@@ -286,6 +304,8 @@ const RX = [
   [/^בחפץ ״(.*)״ הקוד באנגלית לא תקין.*$/, "In the item \"$1\" the English code isn't right: small letters, digits and _, starting with a letter."],
   [/^יש שני חפצים עם הקוד (\w+)\. בחפץ ״(.*)״ בוחרים קוד אחר\.$/, "Two items have the code $1. Choose another code for \"$2\"."],
   [/^(\d+) שלבים$/, "$1 steps"], [/^שיעור (\d+)$/, "Lesson $1"], [/^שלב (\d+) \/ (\d+)$/, "Step $1 / $2"], [/^(\d+) מתוך (\d+) שיעורים$/, "$1 of $2 lessons"],
+  [/^([A-Za-z0-9' ]+) · [א-ת].*$/, "$1"],   // a recipe item's tooltip, "Stick · מקל": the game's English name is enough
+  [/^מחשב (\S+)$/, "Computer $1"], [/^צבע (\d)$/, "Colour $1"],
   [/^רמז (\d+)$/, "Hint $1"], [/^בונים: (.*)$/, k => "Build: " + (D[k.slice(7)] || k.slice(7))], [/^לפני הדבקה ל־(\w+)$/, "before pasting into $1"],
   [/^הקוד נכנס לקובץ (\w+\.java)$/, "The code went into $1"], [/^(.*)\. המחשב בונה ופותח את מיינקראפט\.\.\.$/, s => tr(s.replace(/\. המחשב בונה ופותח את מיינקראפט\.\.\.$/, "")) + ". The computer is building and opening Minecraft..."],
   [/^ג׳מיני שלח רק חפץ, אז הוספתי אותו לקובץ MyItems\.java: (.*)$/, "Gemini sent only an item, so it was added to MyItems.java: $1"],
@@ -484,9 +504,27 @@ const EN_L = {
 };
 
 
+/* ---------- the Drive steps: links and bold words cut these sentences into pieces, so the whole line is swapped.
+   Drive and Windows may be in Hebrew on the school computers: the buttons keep their Hebrew names, with the English. ---------- */
+const DRV = "<a href=\"https://drive.google.com\" target=\"_blank\" rel=\"noopener\">Drive</a>";
+const HEB = (he, e) => `<b>“<bdi>${he}</bdi>”</b> (${e})`;
+const LI = {
+  "פותחים את הדרייב, עם החשבון של משרד החינוך.": `Open ${DRV} with your Ministry of Education account.`,
+  "לוחצים + חדש, ואז העלאת קובץ, ובוחרים מתיקיית הורדות את הקובץ myworld.":
+    `Press ${HEB("+ חדש", "New")}, then ${HEB("העלאת קובץ", "File upload")}, and choose the file <b>myworld</b> in the ${HEB("הורדות", "Downloads")} folder.`,
+  "בדרייב לוחצים על קובץ myworld האחרון עם הכפתור הימני, ואז הורדה.":
+    `In Drive, right-click the newest <b>myworld</b> file, then ${HEB("הורדה", "Download")}.`
+};
+function swapLines(root){
+  const lis = root.tagName === "LI" ? [root] : [...root.querySelectorAll("li")];
+  lis.forEach(li => { const r = LI[li.textContent.replace(/\s+/g, " ").trim()];
+    if (r) li.innerHTML = `<span lang="en" dir="ltr" style="display:block;text-align:left">${r}</span>`; });
+}
+
 /* ---------- swap the words in a part of the page ---------- */
 function translate(root){
   if (!root) return;
+  if (root.querySelectorAll) swapLines(root);
   const w = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
   nodes.forEach(n => { const t = tr(n.nodeValue); if (t !== null) n.nodeValue = t; });

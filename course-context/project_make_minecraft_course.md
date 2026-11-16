@@ -325,3 +325,26 @@ create an item and what you need for it"). L152 (lesson 4 "the price") and L153 
   Hebrew block label stays in place, and a wide program zooms out to fit when it loads.
 - 3D (Blockbench) is not built: the laptops are offline, so it needs the desktop Blockbench on the stick and a model
   import path in the studio first.
+
+**16 Nov: lesson 5 "נכנסים לממד" (class 17 Nov), the portal for lesson 6, the Russian help, a Creative/Survival button.**
+- Ben picked lesson 5 = going into the dimension the kids drew in lesson 4 (he expected that from the bottle on 10 Nov).
+  Studio tabs "קוביות" (the kid's own blocks: drawing on all six sides, name, light, hardness, what drops) and "הממד
+  שלי" (name, shape: flat / hills+sea / huge mountains / islands in the sky / one huge cave, three layers from any block
+  including their own, sea, rare ore with amount and depth, sky and fog colours, time, gravity, no-water / exploding bed,
+  13 plants). `tools/common.ps1` writes a real datapack dimension `myworld:my_dimension` before every Play; the ground
+  shapes are Minecraft's own noise settings read from the game jar on that laptop, with the kid's blocks; unknown
+  blocks become stone so a design can't stop the world opening. `MyDimension.java`: gravity there, a safe landing spot,
+  the name in big letters on arrival, and a changed ground design moves the old ground to `my_dimension_before`.
+  Logic blocks: "לעבור לממד שלי", "אני בממד שלי", the kid's blocks first in every block menu. Ready item "הדלת לממד".
+  First open of a world with the dimension shows Minecraft's "Experimental Settings" screen once: I Know What I'm Doing!
+- Ben: "it'll end up as 2 classes, portal + dimension". The portal (lesson 6, 24 Nov) is built and game-tested:
+  `MyPortal.java` + studio tab "הפורטל" (frame block, the inside drawn, the key item, standing or lying, inside size).
+  Build the frame, right-click it with the key, step in; a lit portal home appears next to you. Lesson 6 steps not written yet.
+- `ModeButton.java`: "→ Survival / → Creative" button in the pause menu and the inventory (works without cheats).
+- Russian help (Ben: olim from Russia/Ukraine): language button "Русский". Lessons stay Hebrew WITH niqqud (DictaBERT,
+  local, `setup/ru/make-niqqud.py`, fixes in `setup/ru/niqqud-fixes.json`) and a Russian line under every part; buttons,
+  studio and logic blocks in Russian (`setup/make-ru.py` builds `hub/ru.js` from `setup/ru/*.json`). Teacher slides
+  from lesson 5 on carry a Russian subtitle (`ru:` on a slide). Reviewed: Hebrew x2, Russian x2, niqqud x2, final x1.
+- Updaters copy the new files (MyDimension, ModeButton, MyPortal, ru.js, niqqud.js). Fixed: a block change made just
+  before leaving the block editor was lost.
+- Open for Ben: ממד vs מימד (one reviewer: kids may read ממ"ד); kept ממד to match lesson 4 and the printed sheet.

@@ -5,6 +5,8 @@
 <div id="app" dir="rtl" lang="he"></div>
 <script src="content.js"></script>
 <script src="en.js"></script>
+<script src="niqqud.js"></script>
+<script src="ru.js"></script>
 <script src="blockly/blockly_compressed.js"></script>
 <script src="blockly/msg_he.js"></script>
 <script src="studio.js"></script>
@@ -19,12 +21,15 @@ const app = document.getElementById("app");
 if (LS.get("big", false)) app.classList.add("big");
 /* The lessons were rebuilt (Oct): forget where a kid stopped in the old steps, once, so nobody lands mid-lesson. */
 if (LS.get("hubv", 0) < 2){ ["l1step","l2step","l1chal","l2chal","lessonsDone","lastLesson","itemcard","stpane"].forEach(k => { try { localStorage.removeItem("mkmod." + k); } catch(e){} }); LS.set("hubv", 2); }
-/* Language: Hebrew, or English for kids who find Hebrew hard (en.js holds the English). */
-const EN = window.HUB_EN;
-const isEn = () => !!EN && LS.get("lang", "he") === "en";
-function applyLang(){ app.dir = isEn() ? "ltr" : "rtl"; app.lang = isEn() ? "en" : "he"; document.documentElement.lang = app.lang; if (isEn()) EN.translate(app); }
-const langBtn = () => EN ? `<button class="btn ghost" id="lang">${isEn() ? "עברית" : "English"}</button>` : "";
-function bindLang(){ const b = app.querySelector("#lang"); if (b) b.addEventListener("click", () => { LS.set("lang", isEn() ? "he" : "en"); DOCK.key = ""; route(); }); }
+/* Language: Hebrew; English for kids who find Hebrew hard (en.js); or the Russian help: the lessons in Hebrew with
+   niqqud and a Russian line under each part, everything else in Russian (ru.js, niqqud.js). EN is whichever is on. */
+const PACKS = { en: window.HUB_EN, ru: window.HUB_RU }, LANG_NAMES = { he:"עברית", en:"English", ru:"Русский" };
+const lang = () => PACKS[LS.get("lang", "he")] ? LS.get("lang", "he") : "he";
+const isEn = () => lang() !== "he";
+const EN = new Proxy({}, { get: (_, k) => (PACKS[lang()] || {})[k] });
+function applyLang(){ app.dir = lang() === "en" ? "ltr" : "rtl"; app.lang = lang(); app.classList.toggle("ru", lang() === "ru"); document.documentElement.lang = app.lang; if (isEn()) EN.translate(app); }
+const langBtn = () => Object.keys(LANG_NAMES).filter(l => l !== lang() && (l === "he" || PACKS[l])).map(l => `<button class="btn ghost" data-lang="${l}" lang="${l}">${LANG_NAMES[l]}</button>`).join("");
+function bindLang(){ app.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => { LS.set("lang", b.dataset.lang); DOCK.key = ""; route(); })); }
 
 /* ===== TOP BAR: one thin bar on every page. The game's controls live in its menu, and inside the lesson steps
    that need them (a big "open Minecraft" button right where the step says to open it). ===== */
@@ -331,7 +336,7 @@ function lockText(){
 }
 function paintLock(){
   const [h, p] = lockText();
-  app.dir = isEn() ? "ltr" : "rtl";
+  app.dir = lang() === "en" ? "ltr" : "rtl"; app.classList.toggle("ru", lang() === "ru");
   app.innerHTML = `<div class="lockv"><div class="lockbox">
     <div class="lk-ico">${ICON.lock}</div><h1>${h}</h1><p>${p}</p>
     <div class="lk-dots">${[0,1,2,3].map(i => `<i class="${i < LOCK.typed.length ? "on" : ""}"></i>`).join("")}</div>
@@ -343,7 +348,7 @@ function paintLock(){
   app.querySelectorAll("[data-k]").forEach(b => b.addEventListener("click", () => key(b.dataset.k)));
   const f = app.querySelector("#lk-forgot"); if (f) f.addEventListener("click", () => { LOCK.mode = "teacher"; LOCK.typed = ""; LOCK.msg = ""; paintLock(); });
   const c = app.querySelector("#lk-cancel"); if (c) c.addEventListener("click", () => { LOCK.mode = "unlock"; LOCK.typed = ""; LOCK.msg = ""; paintLock(); });
-  const l = app.querySelector("#lang"); if (l) l.addEventListener("click", () => { LS.set("lang", isEn() ? "he" : "en"); paintLock(); });
+  app.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => { LS.set("lang", b.dataset.lang); paintLock(); }));
 }
 async function key(k){
   if (k === "back"){ LOCK.typed = LOCK.typed.slice(0, -1); return paintLock(); }

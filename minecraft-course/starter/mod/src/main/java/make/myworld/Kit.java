@@ -26,11 +26,15 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -44,10 +48,11 @@ public final class Kit {
     private Kit() {}
 
     static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MyWorld.MOD_ID);
+    static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MyWorld.MOD_ID);
     static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, MyWorld.MOD_ID);
     static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MyWorld.MOD_ID);
 
-    private static final List<DeferredItem<Item>> ALL_ITEMS = new ArrayList<>();
+    private static final List<Supplier<? extends Item>> ALL_ITEMS = new ArrayList<>();
     private static final Set<String> IDS = new HashSet<>();
     /** The world's name from the studio, if the kid gave one there. */
     static String studioName = null;
@@ -90,6 +95,41 @@ public final class Kit {
             if (root.has("world") && root.get("world").isJsonObject()) {
                 String n = text(root.getAsJsonObject("world"), "name");
                 if (!n.isBlank()) studioName = n;
+            }
+            if (root.has("dim") && root.get("dim").isJsonObject()) {
+                MyDimension.gravity = text(root.getAsJsonObject("dim"), "gravity");
+                JsonObject dim = root.getAsJsonObject("dim");
+                MyDimension.name = text(dim, "name");
+                StringBuilder ground = new StringBuilder();
+                for (String k : new String[] { "shape", "top", "under", "deep", "fluid", "ore", "plants" }) ground.append(k).append('=').append(dim.get(k)).append(';');
+                MyDimension.ground = ground.toString();
+            }
+            // The portal to the dimension (lesson 6): frame block, key item, standing or lying, the inside's size.
+            if (root.has("portal") && root.get("portal").isJsonObject()) {
+                JsonObject portal = root.getAsJsonObject("portal");
+                if (!text(portal, "frame").isBlank()) MyPortal.frame = text(portal, "frame");
+                if (!text(portal, "key").isBlank()) MyPortal.key = text(portal, "key");
+                MyPortal.flat = "flat".equals(text(portal, "shape"));
+                MyPortal.width = portal.has("w") ? Math.max(0, Math.min(6, portal.get("w").getAsInt())) : 2;
+                MyPortal.height = portal.has("h") ? Math.max(0, Math.min(6, portal.get("h").getAsInt())) : 3;
+            }
+            // The kid's own blocks: a picture on every side, a name, how hard to break and how much light. What drops
+            // from them, and their pictures, are files tools/common.ps1 writes (loot table, block model).
+            if (root.has("blocks") && root.get("blocks").isJsonArray()) {
+                for (JsonElement e : root.getAsJsonArray("blocks")) {
+                    try {
+                        JsonObject o = e.getAsJsonObject();
+                        String id = text(o, "id");
+                        if (!id.matches("[a-z][a-z0-9_]{0,39}") || IDS.contains(id)) continue;
+                        float strength = switch (text(o, "hard")) { case "soft" -> 0.5f; case "hard" -> 5f; default -> 1.5f; };
+                        int light = o.has("light") ? Math.max(0, Math.min(15, o.get("light").getAsInt())) : 0;
+                        DeferredBlock<Block> block = BLOCKS.registerBlock(id, p -> new Block(p.strength(strength).lightLevel(s -> light).sound(SoundType.STONE)));
+                        ALL_ITEMS.add(ITEMS.registerItem(id, p -> new BlockItem(block.get(), p.useBlockDescriptionPrefix())));
+                        IDS.add(id);
+                    } catch (RuntimeException bad) {
+                        System.err.println("[myworld] studio block skipped: " + bad);
+                    }
+                }
             }
             if (root.has("items") && root.get("items").isJsonArray()) {
                 for (JsonElement e : root.getAsJsonArray("items")) {
@@ -134,7 +174,11 @@ public final class Kit {
     static void register(IEventBus modEventBus) {
         loadStudio();
         StudioPower.register();   // the studio blocks' game events: right-click a creature, kill, hurt, projectile hits, waits
+        MyDimension.register();   // the kid's own dimension: gravity there
+        MyPortal.load();          // the portal's block, before the blocks are registered
+        MyPortal.register();      // lighting the portal, and going through it
         NeoForge.EVENT_BUS.addListener(Kit::giveRecipes);
+        BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         EFFECTS.register(modEventBus);
         TABS.register(modEventBus);

@@ -25,10 +25,12 @@ $head = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="wid
 $web = New-Object System.Net.WebClient
 Write-Host "Downloading the hub ($s). This takes about a minute; don't click inside this window." -ForegroundColor Cyan
 $files = @{}
-foreach ($n in 'content.js', 'slides.js', 'en.js', 'studio.js', 'blocks.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all, or nothing
+foreach ($n in 'content.js', 'slides.js', 'en.js', 'ru.js', 'niqqud.js', 'studio.js', 'blocks.js', 'index.html', 'teacher.html', 'print.html') { $files[$n] = $utf8.GetString($web.DownloadData("$raw/$n")) }   # all, or nothing
 [IO.File]::WriteAllText("$hub\content.js", $files['content.js'], $utf8)
 [IO.File]::WriteAllText("$hub\slides.js", $files['slides.js'], $utf8)
 [IO.File]::WriteAllText("$hub\en.js", $files['en.js'], $utf8)
+[IO.File]::WriteAllText("$hub\ru.js", $files['ru.js'], $utf8)
+[IO.File]::WriteAllText("$hub\niqqud.js", $files['niqqud.js'], $utf8)
 [IO.File]::WriteAllText("$hub\studio.js", $files['studio.js'], $utf8)
 [IO.File]::WriteAllText("$hub\blocks.js", $files['blocks.js'], $utf8)
 # The block editor's library (Blockly, Apache 2.0), byte for byte.
@@ -48,6 +50,7 @@ if (Test-Path $tools) {
   foreach ($n in 'common.ps1', 'server.ps1', 'shortcuts.ps1', 'prepare.ps1', 'play.ps1', 'paste.ps1', 'undo.ps1', 'rules.txt') { $get["tools\$n"] = $web.DownloadData("$st/tools/$n") }
   $get['src\main\java\make\myworld\Kit.java'] = $web.DownloadData("$st/src/main/java/make/myworld/Kit.java")
   $get['src\main\java\make\myworld\StudioPower.java'] = $web.DownloadData("$st/src/main/java/make/myworld/StudioPower.java")
+  foreach ($n in 'MyDimension.java', 'ModeButton.java', 'MyPortal.java') { $get["src\main\java\make\myworld\$n"] = $web.DownloadData("$st/src/main/java/make/myworld/$n") }   # lesson 5
   # This updater itself, and the double-click file that runs it next time.
   $get['tools\update-hub.ps1'] = $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update-hub.ps1")
   $bat = $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/update.bat")

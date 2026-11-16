@@ -6,7 +6,10 @@
 (function(){
 "use strict";
 const H = window.HUB;
-const en = () => H.LS.get("lang", "he") === "en";
+// English, or the Russian help (ru.js): left to right, with Russian labels where ru.js has them and English elsewhere.
+const ru = () => H.LS.get("lang", "he") === "ru" && !!window.HUB_RU;
+const en = () => H.LS.get("lang", "he") === "en" || ru();
+const RU = (kind, key, fallback) => (ru() && window.HUB_RU.blocks[kind][key]) || fallback;
 
 /* ---------- lists for the dropdowns: [Hebrew, English, id in the game] ---------- */
 // Who it happens to, with the Hebrew preposition each block needs: לי / ליצור / ליצורים מסביבי...
@@ -35,7 +38,8 @@ const SOUNDS = [["עלייה ברמה","Level up","entity.player.levelup"],["א�
   ["ירייה בקשת","Bow shot","entity.arrow.shoot"],["כדור אש","Fireball","entity.blaze.shoot"],["קסם","Magic","block.enchantment_table.use"],["פורטל","Portal","block.portal.travel"],
   ["זכוכית נשברת","Glass breaking","block.glass.break"],["רוח","Wind","entity.breeze.shoot"],["גונג","Gong","block.bell.use"],["חליל","Flute","block.note_block.flute"],
   ["תוף","Drum","block.note_block.basedrum"],["כבשה","Sheep","entity.sheep.ambient"],["פרה","Cow","entity.cow.ambient"],["קריפר","Creeper","entity.creeper.primed"]];
-const DIMS = [["Overworld","Overworld","overworld"],["Nether","Nether","nether"],["End","End","end"]];
+// Hebrew reads "לעבור לממד Nether" / "לעבור לממד שלי"; English "Go to the Nether" / "Go to my dimension".
+const DIMS = [["Overworld","the Overworld","overworld"],["Nether","the Nether","nether"],["End","the End","end"],["שלי","my dimension","mine"]];
 // Blocks and items keep their English names, as in the game (like the recipe ingredients).
 const BLOCKS = ["air","stone","cobblestone","dirt","grass_block","sand","gravel","glass","ice","packed_ice","blue_ice","snow","snow_block","powder_snow","obsidian","oak_planks","oak_log","oak_leaves",
   "water","lava","fire","soul_fire","cobweb","tnt","gold_block","diamond_block","emerald_block","iron_block","glowstone","sea_lantern","slime_block","honey_block","magma_block",
@@ -66,7 +70,17 @@ function blockImg(b){
   g.fillText(name, he ? w - 26 : 26, h / 2 + 1);
   return (BIMG[key] = { src: c.toDataURL(), width: w, height: h, alt: name });
 }
-const blockOpts = () => SHEET.complete && SHEET.naturalWidth ? BLOCKS.map(b => [blockImg(b), b[2]]) : opts(BLOCKS)();
+// The kid's own blocks (lesson 5) come first, each with its drawing. Their value is "myworld:<code>".
+const ownBlocks = () => (window.STUDIO && window.STUDIO.blocks ? window.STUDIO.blocks() : []).filter(b => /^[a-z][a-z0-9_]{0,39}$/.test(b.id || ""));
+function ownImg(b){
+  const name = b.name || b.id, k = 2, h = 22, c = document.createElement("canvas"), g = c.getContext("2d"), font = "600 13px Rubik, Arial, sans-serif";
+  g.font = font; const w = Math.ceil(28 + g.measureText(name).width + 4);
+  c.width = w * k; c.height = h * k; g.scale(k, k);
+  (b.px || []).forEach((col, i) => { if (col){ g.fillStyle = col; g.fillRect(2 + (i % 16) * 18 / 16, 2 + Math.floor(i / 16) * 18 / 16, 18 / 16 + 0.1, 18 / 16 + 0.1); } });
+  g.font = font; g.fillStyle = "#fff"; g.textBaseline = "middle"; g.fillText(name, 26, h / 2 + 1);
+  return { src: c.toDataURL(), width: w, height: h, alt: name };
+}
+const blockOpts = () => ownBlocks().map(b => [ownImg(b), "myworld:" + b.id]).concat(SHEET.complete && SHEET.naturalWidth ? BLOCKS.map(b => [blockImg(b), b[2]]) : opts(BLOCKS)());
 const ddB = { type:"field_dropdown", name:"B", options: blockOpts };
 const ITEMS = ["diamond","emerald","gold_ingot","iron_ingot","netherite_ingot","golden_apple","enchanted_golden_apple","cooked_beef","bread","cookie","cake","apple","arrow",
   "ender_pearl","snowball","egg","tnt","torch","totem_of_undying","experience_bottle","firework_rocket","wind_charge","fire_charge","diamond_sword","bow","shield","elytra",
@@ -86,7 +100,7 @@ const WEATHER = [["שמש","Clear","clear"],["גשם","Rain","rain"],["סופת 
 const TIMES = [["בוקר","Morning","day"],["צהריים","Noon","noon"],["ערב","Evening","evening"],["חצות","Midnight","midnight"]];
 const SHAPES = [["כדור","ball","ball"],["קיר עגול","round wall","shell"],["רצפה עגולה","round floor","floor"]];
 function nice(id){ if (id === "tnt") return "TNT"; return id.split("_").map(w => w[0].toUpperCase() + w.slice(1)).join(" ").replace(/ Of /g, " of ").replace(/ O /g, " o'"); }
-const opts = list => () => list.map(x => [en() ? x[1] : x[0], x[2]]);
+const opts = list => () => list.map(x => [en() ? RU("lists", x[2], x[1]) : x[0], x[2]]);
 const num = (name, value, min, max, precision) => ({ type:"field_number", name, value, min, max, precision: precision || 1 });
 const dd = (name, list) => ({ type:"field_dropdown", name, options: opts(list) });
 const DO_IN = name => ({ type:"input_statement", name });
@@ -135,7 +149,7 @@ const DEFS = [
   ["a_particles","חלקיקים: %1 %2, כמות: %3","Particles: %1 %2, how many: %3",[dd("PT", PARTS),{type:"field_dropdown",name:"WHO",options:opts(where3(["סביבי","סביב היצור","בנקודה"],["around me","around the creature","at the spot"]))},num("N",20,1,100)],"world"],
   ["a_weather","מזג האוויר: %1","Weather: %1",[dd("W", WEATHER)],"world"],
   ["a_time","לשנות את השעה: %1","Set the time to %1",[dd("TM", TIMES)],"world"],
-  ["a_dim","לעבור לממד %1","Go to the %1",[dd("D", DIMS)],"world"],
+  ["a_dim","לעבור לממד %1","Go to %1",[dd("D", DIMS)],"world"],
   // price
   ["p_cooldown","החפץ נח %1 שניות","The item rests %1 seconds",[num("S",5,1,120)],"price"],
   ["p_consume","החפץ נגמר: אחד יורד מהערימה","The item is used up: one less in the stack",[],"price"],
@@ -157,7 +171,7 @@ const DEFS = [
   ["q_water","אני במים","I'm in water",[],"q"], ["q_burning","יש עליי אש","I'm on fire",[],"q"], ["q_air","אני באוויר","I'm in the air",[],"q"],
   ["q_on","מתחתיי יש %1","there's %1 under me",[ddB],"q"],
   ["q_high","אני בגובה מעל %1","I'm higher than %1",[num("N",100,-60,320)],"q"],
-  ["q_dim","אני ב־%1","I'm in the %1",[dd("D", DIMS)],"q"],
+  ["q_dim","אני בממד %1","I'm in %1",[dd("D", DIMS)],"q"],
   ["q_biome","אני ב־%1","I'm in %1",[dd("BI", BIOMES)],"q"],
   ["q_and","%1 וגם %2","%1 and %2",[{type:"input_value",name:"A",check:"Boolean"},{type:"input_value",name:"B",check:"Boolean"}],"q"],
   ["q_or","%1 או %2","%1 or %2",[{type:"input_value",name:"A",check:"Boolean"},{type:"input_value",name:"B",check:"Boolean"}],"q"],
@@ -170,7 +184,7 @@ function defineAll(){
   const B = window.Blockly; if (!B) return false;
   DEFS.forEach(([type, he, enText, args, kind]) => {
     // In Hebrew a label that starts with a comma ("%2, כמות:") would show the comma at its far end: a right-to-left mark keeps it in place.
-    const j = { type, message0: en() ? enText : he.replace(/(%\d),/g, "$1\u200F,"), args0: args, colour: KIND[kind].colour, inputsInline: true };
+    const j = { type, message0: en() ? RU("defs", type, enText) : he.replace(/(%\d),/g, "$1\u200F,"), args0: args, colour: KIND[kind].colour, inputsInline: true };
     if (kind === "when") j.inputsInline = false;          // a hat: nothing above or below it
     else if (kind === "q") j.output = "Boolean";
     else { j.previousStatement = null; j.nextStatement = null; }
@@ -180,7 +194,7 @@ function defineAll(){
   return true;
 }
 function toolbox(){
-  return { kind:"categoryToolbox", contents: CATS.map(([k, he, enT]) => ({ kind:"category", name: en() ? enT : he, colour: String(KIND[k].colour),
+  return { kind:"categoryToolbox", contents: CATS.map(([k, he, enT]) => ({ kind:"category", name: en() ? RU("cats", k, enT) : he, colour: String(KIND[k].colour),
     contents: DEFS.filter(d => d[4] === k).map(d => ({ kind:"block", type:d[0] })) })) };
 }
 
@@ -257,7 +271,7 @@ function setLang(cb){
 }
 function mount(div, item, onChange, readOnly){
   const B = window.Blockly;
-  if (!B){ div.innerHTML = `<p class="st-noblk">${en() ? "The block editor didn't load. Open the page from Minecraft in the Start menu." : "עורך הבלוקים לא נטען. פותחים את הדף מ־Minecraft בתפריט Start."}</p>`; return; }
+  if (!B){ div.innerHTML = `<p class="st-noblk">${en() ? RU("lint", "The block editor didn't load. Open the page from Minecraft in the Start menu.", "The block editor didn't load. Open the page from Minecraft in the Start menu.") : "עורך הבלוקים לא נטען. פותחים את הדף מ־Minecraft בתפריט Start."}</p>`; return; }
   setLang(() => {
     defineAll();
     if (ws){ try { ws.dispose(); } catch(e){} ws = null; }
@@ -271,15 +285,18 @@ function mount(div, item, onChange, readOnly){
     setTimeout(() => { try { const mm = ws.getMetricsManager(), c = mm.getContentMetrics(), v = mm.getViewMetrics();
       if (c.width > v.width || c.height > v.height){ ws.zoomToFit(); if (ws.getScale() > 0.85) ws.setScale(0.85); } ws.scrollCenter(); } catch(e){} }, 80);
     item.power = compile(ws);   // the program always comes from the blocks on screen
-    let t = null;
     ws.addChangeListener(e => {
       if (e.isUiEvent) return;
-      clearTimeout(t);
-      t = setTimeout(() => { item.blocks = B.serialization.workspaces.save(ws); item.power = compile(ws); onChange(); }, 400);
+      clearTimeout(saveTimer);
+      const w = ws;
+      pendingSave = () => { pendingSave = null; item.blocks = B.serialization.workspaces.save(w); item.power = compile(w); onChange(); };
+      saveTimer = setTimeout(pendingSave, 400);
     });
   });
 }
-function unmount(){ if (ws){ try { ws.dispose(); } catch(e){} ws = null; } }
+// A change made just before leaving the editor is saved before the editor closes, not after (it used to be lost).
+let saveTimer = null, pendingSave = null;
+function unmount(){ clearTimeout(saveTimer); if (pendingSave){ try { pendingSave(); } catch(e){} } if (ws){ try { ws.dispose(); } catch(e){} ws = null; } }
 /* ---------- a program back into blocks (for Gemini's improved version) ---------- */
 const LISTS = { E:EFFECTS, WHO:WHO, M:MOBS, SND:SOUNDS, D:DIMS, B:BLOCKS, I:ITEMS, PR:PROJ, PT:PARTS, BI:BIOMES, W:WEATHER, TM:TIMES, SH:SHAPES };
 function defOf(type){ return DEFS.find(d => d[0] === type); }
@@ -367,10 +384,10 @@ Steps (who: "me" | "target" = the creature | "around" = every creature within 5 
 Projectiles: {"a":"shoot","pr":PROJECTILE,"v":speed 1-5,"hit":[steps that run where it hits; "target" there = the creature it hit]}   {"a":"rain","pr":PROJECTILE,"who":"me"|"target"|"spot","n":1-20}
 The world: {"a":"lightning","who":"me"|"target"|"spot"}   {"a":"explode","who":"me"|"target"|"spot","p":power 1-6,"brk":true|false}   {"a":"spawn","m":MOB,"who":"me"|"target"|"spot","n":1-5}
 {"a":"setblock","b":BLOCK,"who":"me"(under me)|"target"|"spot"}   {"a":"fill","sh":"ball"|"shell"|"floor","b":BLOCK,"r":size 1-5,"who":"me"|"target"|"spot"}   {"a":"dig","who":"me"|"target"|"spot","r":1-3}
-{"a":"particles","pt":PARTICLE,"who":"me"|"target"|"spot","n":1-100}   {"a":"weather","w":"clear"|"rain"|"thunder"}   {"a":"time","tm":"day"|"noon"|"evening"|"midnight"}   {"a":"dim","d":"overworld"|"nether"|"end"}
+{"a":"particles","pt":PARTICLE,"who":"me"|"target"|"spot","n":1-100}   {"a":"weather","w":"clear"|"rain"|"thunder"}   {"a":"time","tm":"day"|"noon"|"evening"|"midnight"}   {"a":"dim","d":"overworld"|"nether"|"end"|"mine" (the kid's own dimension)}
 Price: {"a":"cooldown","s":seconds 1-120}   {"a":"consume"}   {"a":"hunger","n":food 1-20}   {"a":"xpcost","n":levels 1-30}
 {"if":COND,"then":[steps],"else":[steps]}   {"repeat":1-20,"do":[steps]}   {"wait":seconds 0.5-30} (the steps after it wait)
-COND: {"c":"night"} {"c":"day"} {"c":"rain"} {"c":"thunder"} {"c":"sneak"} {"c":"chance","p":1-100} {"c":"health","n":hearts} {"c":"thealth","n":the creature's hearts} {"c":"target","m":MOB} {"c":"effect","e":EFFECT} {"c":"water"} {"c":"burning"} {"c":"air"} {"c":"on","b":BLOCK} (under me) {"c":"high","n":height} {"c":"dim","d":"overworld"|"nether"|"end"} {"c":"biome","bi":BIOME} {"and":[COND,COND]} {"or":[COND,COND]} {"not":COND}
+COND: {"c":"night"} {"c":"day"} {"c":"rain"} {"c":"thunder"} {"c":"sneak"} {"c":"chance","p":1-100} {"c":"health","n":hearts} {"c":"thealth","n":the creature's hearts} {"c":"target","m":MOB} {"c":"effect","e":EFFECT} {"c":"water"} {"c":"burning"} {"c":"air"} {"c":"on","b":BLOCK} (under me) {"c":"high","n":height} {"c":"dim","d":"overworld"|"nether"|"end"|"mine"} {"c":"biome","bi":BIOME} {"and":[COND,COND]} {"or":[COND,COND]} {"not":COND}
 "target" exists only inside "hit", "use_mob", "kill" (already dead there), "hurt" (whoever hurt me) and a projectile's "hit".
 EFFECT: ${ids(EFFECTS)}
 MOB: ${ids(MOBS)}
@@ -385,14 +402,14 @@ BIOME: ${ids(BIOMES)}`;
 function label(type, f, v){
   const arg = defOf(type)[3].find(a => a.name === f);
   if (arg && arg.type === "field_dropdown"){ const x = arg.options().find(x => x[1] === v); return x ? x[0] : v; }
-  if (f === "BREAK") return v === "TRUE" ? (en() ? "yes" : "כן") : (en() ? "no" : "לא");
+  if (f === "BREAK") return v === "TRUE" ? (en() ? RU("lint", "yes", "yes") : "כן") : (en() ? RU("lint", "no", "no") : "לא");
   return String(v);
 }
 function describe(b, depth){
   const out = [];
   for (; b; b = b.next && b.next.block){
     const def = defOf(b.type); if (!def) continue;
-    let text = en() ? def[2] : def[1]; const subs = [];
+    let text = en() ? RU("defs", def[0], def[2]) : def[1]; const subs = [];
     const firstStmt = def[3].findIndex(a => a.type === "input_statement");
     if (firstStmt >= 0) text = text.slice(0, text.indexOf("%" + (firstStmt + 1)));
     def[3].forEach((a, i) => {
@@ -403,7 +420,7 @@ function describe(b, depth){
       text = text.replace("%" + (i + 1), r);
     });
     out.push("  ".repeat(depth) + text.replace(/\s+/g, " ").trim());
-    subs.forEach(([name, sb]) => { if (name === "ELSE") out.push("  ".repeat(depth) + (en() ? "otherwise:" : "אחרת:")); out.push(...describe(sb, depth + 1)); });
+    subs.forEach(([name, sb]) => { if (name === "ELSE") out.push("  ".repeat(depth) + (en() ? RU("lint", "otherwise:", "otherwise:") : "אחרת:")); out.push(...describe(sb, depth + 1)); });
   }
   return out;
 }
@@ -411,7 +428,7 @@ function readable(prog){ const r = toBlocks(prog); if (r.error) return []; retur
 function loadInto(item, prog){ const r = toBlocks(prog); if (r.error) return r; item.blocks = r.blocks; item.power = prog; return { ok:true }; }
 /* ---------- quick checks, without Gemini: the logic mistakes kids make most ---------- */
 function lint(prog){
-  const out = [], seen = new Set(), add = t => { if (!seen.has(t)){ seen.add(t); out.push(t); } };
+  const out = [], seen = new Set(), add = t => { t = RU("lint", t, t); if (!seen.has(t)){ seen.add(t); out.push(t); } };
   if (!prog || !prog.on) return out;
   const E = en();
   const strong = new Set(["lightning","explode","spawn","tp","tpspot","fire","shoot","rain","fill","dig","give","dim","freeze"]);
@@ -477,6 +494,11 @@ const EXAMPLES = [
     prog:{ on:{ use:[{a:"weather",w:"thunder"},{repeat:3,do:[{a:"lightning",who:"spot"},{wait:1}]},{a:"cooldown",s:30}] } } },
   { id:"portal_key", lesson:4, he:["מפתח הממדים","לחיצה ימנית: עוברים ל־Nether. ב־Nether: חוזרים הביתה."], en:["Dimension key","Right-click: go to the Nether. In the Nether: go back home."],
     prog:{ on:{ use:[{if:{c:"dim",d:"nether"},then:[{a:"dim",d:"overworld"}],else:[{a:"dim",d:"nether"}]},{a:"sound",snd:"block.portal.travel"},{a:"cooldown",s:10}] } } },
+  // Lesson 5: the door to the kid's own dimension.
+  { id:"dim_door", lesson:5, he:["הדלת לממד","לחיצה ימנית: עוברים לממד שלכם. בממד: חוזרים הביתה."], en:["Dimension door","Right-click: go to your own dimension. In your dimension: go back home."],
+    lore:["רק מי שמחזיק אותה עובר.","Only the one who holds it can pass."], rarity:"epic",
+    pic:{ pal:{ k:"#1b1029", o:"#3b2a5a", p:"#8a4dff", P:"#d9c2ff" }, rows:["..kkkkkkkkkkkk..",".kkooooooooookk.",".kopppppppppPok.",".kopppPppppppok.",".koPPPPPPppppok.",".koPPpppPPpppok.",".koppppppPPppok.",".koppppppPPppok.",".kopppPPPPpppok.",".koppPPppppppok.",".koppPPppppppok.",".kopppPPpppPPok.",".koppppPPPPPPok.",".koppppppPpppok.",".koPpppppppppok.",".kooooooooooook."] },
+    prog:{ on:{ use:[{if:{c:"dim",d:"mine"},then:[{a:"dim",d:"overworld"}],else:[{a:"dim",d:"mine"},{a:"particles",pt:"portal",who:"me",n:60}]},{a:"sound",snd:"block.portal.travel"},{a:"cooldown",s:5}] } } },
   { id:"fire_bow", lesson:4, he:["קשת האש","לחיצה ימנית: יורה כדור אש קטן. כל ירייה עולה אוכל."], en:["Fire bow","Right-click: shoots a small fireball. Every shot costs food."],
     prog:{ on:{ use:[{a:"shoot",pr:"small_fireball",v:3},{a:"hunger",n:1},{a:"cooldown",s:1}] } } },
   { id:"arrow_rain", lesson:4, he:["גשם החצים","לחיצה ימנית: עשרה חצים נופלים על הנקודה שמכוונים אליה."], en:["Arrow rain","Right-click: ten arrows fall where you aim."],

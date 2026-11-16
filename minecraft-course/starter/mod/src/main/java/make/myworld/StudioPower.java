@@ -350,7 +350,7 @@ public final class StudioPower {
             case "tpspot" -> { Vec3 v = c.spot(); c.me.teleportTo(v.x, v.y, v.z); c.me.resetFallDistance(); }
             case "ride" -> { if (c.target != null && c.target.isAlive()) c.me.startRiding(c.target); }
             case "give" -> {
-                Identifier id = Identifier.parse("minecraft:" + str(s, "i"));
+                Identifier id = Identifier.parse(str(s, "i").contains(":") ? str(s, "i") : "minecraft:" + str(s, "i"));
                 if (!BuiltInRegistries.ITEM.containsKey(id)) return;
                 ItemStack give = new ItemStack(BuiltInRegistries.ITEM.getValue(id), clamp(num(s, "n", 1), 1, 64));
                 if (!c.me.getInventory().add(give)) c.me.drop(give, false);
@@ -515,7 +515,7 @@ public final class StudioPower {
         c.level.setBlockAndUpdate(pos, st);
     }
 
-    /** To another dimension, onto a safe place: the End's obsidian platform, a ledge in the Nether, the top of the ground. */
+    /** To another dimension, onto a safe place: the End's obsidian platform, a ledge in the Nether, the top of the ground, land in the kid's own dimension. */
     private static void travel(Ctx c, String d) {
         ResourceKey<Level> key = dimension(d);
         if (!(c.me instanceof ServerPlayer sp) || c.level.dimension() == key) return;
@@ -529,7 +529,7 @@ public final class StudioPower {
                 for (int dy = 0; dy < 3; dy++) to.setBlockAndUpdate(at.offset(dx, dy, dz), Blocks.AIR.defaultBlockState());
             }
         } else {
-            double scale = key == Level.NETHER ? 1 / 8.0 : c.level.dimension() == Level.NETHER ? 8 : 0;
+            double scale = key == Level.NETHER ? 1 / 8.0 : c.level.dimension() == Level.NETHER ? 8 : key == MyDimension.KEY || c.level.dimension() == MyDimension.KEY ? 1 : 0;
             int x = (int) Math.floor(c.me.getX() * scale), z = (int) Math.floor(c.me.getZ() * scale);
             if (key == Level.NETHER) {
                 at = null;
@@ -545,12 +545,16 @@ public final class StudioPower {
                         for (int dy = 0; dy < 3; dy++) to.setBlockAndUpdate(at.offset(dx, dy, dz), Blocks.AIR.defaultBlockState());
                     }
                 }
+            } else if (key == MyDimension.KEY) {
+                at = MyDimension.arrive(to, x, z);   // the kid's own dimension: on land, not in its sea
             } else {
+                to.getChunk(x >> 4, z >> 4);   // the height is only known once the chunk is loaded
                 at = new BlockPos(x, to.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
             }
         }
         sp.teleportTo(to, at.getX() + 0.5, at.getY(), at.getZ() + 0.5, Set.of(), sp.getYRot(), sp.getXRot(), true);
         sp.resetFallDistance();
+        if (key == MyDimension.KEY) MyDimension.welcome(sp);
     }
 
     /** A game command, run quietly by the server (for weather and time). */
@@ -560,13 +564,13 @@ public final class StudioPower {
     }
 
     private static ResourceKey<Level> dimension(String d) {
-        return switch (d) { case "nether" -> Level.NETHER; case "end" -> Level.END; default -> Level.OVERWORLD; };
+        return switch (d) { case "nether" -> Level.NETHER; case "end" -> Level.END; case "mine" -> MyDimension.KEY; default -> Level.OVERWORLD; };
     }
     private static Holder<MobEffect> effect(String id) {
         return BuiltInRegistries.MOB_EFFECT.get(Identifier.parse("minecraft:" + id)).map(h -> (Holder<MobEffect>) h).orElse(null);
     }
     private static BlockState block(String id) {
-        Identifier key = Identifier.parse("minecraft:" + id);
+        Identifier key = Identifier.parse(id.contains(":") ? id : "minecraft:" + id);   // the kid's own blocks are myworld:...
         return BuiltInRegistries.BLOCK.containsKey(key) ? BuiltInRegistries.BLOCK.getValue(key).defaultBlockState() : null;
     }
     private static JsonArray arr(JsonElement e) { return e != null && e.isJsonArray() ? e.getAsJsonArray() : new JsonArray(); }

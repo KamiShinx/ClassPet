@@ -15,7 +15,7 @@ const app = document.getElementById("app");
 
 /* ===== TEACHER AREA ===== */
 // The next lesson to teach. Change NEXT when a lesson is done.
-const NEXT = 4;
+const NEXT = 5;
 const PLAN = {
   1: [["0–15","מתקינים מהדיסק",""],["15–20","מה נעשה בקורס",""],["20–32","Diagon Alley, ומה למדנו",""],["32–65","מה עולם צריך?",""],["65–80","דף 1",""],["80–90","מיינקראפט נפתח",""]],
   2: [["0–5","מיינקראפט בתלת־ממד","קוביות שנשברות, יצורים, יום ולילה, השער"],["5–22","עולמות","בונים יחד את העולם של הכיתה"],["22–40","חפצים","Mojang, תפקיד, מחיר, נדירות, והחפץ של הכיתה"],
@@ -23,15 +23,20 @@ const PLAN = {
   3: [["0–4","פתיחה","ה־Crafting Table"],["4–16","מתכונים","מה יוצא, הצורה, זול ויקר, הסדר"],["16–27","המתכון של הכיתה","בונים יחד, ומתקנים את ״חרב הכול״"],
       ["27–35","הדגמה","מקל הברקים, מהדף ל־Crafting Table"],["35–75","הם בונים","מתכון לחפץ שלהם, ומכינים אותו במשחק"],["75–90","רק מהמתכון, ודרייב",""]],
   4: [["0–2","פתיחה","ממד משלכם"],["2–16","מה ממד צריך","תחושה, שכבות, נדיר, אזהרה, מה אי אפשר, מעט ועמוק, מבנה, דלת"],["16–30","הדף: הממד שלי","13 דקות, עם שעון"],
-      ["30–36","בלוקים חדשים","מה חדש, ושרביט השלג"],["36–44","הדגמה","מהדף לבקבוק"],["44–82","הם בונים","בקבוק הממד, מהדף"],["82–90","איזה ממד זה? ודרייב",""]]
+      ["30–36","בלוקים חדשים","מה חדש, ושרביט השלג"],["36–44","הדגמה","מהדף לבקבוק"],["44–82","הם בונים","בקבוק הממד, מהדף"],["82–90","איזה ממד זה? ודרייב",""]],
+  5: [["0–3","פתיחה","מחזירים את הדפים ״הממד שלי״"],["3–10","איך בונים אדמה","צורה, שכבות, קישוטים, וחמש צורות"],["10–17","מה חדש","הקוביות, החוקים, והדלת"],
+      ["17–25","הדגמה","מהדף לממד, כולל המסך באנגלית"],["25–80","הם בונים","קוביות, ממד, דלת, ונכנסים"],["80–90","אורחים, ודרייב",""]]
 };
 // What to check before each lesson, besides the hub, the pictures, YouTube and the projector.
 const CHECK = {
   2: [["דף 2 מודפס, אחד לכל ילד, וטושים",'<a href="print.html" target="_blank">דפים להדפסה</a>'],["הסטודיו עובד אצלך: חפץ ניסיון נכנס למשחק","להדגמה בדקה 52. אם המשחק לא נפתח: ״לסגור את מיינקראפט״ ואז שוב ״שחק״."]],
   3: [["המחשבים של הילדים עודכנו מהדיסק","מריצים את update-from-usb.bat מהדיסק על כל מחשב. בלי זה אין להם את שיעור 3."],["מקל הברקים יוצא אצלך מה־Crafting Table","להדגמה בדקה 27: שיעור 3, שלב 3. אם הוא לא יוצא: ״לסגור את מיינקראפט״, ושוב ״לפתוח את מיינקראפט״."]],
+  5: [["הדפים ״הממד שלי״ מהשבוע שעבר",'מי ששכח: דף חדש, וממלאים רק את השכבות ואת השמיים. <a href="print.html" target="_blank">דפים להדפסה</a>'],["המחשבים של הילדים עודכנו מהדיסק","מריצים את update-from-usb.bat מהדיסק על כל מחשב. בלי זה אין להם קוביות, ממד ושיעור 5."],["אצלך נכנסים לממד במשחק","להדגמה בדקה 17: שיעור 5, שלבים 2 עד 5. בפעם הראשונה: I Know What I'm Doing!"]],
   4: [["הדף ״הממד שלי״ מודפס, אחד לכל ילד, וטושים",'<a href="print.html" target="_blank">דפים להדפסה</a>'],["המחשבים של הילדים עודכנו מהדיסק","מריצים את update-from-usb.bat מהדיסק על כל מחשב. בלי זה אין להם את הבלוקים החדשים ואת שיעור 4."],["שרביט השלג יורה אצלך במשחק","להדגמה בדקה 36: שיעור 4, שלב 4. אם הוא לא יורה: ״לסגור את מיינקראפט״, ושוב ״לפתוח את מיינקראפט״."]]
 };
 const PART_COL = ["#3B8735","#2B6A99","#C98A0C","#8932B8","#B23A27","#169C9C","#56645A"];
+// A slide with a Russian line (ru) shows it under the slide, like a subtitle (from lesson 5 on).
+const slideHTML = s => s.html + (s.ru ? `<p class="ru-sub" lang="ru">${esc(s.ru)}</p>` : "");
 function deckPictures(n){ const set = new Set(); (H.DECKS[n] || []).forEach(s => (s.html.match(/mc_[a-z0-9_]+\.png/g) || []).forEach(x => set.add(x))); return [...set]; }
 function renderTeacher(){
   const L = H.LESSONS[NEXT], plan = PLAN[NEXT] || [];
@@ -140,7 +145,7 @@ function openAudience(){
 function syncAudience(){
   if (!audOpen()) return;
   const s = aud.document.getElementById("s"); if (!s) return;
-  s.innerHTML = SLIDES[sIx].html;
+  s.innerHTML = slideHTML(SLIDES[sIx]);
   H.applyReveal(s, revealed);
   s.querySelectorAll("[data-yt]").forEach(v => {
     v.innerHTML = SERVED ? ytFrame(v) : `<span class="play">▶</span>`;
@@ -166,7 +171,7 @@ function renderConsole(){
     ${blocked ? `<div style="padding:16px 16px 0"><div class="con-warn">הדפדפן חסם את החלון. מאשרים חלונות קופצים לדף הזה (סמל בשורת הכתובת) ולוחצים שוב.</div></div>` : ""}
     <main class="con-main">
       <section class="con-box live"><div class="con-label"><span>על המקרן עכשיו</span><span>${S.label}</span></div>
-        <div class="stage"><div class="slide" id="cur">${S.html}</div></div></section>
+        <div class="stage"><div class="slide" id="cur">${slideHTML(S)}</div></div></section>
       <div class="con-side">
         <section class="con-box"><div class="con-label"><span>הערות למדריך</span><span>רק אצלך</span></div><div class="con-notes">${S.notes}</div></section>
         <section class="con-box"><div class="con-label"><span>השקופית הבאה</span></div>
@@ -203,7 +208,7 @@ function renderConsole(){
 function goSlide(i){ playing = false; sIx = Math.max(0, Math.min(SLIDES.length-1, i)); LS.set("slide" + deckN, sIx); renderConsole(); syncAudience(); if (fs) renderFs(); }
 // Clears what was clicked on this slide (the class board stays).
 function resetSlide(){
-  const tmp = document.createElement("div"); tmp.innerHTML = SLIDES[sIx].html;
+  const tmp = document.createElement("div"); tmp.innerHTML = slideHTML(SLIDES[sIx]);
   tmp.querySelectorAll("[data-id]").forEach(el => { const id = el.dataset.id; ["rot","rv","vt","tm","dn","pt","hb","so","zm"].forEach(k => { if (ctx[k]) delete ctx[k][id]; }); });
   tmp.querySelectorAll("[data-mine]").forEach(el => { if (ctx.mine) delete ctx.mine[el.dataset.mine]; });
   changed("reset"); renderConsole(); syncAudience(); if (fs) renderFs();
@@ -217,7 +222,7 @@ function openFs(){
 }
 function renderFs(){
   if (!fs) return;
-  fs.innerHTML = `<div class="stage"><div class="slide">${SLIDES[sIx].html}</div></div><div class="fsbar"><span>${sIx+1} / ${SLIDES.length} · ${esc(SLIDES[sIx].label)}</span><span>חצים: שקופית · Esc: חזרה להערות</span><button class="btn ghost" id="fsoff">יציאה</button></div>`;
+  fs.innerHTML = `<div class="stage"><div class="slide">${slideHTML(SLIDES[sIx])}</div></div><div class="fsbar"><span>${sIx+1} / ${SLIDES.length} · ${esc(SLIDES[sIx].label)}</span><span>חצים: שקופית · Esc: חזרה להערות</span><button class="btn ghost" id="fsoff">יציאה</button></div>`;
   const sl = fs.querySelector(".slide");
   H.applyReveal(sl, revealed);
   sl.querySelectorAll("[data-sil]").forEach(b => b.addEventListener("click", () => { revealed.add(+b.dataset.sil); H.applyReveal(sl, revealed); syncAudience(); }));

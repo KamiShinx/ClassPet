@@ -58,7 +58,7 @@ if (Test-Path $tools) {
   [IO.File]::WriteAllBytes((Join-Path $makeRoot 'update.bat'), $bat)
   # The stick's files, ready to copy onto the USB stick (make-usb, install-from-usb, update-from-usb).
   $sf = Join-Path $makeRoot 'stick-files'; New-Item -ItemType Directory -Force $sf | Out-Null
-  foreach ($n in 'make-usb.bat', 'install-from-usb.bat', 'update-from-usb.bat') { [IO.File]::WriteAllBytes((Join-Path $sf $n), $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/$n")) }
+  foreach ($n in 'make-usb.bat', 'install-from-usb.bat', 'update-from-usb.bat', 'fix-laptop.bat', 'fix-laptop.ps1') { [IO.File]::WriteAllBytes((Join-Path $sf $n), $web.DownloadData("https://raw.githubusercontent.com/KamiShinx/ClassPet/$s/minecraft-course/setup/$n")) }
   Write-Host "Course tools updated (the kid's own files are untouched)." -ForegroundColor Green
   # A newer updater came down (new pictures for a new lesson, say): run it once now, so one double-click is enough.
   $new = $get['tools\update-hub.ps1']

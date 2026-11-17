@@ -11,6 +11,12 @@ $hub = Join-Path $root 'hub'
 $log = Join-Path $mod 'build/last-play.log'
 $onWindows = [Environment]::OSVersion.Platform -eq 'Win32NT'
 . ([ScriptBlock]::Create([IO.File]::ReadAllText((Join-Path $mod 'tools/common.ps1'), [Text.Encoding]::UTF8)))
+# The hub opens in the laptop's default browser, or in the one fix-laptop.bat chose (browser.txt) when that one is broken.
+function Open-Hub {
+    $b = ''; $bf = Join-Path $root 'browser.txt'
+    if (Test-Path $bf) { $b = ([IO.File]::ReadAllText($bf)).Trim() }
+    if ($b -and (Test-Path $b)) { Start-Process $b $url } else { Start-Process $url }
+}
 
 # ---------- start, or hand over to the copy that is already running ----------
 try {
@@ -20,14 +26,14 @@ try {
     # Another copy is running: hand over to it. If it doesn't answer (an old process holding the address), say what to do.
     $alive = $false
     try { $r = [Net.WebRequest]::Create("${url}api/lock"); $r.Timeout = 3000; $r.GetResponse().Close(); $alive = $true } catch [Net.WebException] { if ($_.Exception.Response) { $alive = $true } } catch {}
-    if ($alive) { if ($onWindows) { Start-Process $url } }
+    if ($alive) { if ($onWindows) { Open-Hub } }
     elseif ($onWindows) {
         Add-Type -AssemblyName PresentationFramework -ErrorAction SilentlyContinue
         try { [void][System.Windows.MessageBox]::Show("The hub can't start: an old Minecraft builder is still running.`nRestart the computer, or run:  taskkill /f /im java.exe", 'Minecraft') } catch {}
     }
     exit 0
 }
-if ($onWindows -and -not $env:MAKE_NO_BROWSER) { Start-Process $url }
+if ($onWindows -and -not $env:MAKE_NO_BROWSER) { Open-Hub }
 
 # ---------- game state ----------
 $state = @{ phase = 'idle'; message = 'מוכן.'; error = ''; online = $false; proc = $null; tokens = @{}; fails = 0; waitUntil = [DateTime]::MinValue }
@@ -262,6 +268,13 @@ function Invoke-Request($client) {
         Send $stream 200 $types['.json'] ([Text.Encoding]::UTF8.GetBytes((Get-Studio $root)))
         return
     }
+    if ($path -eq '/api/notes') {
+        # The hub's own notes (lesson steps, answers, language): kept on the laptop too, so Chrome and Edge show the same.
+        $f = Join-Path $root 'design/hub-notes.json'
+        $j = '{}'; if (Test-Path $f) { $j = [IO.File]::ReadAllText($f, [Text.Encoding]::UTF8) }
+        Send $stream 200 $types['.json'] ([Text.Encoding]::UTF8.GetBytes($j))
+        return
+    }
     if ($path -eq '/api/clip') {
         Send-Json $stream @{ text = [string](Read-Clip) }
         return
@@ -283,6 +296,18 @@ function Invoke-Request($client) {
             $r = New-Result $false 'העיצוב לא נקרא. נסו שוב.'
             try { $r = Save-Studio $root ([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($body))) } catch {}
             Send-Json $stream @{ ok = $r.Ok; result = $r.Message }
+            return
+        }
+        if ($path -eq '/api/notes-save') {
+            $ok = $false
+            try {
+                $j = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($body))
+                if ($j.StartsWith('{')) {
+                    $d = Join-Path $root 'design'; if (-not (Test-Path $d)) { New-Item -ItemType Directory $d | Out-Null }
+                    [IO.File]::WriteAllText((Join-Path $d 'hub-notes.json'), $j, (New-Object Text.UTF8Encoding $false)); $ok = $true
+                }
+            } catch {}
+            Send-Json $stream @{ ok = $ok }
             return
         }
         if ($path -eq '/api/copy-text') {

@@ -520,7 +520,10 @@ public final class StudioPower {
         ResourceKey<Level> key = dimension(d);
         if (!(c.me instanceof ServerPlayer sp) || c.level.dimension() == key) return;
         ServerLevel to = c.level.getServer().getLevel(key);
-        if (to == null) return;
+        if (to == null) {   // said out loud: a kid who clicks and sees nothing thinks the door is broken
+            if (key == MyDimension.KEY) sp.sendOverlayMessage(Component.literal("There's no dimension yet: build it in the studio, then open the game again."));
+            return;
+        }
         BlockPos at;
         if (key == Level.END) {
             at = new BlockPos(100, 49, 0);

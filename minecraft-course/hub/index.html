@@ -269,6 +269,22 @@ function hubNotes(){
   for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (k.indexOf("mkmod.") === 0 && k !== "mkmod.seat") o[k] = localStorage.getItem(k); }
   return o;
 }
+/* The notes also live on the laptop (/api/notes): a kid who opens the hub in another browser gets the same steps,
+   answers and language. The newer copy wins. */
+let notesTimer = 0;
+function pushNotes(){ clearTimeout(notesTimer); notesTimer = setTimeout(() => { if (H.token) api("/api/notes-save", { method:"POST", body: b64(JSON.stringify(hubNotes())) }).catch(() => {}); }, 1500); }
+async function syncNotes(){
+  let srv = {};
+  try { const r = await api("/api/notes"); if (r.ok) srv = await r.json(); } catch(e){ return; }
+  const at = o => +(o["mkmod.notesAt"] || 0);
+  const has = Object.keys(srv).length > 0;
+  if (has && (LS.fresh || at(srv) > at(hubNotes()))){
+    Object.keys(localStorage).filter(k => k.indexOf("mkmod.") === 0 && k !== "mkmod.seat").forEach(k => localStorage.removeItem(k));
+    Object.keys(srv).forEach(k => { if (k.indexOf("mkmod.") === 0 && k !== "mkmod.seat") localStorage.setItem(k, srv[k]); });
+    location.reload();
+  } else if (!has || at(hubNotes()) > at(srv)) pushNotes();
+}
+LS.onset = pushNotes;
 /* The server reads request bodies as plain ASCII, so Hebrew travels as base64. */
 function b64(text){ let bin = ""; new TextEncoder().encode(text).forEach(c => bin += String.fromCharCode(c)); return btoa(bin); }
 async function backup(){
@@ -366,7 +382,7 @@ async function key(k){
   if (!j.ok){ LOCK.msg = LOCK.mode === "teacher" ? "זה לא קוד המורה." : "הקוד לא נכון. נסו שוב."; return setTimeout(paintLock, 150); }
   if (LOCK.mode === "teacher"){ LOCK.mode = "new"; LOCK.msg = ""; return paintLock(); }
   H.token = j.token; try { sessionStorage.setItem("mkmod.tok", j.token); } catch(e){}
-  LOCK.shown = false; DOCK.key = ""; route(); poll();
+  LOCK.shown = false; DOCK.key = ""; route(); poll(); if (DOCK.on) syncNotes();
 }
 document.addEventListener("keydown", e => { if (!LOCK.shown) return; if (/^[0-9]$/.test(e.key)) key(e.key); else if (e.key === "Backspace") key("back"); });
 
@@ -391,6 +407,6 @@ H.api = api; H.lock = showLock; H.act = act; H.langBtn = langBtn;
 H.topBar = topBar;
 H.afterRender = () => { bindTop(); applyLang(); paintDock(); };
 H.afterEmbed = el => { if (isEn()) EN.translate(el); };
-if (DOCK.on && !H.token) showLock(); else route();
+if (DOCK.on && !H.token) showLock(); else { route(); if (DOCK.on) syncNotes(); }
 })();
 </script>

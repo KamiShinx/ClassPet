@@ -35,6 +35,12 @@ copy /y "%SRC%\mod\src\main\java\make\myworld\MyDimension.java" "%ROOT%\mod\src\
 copy /y "%SRC%\mod\src\main\java\make\myworld\ModeButton.java" "%ROOT%\mod\src\main\java\make\myworld\ModeButton.java" >nul
 copy /y "%SRC%\mod\src\main\java\make\myworld\MyPortal.java" "%ROOT%\mod\src\main\java\make\myworld\MyPortal.java" >nul
 copy /y "%~dp0teacher.txt" "%ROOT%\teacher.txt" >nul
+rem The teacher's laptop (it already has the teacher page) gets the newest slides page too. Kid laptops never get it.
+if not exist "%ROOT%\hub\teacher.html" goto :no_teacher
+if not exist "%~dp0teacher-page\teacher.html" goto :no_teacher
+copy /y "%~dp0teacher-page\teacher.html" "%ROOT%\hub\teacher.html" >nul
+echo  The teacher page and its slides are updated too.
+:no_teacher
 
 echo.
 echo  ===============================================
@@ -43,11 +49,13 @@ echo   The kid's items, pictures and worlds are untouched.
 echo   Open Minecraft from the Start menu: the hub asks
 echo   the kid to choose a 4-digit code the first time.
 echo  ===============================================
+if /i "%~1"=="nopause" exit /b 0
 pause
 exit /b 0
 
 :fail
 echo.
 echo  ---- Stopped. Take a photo of this window. ----
+if /i "%~1"=="nopause" exit /b 1
 pause
 exit /b 1

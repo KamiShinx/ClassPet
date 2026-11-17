@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -79,7 +80,13 @@ public final class MyPortal {
         Identifier keyId = Identifier.tryParse(key);
         if (keyId == null || !BuiltInRegistries.ITEM.containsKey(keyId)) return;
         Item keyItem = BuiltInRegistries.ITEM.getValue(keyId);
-        if (!event.getItemStack().is(keyItem) || !level.getBlockState(event.getPos()).is(frameBlock())) return;
+        if (!level.getBlockState(event.getPos()).is(frameBlock())) return;
+        if (!event.getItemStack().is(keyItem)) {
+            // Building the frame (a block in hand) stays quiet; anything else is a kid trying to light it.
+            if (!(event.getItemStack().getItem() instanceof BlockItem) && event.getEntity() instanceof ServerPlayer p)
+                p.sendOverlayMessage(Component.literal("Light the portal with: " + keyItem.getName(keyItem.getDefaultInstance()).getString()));
+            return;
+        }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         // Kids click the frame from the front, the side or the top: try the space on every side of the clicked block.
@@ -96,7 +103,7 @@ public final class MyPortal {
 
     /** Fills the space inside a closed frame of the right shape and size with portal. */
     static boolean light(ServerLevel level, BlockPos start) {
-        if (!level.getBlockState(start).isAir()) return false;
+        if (!empty(level.getBlockState(start))) return false;
         Block f = frameBlock();
         Direction.Axis[] planes = flat ? new Direction.Axis[] { Direction.Axis.Y } : new Direction.Axis[] { Direction.Axis.X, Direction.Axis.Z };
         for (Direction.Axis axis : planes) {
@@ -115,7 +122,7 @@ public final class MyPortal {
                     if (inside.contains(n)) continue;
                     BlockState s = level.getBlockState(n);
                     if (s.is(f)) continue;
-                    if (s.isAir()) todo.add(n); else { closed = false; break; }
+                    if (empty(s)) todo.add(n); else { closed = false; break; }
                 }
             }
             if (closed && inside.size() >= 2 && fits(inside, axis)) {
@@ -125,6 +132,11 @@ public final class MyPortal {
             }
         }
         return false;
+    }
+
+    /** Air, or grass, flowers and snow that the portal simply replaces (a frame built on a lawn has grass inside). */
+    private static boolean empty(BlockState s) {
+        return s.isAir() || (s.canBeReplaced() && s.getFluidState().isEmpty() && !s.is(PORTAL.get()));
     }
 
     /** The inside is a full rectangle of the size the kid chose (width across, height up; lying down: width by height). */

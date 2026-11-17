@@ -617,7 +617,9 @@ const GEM_LINK = "";
 /* ===== storage (per laptop, optional) ===== */
 const LS = {
   get(k, d){ try{ const v = localStorage.getItem("mkmod." + k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
-  set(k, v){ try{ localStorage.setItem("mkmod." + k, JSON.stringify(v)); }catch(e){} }
+  set(k, v){ try{ localStorage.setItem("mkmod." + k, JSON.stringify(v)); localStorage.setItem("mkmod.notesAt", Date.now()); }catch(e){} if (LS.onset) LS.onset(); },
+  onset: null,   // index.html keeps a copy of these notes on the laptop, so another browser shows the same progress
+  fresh: (() => { try { return !localStorage.getItem("mkmod.notesAt"); } catch(e){ return true; } })()   // this browser has no notes of its own yet
 };
 // Every button call carries the token the kids' page got from the code lock (index.html sets it).
 const apiHeaders = () => ({ "X-Make":"1", "X-Token": (window.HUB && window.HUB.token) || "" });

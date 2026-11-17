@@ -38,6 +38,13 @@ Kinds of block a kid could pick, from easy to hard:
 - a chest of their own (holds items, opens a menu). A barrel-style one (no lid animation) is **medium**;
   a chest with an opening lid is **big**.
 
+**The kids asked for this one most (Ben, 17 Nov): moving parts, like the chest lid opening.** In Minecraft that
+is a block with a model of its own, drawn and moved by code every frame (chest lid, bell swing, a door that
+slides). The studio already builds models from cubes in Blockbench style (lesson 3), so the plan is: the kid
+builds the block's model, marks the part that moves (the lid), picks how it moves (opens up, spins, slides) and
+when (when you open it, when someone is near, all the time). **Big**: one shared piece of Java that plays any
+kid's movement, then each kid only makes choices. Worth its own lesson, maybe two.
+
 ## 6. More layers and richer generation
 All of this is game files the studio writes, no Java:
 - more layers than three, each with how deep it goes;
@@ -58,5 +65,5 @@ All of this is game files the studio writes, no Java:
 
 ## Order I'd teach them in
 7 (mining) and 2 (transparent) first: small, and every kid's block gets better at once. Then 1 (glow pencil) and
-3 (animation), which are drawing lessons. Then 6 (generation) as a second dimension lesson, 5 (blocks that do
-things), and 4 (their own liquid) last.
+3 (animation), which are drawing lessons. Then 5 with moving parts (their chest with a lid), since the kids want
+it most, then 6 (generation) as a second dimension lesson, and 4 (their own liquid) last.

@@ -78,9 +78,25 @@
   .ru5 .head h1 { font-size: 8.4mm; }   /* the Russian titles are long: room for the name line */
   .ru5 .box > small, .ru5 .lead5 { font-size: 3.3mm; line-height: 1.25; }
   .ru5 { font-family: Arial, "Segoe UI", sans-serif; }
+  /* lesson 6: my portal and the build guide, in Hebrew and Russian, and the teacher's Russian phrases */
+  .page[data-set~="l6"] { gap: 2.6mm; } .page[data-set~="l6"] .box { padding: 2.2mm 3.5mm; } .page[data-set~="l6"] .box b { font-size: 4.8mm; }
+  .px6 { display: grid; grid-template-columns: repeat(16, 4.6mm); grid-template-rows: repeat(16, 4.6mm); border: .7mm solid #111; width: max-content; margin-top: 1.5mm; }
+  .px6 i { border: .15mm solid #aaa; }
+  .fr6 { display: grid; grid-template-columns: repeat(4, 9mm); grid-template-rows: repeat(5, 9mm); flex: none; }
+  .fr6 i { border: .4mm solid #111; display: grid; place-items: center; font-style: normal; font-size: 5mm; }
+  .fr6 .f { background: #555; } .fr6 .c { background: #ddd; border-style: dashed; } .fr6 .in { background: #e6d9f7; border-color: #bbb; }
+  .fig6 { display: flex; gap: 4mm; align-items: center; margin-top: 1mm; } .fig6 ul { margin: 0; padding-inline-start: 4mm; font-size: 3.6mm; line-height: 1.5; }
+  .steps5 .fig6 li { display: list-item; counter-increment: none; font-size: 3.6mm; }
+  .sz6 { display: flex; gap: 2mm; align-items: flex-end; font-size: 4.2mm; font-weight: 700; margin-top: 1.5mm; } .sz6 .blank { min-width: 14mm; }
+  .phr { width: 100%; border-collapse: collapse; font-size: 4mm; }
+  .phr td, .phr th { border: .4mm solid #111; padding: 1.2mm 2.5mm; vertical-align: middle; }
+  .phr th { background: #eee; font-size: 3.8mm; }
+  .phr td:nth-child(2) { direction: ltr; text-align: left; font-family: Arial, sans-serif; font-weight: 700; }
+  .phr td:nth-child(3) { font-size: 4.4mm; }
   /* print one set: body[data-only] hides the other pages */
   body[data-only] .page { display: none; }
-  body[data-only="l5he"] .page[data-set~="he"][data-set~="l5"], body[data-only="l5ru"] .page[data-set~="ru"][data-set~="l5"] { display: flex; }
+  body[data-only="l5he"] .page[data-set~="he"][data-set~="l5"], body[data-only="l5ru"] .page[data-set~="ru"][data-set~="l5"],
+  body[data-only="l6he"] .page[data-set~="he"][data-set~="l6"], body[data-only="l6ru"] .page[data-set~="ru"][data-set~="l6"], body[data-only="t6"] .page[data-set~="t6"] { display: flex; }
   body[data-only="old"] .page:not([data-set]) { display: flex; }
   @media print {
     html { background: #fff; }
@@ -89,7 +105,7 @@
     .page:last-child { break-after: auto; }
   }
 </style>
-<div class="bar"><span>דפים 1–3: כרטיס העולם (שיעור 1), כרטיס החפץ (שיעור 2), הממד שלי (שיעור 4). דפים 4–5: המתכון של הממד ומדריך הבנייה (שיעור 5), ודפים 6–7: אותם דפים ברוסית, לילדים שעלו מרוסיה ומאוקראינה. מדפיסים על A4, בלי הקטנה.</span><span><button onclick="only('l5he')">שיעור 5</button> <button onclick="only('l5ru')">שיעור 5 ברוסית</button> <button onclick="only('old')">דפים 1–3</button> <button onclick="only('')">הכול</button></span></div>
+<div class="bar"><span>דפים 1–3: כרטיס העולם (שיעור 1), כרטיס החפץ (שיעור 2), הממד שלי (שיעור 4). דפים 4–5: המתכון של הממד ומדריך הבנייה (שיעור 5), ודפים 6–7: אותם דפים ברוסית, לילדים שעלו מרוסיה ומאוקראינה. דפים 8–11: הפורטל שלי ומדריך הבנייה (שיעור 6), בעברית וברוסית. דף 12: משפטים ברוסית, למורה. מדפיסים על A4, בלי הקטנה.</span><span><button onclick="only('l6he')">שיעור 6</button> <button onclick="only('l6ru')">שיעור 6 ברוסית</button> <button onclick="only('t6')">למורה</button> <button onclick="only('l5he')">שיעור 5</button> <button onclick="only('l5ru')">שיעור 5 ברוסית</button> <button onclick="only('old')">דפים 1–3</button> <button onclick="only('')">הכול</button></span></div>
 
 <section class="page">
   <div class="head"><h1>כרטיס העולם שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
@@ -252,10 +268,122 @@
   <div class="box grow"><b>Готово? Задания <small class="he5" lang="he" dir="rtl">אֶתְגָּרִים</small></b>
     <div class="chk5"><span>Я нашёл (нашла) редкую руду в измерении</span><span>Я играл(а) в измерении в Survival</span><span>У двери есть условие, а не только цена</span><span>В тёмном измерении у меня есть светящийся блок</span></div></div>
 </section>
+<section class="page" data-set="l6 he">
+  <div class="head"><h1>הפורטל שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
+  <small class="lead5">הסדר בדף הוא הסדר בסטודיו. אחר כך רק מעבירים לסטודיו.</small>
+  <div class="row">
+    <div class="box"><b>1. המסגרת</b><small>מאיזו קובייה בונים אותה? קובייה שציירתם, או קובייה ממיינקראפט.</small><div class="line sm"></div><small>למה היא מתאימה לממד שלכם?</small><div class="line sm"></div></div>
+    <div class="box"><b>2. המפתח</b><small>במה מדליקים את הפורטל? מקיפים בעיגול.</small><div class="opts"><span>Flint and Steel</span><span>Diamond</span><span>חפץ שלי</span><span>אחר: _______</span></div><small>מי יוכל להיכנס לממד?</small><div class="line sm"></div></div>
+  </div>
+  <div class="box"><b>3. הצורה והגודל</b><small>מקיפים בעיגול, וכותבים כמה משבצות יש בפנים.</small>
+    <div class="row"><div class="opts"><span>עומד, כמו ב־Nether</span><span>שוכב על הרצפה, כמו ב־End</span></div><div class="sz6">הפנים: <span class="blank"></span> על <span class="blank"></span> <small>(או: כל גודל)</small></div></div></div>
+  <div class="row grow">
+    <div class="box" style="flex:0 0 auto;align-items:center"><b>4. הציור בפנים: 16 על 16</b><small>מה רואים בתוך הפורטל? משבצת ריקה תהיה שקופה.</small><div class="px6" dir="ltr"></div></div>
+    <div class="col" style="flex:1 1 0">
+      <div class="box"><b>5. מה מבינים מהפורטל?</b><small>מישהו רואה את הפורטל שלכם. מה הוא מבין על הממד, עוד לפני שהוא נכנס?</small><div class="line sm"></div><div class="line sm"></div></div>
+      <div class="box grow"><b>6. המקום סביב הפורטל</b><small>מציירים: מה בונים מסביב? קטן ומלא, לא גדול וריק.</small></div>
+    </div>
+  </div>
+</section>
+<section class="page" data-set="l6 he">
+  <div class="head"><h1>מדריך הבנייה: הפורטל שלי</h1><span class="no">שם ושם משפחה <i></i></span></div>
+  <small class="lead5">הדף ״הפורטל שלי״ לידכם, והשלבים בדף של שיעור 6. מסמנים כל שלב שסיימתם.</small>
+  <ol class="steps5">
+    <li><i></i><div><b>פותחים</b> את <span class="ltr5" dir="ltr">Minecraft</span> בתפריט Start, מקלידים את הקוד, ובשיעור 6 לוחצים ״להתחיל״. העולם נעלם? לוחצים על תפריט, ואז על דרייב.</div></li>
+    <li><i></i><div><b>הפורטל בסטודיו</b> (שלב 3)<br>לפי הדף: מסגרת, מפתח, צורה, גודל, והציור בפנים.</div></li>
+    <li><i></i><div><b>סוגרים ופותחים</b><br>סוגרים את מיינקראפט ולוחצים על הכפתור הירוק. Singleplayer, ואז העולם שלכם.</div></li>
+    <li><i></i><div><b>בונים את המסגרת</b> (שלב 4)<div class="fig6"><div class="fr6" dir="ltr"><i class="c"></i><i class="f"></i><i class="f"></i><i class="c"></i><i class="f"></i><i class="in"></i><i class="in"></i><i class="f"></i><i class="f"></i><i class="in"></i><i class="in"></i><i class="f"></i><i class="f"></i><i class="in">👆</i><i class="in"></i><i class="f"></i><i class="c"></i><i class="f"></i><i class="f"></i><i class="c"></i></div><ul><li>לוחצים <span class="ltr5">E</span>: הקוביות שלכם בלשונית של העולם.</li><li>המפתח הוא <span class="ltr5">Flint and Steel</span>? מקלידים <span class="ltr5">flint</span> בחיפוש.</li><li>סופרים את המשבצות בפנים: כמו בסטודיו.</li><li>את הפינות לא חייבים לשים.</li></ul></div></div></li>
+    <li><i></i><div><b>מדליקים</b> (שלב 5)<br>מחזיקים את המפתח, ולוחצים לחיצה ימנית על המסגרת, מבפנים 👆.</div></li>
+    <li><i></i><div><b>נכנסים ובודקים</b><br>הציור שלכם בפנים? השם של הממד על המסך? יש לידכם פורטל שמחזיר הביתה?</div></li>
+    <li><i></i><div><b>מקום לפורטל</b> (שלב 6)<br>בונים מקום קטן סביב הפורטל, עם קוביות מהממד.</div></li>
+    <li><i></i><div><b>5 דקות לסוף</b><br>השכן מסתכל על הפורטל ומנחש מה יש מעבר לו, ואז נכנס ובודק. שומרים בדרייב.</div></li>
+  </ol>
+  <div class="box warn5"><b>לא לשכוח</b>
+    <ul>
+      <li>שיניתם משהו בסטודיו? סוגרים את מיינקראפט ופותחים מחדש.</li>
+      <li><span class="ltr5">Light the portal with</span>: זה לא המפתח. כתוב שם במה מדליקים.</li>
+      <li><span class="ltr5">The portal didn't light</span>: המסגרת לא סגורה, או שהגודל לא כמו בסטודיו.</li>
+      <li><span class="ltr5">There's no dimension yet</span>: עוד אין ממד. בונים אותו בסטודיו, וסוגרים ופותחים את המשחק.</li>
+      <li>כדי להחליף בין <span class="ltr5">Creative</span> ל־<span class="ltr5">Survival</span>: לוחצים <span class="ltr5">Esc</span>, ואז על הכפתור בפינה.</li>
+    </ul></div>
+  <div class="box grow"><b>סיימתם? אתגרים</b>
+    <div class="chk5"><span>המפתח הוא חפץ שאני הכנתי</span><span>בניתי מקום קטן סביב הפורטל</span><span>מישהו ניחש נכון מה יש מעבר לפורטל שלי</span><span>עברתי בפורטל ב־Survival</span></div></div>
+</section>
+<section class="page ru5" data-set="l6 ru" lang="ru" dir="ltr">
+  <div class="head"><h1>Мой портал</h1><span class="no">Имя и фамилия <i></i></span></div>
+  <small class="lead5">Порядок на листе такой же, как в студии. Потом просто перенеси всё в студию.</small>
+  <div class="row">
+    <div class="box"><b>1. Рамка <small class="he5" lang="he" dir="rtl">הַמִּסְגֶּרֶת</small></b><small>Из какого блока её строить? Твой блок или блок из Minecraft.</small><div class="line sm"></div><small>Почему он подходит твоему измерению?</small><div class="line sm"></div></div>
+    <div class="box"><b>2. Ключ <small class="he5" lang="he" dir="rtl">הַמַּפְתֵּחַ</small></b><small>Чем зажигать портал? Обведи.</small><div class="opts"><span>Flint and Steel</span><span>Diamond</span><span>Мой предмет</span><span>Другое: _______</span></div><small>Кто сможет войти в измерение?</small><div class="line sm"></div></div>
+  </div>
+  <div class="box"><b>3. Форма и размер <small class="he5" lang="he" dir="rtl">הַצּוּרָה וְהַגֹּדֶל</small></b><small>Обведи и напиши, сколько клеток внутри.</small>
+    <div class="row"><div class="opts"><span>Стоит, как в Nether</span><span>Лежит на земле, как в End</span></div><div class="sz6">Внутри: <span class="blank"></span> на <span class="blank"></span> <small>(или: любой размер)</small></div></div></div>
+  <div class="row grow">
+    <div class="box" style="flex:0 0 auto;align-items:center"><b>4. Рисунок внутри: 16×16 <small class="he5" lang="he" dir="rtl">הַצִּיּוּר</small></b><small>Что видно внутри портала? Пустая клетка будет прозрачной.</small><div class="px6" dir="ltr"></div></div>
+    <div class="col" style="flex:1 1 0">
+      <div class="box"><b>5. Что можно понять по порталу?</b><small>Кто-то видит твой портал. Что он поймёт об измерении ещё до того, как войдёт?</small><div class="line sm"></div><div class="line sm"></div></div>
+      <div class="box grow"><b>6. Место вокруг портала <small class="he5" lang="he" dir="rtl">הַמָּקוֹם</small></b><small>Нарисуй, что ты построишь вокруг. Маленькое и полное лучше, чем большое и пустое.</small></div>
+    </div>
+  </div>
+</section>
+<section class="page ru5" data-set="l6 ru" lang="ru" dir="ltr">
+  <div class="head"><h1>Как строить: мой портал</h1><span class="no">Имя и фамилия <i></i></span></div>
+  <small class="lead5">Лист «Мой портал» лежит рядом, а шаги есть на странице урока 6. Отмечай каждый сделанный шаг.</small>
+  <ol class="steps5">
+    <li><i></i><div><b>Открываем</b> <span class="he5" lang="he" dir="rtl">פּוֹתְחִים</span><br>Найди Minecraft в меню «Пуск», введи свой код, а в уроке 6 нажми «Начать». Мир пропал? Открой меню, а потом Drive.</div></li>
+    <li><i></i><div><b>Портал в студии</b> <span class="he5" lang="he" dir="rtl">הַפּוֹרְטָל בַּסְּטוּדְיוֹ</span> (шаг 3)<br>По листу: рамка, ключ, форма, размер и рисунок внутри.</div></li>
+    <li><i></i><div><b>Закрываем и открываем</b> <span class="he5" lang="he" dir="rtl">סוֹגְרִים וּפוֹתְחִים</span><br>Закрой Minecraft и нажми зелёную кнопку. Singleplayer, потом твой мир.</div></li>
+    <li><i></i><div><b>Строим рамку</b> <span class="he5" lang="he" dir="rtl">בּוֹנִים</span> (шаг 4)<div class="fig6"><div class="fr6" dir="ltr"><i class="c"></i><i class="f"></i><i class="f"></i><i class="c"></i><i class="f"></i><i class="in"></i><i class="in"></i><i class="f"></i><i class="f"></i><i class="in"></i><i class="in"></i><i class="f"></i><i class="f"></i><i class="in">👆</i><i class="in"></i><i class="f"></i><i class="c"></i><i class="f"></i><i class="f"></i><i class="c"></i></div><ul><li>Нажми <span class="ltr5">E</span>: твои блоки во вкладке твоего мира.</li><li>Ключ — <span class="ltr5">Flint and Steel</span>? Напиши <span class="ltr5">flint</span> в поиске.</li><li>Посчитай клетки внутри: как в студии.</li><li>Углы ставить не обязательно.</li></ul></div></div></li>
+    <li><i></i><div><b>Зажигаем</b> <span class="he5" lang="he" dir="rtl">מַדְלִיקִים</span> (шаг 5)<br>Возьми ключ в руку и нажми правой кнопкой мыши на рамку, изнутри 👆.</div></li>
+    <li><i></i><div><b>Входим и проверяем</b> <span class="he5" lang="he" dir="rtl">נִכְנָסִים</span><br>Внутри твой рисунок? Название измерения на экране? Рядом стоит портал, который ведёт домой?</div></li>
+    <li><i></i><div><b>Место для портала</b> <span class="he5" lang="he" dir="rtl">הַמָּקוֹם</span> (шаг 6)<br>Построй маленькое место вокруг портала из блоков измерения.</div></li>
+    <li><i></i><div><b>5 минут до конца</b><br>Сосед смотрит на твой портал и угадывает, что за ним, а потом входит и проверяет. Сохрани мир в Drive.</div></li>
+  </ol>
+  <div class="box warn5"><b>Не забудь <small class="he5" lang="he" dir="rtl">לֹא לִשְׁכֹּחַ</small></b>
+    <ul>
+      <li>Что-то поменял(а) в студии? Закрой Minecraft и открой заново.</li>
+      <li><span class="ltr5">Light the portal with</span>: это не ключ. Там написано, чем зажигать.</li>
+      <li><span class="ltr5">The portal didn't light</span>: рамка не закрыта, или размер не такой, как в студии.</li>
+      <li><span class="ltr5">There's no dimension yet</span>: измерения ещё нет. Построй его в студии, потом закрой и открой игру.</li>
+      <li>Как переключиться между Creative и Survival: нажми Esc, потом кнопку в углу.</li>
+    </ul></div>
+  <div class="box grow"><b>Готово? Задания <small class="he5" lang="he" dir="rtl">אֶתְגָּרִים</small></b>
+    <div class="chk5"><span>Ключ — предмет, который я сделал(а) сам(а)</span><span>Я построил(а) место вокруг портала</span><span>Кто-то правильно угадал, что за моим порталом</span><span>Я прошёл (прошла) через портал в Survival</span></div></div>
+</section>
+<section class="page" data-set="t6">
+  <div class="head"><h1>משפטים ברוסית, למורה</h1><span class="no">שיעור 6</span></div>
+  <small class="lead5">משפטים קצרים לכיתה, בפנייה לילד אחד. הקריאה כתובה באותיות עבריות.</small>
+  <table class="phr">
+    <tr><th>בעברית</th><th>ברוסית</th><th>איך אומרים</th></tr>
+    <tr><td>תסתכל!</td><td>Смотри!</td><td>סְמַטְרִי!</td></tr>
+    <tr><td>תסתכל על המסך</td><td>Смотри на экран</td><td>סְמַטְרִי נָא אֶקְרָאן</td></tr>
+    <tr><td>מי רוצה פורטל משלו?</td><td>Кто хочет свой портал?</td><td>קְטוֹ חוֹצֶ׳ט סְבוֹי פַּרְטָאל?</td></tr>
+    <tr><td>סגור את מיינקראפט</td><td>Закрой Minecraft</td><td>זַקְרוֹי מַיינְקְרָאפְט</td></tr>
+    <tr><td>לחץ על הכפתור הירוק</td><td>Нажми зелёную кнопку</td><td>נַזְ׳מִי זִלְיוֹנוּיוּ קְנוֹפְּקוּ</td></tr>
+    <tr><td>תלחץ לחיצה ימנית</td><td>Нажми правой кнопкой мыши</td><td>נַזְ׳מִי פְּרָאבַיי קְנוֹפְּקַיי מִישִׁי</td></tr>
+    <tr><td>איפה המסגרת?</td><td>Где рамка?</td><td>גְדֶה רָאמְקָה?</td></tr>
+    <tr><td>תספור את המשבצות</td><td>Посчитай клетки</td><td>פַּשִּׁיטַאי קְלֶיטְקִי</td></tr>
+    <tr><td>מבפנים</td><td>Изнутри</td><td>אִיזְנוּטְרִי</td></tr>
+    <tr><td>תראה לי</td><td>Покажи мне</td><td>פַּקַאזִ׳י מְנֶה</td></tr>
+    <tr><td>מה לא עובד?</td><td>Что не работает?</td><td>שְׁטוֹ נִי רַבּוֹטַאיֶט?</td></tr>
+    <tr><td>תנסה שוב</td><td>Попробуй ещё раз</td><td>פַּפְּרוֹבּוּי יִשׁוֹ רָאז</td></tr>
+    <tr><td>מה מבינים מהפורטל שלך?</td><td>Что поймут по твоему порталу?</td><td>שְׁטוֹ פַּיְמוּט פַּ טְבַאִימוּ פַּרְטָאלוּ?</td></tr>
+    <tr><td>מה יש מעבר לפורטל?</td><td>Что за порталом?</td><td>שְׁטוֹ זָא פַּרְטָאלַם?</td></tr>
+    <tr><td>תעזור לשכן</td><td>Помоги соседу</td><td>פַּמַגִי סַסְיֶדוּ</td></tr>
+    <tr><td>תרים יד</td><td>Подними руку</td><td>פַּדְנִימִי רוּקוּ</td></tr>
+    <tr><td>עוד חמש דקות</td><td>Ещё пять минут</td><td>יִשׁוֹ פְּיָאט מִינוּט</td></tr>
+    <tr><td>תשמור בדרייב</td><td>Сохрани в Drive</td><td>סַחְרַנִי וְ־דְרַייב</td></tr>
+    <tr><td>כל הכבוד!</td><td>Молодец!</td><td>מַלַדְיֶץ!</td></tr>
+    <tr><td>יפה מאוד!</td><td>Очень красиво!</td><td>אוֹצֶ׳ן קְרַסִיבַה!</td></tr>
+    <tr><td>תודה</td><td>Спасибо</td><td>סְפַּסִיבַּה</td></tr>
+  </table>
+  <div class="box warn5"><b>בכיתה</b><ul><li>קודם מראים על המקרן, ורק אחר כך מסבירים. הדגמה מובנת בכל שפה.</li><li>השורה הכחולה בכל שקופית היא אותו דבר ברוסית: מצביעים עליה.</li><li>הילד שמדבר עברית ורוסית יכול לעזור אם הוא רוצה, אבל הוא לא המתורגמן של הכיתה.</li></ul></div>
+</section>
 <script>
   // Print one set of pages: only("l5he"), only("l5ru"), only("old"), or only("") for all of them.
   function only(set){ if (set) document.body.dataset.only = set; else delete document.body.dataset.only; print(); }
   document.getElementById("px").innerHTML = "<i></i>".repeat(256);
   document.getElementById("wg").innerHTML = "<i></i>".repeat(26 * 10);
+  document.querySelectorAll(".px6").forEach(g => g.innerHTML = "<i></i>".repeat(256));
 </script>
 </html>

@@ -326,6 +326,13 @@ const CSS = `
 .slide .lay6 img{width:2.2em;height:2.2em;image-rendering:pixelated;border:2px solid #373737}
 .slide .lay6 b{min-width:6.5em;direction:ltr;text-align:start}
 .slide .ru-sub{margin:0;max-width:62em;padding:.35em .9em;border-radius:8px;background:rgba(0,0,0,.72);color:#fff;font-family:Arial,sans-serif;font-size:clamp(.8rem,1.55cqw,1.15rem);line-height:1.35;direction:ltr;unicode-bidi:isolate}
+.slide .ru-sub.big{max-width:none;width:100%;padding:.45em .9em;font-size:clamp(1rem,2.3cqw,1.75rem);line-height:1.3;background:#123a5c;border-inline-start:6px solid #6fb4ff}
+.slide .pt6{display:inline-grid;grid-template-columns:repeat(var(--c),var(--cell));grid-auto-rows:var(--cell);vertical-align:middle}
+.slide .pt6 i{display:block}
+.slide .pt6 img{width:100%;height:100%;display:block;image-rendering:pixelated}
+.slide .pt6.bld .cn{opacity:.3}
+.slide .pt6.bld .in{background:rgba(140,60,220,.5);outline:1px dashed rgba(255,255,255,.55);outline-offset:-1px;display:grid;place-items:center;font-style:normal;font-size:calc(var(--cell) * .6)}
+.slide .q6{display:grid;place-items:center;width:1.6em;height:1.6em;margin:0 auto;font-size:2.2em;font-weight:800;border:3px dashed currentColor;border-radius:10px}
 .slide .sh5s{display:flex;gap:clamp(10px,2cqw,26px);justify-content:center;flex-wrap:wrap}
 .slide .sh5{margin:0;display:grid;justify-items:center;gap:8px;font-family:var(--display);font-size:clamp(.95rem,1.7cqw,1.3rem)}
 .slide .sh5 svg{width:clamp(90px,15cqw,180px);height:auto;fill:#5d8c3a;background:#bcdcff;border-radius:8px;border:3px solid #373737}
@@ -1019,6 +1026,81 @@ const DECK5 = [
     notes:"85–90 דק׳. כל אחד נכנס לממד של השכן, ואומר במשפט אחד מה הרגיש שם. השכן בודק בדף: זאת התחושה שהוא כתב? כולם שומרים את העולם בדרייב, וסוגרים את מיינקראפט." }
 ];
 H.DECKS[5] = DECK5;
+/* ===== lesson 6: a portal to your dimension. Half the class reads Russian first (Ben, 23 Nov): the Russian line is
+   as big as the Hebrew (teacher.html, deck 6 on), every idea has a picture, and the demo comes before the talk. ===== */
+// A portal as the game shows it: a frame of one block, and the inside (a texture, or a colour).
+const portal6 = (frame, inside, w, h, cell) => {
+  const cols = w + 2, rows = h + 2, cs = [];
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++){
+    const edge = x === 0 || y === 0 || x === cols - 1 || y === rows - 1;
+    cs.push(edge ? `<i>${img(frame)}</i>` : /^#/.test(inside) ? `<i style="background:${inside}"></i>` : `<i>${img(inside)}</i>`);
+  }
+  return `<span class="pt6" data-mcw style="--c:${cols};--cell:${cell || "clamp(22px,3.6cqw,46px)"}">${cs.join("")}</span>`;
+};
+const flat6 = (frame, inside) => `<span class="pt6 flat" data-mcw style="--c:5;--cell:clamp(20px,3cqw,38px)">${[...Array(25)].map((_, i) => { const x = i % 5, y = Math.floor(i / 5), edge = x === 0 || y === 0 || x === 4 || y === 4, corner = (x === 0 || x === 4) && (y === 0 || y === 4);
+  return corner ? `<i></i>` : edge ? `<i>${img(frame)}</i>` : `<i style="background:${inside}"></i>`; }).join("")}</span>`;
+// The frame the kids build: a 2 by 3 inside, faded corners (optional), and a hand where the key clicks.
+const build6 = () => `<span class="pt6 bld" data-mcw style="--c:4;--cell:clamp(30px,5cqw,62px)">${[...Array(20)].map((_, i) => { const x = i % 4, y = Math.floor(i / 4), edge = x === 0 || y === 0 || x === 3 || y === 4, corner = (x === 0 || x === 3) && (y === 0 || y === 4);
+  return edge ? `<i class="${corner ? "cn" : ""}">${img("block_crying_obsidian")}</i>` : `<i class="in">${x === 1 && y === 3 ? "👆" : ""}</i>`; }).join("")}</span>`;
+const DECK6 = [
+  { label:"פתיחה", html:`<div class="eye">שיעור 6 · מודים למיינקראפט</div><div class="row3">${portal6("block_obsidian", "block_nether_portal", 2, 3)}</div><h1>פורטל לממד</h1><p class="sub">בונים מסגרת, מדליקים אותה, ונכנסים.</p>`,
+    ru:"Урок 6. Портал в измерение: строим рамку, зажигаем её и входим.",
+    notes:"0–4 דק׳. קודם מראים, אחר כך מדברים: חצי מהכיתה קוראים רוסית, והדגמה מובנת בכל שפה. במחשב שלך, על המקרן: בונים מסגרת קטנה, מדליקים, ונכנסים לממד. לא מסבירים כלום. רק אז שואלים: ״מי רוצה פורטל משלו?״ ומחזירים לכל אחד את הדף ״המתכון של הממד שלי״ מהשבוע שעבר." },
+
+  { label:"שני פורטלים", html:`<h2>שני פורטלים במיינקראפט</h2><div class="fls">${flip("n6", `${portal6("block_obsidian", "block_nether_portal", 2, 3, "clamp(16px,2.4cqw,30px)")}<b>Nether</b>`, `<b>עומד</b>מסגרת של Obsidian<small>מדליקים ב־Flint and Steel</small>`)}${flip("e6", `${flat6("block_end_stone", "#0B0B14")}<b>End</b>`, `<b>שוכב על הרצפה</b>מסגרת עמוק מתחת לאדמה<small>מדליקים ב־Eye of Ender, אחת בכל קובייה</small>`)}</div>`,
+    ru:"Два портала в Minecraft. В Nether: стоит, рамка из Obsidian, зажигают Flint and Steel. В End: лежит на полу, зажигают Eye of Ender.",
+    notes:"4–8 דק׳. על כל כרטיס שואלים: איך מדליקים אותו? אחרי שעונים, הופכים את הכרטיס. אחר כך: ״איזה מהם קשה יותר להשיג?״ (End: צריך למצוא את המסגרת עמוק מתחת לאדמה, וכמה Eye of Ender.) כמה שקשה יותר להיכנס, ככה הממד מרגיש מיוחד יותר." },
+
+  { label:"מה הפורטל מבטיח", html:`<h2>מאחורי איזה פורטל יש ממד מפחיד?</h2>${vote("v6",[{l:"א",t:portal6("block_oak_log", "#BDF0A0", 2, 3, "clamp(16px,2.6cqw,32px)")},{l:"ב",t:portal6("block_sculk_catalyst_side", "#123447", 2, 3, "clamp(16px,2.6cqw,32px)")}])}<p class="sub reveal-line" data-c="rv" data-id="p6">המסגרת והציור בפנים מספרים מה יש בממד, עוד לפני שנכנסים.</p>`,
+    ru:"За каким порталом страшное измерение? Рамка и рисунок внутри рассказывают об измерении ещё до того, как ты войдёшь.",
+    notes:"8–11 דק׳. מצביעים: יד למעלה לא׳, יד למעלה לב׳. כמעט כולם יבחרו בב׳. שואלים: ״איך ידעתם? עוד לא נכנסתם.״ (הצבעים, הקובייה של המסגרת.) כל אחד בודק בדף ״המתכון של הממד שלי״: מאיזו קובייה תהיה המסגרת שלו, ובאיזה צבע הפנים. לוחצים על השורה." },
+
+  { label:"המפתח", html:`<h2>במה מדליקים?</h2><div class="fls">${flip("k1", `${img("item_flint_and_steel", "ico")}<b>Flint and Steel</b>`, `<b>כולם נכנסים</b>קל להשיג<small>מתאים לממד שמזמין אורחים</small>`)}${flip("k2", `${img("item_diamond", "ico")}<b>Diamond</b>`, `<b>רק מי שחפר עמוק</b>נדיר<small>הכניסה היא פרס</small>`)}${flip("k3", `<span class="q6">?</span><b>החפץ שלכם</b>`, `<b>רק מי שהכין אותו</b>לפי המתכון שלכם<small>משיעור 3</small>`)}</div><p class="sub reveal-line" data-c="rv" data-id="k6">המפתח הוא המחיר של הכניסה.</p>`,
+    ru:"Чем зажигать? Flint and Steel: легко достать, войдут все. Diamond: редкий, войдёт только тот, кто копал глубоко. Твой предмет: войдёт только тот, кто сделал его по твоему рецепту. Ключ — это цена входа.",
+    notes:"11–14 דק׳. על כל כרטיס שואלים: מי יוכל להיכנס לממד? אחר כך הופכים. מזכירים: בשבוע שעבר לדלת היה מחיר. בפורטל המחיר הוא המפתח. מי שבוחר חפץ משלו צריך מתכון לחפץ (שיעור 3), אחרת אף אחד לא יוכל להכין אותו במצב Survival. לוחצים על השורה." },
+
+  { label:"צורה וגודל", html:`<h2>עומד או שוכב? קטן או ענק?</h2><div class="row3">${portal6("block_crying_obsidian", "block_nether_portal", 1, 2, "clamp(18px,2.8cqw,34px)")}${portal6("block_crying_obsidian", "block_nether_portal", 2, 3, "clamp(18px,2.8cqw,34px)")}${portal6("block_crying_obsidian", "block_nether_portal", 4, 5, "clamp(18px,2.8cqw,34px)")}${flat6("block_crying_obsidian", "#6A2FB0")}</div><p class="sub">בסטודיו בוחרים את הגודל של הפנים. במשחק, רק מסגרת בגודל הזה תידלק.</p>`,
+    ru:"Стоит или лежит? Маленький или огромный? Размер внутри выбираешь в студии. В игре загорится только рамка такого размера.",
+    notes:"14–16 דק׳. שואלים: באיזה פורטל צריך להתכופף? (הקטן.) איזה פורטל נראה כמו שער של ארמון? (הגדול.) פורטל ששוכב על הרצפה: נופלים לתוכו. ״כל גודל״ בסטודיו: כל מסגרת סגורה נדלקת." },
+
+  { label:"הדף: הפורטל שלי", html:`<h2>הדף: הפורטל שלי</h2><div class="duo"><ol class="big"><li>המסגרת: מאיזו קובייה</li><li>המפתח: במה מדליקים</li><li>עומד או שוכב, ואיזה גודל</li><li>הציור בפנים: 16 על 16</li><li>איפה הוא עומד, ומה יש סביבו</li></ol><div>${timer("t0",10*60)}</div></div>`,
+    ru:"Лист «Мой портал»: рамка, ключ, форма и размер, рисунок внутри (16×16) и место вокруг портала.",
+    notes:"16–26 דק׳. מחלקים את הדף ״הפורטל שלי״: בעברית, או ברוסית למי שקורא רוסית. מפעילים את השעון. הדף בנוי לפי הסדר של הסטודיו. מסתובבים ושואלים כל אחד שאלה אחת: ״מה מישהו יבין מהפורטל שלך, לפני שהוא נכנס?״ ברוסית: ״Что поймут по твоему порталу?״ (שְׁטוֹ פַּיְמוּט פַּ טְבַאִימוּ פַּרְטָאלוּ?)" },
+
+  { label:"הדגמה", html:`<h2>מהדף לפורטל</h2><div class="steps">
+      <div><span class="ico k">▦</span><b>הסטודיו</b>מסגרת, מפתח, צורה, ציור</div>
+      <div><span class="ico k">▶</span><b>המשחק</b>סוגרים ופותחים</div>
+      <div><span class="ico k">🧱</span><b>בונים</b>את המסגרת</div>
+      <div><span class="ico k">🔥</span><b>מדליקים</b>מבפנים</div>
+      <div><span class="ico k">🌀</span><b>נכנסים</b>ויש פורטל הביתה</div></div>`,
+    ru:"Смотри: студия → закрой и открой игру → построй рамку → зажги изнутри → входи. Рядом появится портал домой.",
+    notes:"26–31 דק׳. הדגמה על המקרן, בדף של שיעור 6 בהאב. 1. שלב 3: בוחרים מסגרת ומפתח, ומציירים כמה משבצות. 2. סוגרים את מיינקראפט ולוחצים על הכפתור הירוק. 3. E, הלשונית של העולם, לוקחים קוביות, ובונים מסגרת. 4. מחזיקים את המפתח ולוחצים על המסגרת מבפנים. 5. נכנסים, ומראים את הפורטל שעומד ליד, בדרך הביתה. לא מדברים הרבה: מראים לאט, וחוזרים על כל צעד פעמיים." },
+
+  { label:"המסגרת", html:`<h2>איך בונים את המסגרת?</h2><div class="duo"><div class="row3">${build6()}</div><div class="rules"><div><span class="n">1</span><b>סופרים</b>את המשבצות בפנים: כמו בסטודיו</div><div><span class="n">2</span><b>פינות</b>לא חובה</div><div><span class="n">3</span><b>👆 מבפנים</b>לוחצים עם המפתח</div></div></div>`,
+    ru:"Как строить рамку: 1. посчитай клетки внутри, как в студии; 2. углы не обязательны; 3. нажми ключом изнутри.",
+    notes:"31–33 דק׳. מצביעים על הציור. הטעות הכי נפוצה: הפנים בגודל אחר מזה שבחרו בסטודיו. השנייה: לוחצים על המסגרת מבחוץ. אותו ציור יש בדף של הילדים, בשלבים 4 ו־5." },
+
+  { label:"עכשיו אתם", html:`<h2>עכשיו אתם</h2><div class="duo"><ol class="big"><li>שיעור 6 בדף: ״להתחיל״</li><li>הפורטל בסטודיו, לפי הדף</li><li>בונים את המסגרת במשחק</li><li>מדליקים ונכנסים</li><li>מקום קטן סביב הפורטל</li></ol><div>${timer("t1",45*60)}</div></div>`,
+    ru:"Теперь ты: урок 6 → «Начать». Портал в студии по листу, рамка в игре, зажигаешь и входишь, потом маленькое место вокруг портала.",
+    notes:"33–80 דק׳. מפעילים את השעון. מסתובבים. מי שתקוע: קודם ״נתקעתי״ בתחתית השלב (גם ברוסית), אחר כך השקופית הבאה. הילד שמדבר עברית ורוסית יכול לעזור אם הוא רוצה, אבל הוא לא המתורגמן של הכיתה: הוא בונה את הפורטל שלו כמו כולם. מי שסיים: המקום סביב הפורטל, והאתגרים בתחתית הדף." },
+
+  { label:"משהו לא עבד?", html:`<h2>משהו לא עבד?</h2><div class="rules">
+      <div><b dir="ltr">Light the portal with: ...</b>זה לא המפתח. כתוב שם במה מדליקים.</div>
+      <div><b dir="ltr">The portal didn't light</b>המסגרת פתוחה, או שהגודל לא כמו בסטודיו.</div>
+      <div><b dir="ltr">There's no dimension yet</b>בונים ממד בסטודיו, וסוגרים ופותחים את המשחק.</div>
+      <div><b>שום דבר לא כתוב</b>סוגרים ופותחים את המשחק. המסגרת מהקובייה הנכונה?</div></div>`,
+    ru:"Light the portal with: это не ключ. The portal didn't light: рамка не закрыта или размер не тот. There's no dimension yet: построй измерение в студии, потом закрой и открой игру. Ничего не написано: закрой и открой игру. Рамка из нужного блока?",
+    notes:"משאירים את השקופית הזאת על המסך בזמן העבודה, אם לא צריך את השעון. ההודעות במשחק באנגלית: הן אותו דבר לכל הילדים, ומכאן אפשר להצביע עליהן." },
+
+  { label:"מקום לפורטל", html:`<h2>מקום לפורטל</h2><div class="duo"><div class="row3">${portal6("block_sculk", "#0E2A3A", 2, 3, "clamp(18px,3cqw,36px)")}</div><ol class="big"><li>קטן ומלא, לא גדול וריק</li><li>קוביות מהממד, מסביב</li><li>מי שעובר שם מבין לאן זה מוביל</li></ol></div>`,
+    ru:"Место для портала: маленькое и полное лучше большого и пустого. Возьми блоки из измерения, чтобы каждый понял, куда ведёт портал.",
+    notes:"מראים את השקופית למי שסיים, בסביבות דקה 65. שואלים: ״מה מישהו שעובר ליד הפורטל שלך יבין?״ בונים בעולם הרגיל, ליד הפורטל." },
+
+  { label:"סיום", html:`<h1>מה יש מעבר?</h1><p class="sub">מסתכלים על הפורטל של מי שיושב לידכם, מנחשים, ורק אז נכנסים.</p>`,
+    ru:"Что за порталом? Посмотри на портал соседа, угадай, какое там измерение, и только потом входи.",
+    notes:"80–90 דק׳. כל אחד מסתכל על הפורטל של השכן, ואומר במשפט אחד מה יש מעבר לו. אחר כך נכנס ובודק. כולם סוגרים את מיינקראפט, ואז שומרים את העולם בדרייב." }
+];
+H.DECKS[6] = DECK6;
 window.STAGE = { apply, bind, tick, CSS, fmt };
 const baseInject = H.injectStyle;
 H.injectStyle = doc => { baseInject(doc); const st = doc.createElement("style"); st.textContent = CSS; (doc.head || doc.documentElement).appendChild(st); };

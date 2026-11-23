@@ -24,7 +24,7 @@ out = {s: unicodedata.normalize('NFC', ''.join(done.get(seg, seg) for seg in re.
 # Minecraft stays unpointed (the model drops its letters and reads the pe as "p"); a prefix keeps its vowel.
 HEB = 'א-תְ-ׇ'
 P = '[ְ-ׇ]*'
-mc = re.compile('(?<![' + HEB + '])((?:[ובלהשכ]' + P + ')?)' + P.join('מינקרפט') + P + '(?![' + HEB + '])')
+mc = re.compile('(?<![' + HEB + '])((?:[ובלהשכמ]' + P + ')?)' + P.join('מינקרפט') + P + '(?![' + HEB + '])')
 out = {k: mc.sub(lambda m: m.group(1) + 'מיינקראפט', v) for k, v in out.items()}
 # The reviewers' fixes (setup/ru/niqqud-fixes.json): "all" = [wrong, right] for whole words anywhere, "keys" = only in that text.
 fixes = os.path.join(HERE, 'niqqud-fixes.json')

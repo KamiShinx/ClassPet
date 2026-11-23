@@ -600,6 +600,15 @@ a.dbtn{text-decoration:none}
 .drv-in ol{margin:0;padding-inline-start:1.3em;display:grid;gap:6px}
 .drv-in svg{width:22px;height:22px}
 /* the road of a lesson, drawn big on its first step */
+.pfig{display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center}
+.pf-g{display:grid;grid-template-columns:repeat(4,52px);grid-template-rows:repeat(5,52px)}
+.pfig i{display:grid;place-items:center;width:52px;height:52px;font-style:normal;font-size:26px}
+.pfig img{width:100%;height:100%;image-rendering:pixelated;display:block}
+.pf-in{background:rgba(140,60,220,.55);outline:1px dashed rgba(255,255,255,.5);outline-offset:-1px}
+.pf-c{opacity:.35}
+.pf-k{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-weight:700}
+.pf-k li{display:flex;gap:10px;align-items:center}
+.pf-k i{width:34px;height:34px;font-size:18px;flex:none}
 .road{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;counter-reset:road}
 .road div{position:relative;display:grid;gap:6px;justify-items:center;text-align:center;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:14px 10px}
 .road b{font-size:1.1rem}
@@ -634,10 +643,10 @@ const UNITS = [
       {n:2, title:"החפץ הראשון שלי", build:"חפץ משלכם, עם שם, ציור וכוח, בתוך המשחק", open:true},
       {n:3, title:"איך מכינים את החפץ?", build:"מתכון לחפץ שלכם: ממה מכינים אותו ב־Crafting Table", open:true},
       {n:4, title:"ממד משלכם", build:"ממד על הדף, ובקבוק שמביא אותו למשחק", open:true},
-      {n:5, title:"נכנסים לממד", build:"הממד מהדף הופך לעולם אמיתי במשחק", open:true} ] },
+      {n:5, title:"נכנסים לממד", build:"הממד מהדף הופך לעולם אמיתי במשחק", open:true},
+      {n:6, title:"פורטל לממד", build:"פורטל משלכם, שבונים במשחק ונכנסים בו לממד", open:true} ] },
   { n:3, name:"המקום והיצור הראשון", sub:"עולם שיש בו חוקים", color:"#8A5A2B", icon:"3",
     lessons:[
-      {n:6, title:"המקום שלי", build:"מקום בעולם, עם תיבת אוצר"},
       {n:7, title:"חוק של העולם", build:"חוק ״כש... אם... אז...״ שעובד במשחק"},
       {n:8, title:"היצור הראשון", build:"יצור עם סימן אזהרה לפני שהוא תוקף"},
       {n:9, title:"הכול מתחבר", build:"יצור שחי במקום שלכם ומפיל חפץ שלכם"} ] },
@@ -1321,6 +1330,92 @@ const L5 = {
   ]
 };
 
+/* ===== lesson 6: a portal to your dimension (24 Nov). The studio's "portal" tab (studio.js) and MyPortal.java: the
+   frame block, the item that lights it, standing or lying, the inside's size and its picture. Half the class reads
+   Russian first (Ben, 23 Nov), so every game step has a picture and few words. ===== */
+const PFIG_F = "block_crying_obsidian";
+// The frame as the kid builds it: a 2 by 3 inside, the corners optional, and where to click with the key.
+const portalFig = () => {
+  const cols = 4, rows = 5, cells = [];
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++){
+    const edge = x === 0 || y === 0 || x === cols - 1 || y === rows - 1, corner = (x === 0 || x === cols - 1) && (y === 0 || y === rows - 1);
+    cells.push(edge ? `<i class="pf-b${corner ? " pf-c" : ""}"><img src="mc_${PFIG_F}.png" alt=""></i>` : `<i class="pf-in">${x === 1 && y === rows - 2 ? "👆" : ""}</i>`);
+  }
+  return `<div class="pfig"><div class="pf-g" dir="ltr">${cells.join("")}</div><ul class="pf-k"><li><i class="pf-b"><img src="mc_${PFIG_F}.png" alt=""></i>המסגרת: הקובייה שבחרתם</li><li><i class="pf-b pf-c"><img src="mc_${PFIG_F}.png" alt=""></i>פינה: לא חובה</li><li><i class="pf-in">👆</i>לוחצים כאן עם המפתח, מבפנים</li><li><i class="pf-in"></i>הפנים: בגודל שבחרתם בסטודיו</li></ul></div>`;
+};
+const L6 = {
+  n:6, unit:"יחידה 2 · החפצים הראשונים", title:"שיעור 6: פורטל לממד",
+  stations:[["הדף",1],["הסטודיו",2],["בונים",3],["נכנסים",4],["המקום",5],["דרייב",6]],
+  groups:{ game:"הפורטל במשחק" },
+  steps:[
+    { title:"היום: פורטל לממד שלכם",
+      body:`<p>בשבוע שעבר נכנסתם לממד שלכם דרך דלת. היום בונים פורטל: מסגרת במשחק, שנדלקת ומעבירה אתכם לממד.</p><p>מוציאים את הדף ״הפורטל שלי״, ובונים לפי מה שכתוב בו.</p>`,
+      visual:()=>road([["הדף","מתכננים את הפורטל"],["הסטודיו","מסגרת, מפתח, צורה וציור"],["בונים","את המסגרת, במשחק"],["נכנסים","מדליקים ועוברים לממד"],["המקום","בונים מקום קטן סביב הפורטל"]]),
+      note:"העולם שלכם נעלם? למעלה: <b>תפריט</b>, ואז <b>דרייב</b>, ומחזירים משם את העולם." },
+
+    { title:"על הדף: הפורטל שלי",
+      body:`<p>ממלאים את הדף ״הפורטל שלי״. הסדר בדף הוא הסדר בסטודיו.</p>`,
+      hints:[
+        "המסגרת והציור בפנים הם הדבר הראשון שרואים. מה הם מספרים על הממד, עוד לפני שנכנסים?",
+        "מפתח שקל להשיג: כולם נכנסים. מפתח נדיר: נכנס רק מי שהשיג אותו.",
+        "אין לכם את הדף? מבקשים מהמורה."
+      ] },
+
+    { title:"הפורטל בסטודיו",
+      body:`<ol><li>המסגרת: ממה בונים אותה. הקוביות שציירתם מופיעות ראשונות.</li><li>המפתח: החפץ שמדליק את הפורטל.</li><li>הצורה: עומד או שוכב, והגודל של הפנים.</li><li>הציור: מה שרואים בתוך הפורטל.</li></ol>`,
+      visual:()=>studioIn({ parts:["portal"] }),
+      hints:[
+        "התמונה של הפורטל מראה אותו כמו שהוא ייראה במשחק. כל שינוי מופיע בה מיד.",
+        "משבצת שלא ציירתם תהיה שקופה. ככה רואים דרך הפורטל.",
+        "״כל גודל״: כל מסגרת סגורה נדלקת, בכל גודל."
+      ] },
+
+    { title:"בונים את המסגרת", group:"game", tab:"בונים",
+      body:`<ol><li>מיינקראפט פתוח? סוגרים אותו.</li><li>לוחצים על הכפתור הירוק.</li><li><b>Singleplayer</b>, ואז העולם שלכם.</li><li>לוחצים <kbd>E</kbd>. בלשונית של העולם שלכם יש את הקוביות שציירתם.</li><li>המפתח הוא <b>Flint and Steel</b>? מקלידים <b>flint</b> בחיפוש, ולוקחים אותו.</li><li>בונים את המסגרת כמו בציור. הפנים בגודל שבחרתם בסטודיו.</li></ol>`,
+      visual:()=>portalFig(),
+      hints:[
+        "בונים על אדמה שטוחה. את הפינות לא חייבים לשים.",
+        "פורטל ששוכב על הרצפה: בונים את המסגרת על הרצפה, ומשאירים את הפנים ריקים.",
+        "צריכים חפצים ממיינקראפט? <b>Esc</b>, ואז הכפתור <b>→ Creative</b>."
+      ] },
+
+    { title:"מדליקים ונכנסים", group:"game", tab:"נכנסים",
+      body:`<ol><li>מחזיקים את המפתח.</li><li>לוחצים לחיצה ימנית על המסגרת, מבפנים.</li><li>הפנים מתמלאים בציור שלכם.</li><li>נכנסים לפורטל, ומחכים רגע.</li></ol>`,
+      visual:()=>portalFig(),
+      expect:"הפנים מתמלאים בציור שלכם. כשנכנסים, השם של הממד מופיע על המסך. לידכם עומד פורטל שמחזיר הביתה.",
+      stuck:[
+        ["כתוב Light the portal with","זה לא המפתח. כתוב שם איזה חפץ מדליק את הפורטל: מחזיקים אותו ולוחצים שוב."],
+        ["כתוב The portal didn't light","המסגרת לא סגורה, או שהגודל של הפנים לא כמו בסטודיו. סופרים את המשבצות בפנים."],
+        ["כתוב There's no dimension yet","עוד אין ממד. בונים אותו בסטודיו, בלשונית ״הממד שלי״, ואז סוגרים ופותחים את המשחק."],
+        ["לחצתי, ושום דבר לא כתוב","המשחק נפתח לפני ששמרתם את הפורטל בסטודיו, או שהמסגרת מקובייה אחרת. סוגרים את מיינקראפט, ולוחצים שוב על הכפתור הירוק."],
+        ["הפורטל סגול, ולא הציור שלי","הציור נכנס למשחק רק כשהמשחק נפתח מחדש. סוגרים ולוחצים על הכפתור הירוק."],
+        ["אני בממד. איך חוזרים?","נכנסים לפורטל שעומד לידכם."],
+        ["הכול שחור בממד","בסטודיו, ב״הממד שלי״: בוחרים שמיים וערפל בהירים, ו״תמיד יום״. ואז סוגרים ופותחים את המשחק."],
+        ["הופיעה מסגרת אדומה: המשחק לא נבנה","מרימים יד וקוראים למורה."]
+      ] },
+
+    { title:"מקום לפורטל",
+      body:`<p>בונים מקום קטן סביב הפורטל, בעולם הרגיל. מי שרואה אותו צריך להבין לאן הפורטל מוביל, עוד לפני שהוא נכנס.</p>`,
+      hints:[
+        "קטן ומלא עדיף על גדול וריק.",
+        "משתמשים בקוביות מהממד: ככה הממד ״דולף״ החוצה.",
+        "רוצים לבנות מהר? <b>Esc</b>, ואז <b>→ Creative</b>."
+      ] },
+
+    { title:"שומרים ומסיימים",
+      body:`<ul><li>נותנים למי שיושב לידכם להסתכל על הפורטל שלכם. הוא מנחש: איזה ממד יש מעבר לו? אחר כך הוא נכנס ובודק.</li><li>סוגרים את מיינקראפט.</li><li>שומרים את העולם בדרייב:</li></ul>`,
+      visual:()=>driveBox() }
+  ],
+  challenges:[
+    {id:"design", lvl:"חובה", t:"הפורטל שלי", d:"בחרתי בסטודיו מסגרת, מפתח וצורה, וציירתי את הפנים."},
+    {id:"lit", lvl:"חובה", t:"נדלק", d:"בניתי את המסגרת במשחק, והדלקתי אותה."},
+    {id:"home", lvl:"חובה", t:"הלוך וחזור", d:"עברתי בפורטל לממד, וחזרתי הביתה."},
+    {id:"key", lvl:"אתגר", t:"מפתח משלי", d:"החפץ שמדליק את הפורטל הוא חפץ שאני הכנתי."},
+    {id:"place", lvl:"אתגר", t:"מקום לפורטל", d:"בניתי מקום קטן סביב הפורטל, עם קוביות מהממד."},
+    {id:"guess", lvl:"אתגר", t:"מה יש מעבר?", d:"מישהו הסתכל על הפורטל שלי, וניחש נכון מה יש מעבר לו."}
+  ]
+};
+
 const GEM_TEXT = `RULES FOR THIS CHAT. Follow them for every answer in this chat.
 You are the Mod Helper for a class of 11-13-year-olds in Israel who are each building their own Minecraft mod. Their teacher is Ben. Answer in simple, short Hebrew. If the kid writes to you in English, answer in simple English. Code, file names and paths stay in English.
 
@@ -1373,7 +1468,7 @@ const TEACHER_CHECK = [
 function applyReveal(root, set){
   root.querySelectorAll("[data-sil]").forEach(b => { if (set.has(+b.dataset.sil)) { b.classList.add("shown"); b.querySelector(".nm").textContent = MOBS[+b.dataset.sil].name; } });
 }
-const LESSONS = { 1: L1, 2: L2, 3: L3, 4: L4, 5: L5 };
+const LESSONS = { 1: L1, 2: L2, 3: L3, 4: L4, 5: L5, 6: L6 };
 const DECKS = { 1: SLIDES };
 window.HUB = { CSS, injectStyle, FONT_HREF, GEM_LINK, LS, esc, UNITS, MOBS, silSVG, EQ, ROLES, VAGUE_SPECIFIC,
   gemPromptBox, L1, worldCardForm, bindWorldCard, bindCopy, bindSil, applyReveal, SLIDES, GEM_TEXT, TEACHER_CHECK,

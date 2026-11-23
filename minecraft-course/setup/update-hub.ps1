@@ -115,7 +115,7 @@ $want = [ordered]@{
   'block_warped_stem' = 'block/warped_stem'; 'block_chorus_plant' = 'block/chorus_plant'; 'block_nether_bricks' = 'block/nether_bricks'
   'block_gilded_blackstone' = 'block/gilded_blackstone'; 'block_purpur_block' = 'block/purpur_block'; 'item_ender_eye' = 'item/ender_eye'
   # lesson 6 (the portal): the key on the slides
-  'item_flint_and_steel' = 'item/flint_and_steel'
+  'item_flint_and_steel' = 'item/flint_and_steel'; 'item_blaze_powder' = 'item/blaze_powder'
 }
 # ---------- 3. every Minecraft item, for the studio's ingredient menu ----------
 # hub\mc_items.json = [[id, English name, Hebrew name, picture number, 1 if it's a block], ...] and hub\mc_items.png =

@@ -151,6 +151,23 @@ function Get-DimColor($c, [string]$def, [double]$k) {
     $v = @(1, 3, 5 | ForEach-Object { [int][Math]::Round([Convert]::ToInt32($c.Substring($_, 2), 16) * $k) })
     return ('#{0:x2}{1:x2}{2:x2}' -f $v[0], $v[1], $v[2])
 }
+# One data file out of the game jar on this computer, e.g. "data/minecraft/worldgen/configured_feature/oak.json"; $null without it.
+function Get-GameData([string]$mod, [string]$path) {
+    $places = @((Join-Path (Split-Path $mod) 'gradle-home/caches/neoformruntime/artifacts'))
+    if ($env:GRADLE_USER_HOME) { $places += (Join-Path $env:GRADLE_USER_HOME 'caches/neoformruntime/artifacts') }
+    $jar = $places | ForEach-Object { Get-ChildItem $_ -Filter 'minecraft_*_client.jar' -ErrorAction SilentlyContinue } | Select-Object -First 1
+    if (-not $jar) { return $null }
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $zip = [IO.Compression.ZipFile]::OpenRead($jar.FullName)
+    try {
+        $e = $zip.GetEntry($path)
+        if (-not $e) { return $null }
+        $r = New-Object IO.StreamReader($e.Open(), [Text.Encoding]::UTF8)
+        try { return $r.ReadToEnd() } finally { $r.Dispose() }
+    } finally { $zip.Dispose() }
+}
+# The kid's own tree: which of Minecraft's trees gives its shape (studio name = Minecraft's file name).
+$script:DimTrees = @{ oak = 'oak'; birch = 'birch'; fancy = 'fancy_oak'; spruce = 'spruce'; cherry = 'cherry'; dark = 'dark_oak' }
 # The ground shapes are Minecraft's own world shapes, read out of the game jar on this computer, with the kid's blocks
 # in place of stone, grass and dirt. Without the jar the dimension is flat.
 function Get-NoiseTemplate([string]$mod, [string]$preset) {
@@ -181,7 +198,8 @@ function Invoke-PrepareDim([string]$mod, $w) {
     $utf8 = New-Object System.Text.UTF8Encoding($false)
     $data = Join-Path $mod 'src/main/resources/data/myworld'
     $files = @{ dim = "$data/dimension/my_dimension.json"; type = "$data/dimension_type/my_dimension.json"; noise = "$data/worldgen/noise_settings/my_dimension.json"
-        biome = "$data/worldgen/biome/my_dimension.json"; ore = "$data/worldgen/configured_feature/my_ore.json"; place = "$data/worldgen/placed_feature/my_ore.json" }
+        biome = "$data/worldgen/biome/my_dimension.json"; ore = "$data/worldgen/configured_feature/my_ore.json"; place = "$data/worldgen/placed_feature/my_ore.json"
+        tree = "$data/worldgen/configured_feature/my_tree.json"; treeplace = "$data/worldgen/placed_feature/my_tree.json" }
     foreach ($p in $files.Values) { if (Test-Path $p) { Remove-Item $p -Force } }
     $d = $w.dim
     if (-not $d -or -not [string]$d.shape) { return $false }
@@ -245,6 +263,31 @@ function Invoke-PrepareDim([string]$mod, $w) {
         $pl = $script:DimPlants[[string]$p]
         if (-not $pl) { continue }
         foreach ($f in $pl[1..($pl.Count - 1)]) { $q = '"' + $f + '"'; if (-not $features[$pl[0]].Contains($q)) { [void]$features[$pl[0]].Add($q) } }
+    }
+    # The kid's own tree: Minecraft's tree of that shape with the kid's trunk and leaves. It grows on any ground (the
+    # block under the trunk becomes the top layer's block, not dirt). A broken tree is skipped, never the dimension.
+    $t = $d.tree
+    if ($t -and $script:DimTrees[[string]$t.shape]) {
+        try {
+            $tpl = Get-GameData $mod ('data/minecraft/worldgen/configured_feature/' + $script:DimTrees[[string]$t.shape] + '.json')
+            if ($tpl) {
+                $cfg = $tpl | ConvertFrom-Json
+                $one = { param($id) [pscustomobject]@{ type = 'minecraft:simple_state_provider'; state = [pscustomobject]@{ Name = $id } } }
+                $cfg.config.trunk_provider = & $one (Get-DimBlockId $t.trunk $known 'minecraft:oak_log')
+                $cfg.config.foliage_provider = & $one (Get-DimBlockId $t.leaves $known 'minecraft:oak_leaves')
+                $cfg.config.below_trunk_provider = & $one $top
+                $cfg.config.decorators = @()
+                $count = @{ few = 1; some = 3; lots = 8 }[[string]$t.n]
+                if (-not $count) { $count = 3 }
+                $where = '{ "type": "minecraft:count", "count": ' + $count + ' }, { "type": "minecraft:in_square" }, { "type": "minecraft:surface_water_depth_filter", "max_water_depth": 0 }, { "type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR" }'
+                if ($roof) { $where = '{ "type": "minecraft:count_on_every_layer", "count": ' + $count + ' }' }   # under a roof: on the cave floors
+                [IO.File]::WriteAllText($files.tree, ($cfg | ConvertTo-Json -Depth 40 -Compress), $utf8)
+                [IO.File]::WriteAllText($files.treeplace, '{ "feature": "myworld:my_tree", "placement": [ ' + $where + ', { "type": "minecraft:biome" } ] }', $utf8)
+                [void]$features[9].Add('"myworld:my_tree"')
+            }
+        } catch {
+            foreach ($f in $files.tree, $files.treeplace) { if (Test-Path $f) { Remove-Item $f -Force } }
+        }
     }
     $carvers = ''
     if ($shape -eq 'hills' -or $shape -eq 'mountains') { $carvers = '"minecraft:cave", "minecraft:cave_extra_underground", "minecraft:canyon"' }

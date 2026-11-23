@@ -46,6 +46,8 @@ when (when you open it, when someone is near, all the time). **Big**: one shared
 kid's movement, then each kid only makes choices. Worth its own lesson, maybe two.
 
 ## 6. More layers and richer generation
+**Done 24 Nov: a tree of their own** (studio, "הממד שלי" → "עץ משלכם"): trunk and leaves from any block, theirs
+first, in one of six Minecraft tree shapes, few/some/lots. `tools/common.ps1` writes it from the game's own tree file.
 All of this is game files the studio writes, no Java:
 - more layers than three, each with how deep it goes;
 - different top blocks by height (snow on peaks, sand at the shore);

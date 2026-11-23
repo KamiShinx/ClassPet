@@ -274,6 +274,12 @@ const PLANTS = [["grass","דשא","short_grass","על Grass Block או Dirt"],["
   ["birch","עצי ליבנה","birch_sapling","על Grass Block או Dirt"],["cherry","עצי דובדבן","cherry_sapling","על Grass Block או Dirt"],["spruce","עצי אשוח","spruce_sapling","על Grass Block או Dirt"],
   ["mushrooms","פטריות","red_mushroom","רק בחושך"],["crimson","יער אדום","crimson_fungus","על Crimson Nylium"],["warped","יער כחול","warped_fungus","על Warped Nylium"],
   ["chorus","Chorus","chorus_flower","על End Stone"],["cactus","קקטוסים","cactus","על Sand"],["amethyst","גבישים","amethyst_cluster","בתוך האדמה"],["lichen","אזוב זוהר","glow_lichen","על קירות במערות"]];
+/* The kid's own tree (Ben, 24 Nov): trunk and leaves from any block, theirs first, in one of Minecraft's tree shapes.
+   S.world.dim.tree = { trunk, leaves, shape, n } or null; tools/common.ps1 writes it as a Minecraft tree. */
+const TREES = [["oak","עגול","M30 40h4V24h-4zM32 4a14 12 0 1 0 .1 0z"],["birch","גבוה ודק","M30 40h4V18h-4zM32 2a9 11 0 1 0 .1 0z"],
+  ["fancy","ענק","M30 40h4V14h-4zM14 16a10 8 0 1 0 .1 0zM50 14a10 8 0 1 0 .1 0zM32 0a12 9 0 1 0 .1 0z"],["spruce","חרוטי","M30 40h4v-6h-4zM32 2L16 34h32z"],
+  ["cherry","רחב","M30 40h4V22h-4zM32 6a24 10 0 1 0 .1 0z"],["dark","עבה","M27 40h10V22H27zM32 2a18 14 0 1 0 .1 0z"]];
+const TREEN = [["few","מעט"],["some","בינוני"],["lots","הרבה"]];
 function ensureDim(){
   if (!S.world.dim){ S.world.dim = { name:"", shape:"hills", top:"minecraft:grass_block", under:"minecraft:dirt", deep:"minecraft:stone", fluid:"water", sky:"#78a7ff", fog:"#c0d8ff", time:"cycle", gravity:"normal", ore:null, plants:[], nobed:false, nowater:false }; save(); }
   return S.world.dim;
@@ -281,7 +287,7 @@ function ensureDim(){
 const chs = (key, list, cur) => `<div class="chs">${list.map(([v, t]) => `<button data-dk="${key}" data-dv="${v}" class="${cur === v ? "on" : ""}">${t}</button>`).join("")}</div>`;
 const curBtn = (key, code, ph) => `<button class="dm-cur${S.pick === key ? " on" : ""}" data-pick="${key}">${code ? ingPic(code) : `<span class="rc-pic"><em>?</em></span>`}<small>${esc(code ? ingName(code) : ph)}</small></button>`;
 function dimHTML(){
-  const d = ensureDim(), o = d.ore || {}, pal = S.pick && S.pick !== "drop" ? pickPal(true) : "";
+  const d = ensureDim(), o = d.ore || {}, tr = d.tree, pal = S.pick && S.pick !== "drop" ? pickPal(true) : "";
   const at = k => S.pick === k ? pal : "";
   return `<div class="dm">
     <div class="dm-top"><label class="st-wn st-wn-big"><span>השם של הממד</span><input data-dt="name" maxlength="40" value="${esc(d.name || "")}" placeholder="למשל: ממלכת הלבה"></label>
@@ -299,6 +305,11 @@ function dimHTML(){
     <section><h3>החוקים</h3><div class="st-row"><span>כוח המשיכה</span>${chs("gravity", GRAVS, d.gravity || "normal")}</div>
       <div class="st-row"><span>מה אי אפשר לעשות שם</span><label class="rc-any"><input type="checkbox" data-dc="nowater" ${d.nowater ? "checked" : ""}> לשפוך מים: הם מתאדים</label><label class="rc-any"><input type="checkbox" data-dc="nobed" ${d.nobed ? "checked" : ""}> לישון: המיטה מתפוצצת</label></div></section>
     <section><h3>מה צומח?</h3><div class="dm-plants">${PLANTS.map(([v, t, pic, on]) => `<button data-plant="${v}" class="${(d.plants || []).includes(v) ? "on" : ""}">${ingPic("minecraft:" + pic)}<b>${t}</b><small>${on}</small></button>`).join("")}</div></section>
+    <section><h3>עץ משלכם</h3>${tr ? `<div class="dm-layers"><div><span>הגזע</span>${curBtn("ttrunk", tr.trunk, "בוחרים")}</div><div><span>העלים</span>${curBtn("tleaves", tr.leaves, "בוחרים")}</div></div>${at("ttrunk")}${at("tleaves")}
+      <div class="dm-shapes dm-trees">${TREES.map(([v, t, p]) => `<button data-dk="tshape" data-dv="${v}" class="${tr.shape === v ? "on" : ""}"><svg viewBox="0 0 64 40"><path d="${p}"/></svg><span>${t}</span></button>`).join("")}</div>
+      <div class="st-row"><span>כמה עצים</span>${chs("tn", TREEN, tr.n || "some")}<button class="btn ghost" data-notree>בלי עץ משלי</button></div>
+      <small class="st-hint">העץ צומח על כל אדמה. הקוביות שציירתם מופיעות ראשונות בתפריט.</small>`
+      : `<div class="st-row"><button class="btn" data-addtree>+ עץ משלי</button><small class="st-hint">גזע ועלים מהקוביות שלכם, בצורה שאתם בוחרים.</small></div>`}</section>
   </div>`;
 }
 
@@ -336,6 +347,12 @@ function drawDim(cv){
       const k = y - s, t = k === 0 ? top : k < 4 ? under : deep;
       put(ore && k >= 4 && rnd(x, y) ? ore : t, x, y);
     }
+    if (d.tree && d.shape !== "caves" && x % 9 === 4 && (!sea || s <= sea)){
+      const tk = tileOf(d.tree.trunk), lv = tileOf(d.tree.leaves);
+      for (let y = s - 1; y >= s - 3; y--) put(tk, x, y);
+      for (let dx = -1; dx <= 1; dx++) for (let y = s - 5; y <= s - 4; y++) put(lv, x + dx, y);
+      put(lv, x, s - 6);
+    }
     if (sea) for (let y = sea; y < s; y++){ g.fillStyle = d.fluid === "lava" ? "rgba(255,110,0,.85)" : "rgba(40,90,220,.7)"; g.fillRect(x * T, y * T, T, T); }
   }
 }
@@ -356,7 +373,7 @@ function bindDim(app){
   box.querySelectorAll("[data-dt]").forEach(inp => inp.addEventListener("input", () => { d[inp.dataset.dt] = inp.type === "color" ? inp.value : inp.value.trim(); save(); drawDim(box.querySelector("#dm-view")); }));
   box.querySelectorAll("[data-dk]").forEach(b => b.addEventListener("click", () => {
     const k = b.dataset.dk, v = b.dataset.dv;
-    if (k === "rare" || k === "depth") d.ore[k] = v; else d[k] = v;
+    if (k === "rare" || k === "depth") d.ore[k] = v; else if (k === "tshape" || k === "tn") d.tree[k === "tshape" ? "shape" : "n"] = v; else d[k] = v;
     again();
   }));
   box.querySelectorAll("[data-dc]").forEach(c => c.addEventListener("change", () => { d[c.dataset.dc] = c.checked; save(); }));
@@ -366,7 +383,9 @@ function bindDim(app){
   }));
   box.querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => { S.pick = S.pick === b.dataset.pick ? "" : b.dataset.pick; S.pickQ = ""; again(); }));
   const no = box.querySelector("[data-noore]"); if (no) no.addEventListener("click", () => { d.ore = null; again(); });
-  bindPick(box, code => { if (key === "ore") d.ore = Object.assign({ rare:"rare", depth:"deep" }, d.ore || {}, { b: code }); else if (key) d[key] = code; again(); }, true);
+  const nt = box.querySelector("[data-notree]"); if (nt) nt.addEventListener("click", () => { d.tree = null; S.pick = ""; again(); });
+  const at = box.querySelector("[data-addtree]"); if (at) at.addEventListener("click", () => { d.tree = { trunk:"minecraft:oak_log", leaves:"minecraft:oak_leaves", shape:"oak", n:"some" }; again(); });
+  bindPick(box, code => { if (key === "ore") d.ore = Object.assign({ rare:"rare", depth:"deep" }, d.ore || {}, { b: code }); else if ((key === "ttrunk" || key === "tleaves") && d.tree) d.tree[key.slice(1)] = code; else if (key) d[key] = code; again(); }, true);
 }
 function bindBlocks(app, embed){
   const box = app.querySelector(".bk"); if (!box) return;

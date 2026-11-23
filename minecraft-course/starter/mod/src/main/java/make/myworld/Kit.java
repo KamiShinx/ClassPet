@@ -101,7 +101,7 @@ public final class Kit {
                 JsonObject dim = root.getAsJsonObject("dim");
                 MyDimension.name = text(dim, "name");
                 StringBuilder ground = new StringBuilder();
-                for (String k : new String[] { "shape", "top", "under", "deep", "fluid", "ore", "plants" }) ground.append(k).append('=').append(dim.get(k)).append(';');
+                for (String k : new String[] { "shape", "top", "under", "deep", "fluid", "ore", "plants", "tree" }) ground.append(k).append('=').append(dim.get(k)).append(';');
                 MyDimension.ground = ground.toString();
             }
             // The portal to the dimension (lesson 6): frame block, key item, standing or lying, the inside's size.
